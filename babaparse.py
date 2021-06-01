@@ -5,6 +5,7 @@ import pathlib
 from collections import defaultdict
 import logging
 import json
+import math
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -144,12 +145,17 @@ def get_new_gif(num_frames: int, width_in_blocks: int, height_in_blocks: int):
     ]
 
 def save_gif(name: str, frames: list[Image]):
+    return
     frames[0].save(OUTPUT_DIRECTORY + f'{name}.gif',
                           save_all=True,
                           append_images=frames[1:],
                           duration=300,
                            optimize=True,
                           loop=0)
+
+def save_image(name: str, frames: list[Image]):
+    frames[0].save(OUTPUT_DIRECTORY + f'Sheets/{name}.png')
+    
 
 def get_text_name(name: str):
     if name in WORD_MAP:
@@ -181,7 +187,7 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
             for wobble_sprite in images[phase].values()
         ])
         output_data[direc].append([
-            f'{name}_{phase}_{wobble}'
+            f'{phase}_{wobble}'
             for wobble in images[phase].keys()
         ])
             
@@ -232,9 +238,11 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
 def output_simple(name: str, images: dict[int, dict[int, Image]]):
     output_data = {
         'all': [
-            f'{name}_{phase}_{wobble}'
+            [
+                f'{phase}_{wobble}'
+                for wobble in p.keys()
+            ]
             for phase, p in images.items()
-            for wobble in p.keys()
         ],
     }
     if name.startswith('text'):
@@ -306,6 +314,51 @@ def open_all_images() -> dict[str, dict[int, dict[int, Image]]]:
     return objects
 
 
+def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], images: dict[int, dict[int, Image]]):
+    if data == {'type': 'joinable'}:
+        all_images = {
+            f'{phase}_{wobble}': image
+            for phase in range(16)
+            for wobble, image in images[phase].items()
+        }
+    else:        
+        all_images: dict[str, Image] = {
+            f'{phase}_{wobble}': image
+            for phase, wobbles in images.items()
+            for wobble, image in wobbles.items()
+        }
+
+    square = math.ceil(math.sqrt(len(all_images)))
+    output_image = get_new_gif(1, square, square)
+
+    mapping = {
+        image_name: [index % square, index // square]
+        for index, image_name in enumerate(all_images.keys())
+    }
+
+    for frame, coord in mapping.items():
+        copy_animation_across([all_images[frame]], output_image, get_output_coord(*coord))
+
+    save_image(name, output_image)
+
+    try:
+        return {
+            k: [
+                [
+                    mapping[j]
+                    for j in i
+                ]
+                for i in v
+            ]
+            for k, v in data.items()
+        }
+    except KeyError as e:
+        return {
+            str(phase): [[mapping[j] for j in all_images.keys() if j.startswith(f'{phase}_')]]
+            for phase in range(16)
+        }
+    
+
 
 OUTPUT = {}
 for name, values in open_all_images().items():
@@ -338,6 +391,7 @@ for name, values in open_all_images().items():
         output = output_simple(name, values)
 
     if output:
+        output = pack_images_into_spritesheet(name, output, values)
         OUTPUT[name] = output
         
 with open(OUTPUT_DIRECTORY + f'json/OUTPUT.json', 'w') as f:

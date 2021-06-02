@@ -1,0 +1,50 @@
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Core.Utils
+{
+    public sealed class SpriteContainer : BaseSprite
+    {
+        public static SpriteContainer ROOT = new SpriteContainer();
+
+        public readonly List<BaseSprite> children = new List<BaseSprite>();
+
+        private bool _shouldReorder = false;
+
+        public override void Draw()
+        {
+            _reorderChildren();
+            RecalculateTransform();
+            using var t = new SceneContextManager(this);
+            foreach (var child in children)
+            {
+                if (child.alpha > 0)
+                    child.Draw();
+            }
+        }
+
+        public void AddChild(BaseSprite child)
+        {
+            children.Add(child);
+            child.parent = this;
+        }
+
+
+        public void ReorderChildren()
+        {
+            // do the sorting after the current update to avoid performance issues
+            _shouldReorder = true;
+        }
+
+        private void _reorderChildren()
+        {
+            if (_shouldReorder)
+            {
+                children.Sort((a, b) => (int)a.zindex - (int)b.zindex);
+                _shouldReorder = false;
+            }
+        }
+    }
+}

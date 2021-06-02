@@ -9,7 +9,7 @@ import math
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-logger.addHandler(logging.StreamHandler())
+# logger.addHandler(logging.StreamHandler())
 
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
@@ -108,6 +108,10 @@ class RecursiveDefaultDict(defaultdict):
 
 def load_image(name: str, file: str):
     img = Image.open(file).convert(IMAGE_MODE)
+    return img
+
+
+def colorized_image(name: str, img: Image):
     r, g, b, a = img.split()
 
     if name in WORD_MAP:
@@ -298,7 +302,19 @@ def output_joinable(name: str, images: dict[int, dict[int, Image]]):
     copy_animation_across(load_sprites(get_text_name(name)), output_images, get_output_coord(0, 0))
     
     save_gif(name, output_images)
+
+
+def create_sheet(images: list[Image]):
+    square = math.ceil(math.sqrt(len(images)))
+    output_image = get_new_gif(1, square, square)
+    mapping = []
+
+    for index, image in enumerate(images):
+        coord = [index % square, index // square]
+        mapping.append(coord)
+        copy_animation_across([image], output_image, get_output_coord(*coord))
         
+    return output_image, mapping
 
 
 def open_all_images() -> dict[str, dict[int, dict[int, Image]]]:
@@ -328,18 +344,15 @@ def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], im
             for wobble, image in wobbles.items()
         }
 
-    square = math.ceil(math.sqrt(len(all_images)))
-    output_image = get_new_gif(1, square, square)
+    reverse_map = [(k, v) for k, v in all_images.items()]
+    sheet, coordinates = create_sheet([v for k, v in reverse_map])
 
     mapping = {
-        image_name: [index % square, index // square]
-        for index, image_name in enumerate(all_images.keys())
+        image_name: coordinates[index]
+        for index, (image_name, image) in enumerate(reverse_map)
     }
 
-    for frame, coord in mapping.items():
-        copy_animation_across([all_images[frame]], output_image, get_output_coord(*coord))
-
-    save_image(name, output_image)
+    save_image(name, sheet)
 
     try:
         return {
@@ -357,11 +370,51 @@ def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], im
             str(phase): [[mapping[j] for j in all_images.keys() if j.startswith(f'{phase}_')]]
             for phase in range(16)
         }
+
+
+def pack_images_into_tileset(images: dict[str, dict[int, dict[int, Image]]]):
+    representatives: list[Image] = []
+    names: list[str] = []
+
+    for name, animations in images.items():
+        if 4 in animations:
+            names.append(name)
+            representatives.append(colorized_image(name, images[name][0][1]))
+        elif 24 in animations:
+            names.append(f'{name}_right')
+            names.append(f'{name}_up')
+            names.append(f'{name}_left')
+            names.append(f'{name}_down')
+            
+            representatives += [
+                colorized_image(name, images[name][0][1]),
+                colorized_image(name, images[name][8][1]),
+                colorized_image(name, images[name][16][1]),
+                colorized_image(name, images[name][24][1]),
+            ]
+        else:
+            names.append(name)
+            representatives.append(colorized_image(name, images[name][0][1]))
+    
+    sheet, coordinates = create_sheet(representatives)
+
+    sprite_sheet_info = {
+        f'{index+1}': names[index]
+        for index, (x, y) in enumerate(coordinates)
+    }
+
+    save_image('tileset', sheet)
+
+    return sprite_sheet_info
+    
+    
     
 
 
+
 OUTPUT = {}
-for name, values in open_all_images().items():
+images = open_all_images()
+for name, values in images.items():
     output = None
     
     has_facing = all(direction in values for direction in DIRECTIONS)
@@ -397,7 +450,10 @@ for name, values in open_all_images().items():
 with open(OUTPUT_DIRECTORY + f'json/OUTPUT.json', 'w') as f:
     f.write(json.dumps(OUTPUT, indent=4))
 
+sheet_info = pack_images_into_tileset(images)
 
+with open(OUTPUT_DIRECTORY + f'json/TILESET.json', 'w') as f:
+    f.write(json.dumps(sheet_info, indent=4))
 
 
 

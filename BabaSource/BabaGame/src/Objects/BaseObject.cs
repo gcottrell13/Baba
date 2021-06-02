@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using BabaGame.src.Resources;
+using Core;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
@@ -28,6 +29,34 @@ namespace BabaGame.src.Objects
             var (px, py) = World.GameCoordToScreenCoord(x, y);
             Graphics.x = px;
             Graphics.y = py;
+
+            var palettePointer = JsonValues.Colors[name].colour;
+            sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+        }
+
+        public void Move(char direction)
+        {
+            if (direction == 'u')
+            {
+                SetY(Y - 1);
+            }
+            else if (direction == 'd')
+            {
+                SetY(Y + 1);
+            }
+            else if (direction == 'l')
+            {
+                SetX(X - 1);
+            }
+            else if (direction == 'r')
+            {
+                SetX(X + 1);
+            }
+        }
+
+        public void MoveX(int direction)
+        {
+            SetX(X + direction);
         }
 
         public void SetX(int x)

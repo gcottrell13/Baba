@@ -1,26 +1,30 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BabaGame.src.Resources
 {
-    using ColorStructure = List<JsonValues.ColorItem>;
+    using ColorStructure = Dictionary<string, JsonValues.ColorItem>;
     using AnimationStructure = Dictionary<string, Dictionary<string, int[][][]>>;
     using TilesetMapStructure = Dictionary<string, string>;
+    using PaletteStructure = Dictionary<string, Color[][]>;
 
     public static class JsonValues
     {
-        public static ColorStructure Colors = loadJson<ColorStructure>("COLORS");
-        public static AnimationStructure Animations = loadJson<AnimationStructure>("OUTPUT");
-        public static TilesetMapStructure Tileset = loadJson<TilesetMapStructure>("TILESET");
+        public static ColorStructure Colors = Load.loadJson<List<ColorItem>>("COLORS").ToDictionary(item => item.name);
+        public static AnimationStructure Animations = Load.loadJson<AnimationStructure>("OUTPUT");
+        public static TilesetMapStructure Tileset = Load.loadJson<TilesetMapStructure>("TILESET");
+        public static PaletteStructure Palettes = Load.loadJson<Dictionary<string, int[][][]>>("PALETTES")
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Select(i => i.Select(c => new Color(c[0], c[1], c[2])).ToArray()).ToArray());
 
-        private static T loadJson<T>(string name)
+
+        public static Color TryGetPaletteColor(string theme, int[] coord)
         {
-            var file = System.IO.File.Open($"Content/json/{name}.json", System.IO.FileMode.Open);
-            var buffer = new byte[file.Length];
-            file.Read(buffer);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Encoding.ASCII.GetString(buffer));
+            return Palettes.TryGetValue(theme, out var arr) ? arr[coord[1]][coord[0]] : Color.White;
         }
+
 
         public struct ColorItem
         {

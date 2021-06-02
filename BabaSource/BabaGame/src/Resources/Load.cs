@@ -22,5 +22,13 @@ namespace BabaGame.src.Resources
 
             return dict;
         }
+
+        public static T loadJson<T>(string name)
+        {
+            var file = File.Open($"Content/json/{name}.json", FileMode.Open);
+            var buffer = new byte[file.Length];
+            file.Read(buffer);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Encoding.ASCII.GetString(buffer));
+        }
     }
 }

@@ -44,6 +44,9 @@
     <None Update="Content\json\OUTPUT.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\json\PALETTES.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\json\TILESET.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

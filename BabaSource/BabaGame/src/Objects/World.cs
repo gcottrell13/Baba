@@ -14,6 +14,8 @@ namespace BabaGame.src.Objects
         public static float TileWidth = 24f;
         public static float TileHeight = 24f;
 
+        public static string Palette = "default";
+
         public static (float x, float y) GameCoordToScreenCoord(int x, int y)
         {
             return (

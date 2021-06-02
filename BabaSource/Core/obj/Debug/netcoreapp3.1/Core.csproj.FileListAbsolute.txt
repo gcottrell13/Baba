@@ -23,4 +23,3 @@ E:\Projects\Baba\BabaSource\Core\obj\Debug\netcoreapp3.1\Core.AssemblyInfo.cs
 E:\Projects\Baba\BabaSource\Core\obj\Debug\netcoreapp3.1\Core.csproj.CoreCompileInputs.cache
 E:\Projects\Baba\BabaSource\Core\obj\Debug\netcoreapp3.1\Core.dll
 E:\Projects\Baba\BabaSource\Core\obj\Debug\netcoreapp3.1\Core.pdb
-E:\Projects\Baba\BabaSource\Core\obj\Debug\netcoreapp3.1\Core.csproj.AssemblyReference.cache

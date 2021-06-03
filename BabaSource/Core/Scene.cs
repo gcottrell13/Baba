@@ -26,7 +26,7 @@ namespace Core
         public static void Begin()
         {
             spriteBatch.GraphicsDevice.SetRenderTarget(scene);
-            spriteBatch.Begin(transformMatrix: Matrix.CreateTranslation(X, Y, 0));
+            spriteBatch.Begin(transformMatrix: Matrix.CreateTranslation(X, Y, 0), samplerState: SamplerState.PointClamp);
             transformStack = new Stack<TransformationItem>();
             transformStack.Push(new TransformationItem
             {

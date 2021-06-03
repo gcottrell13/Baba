@@ -15,7 +15,12 @@ namespace BabaGame.src.Resources
             return allTextures.TryGetValue(name, out var value) ? value : throw new Exception($"Failed to load sprite for {name}");
         }
 
-        private static Dictionary<string, ResourceHandle<Texture2D>> allTextures = Load.loadAll("Sheets", ResourceLoader.AddGraphicsResource);
+        public static void LoadTextures()
+        {
+            allTextures = Load.loadAll("Sheets", ResourceLoader.AddGraphicsResource);
+        }
+
+        private static Dictionary<string, ResourceHandle<Texture2D>> allTextures;
 
     }
 }

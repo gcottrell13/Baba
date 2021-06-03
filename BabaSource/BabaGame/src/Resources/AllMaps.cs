@@ -16,6 +16,11 @@ namespace BabaGame.src.Resources
             return allMaps.TryGetValue(name, out var value) ? value.Value : null;
         }
 
-        private static Dictionary<string, ResourceHandle<TiledMap>> allMaps = Load.loadAll("Maps", ResourceLoader.AddTiledMapResource);
+        public static void LoadMaps()
+        {
+            allMaps = Load.loadAll("Maps", ResourceLoader.AddTiledMapResource);
+        }
+
+        private static Dictionary<string, ResourceHandle<TiledMap>> allMaps;
     }
 }

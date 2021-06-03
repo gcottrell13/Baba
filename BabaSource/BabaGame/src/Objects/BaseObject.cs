@@ -4,10 +4,12 @@ using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace BabaGame.src.Objects
 {
+    [DebuggerDisplay("{Name}/{X}/{Y}/{Facing}")]
     public class BaseObject : GameObject
     {
         public string Name { get; private set; }

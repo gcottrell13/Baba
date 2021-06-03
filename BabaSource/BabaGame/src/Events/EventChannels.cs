@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baba.src.Events
+namespace BabaGame.src.Events
 {
     static class EventChannels
     {
         public static EventChannel<KeyEvent> KeyPress = EventManager.CreateChannel<KeyEvent>();
+        public static EventChannel<MapChange> MapChange = EventManager.CreateChannel<MapChange>();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Baba.src.Events;
+﻿using BabaGame.src.Events;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;

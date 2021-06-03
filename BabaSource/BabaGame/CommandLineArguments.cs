@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baba
+namespace BabaGame
 {
     class CommandLineArguments
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Baba.src.Events
+namespace BabaGame.src.Events
 {
     class KeyEvent
     {

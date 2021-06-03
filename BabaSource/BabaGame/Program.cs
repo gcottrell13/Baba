@@ -7,7 +7,7 @@ namespace Baba
         [STAThread]
         static void Main()
         {
-            using var game = new BabaGame();
+            using var game = new BabaGame.BabaGame();
             game.Run();
         }
     }

@@ -7,15 +7,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Baba
+namespace BabaGame
 {
     public class BabaGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch? _spriteBatch;
 
+        public static BabaGame? Game;
+
         public BabaGame()
         {
+            Game = this;
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -23,21 +26,23 @@ namespace Baba
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1080;
-            _graphics.PreferredBackBufferHeight = 720;
-            _graphics.ApplyChanges();
+            SetScreenSize(1080, 720);
             GameEntryPoint.ROOT.Initialize(CommandLineArguments.Args?.Connect ?? "127.0.0.1");
             base.Initialize();
         }
 
+        public void SetScreenSize(int x, int y)
+        {
+            _graphics.PreferredBackBufferWidth = x;
+            _graphics.PreferredBackBufferHeight = y;
+            _graphics.ApplyChanges();
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            Scene.Initialize(_spriteBatch, x, y);
+        }
+
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Scene.Initialize(_spriteBatch, 1080, 900);
-            
             ResourceLoader.LoadAll(this);
-
-            var j = JsonValues.Colors;
 
             GameEntryPoint.ROOT.AfterInitialize();
         }

@@ -45,14 +45,14 @@ namespace BabaGame.src.WordEngine
             objects = new List<BaseObject>();
             _phrases = new List<string>
             {
-                "not me is you",
+                "baba is you",
                 "baba is scary",
                 "me is scared",
             };
             _properties = new Dictionary<string, SelectorType[]>
             {
                 { "you", new []{ nounSelect("baba") } },
-                { "stop", new[]{ nounSelect("") } },
+                { "stop", new[]{ nounSelect("wall") } },
                 { "scary", new[]{ nounSelect("baba") } },
                 { "scared", new[]{ nounSelect("me") } },
                 { "move", new[]{ nounSelect("me") } },

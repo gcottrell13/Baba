@@ -1,4 +1,4 @@
-﻿using Baba.src.Events;
+﻿using BabaGame.src.Events;
 using BabaGame.src;
 using BabaGame.src.Objects;
 using BabaGame.src.Resources;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Baba
+namespace BabaGame
 {
     class GameEntryPoint : GameObject
     {
@@ -34,69 +34,12 @@ namespace Baba
 
         public void Initialize(string connectTo)
         {
-            var map = AllMaps.GetMapHandle("start");
-            ROOT.Graphics.xscale = World.Scale;
-            ROOT.Graphics.yscale = World.Scale;
+            AllMaps.LoadMaps();
+            ObjectSprites.LoadTextures();
 
-            var engine = new WordEngine(20, 20);
+            AddChild(new Map(), true);
 
-
-            ROOT.AddChild(new KeyListener());
-
-
-            void onKeyPress(KeyEvent keyEvent)
-            {
-                if (keyEvent.Up == false) return;
-                if (keyEvent.Key == KeyMap.Up)
-                {
-                    engine.TakeAction("up");
-                }
-                else if (keyEvent.Key == KeyMap.Down)
-                {
-                    engine.TakeAction("down");
-                }
-                else if (keyEvent.Key == KeyMap.Left)
-                {
-                    engine.TakeAction("left");
-                }
-                else if (keyEvent.Key == KeyMap.Right)
-                {
-                    engine.TakeAction("right");
-                }
-                else if (keyEvent.Key == KeyMap.Wait)
-                {
-                    engine.TakeAction("wait");
-                }
-            }
-
-            EventChannels.KeyPress.Subscribe(onKeyPress);
-
-            for (var i = 0; i < 10; i++)
-            {
-                var f = new BaseObject("me", i, i, "right");
-                ROOT.AddChild(f, addGraphics: true);
-                engine.AddObject(f);
-            }
-
-
-            var me = new BaseObject("baba", 11, 11);
-            ROOT.AddChild(me, addGraphics: true);
-            engine.AddObject(me);
-
-            var rock = new BaseObject("rock", 15, 10);
-            ROOT.AddChild(rock, addGraphics: true);
-            engine.AddObject(rock);
-
-            //var map = new WaitingRoom();
-            //ROOT.AddChild(map);
-
-            //ROOT.AddChild(new KeyListener());
-            //ROOT.AddChild(new Character(600, 1300, src.Maps.MapBase.EntityScale, map.Graphics, color: Color.Red)
-            //{
-            //    CharacterRadius = 15f,
-            //});
-            //ROOT.AddChild(new Assembler(705, 1274, src.Maps.MapBase.EntityScale, map.Graphics));
-            //ROOT.AddChild(new Tent(map.Graphics));
+            EventChannels.MapChange.SendAsyncMessage(new MapChange { NewMapName = "start" });
         }
 
     }

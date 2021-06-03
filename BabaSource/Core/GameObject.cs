@@ -53,15 +53,15 @@ namespace Core
             gameObject.SetParent(this, addGraphics);
         }
 
-        public void SetParent(GameObject gameObject, bool addGraphics = false)
+        public void SetParent(GameObject newParent, bool addGraphics = false)
         {
             if (parent == null)
             {
-                parent = gameObject;
+                parent = newParent;
 
                 if (addGraphics)
                 {
-                    parent.Graphics.AddChild(gameObject.Graphics);
+                    parent.Graphics.AddChild(Graphics);
                 }
             }
             else

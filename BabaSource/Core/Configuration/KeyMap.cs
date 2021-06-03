@@ -11,5 +11,6 @@ namespace Core.Configuration
         public static Keys Down = Keys.S;
         public static Keys Left = Keys.A;
         public static Keys Right = Keys.D;
+        public static Keys Wait = Keys.Space;
     }
 }

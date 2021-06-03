@@ -38,12 +38,11 @@ namespace Baba
             ROOT.Graphics.xscale = World.Scale;
             ROOT.Graphics.yscale = World.Scale;
 
-            var engine = new WordEngine();
+            var engine = new WordEngine(20, 20);
 
 
             ROOT.AddChild(new KeyListener());
 
-            var me = new BaseObject("baba", 11, 11);
 
             void onKeyPress(KeyEvent keyEvent)
             {
@@ -64,21 +63,29 @@ namespace Baba
                 {
                     engine.TakeAction("right");
                 }
+                else if (keyEvent.Key == KeyMap.Wait)
+                {
+                    engine.TakeAction("wait");
+                }
             }
 
             EventChannels.KeyPress.Subscribe(onKeyPress);
 
             for (var i = 0; i < 10; i++)
             {
-                var f = new BaseObject("me", i, i);
+                var f = new BaseObject("me", i, i, "right");
                 ROOT.AddChild(f, addGraphics: true);
                 engine.AddObject(f);
             }
-                
 
+
+            var me = new BaseObject("baba", 11, 11);
             ROOT.AddChild(me, addGraphics: true);
-
             engine.AddObject(me);
+
+            var rock = new BaseObject("rock", 15, 10);
+            ROOT.AddChild(rock, addGraphics: true);
+            engine.AddObject(rock);
 
             //var map = new WaitingRoom();
             //ROOT.AddChild(map);

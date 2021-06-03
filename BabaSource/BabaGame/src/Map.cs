@@ -7,6 +7,7 @@ using Core.Configuration;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BabaGame.src
@@ -15,11 +16,12 @@ namespace BabaGame.src
     {
         private WordEngine.WordEngine? engine;
 
+        private DateTime lastInput;
+
         public Map()
         {
+            lastInput = DateTime.Now;
             EventChannels.MapChange.Subscribe(setMap);
-            
-            AddChild(new KeyListener());
             EventChannels.KeyPress.Subscribe(onKeyPress);
         }
 
@@ -54,29 +56,51 @@ namespace BabaGame.src
 
             BabaGame.Game?.SetScreenSize(px, ph);
 
-            for (var i = 0; i < 10; i++)
+            Graphics.children.Clear();
+            children.Clear();
+
+            AddChild(new KeyListener());
+
+            foreach (var layer in map.TileLayers)
             {
-                var f = new BaseObject("me", i, i, "right");
-                AddChild(f, addGraphics: true);
-                engine.AddObject(f);
+                foreach (var tile in layer.Tiles)
+                {
+                    if (tile.GlobalIdentifier != 0)
+                    {
+                        var name = JsonValues.Tileset[tile.GlobalIdentifier.ToString()];
+                        if (name.StartsWith("text_") || name.Contains("_") == false)
+                        {
+                            // non-directional
+                            var f = new BaseObject(name, tile.X, tile.Y);
+                            AddChild(f, addGraphics: true);
+                            engine.AddObject(f);
+                        }
+                        else
+                        {
+                            var parts = name.Split("_");
+                            name = parts[0];
+                            var direction = parts[1];
+
+                            var f = new BaseObject(name, tile.X, tile.Y, direction);
+                            AddChild(f, addGraphics: true);
+                            engine.AddObject(f);
+                        }
+                    }
+                }
             }
 
-
-            for (var i = 0; i < 10; i++)
+            foreach (var obj in engine.Objects)
             {
-                var f = new BaseObject("wall", i, i);
-                AddChild(f, addGraphics: true);
-                engine.AddObject(f);
+                if (obj.Joinable)
+                {
+                    var flag = 0;
+                    if (obj.Y > 0 && engine.Grid[obj.X, obj.Y - 1]?.Any(o => o.Name == obj.Name) == true) flag += 2;
+                    if (obj.X < map.Width - 1 && engine.Grid[obj.X + 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 1;
+                    if (obj.Y < map.Height - 1 && engine.Grid[obj.X, obj.Y + 1]?.Any(o => o.Name == obj.Name) == true) flag += 8;
+                    if (obj.X > 0 && engine.Grid[obj.X - 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 4;
+                    obj.SetJoinWithNeighbors(flag.ToString());
+                }
             }
-
-
-            var me = new BaseObject("baba", 11, 11);
-            AddChild(me, addGraphics: true);
-            engine.AddObject(me);
-
-            var rock = new BaseObject("rock", 15, 10);
-            AddChild(rock, addGraphics: true);
-            engine.AddObject(rock);
         }
 
 
@@ -84,6 +108,11 @@ namespace BabaGame.src
         {
             if (engine == null) return;
             if (keyEvent.Up == false) return;
+
+            if ((DateTime.Now - lastInput) < TimeSpan.FromSeconds(World.InputDelaySeconds)) return;
+
+            lastInput = DateTime.Now;
+
             if (keyEvent.Key == KeyMap.Up)
             {
                 engine.TakeAction("up");

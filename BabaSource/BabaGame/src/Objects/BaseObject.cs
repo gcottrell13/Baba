@@ -23,6 +23,8 @@ namespace BabaGame.src.Objects
 
         public char Facing { get; private set; }
 
+        public bool Joinable { get; private set; }
+
         public BaseObject(string name, int x, int y, string? phase=null)
         {
             Name = name;
@@ -37,6 +39,7 @@ namespace BabaGame.src.Objects
 
             var palettePointer = JsonValues.Colors[name].colour;
             sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+            Joinable = JsonValues.Animations[name].Count == 16;
         }
 
         public void Move(char direction)
@@ -74,7 +77,7 @@ namespace BabaGame.src.Objects
             if (x != X)
             {
                 var (sx, _) = World.GameCoordToScreenCoord(x, Y);
-                animateX = new AnimateValue(Graphics.x, sx, 0.1f);
+                animateX = new AnimateValue(Graphics.x, sx, World.InputDelaySeconds);
                 sprite.StepIndex();
                 if (x < X) FaceDirection('l'); else FaceDirection('r');
                 X = x;
@@ -86,7 +89,7 @@ namespace BabaGame.src.Objects
             if (y != Y)
             {
                 var (_, sy) = World.GameCoordToScreenCoord(X, y);
-                animateY = new AnimateValue(Graphics.y, sy, 0.1f);
+                animateY = new AnimateValue(Graphics.y, sy, World.InputDelaySeconds);
                 sprite.StepIndex();
                 if (y < Y) FaceDirection('u'); else FaceDirection('d');
                 Y = y;
@@ -125,6 +128,12 @@ namespace BabaGame.src.Objects
                 sprite.SetPhase(phase);
                 Facing = phase[0];
             }
+        }
+
+        public void SetJoinWithNeighbors(string phase)
+        {
+            if (sprite.Phase != phase)
+                sprite.SetPhase(phase);
         }
 
         protected override void OnBeforeUpdate(GameTime gameTime)

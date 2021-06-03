@@ -11,9 +11,9 @@ namespace BabaGame.src.WordEngine
     {
         private Dictionary<string, SelectorType[]> _properties; // indexed by property
         private List<string> _phrases;
-        private List<BaseObject> objects;
+        public List<BaseObject> Objects;
 
-        private BaseObject[,] grid;
+        public List<BaseObject>[,] Grid;
 
         private static string[] adjectives = new[]
         {
@@ -42,7 +42,7 @@ namespace BabaGame.src.WordEngine
 
         public WordEngine(int gridx, int gridy)
         {
-            objects = new List<BaseObject>();
+            Objects = new List<BaseObject>();
             _phrases = new List<string>
             {
                 "baba is you",
@@ -60,19 +60,28 @@ namespace BabaGame.src.WordEngine
                 { "shift", new[]{ nounSelect("belt") } },
             };
 
-            grid = new BaseObject[gridx, gridy];
+            Grid = new List<BaseObject>[gridx, gridy];
             this.gridx = gridx;
             this.gridy = gridy;
         }
 
         public void AddObject(BaseObject obj)
         {
-            if (objects.Contains(obj))
+            if (Objects.Contains(obj))
             {
                 throw new Exception();
             }
-            objects.Add(obj);
-            grid[obj.X, obj.Y] = obj;
+            Objects.Add(obj);
+            insertIntoGrid(obj, obj.X, obj.Y);
+        }
+
+        private void insertIntoGrid(BaseObject obj, int x, int y)
+        {
+            if (Grid[obj.X, obj.Y] == null)
+            {
+                Grid[obj.X, obj.Y] = new List<BaseObject>();
+            }
+            Grid[obj.X, obj.Y].Add(obj);
         }
 
         public void TakeAction(string action)
@@ -133,18 +142,20 @@ namespace BabaGame.src.WordEngine
             {
                 if (canMove(ox, oy, nx, ny))
                 {
-                    obj.SetX(nx);
-                    obj.SetY(ny);
+                    moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
                 }
                 else if (getCache(cache, "move").Any(j => j.Object == obj))
                 {
                     obj.AboutFace();
                 }
+                else
+                {
+                    obj.FaceDirection(directionFromDelta(nx - ox, ny - oy));
+                }
             }
             foreach (var (ox, oy, nx, ny, obj) in newIntentsToMove.ToList())
             {
-                obj.SetX(nx);
-                obj.SetY(ny);
+                moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
 
             intentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
@@ -178,7 +189,7 @@ namespace BabaGame.src.WordEngine
             if (cache.ContainsKey("shift")) {
                 foreach (var shift in getCache(cache, "shift"))
                 {
-                    foreach (var shifted in objects.Where(obj => obj.X == shift.X && obj.Y == shift.Y))
+                    foreach (var shifted in Objects.Where(obj => obj.X == shift.X && obj.Y == shift.Y))
                     {
                         intentsToMove.Add(directionMoveObject(shifted, shift.Object.Facing));
                     }
@@ -191,16 +202,31 @@ namespace BabaGame.src.WordEngine
             {
                 if (canMove(ox, oy, nx, ny))
                 {
-                    obj.SetX(nx);
-                    obj.SetY(ny);
+                    moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
                 }
             }
             foreach (var (ox, oy, nx, ny, obj) in newIntentsToMove.ToList())
             {
-                obj.SetX(nx);
-                obj.SetY(ny);
+                moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
 
+            //foreach (var obj in Objects.Where(o => o.Joinable))
+            //{
+            //    var flag = 0;
+            //    if (obj.Y > 0 && Grid[obj.X, obj.Y - 1]?.Any(o => o.Name == obj.Name) == true) flag += 2;
+            //    if (obj.X < gridx - 1 && Grid[obj.X + 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 1;
+            //    if (obj.Y < gridy - 1 && Grid[obj.X, obj.Y + 1]?.Any(o => o.Name == obj.Name) == true) flag += 8;
+            //    if (obj.X > 0 && Grid[obj.X - 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 4;
+            //    obj.SetJoinWithNeighbors(flag.ToString());
+            //}
+        }
+
+        private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
+        {
+            obj.SetX(newX);
+            obj.SetY(newY);
+            Grid[oldX, oldY].Remove(obj);
+            insertIntoGrid(obj, newX, newY);
         }
 
         private (int, int, int, int, BaseObject) directionMoveObject(BaseObject obj, char direction)
@@ -224,9 +250,18 @@ namespace BabaGame.src.WordEngine
             return (0, 0, 0, 0, obj);
         }
 
+        private char directionFromDelta(int dx, int dy)
+        {
+            if (dx < 0) return 'l';
+            if (dx > 0) return 'r';
+            if (dy < 0) return 'u';
+            if (dy > 0) return 'd';
+            return ' ';
+        }
+
         private IEnumerable<BaseObject> queryProperty(string property)
         {
-            return objects.Where(obj => _properties[property].Any(s => s(obj, objects)));
+            return Objects.Where(obj => _properties[property].Any(s => s(obj, Objects)));
         }
 
         private SelectorType nounSelect(string noun) => (obj, all) => obj.Name == noun;

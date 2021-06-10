@@ -3,6 +3,9 @@ from typing import Iterator
 from PIL import Image
 from vars import VALUES_FILE_PATH, CUSTOM_VALUES_FILE_PATH, FILES_PATH
 
+ColorsFormat = dict[str, dict[str, tuple[int, int, int]]]
+PaletteValuesFormat = dict[str, dict[str, tuple[int, int]]]
+
 
 def parse_block(lines: Iterator[str]) -> dict:
     props = {}
@@ -45,8 +48,8 @@ PALETTE = {
     for i in range(PALETTE_HEIGHT)
 }
 
-def load_colors() -> dict[str, dict[str, tuple[int, int, int]]]:
-    colors_by_name: dict[str, dict[str, tuple[int, int]]] = {}
+def load_colors():
+    colors_by_name: PaletteValuesFormat = {}
 
     with open(VALUES_FILE_PATH, 'r') as f:
         lines = iter(f.readlines())
@@ -63,8 +66,11 @@ def load_colors() -> dict[str, dict[str, tuple[int, int, int]]]:
                 'color_inactive': attrs['colour'],
                 'color': attrs.get('colour_active', attrs['colour']),
             }
+    
+    with open(CUSTOM_VALUES_FILE_PATH, 'r') as f:
+        pass
 
-    return {
+    return colors_by_name, {
         name: {
             'color': PALETTE[tuple(color_indexes['color'])],
             'color_inactive': PALETTE[tuple(color_indexes['color_inactive'])],

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace BabaGame.src.Objects
 {
-    [DebuggerDisplay("{Name}/{X}/{Y}/{Facing}")]
+    [DebuggerDisplay("{Name} ({X} ,{Y}) {Facing}")]
     public class BaseObject : GameObject
     {
         public string Name { get; private set; }
@@ -23,7 +23,11 @@ namespace BabaGame.src.Objects
 
         public char Facing { get; private set; }
 
+        public ObjectType Type { get; private set; }
+
         public bool Joinable { get; private set; }
+
+        public string Color { get; private set; }
 
         public BaseObject(string name, int x, int y, string? phase=null)
         {
@@ -37,9 +41,12 @@ namespace BabaGame.src.Objects
             Graphics.y = py;
             Facing = (phase ?? "u")[0];
 
-            var palettePointer = JsonValues.Colors[name].colour;
+            Type = name.StartsWith("text_") ? ObjectType.Text : ObjectType.Object;
+
+            var palettePointer = JsonValues.ObjectInfo[name].color_inactive;
             sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
-            Joinable = JsonValues.Animations[name].Count == 16;
+            Color = "";
+            Joinable = JsonValues.Animations[name].ContainsKey("0");
         }
 
         public void Move(char direction)
@@ -93,6 +100,24 @@ namespace BabaGame.src.Objects
                 sprite.StepIndex();
                 if (y < Y) FaceDirection('u'); else FaceDirection('d');
                 Y = y;
+            }
+        }
+
+        public void SetColor(string color)
+        {
+            if (JsonValues.ObjectInfo.ContainsKey("text_" + color))
+            {
+                var c = JsonValues.ObjectInfo["text_" + color];
+                var palettePointer = c.color ?? c.color_inactive;
+                sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+                Color = color;
+            }
+            else
+            {
+                Color = "";
+                var c = JsonValues.ObjectInfo[Name];
+                var palettePointer = c.color ?? c.color_inactive;
+                sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
             }
         }
 

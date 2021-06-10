@@ -21,7 +21,7 @@ AnalysisResult = dict[str, dict[str, list[list[list[int]]]]]
 ImageCollection = dict[str, dict[int, dict[int, Image.Image]]]
 
 
-COLORS = load_colors()
+OBJECT_INFO, COLORS = load_colors()
 
 ALL_FILES = glob.glob(str(SPRITES_PATH / "*.png")) + glob.glob(
     str(CUSTOM_FILES_PATH / "*.png")
@@ -29,8 +29,8 @@ ALL_FILES = glob.glob(str(SPRITES_PATH / "*.png")) + glob.glob(
 
 WIDTH = 24
 HEIGHT = 24
-WPAD = 2
-HPAD = 2
+WPAD = 1
+HPAD = 1
 
 DIRECTIONS = {
     0: "right",
@@ -119,11 +119,13 @@ def load_sprites(name: str):
 
 
 def copy_animation_across(
-    animation: list[Image.Image], destination: list[Image.Image], coord
+    animation: list[Image.Image], destination: list[Image.Image], coord: tuple[int, int]
 ):
     for i, dest in enumerate(destination):
         anim = animation[i % len(animation)]
-        dest.paste(anim, coord)
+        x = coord[0] - (anim.width - WIDTH) // 2
+        y = coord[1] - (anim.height - HEIGHT) // 2
+        dest.paste(anim, (x, y))
 
 
 def get_output_coord(block_x: int, block_y: int):
@@ -162,7 +164,6 @@ def get_text_name(name: str):
 
 def output_facing_and_animation(name: str, images: dict[int, dict[int, Image.Image]]):
     directions: dict[str, list[list[Image.Image]]] = defaultdict(list)
-    current = None
 
     output_data: dict[str, list[list[str]]] = defaultdict(list)
 
@@ -189,7 +190,7 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image.Ima
 
         # print(name, phase, len(images[phase]))
 
-    animation_lengths = {len(anim) for dir, anim in directions.items()} | {3}
+    animation_lengths = {len(anim) for _, anim in directions.items()} | {3}
 
     layout = [
         ["name_active", up, down, right, left],
@@ -524,7 +525,13 @@ def create_tileset(images: ImageCollection):
         f.write(json.dumps(sheet_info, indent=4))
 
 
+def save_object_info():
+    with open(OUTPUT_DIRECTORY / f'json/OBJECTS.json', 'w') as f:
+        f.write(json.dumps(OBJECT_INFO, indent=4))
+
+
 if __name__ == "__main__":
     images = open_all_images()
     analyze_images(images)
     create_tileset(images)
+    save_object_info()

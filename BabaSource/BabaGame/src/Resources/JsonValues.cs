@@ -6,16 +6,16 @@ using System.Text;
 
 namespace BabaGame.src.Resources
 {
-    using ColorStructure = Dictionary<string, JsonValues.ColorItem>;
+    using ObjectInformationStructure = Dictionary<string, JsonValues.ObjectInfoItem>;
     using AnimationStructure = Dictionary<string, Dictionary<string, int[][][]>>;
-    using TilesetMapStructure = Dictionary<string, string>;
+    using TilesetMapStructure = Dictionary<int, string>;
     using PaletteStructure = Dictionary<string, Color[][]>;
 
     public static class JsonValues
     {
-        public static ColorStructure Colors = Load.loadJson<List<ColorItem>>("COLORS").ToDictionary(item => item.name);
-        public static AnimationStructure Animations = Load.loadJson<AnimationStructure>("OUTPUT");
-        public static TilesetMapStructure Tileset = Load.loadJson<TilesetMapStructure>("TILESET");
+        public static ObjectInformationStructure ObjectInfo = Load.loadJson<ObjectInformationStructure>("OBJECTS");
+        public static AnimationStructure Animations = Load.loadJson<AnimationStructure>("ANIMATIONS");
+        public static TilesetMapStructure Tileset = Load.loadJson<Dictionary<string, string>>("TILESET").ToDictionary(kvp => int.Parse(kvp.Key), kvp => kvp.Value);
         public static PaletteStructure Palettes = Load.loadJson<Dictionary<string, int[][][]>>("PALETTES")
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Select(i => i.Select(c => new Color(c[0], c[1], c[2])).ToArray()).ToArray());
 
@@ -26,10 +26,10 @@ namespace BabaGame.src.Resources
         }
 
 
-        public struct ColorItem
+        public struct ObjectInfoItem
         {
-            public string name;
-            public int[] colour;
+            public int[] color_inactive;
+            public int[] color;
         }
     }
 }

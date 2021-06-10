@@ -1,15 +1,13 @@
 from PIL import Image
 import glob
-import re
-import pathlib
-from collections import defaultdict
-import logging
 import json
-import math
+from .vars import FILES_PATH
 
-palettes = glob.glob("*.png")
+palettes = glob.glob(str(FILES_PATH / 'Palettes' / "*.png"))
 
-print(palettes)
+# print(palettes)
+
+output = {}
 
 for file in palettes:
 
@@ -25,10 +23,11 @@ for file in palettes:
         for i in range(PALETTE_HEIGHT)
     ]
 
-    file = file.replace('.png', '.json')
+    name = file.replace('.png', '')
+    output[name] = PALETTE
 
-    with open(f'jsonfiles/{file}', 'w') as f:
-        f.write(json.dumps(PALETTE))
+with open(f'PALETTES.json', 'w') as f:
+    f.write(json.dumps(output))
 
 
 

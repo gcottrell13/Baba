@@ -8,7 +8,8 @@
             5,
             2
         ],
-        "sprite": "algae"
+        "sprite": "algae",
+        "layer": 15
     },
     "arrow": {
         "color_inactive": [
@@ -19,7 +20,8 @@
             5,
             2
         ],
-        "sprite": "arrow"
+        "sprite": "arrow",
+        "layer": 14
     },
     "baba": {
         "color_inactive": [
@@ -30,7 +32,8 @@
             0,
             3
         ],
-        "sprite": "baba"
+        "sprite": "baba",
+        "layer": 18
     },
     "banana": {
         "color_inactive": [
@@ -41,7 +44,8 @@
             2,
             4
         ],
-        "sprite": "banana"
+        "sprite": "banana",
+        "layer": 16
     },
     "bat": {
         "color_inactive": [
@@ -52,7 +56,8 @@
             3,
             1
         ],
-        "sprite": "bat"
+        "sprite": "bat",
+        "layer": 14
     },
     "bed": {
         "color_inactive": [
@@ -63,7 +68,8 @@
             0,
             3
         ],
-        "sprite": "bed"
+        "sprite": "bed",
+        "layer": 14
     },
     "bee": {
         "color_inactive": [
@@ -74,7 +80,8 @@
             2,
             4
         ],
-        "sprite": "bee"
+        "sprite": "bee",
+        "layer": 16
     },
     "belt": {
         "color_inactive": [
@@ -85,7 +92,8 @@
             1,
             2
         ],
-        "sprite": "belt"
+        "sprite": "belt",
+        "layer": 11
     },
     "bird": {
         "color_inactive": [
@@ -96,7 +104,8 @@
             2,
             3
         ],
-        "sprite": "bird"
+        "sprite": "bird",
+        "layer": 17
     },
     "blob": {
         "color_inactive": [
@@ -107,7 +116,8 @@
             5,
             2
         ],
-        "sprite": "blob"
+        "sprite": "blob",
+        "layer": 16
     },
     "boat": {
         "color_inactive": [
@@ -118,7 +128,8 @@
             6,
             1
         ],
-        "sprite": "boat"
+        "sprite": "boat",
+        "layer": 14
     },
     "bog": {
         "color_inactive": [
@@ -129,7 +140,8 @@
             5,
             1
         ],
-        "sprite": "water"
+        "sprite": "water",
+        "layer": 2
     },
     "bolt": {
         "color_inactive": [
@@ -140,7 +152,8 @@
             2,
             4
         ],
-        "sprite": "bolt"
+        "sprite": "bolt",
+        "layer": 16
     },
     "book": {
         "color_inactive": [
@@ -151,7 +164,8 @@
             2,
             3
         ],
-        "sprite": "book"
+        "sprite": "book",
+        "layer": 15
     },
     "bottle": {
         "color_inactive": [
@@ -162,7 +176,8 @@
             1,
             4
         ],
-        "sprite": "bottle"
+        "sprite": "bottle",
+        "layer": 16
     },
     "box": {
         "color_inactive": [
@@ -173,7 +188,8 @@
             6,
             2
         ],
-        "sprite": "box"
+        "sprite": "box",
+        "layer": 16
     },
     "brick": {
         "color_inactive": [
@@ -184,7 +200,8 @@
             6,
             3
         ],
-        "sprite": "brick"
+        "sprite": "brick",
+        "layer": 10
     },
     "bubble": {
         "color_inactive": [
@@ -195,7 +212,8 @@
             1,
             4
         ],
-        "sprite": "bubble"
+        "sprite": "bubble",
+        "layer": 12
     },
     "bucket": {
         "color_inactive": [
@@ -206,7 +224,8 @@
             2,
             2
         ],
-        "sprite": "bucket"
+        "sprite": "bucket",
+        "layer": 14
     },
     "bug": {
         "color_inactive": [
@@ -217,7 +236,8 @@
             6,
             2
         ],
-        "sprite": "bug"
+        "sprite": "bug",
+        "layer": 17
     },
     "burger": {
         "color_inactive": [
@@ -228,7 +248,8 @@
             2,
             3
         ],
-        "sprite": "burger"
+        "sprite": "burger",
+        "layer": 16
     },
     "cake": {
         "color_inactive": [
@@ -239,7 +260,8 @@
             4,
             2
         ],
-        "sprite": "cake"
+        "sprite": "cake",
+        "layer": 17
     },
     "car": {
         "color_inactive": [
@@ -250,7 +272,8 @@
             2,
             2
         ],
-        "sprite": "car"
+        "sprite": "car",
+        "layer": 17
     },
     "cart": {
         "color_inactive": [
@@ -261,7 +284,8 @@
             5,
             2
         ],
-        "sprite": "cart"
+        "sprite": "cart",
+        "layer": 18
     },
     "cash": {
         "color_inactive": [
@@ -272,7 +296,8 @@
             5,
             2
         ],
-        "sprite": "cash"
+        "sprite": "cash",
+        "layer": 12
     },
     "cat": {
         "color_inactive": [
@@ -283,7 +308,8 @@
             6,
             2
         ],
-        "sprite": "cat"
+        "sprite": "cat",
+        "layer": 19
     },
     "circle": {
         "color_inactive": [
@@ -294,7 +320,8 @@
             5,
             3
         ],
-        "sprite": "circle"
+        "sprite": "circle",
+        "layer": 17
     },
     "cliff": {
         "color_inactive": [
@@ -305,7 +332,8 @@
             6,
             1
         ],
-        "sprite": "cliff"
+        "sprite": "cliff",
+        "layer": 14
     },
     "clock": {
         "color_inactive": [
@@ -316,7 +344,8 @@
             1,
             3
         ],
-        "sprite": "clock"
+        "sprite": "clock",
+        "layer": 16
     },
     "cloud": {
         "color_inactive": [
@@ -327,7 +356,8 @@
             1,
             4
         ],
-        "sprite": "cloud"
+        "sprite": "cloud",
+        "layer": 14
     },
     "cog": {
         "color_inactive": [
@@ -338,7 +368,8 @@
             0,
             1
         ],
-        "sprite": "cog"
+        "sprite": "cog",
+        "layer": 16
     },
     "crab": {
         "color_inactive": [
@@ -349,7 +380,8 @@
             2,
             2
         ],
-        "sprite": "crab"
+        "sprite": "crab",
+        "layer": 17
     },
     "crystal": {
         "color_inactive": [
@@ -360,7 +392,8 @@
             4,
             2
         ],
-        "sprite": "crystal"
+        "sprite": "crystal",
+        "layer": 12
     },
     "cup": {
         "color_inactive": [
@@ -371,7 +404,8 @@
             1,
             3
         ],
-        "sprite": "cup"
+        "sprite": "cup",
+        "layer": 13
     },
     "cursor": {
         "color_inactive": [
@@ -382,7 +416,8 @@
             4,
             2
         ],
-        "sprite": "cursor"
+        "sprite": "cursor",
+        "layer": 20
     },
     "donut": {
         "color_inactive": [
@@ -393,7 +428,8 @@
             4,
             1
         ],
-        "sprite": "donut"
+        "sprite": "donut",
+        "layer": 16
     },
     "door": {
         "color_inactive": [
@@ -404,7 +440,8 @@
             2,
             2
         ],
-        "sprite": "door"
+        "sprite": "door",
+        "layer": 15
     },
     "dot": {
         "color_inactive": [
@@ -415,7 +452,8 @@
             0,
             3
         ],
-        "sprite": "dot"
+        "sprite": "dot",
+        "layer": 12
     },
     "drink": {
         "color_inactive": [
@@ -426,7 +464,8 @@
             4,
             4
         ],
-        "sprite": "drink"
+        "sprite": "drink",
+        "layer": 16
     },
     "drum": {
         "color_inactive": [
@@ -437,7 +476,8 @@
             2,
             3
         ],
-        "sprite": "drum"
+        "sprite": "drum",
+        "layer": 17
     },
     "dust": {
         "color_inactive": [
@@ -448,7 +488,8 @@
             6,
             2
         ],
-        "sprite": "dust"
+        "sprite": "dust",
+        "layer": 12
     },
     "ear": {
         "color_inactive": [
@@ -459,7 +500,8 @@
             3,
             1
         ],
-        "sprite": "ear"
+        "sprite": "ear",
+        "layer": 18
     },
     "eye": {
         "color_inactive": [
@@ -470,7 +512,8 @@
             3,
             1
         ],
-        "sprite": "eye"
+        "sprite": "eye",
+        "layer": 19
     },
     "fence": {
         "color_inactive": [
@@ -481,7 +524,8 @@
             6,
             1
         ],
-        "sprite": "fence"
+        "sprite": "fence",
+        "layer": 14
     },
     "fire": {
         "color_inactive": [
@@ -492,7 +536,8 @@
             2,
             3
         ],
-        "sprite": "fire"
+        "sprite": "fire",
+        "layer": 15
     },
     "fish": {
         "color_inactive": [
@@ -503,7 +548,8 @@
             1,
             3
         ],
-        "sprite": "fish"
+        "sprite": "fish",
+        "layer": 14
     },
     "flag": {
         "color_inactive": [
@@ -514,7 +560,8 @@
             2,
             4
         ],
-        "sprite": "flag"
+        "sprite": "flag",
+        "layer": 17
     },
     "flower": {
         "color_inactive": [
@@ -525,7 +572,8 @@
             3,
             3
         ],
-        "sprite": "flower"
+        "sprite": "flower",
+        "layer": 12
     },
     "fofo": {
         "color_inactive": [
@@ -536,7 +584,8 @@
             5,
             2
         ],
-        "sprite": "fofo"
+        "sprite": "fofo",
+        "layer": 18
     },
     "foliage": {
         "color_inactive": [
@@ -547,7 +596,8 @@
             6,
             0
         ],
-        "sprite": "foliage"
+        "sprite": "foliage",
+        "layer": 17
     },
     "foot": {
         "color_inactive": [
@@ -558,7 +608,8 @@
             3,
             1
         ],
-        "sprite": "foot"
+        "sprite": "foot",
+        "layer": 17
     },
     "fort": {
         "color_inactive": [
@@ -569,7 +620,8 @@
             1,
             1
         ],
-        "sprite": "fort"
+        "sprite": "fort",
+        "layer": 16
     },
     "frog": {
         "color_inactive": [
@@ -580,7 +632,8 @@
             5,
             3
         ],
-        "sprite": "frog"
+        "sprite": "frog",
+        "layer": 19
     },
     "fruit": {
         "color_inactive": [
@@ -591,7 +644,8 @@
             2,
             2
         ],
-        "sprite": "fruit"
+        "sprite": "fruit",
+        "layer": 16
     },
     "fungi": {
         "color_inactive": [
@@ -602,7 +656,8 @@
             6,
             1
         ],
-        "sprite": "fungi"
+        "sprite": "fungi",
+        "layer": 8
     },
     "fungus": {
         "color_inactive": [
@@ -613,7 +668,8 @@
             6,
             1
         ],
-        "sprite": "fungus"
+        "sprite": "fungus",
+        "layer": 16
     },
     "gate": {
         "color_inactive": [
@@ -624,7 +680,8 @@
             2,
             2
         ],
-        "sprite": "gate"
+        "sprite": "gate",
+        "layer": 18
     },
     "gem": {
         "color_inactive": [
@@ -635,7 +692,8 @@
             4,
             2
         ],
-        "sprite": "gem"
+        "sprite": "gem",
+        "layer": 15
     },
     "ghost": {
         "color_inactive": [
@@ -646,7 +704,8 @@
             4,
             2
         ],
-        "sprite": "ghost"
+        "sprite": "ghost",
+        "layer": 17
     },
     "grass": {
         "color_inactive": [
@@ -657,7 +716,8 @@
             5,
             0
         ],
-        "sprite": "grass"
+        "sprite": "grass",
+        "layer": 10
     },
     "guitar": {
         "color_inactive": [
@@ -668,7 +728,8 @@
             6,
             2
         ],
-        "sprite": "guitar"
+        "sprite": "guitar",
+        "layer": 16
     },
     "hand": {
         "color_inactive": [
@@ -679,7 +740,8 @@
             3,
             1
         ],
-        "sprite": "hand"
+        "sprite": "hand",
+        "layer": 17
     },
     "hedge": {
         "color_inactive": [
@@ -690,7 +752,8 @@
             5,
             1
         ],
-        "sprite": "hedge"
+        "sprite": "hedge",
+        "layer": 14
     },
     "hihat": {
         "color_inactive": [
@@ -701,7 +764,8 @@
             2,
             4
         ],
-        "sprite": "hihat"
+        "sprite": "hihat",
+        "layer": 17
     },
     "house": {
         "color_inactive": [
@@ -712,7 +776,8 @@
             6,
             1
         ],
-        "sprite": "house"
+        "sprite": "house",
+        "layer": 16
     },
     "husk": {
         "color_inactive": [
@@ -723,7 +788,8 @@
             6,
             1
         ],
-        "sprite": "husk"
+        "sprite": "husk",
+        "layer": 15
     },
     "husks": {
         "color_inactive": [
@@ -734,7 +800,8 @@
             6,
             1
         ],
-        "sprite": "husks"
+        "sprite": "husks",
+        "layer": 9
     },
     "ice": {
         "color_inactive": [
@@ -745,7 +812,8 @@
             1,
             2
         ],
-        "sprite": "ice"
+        "sprite": "ice",
+        "layer": 9
     },
     "it": {
         "color_inactive": [
@@ -756,7 +824,8 @@
             1,
             4
         ],
-        "sprite": "it"
+        "sprite": "it",
+        "layer": 18
     },
     "jelly": {
         "color_inactive": [
@@ -767,7 +836,8 @@
             1,
             4
         ],
-        "sprite": "jelly"
+        "sprite": "jelly",
+        "layer": 17
     },
     "jiji": {
         "color_inactive": [
@@ -778,7 +848,8 @@
             2,
             3
         ],
-        "sprite": "jiji"
+        "sprite": "jiji",
+        "layer": 18
     },
     "keke": {
         "color_inactive": [
@@ -789,7 +860,8 @@
             2,
             2
         ],
-        "sprite": "keke"
+        "sprite": "keke",
+        "layer": 18
     },
     "key": {
         "color_inactive": [
@@ -800,7 +872,8 @@
             2,
             4
         ],
-        "sprite": "key"
+        "sprite": "key",
+        "layer": 16
     },
     "knight": {
         "color_inactive": [
@@ -811,7 +884,8 @@
             2,
             2
         ],
-        "sprite": "knight"
+        "sprite": "knight",
+        "layer": 16
     },
     "ladder": {
         "color_inactive": [
@@ -822,7 +896,8 @@
             2,
             3
         ],
-        "sprite": "ladder"
+        "sprite": "ladder",
+        "layer": 10
     },
     "lamp": {
         "color_inactive": [
@@ -833,7 +908,8 @@
             2,
             4
         ],
-        "sprite": "lamp"
+        "sprite": "lamp",
+        "layer": 16
     },
     "lava": {
         "color_inactive": [
@@ -844,7 +920,8 @@
             2,
             3
         ],
-        "sprite": "water"
+        "sprite": "water",
+        "layer": 2
     },
     "leaf": {
         "color_inactive": [
@@ -855,7 +932,8 @@
             2,
             4
         ],
-        "sprite": "leaf"
+        "sprite": "leaf",
+        "layer": 8
     },
     "lift": {
         "color_inactive": [
@@ -866,7 +944,8 @@
             0,
             1
         ],
-        "sprite": "lift"
+        "sprite": "lift",
+        "layer": 17
     },
     "line": {
         "color_inactive": [
@@ -877,7 +956,8 @@
             0,
             3
         ],
-        "sprite": "line"
+        "sprite": "line",
+        "layer": 20
     },
     "lizard": {
         "color_inactive": [
@@ -888,7 +968,8 @@
             2,
             2
         ],
-        "sprite": "lizard"
+        "sprite": "lizard",
+        "layer": 19
     },
     "love": {
         "color_inactive": [
@@ -899,7 +980,8 @@
             4,
             2
         ],
-        "sprite": "love"
+        "sprite": "love",
+        "layer": 16
     },
     "me": {
         "color_inactive": [
@@ -910,7 +992,8 @@
             3,
             1
         ],
-        "sprite": "me"
+        "sprite": "me",
+        "layer": 18
     },
     "monitor": {
         "color_inactive": [
@@ -921,7 +1004,8 @@
             0,
             1
         ],
-        "sprite": "monitor"
+        "sprite": "monitor",
+        "layer": 14
     },
     "moon": {
         "color_inactive": [
@@ -932,7 +1016,8 @@
             2,
             4
         ],
-        "sprite": "moon"
+        "sprite": "moon",
+        "layer": 16
     },
     "nose": {
         "color_inactive": [
@@ -943,7 +1028,8 @@
             3,
             1
         ],
-        "sprite": "nose"
+        "sprite": "nose",
+        "layer": 18
     },
     "orb": {
         "color_inactive": [
@@ -954,7 +1040,8 @@
             4,
             1
         ],
-        "sprite": "orb"
+        "sprite": "orb",
+        "layer": 17
     },
     "pants": {
         "color_inactive": [
@@ -965,7 +1052,8 @@
             3,
             2
         ],
-        "sprite": "pants"
+        "sprite": "pants",
+        "layer": 15
     },
     "pawn": {
         "color_inactive": [
@@ -976,7 +1064,8 @@
             2,
             2
         ],
-        "sprite": "pawn"
+        "sprite": "pawn",
+        "layer": 16
     },
     "piano": {
         "color_inactive": [
@@ -987,7 +1076,8 @@
             1,
             3
         ],
-        "sprite": "piano"
+        "sprite": "piano",
+        "layer": 16
     },
     "pillar": {
         "color_inactive": [
@@ -998,7 +1088,8 @@
             0,
             1
         ],
-        "sprite": "pillar"
+        "sprite": "pillar",
+        "layer": 16
     },
     "pipe": {
         "color_inactive": [
@@ -1009,7 +1100,8 @@
             1,
             1
         ],
-        "sprite": "pipe"
+        "sprite": "pipe",
+        "layer": 14
     },
     "pixel": {
         "color_inactive": [
@@ -1020,7 +1112,8 @@
             0,
             3
         ],
-        "sprite": "pixel"
+        "sprite": "pixel",
+        "layer": 18
     },
     "pizza": {
         "color_inactive": [
@@ -1031,7 +1124,8 @@
             2,
             3
         ],
-        "sprite": "pizza"
+        "sprite": "pizza",
+        "layer": 16
     },
     "plane": {
         "color_inactive": [
@@ -1042,7 +1136,8 @@
             2,
             2
         ],
-        "sprite": "plane"
+        "sprite": "plane",
+        "layer": 16
     },
     "planet": {
         "color_inactive": [
@@ -1053,7 +1148,8 @@
             2,
             3
         ],
-        "sprite": "planet"
+        "sprite": "planet",
+        "layer": 12
     },
     "potato": {
         "color_inactive": [
@@ -1064,7 +1160,8 @@
             6,
             1
         ],
-        "sprite": "potato"
+        "sprite": "potato",
+        "layer": 16
     },
     "pumpkin": {
         "color_inactive": [
@@ -1075,7 +1172,8 @@
             2,
             3
         ],
-        "sprite": "pumpkin"
+        "sprite": "pumpkin",
+        "layer": 16
     },
     "reed": {
         "color_inactive": [
@@ -1086,7 +1184,8 @@
             6,
             2
         ],
-        "sprite": "reed"
+        "sprite": "reed",
+        "layer": 16
     },
     "ring": {
         "color_inactive": [
@@ -1097,7 +1196,8 @@
             2,
             4
         ],
-        "sprite": "ring"
+        "sprite": "ring",
+        "layer": 18
     },
     "road": {
         "color_inactive": [
@@ -1108,7 +1208,8 @@
             0,
             1
         ],
-        "sprite": "road"
+        "sprite": "road",
+        "layer": 7
     },
     "robot": {
         "color_inactive": [
@@ -1119,7 +1220,8 @@
             0,
             1
         ],
-        "sprite": "robot"
+        "sprite": "robot",
+        "layer": 17
     },
     "rock": {
         "color_inactive": [
@@ -1130,7 +1232,8 @@
             6,
             2
         ],
-        "sprite": "rock"
+        "sprite": "rock",
+        "layer": 16
     },
     "rocket": {
         "color_inactive": [
@@ -1141,7 +1244,8 @@
             0,
             1
         ],
-        "sprite": "rocket"
+        "sprite": "rocket",
+        "layer": 15
     },
     "rose": {
         "color_inactive": [
@@ -1152,7 +1256,8 @@
             2,
             2
         ],
-        "sprite": "rose"
+        "sprite": "rose",
+        "layer": 16
     },
     "rubble": {
         "color_inactive": [
@@ -1163,7 +1268,8 @@
             6,
             1
         ],
-        "sprite": "rubble"
+        "sprite": "rubble",
+        "layer": 8
     },
     "sax": {
         "color_inactive": [
@@ -1174,7 +1280,8 @@
             3,
             4
         ],
-        "sprite": "sax"
+        "sprite": "sax",
+        "layer": 16
     },
     "seed": {
         "color_inactive": [
@@ -1185,7 +1292,8 @@
             6,
             2
         ],
-        "sprite": "seed"
+        "sprite": "seed",
+        "layer": 12
     },
     "shell": {
         "color_inactive": [
@@ -1196,7 +1304,8 @@
             4,
             2
         ],
-        "sprite": "shell"
+        "sprite": "shell",
+        "layer": 13
     },
     "shirt": {
         "color_inactive": [
@@ -1207,7 +1316,8 @@
             2,
             1
         ],
-        "sprite": "shirt"
+        "sprite": "shirt",
+        "layer": 15
     },
     "shovel": {
         "color_inactive": [
@@ -1218,7 +1328,8 @@
             3,
             1
         ],
-        "sprite": "shovel"
+        "sprite": "shovel",
+        "layer": 15
     },
     "sign": {
         "color_inactive": [
@@ -1229,7 +1340,8 @@
             6,
             1
         ],
-        "sprite": "sign"
+        "sprite": "sign",
+        "layer": 12
     },
     "skull": {
         "color_inactive": [
@@ -1240,7 +1352,8 @@
             2,
             1
         ],
-        "sprite": "skull"
+        "sprite": "skull",
+        "layer": 17
     },
     "spike": {
         "color_inactive": [
@@ -1251,7 +1364,8 @@
             1,
             1
         ],
-        "sprite": "spike"
+        "sprite": "spike",
+        "layer": 10
     },
     "sprout": {
         "color_inactive": [
@@ -1262,7 +1376,8 @@
             5,
             3
         ],
-        "sprite": "sprout"
+        "sprite": "sprout",
+        "layer": 17
     },
     "square": {
         "color_inactive": [
@@ -1273,7 +1388,8 @@
             4,
             1
         ],
-        "sprite": "square"
+        "sprite": "square",
+        "layer": 17
     },
     "star": {
         "color_inactive": [
@@ -1284,7 +1400,8 @@
             2,
             4
         ],
-        "sprite": "star"
+        "sprite": "star",
+        "layer": 16
     },
     "statue": {
         "color_inactive": [
@@ -1295,7 +1412,8 @@
             0,
             1
         ],
-        "sprite": "statue"
+        "sprite": "statue",
+        "layer": 17
     },
     "stick": {
         "color_inactive": [
@@ -1306,7 +1424,8 @@
             6,
             1
         ],
-        "sprite": "stick"
+        "sprite": "stick",
+        "layer": 12
     },
     "stump": {
         "color_inactive": [
@@ -1317,7 +1436,8 @@
             6,
             1
         ],
-        "sprite": "stump"
+        "sprite": "stump",
+        "layer": 12
     },
     "sun": {
         "color_inactive": [
@@ -1328,7 +1448,8 @@
             2,
             4
         ],
-        "sprite": "sun"
+        "sprite": "sun",
+        "layer": 14
     },
     "sword": {
         "color_inactive": [
@@ -1339,7 +1460,8 @@
             1,
             4
         ],
-        "sprite": "sword"
+        "sprite": "sword",
+        "layer": 17
     },
     "text_0": {
         "color_inactive": [
@@ -1350,7 +1472,8 @@
             0,
             3
         ],
-        "sprite": "text_0"
+        "sprite": "text_0",
+        "layer": 20
     },
     "text_1": {
         "color_inactive": [
@@ -1361,7 +1484,8 @@
             0,
             3
         ],
-        "sprite": "text_1"
+        "sprite": "text_1",
+        "layer": 20
     },
     "text_2": {
         "color_inactive": [
@@ -1372,7 +1496,8 @@
             0,
             3
         ],
-        "sprite": "text_2"
+        "sprite": "text_2",
+        "layer": 20
     },
     "text_3": {
         "color_inactive": [
@@ -1383,7 +1508,8 @@
             0,
             3
         ],
-        "sprite": "text_3"
+        "sprite": "text_3",
+        "layer": 20
     },
     "text_4": {
         "color_inactive": [
@@ -1394,7 +1520,8 @@
             0,
             3
         ],
-        "sprite": "text_4"
+        "sprite": "text_4",
+        "layer": 20
     },
     "text_5": {
         "color_inactive": [
@@ -1405,7 +1532,8 @@
             0,
             3
         ],
-        "sprite": "text_5"
+        "sprite": "text_5",
+        "layer": 20
     },
     "text_6": {
         "color_inactive": [
@@ -1416,7 +1544,8 @@
             0,
             3
         ],
-        "sprite": "text_6"
+        "sprite": "text_6",
+        "layer": 20
     },
     "text_7": {
         "color_inactive": [
@@ -1427,7 +1556,8 @@
             0,
             3
         ],
-        "sprite": "text_7"
+        "sprite": "text_7",
+        "layer": 20
     },
     "text_8": {
         "color_inactive": [
@@ -1438,7 +1568,8 @@
             0,
             3
         ],
-        "sprite": "text_8"
+        "sprite": "text_8",
+        "layer": 20
     },
     "text_9": {
         "color_inactive": [
@@ -1449,7 +1580,8 @@
             0,
             3
         ],
-        "sprite": "text_9"
+        "sprite": "text_9",
+        "layer": 20
     },
     "text_a": {
         "color_inactive": [
@@ -1460,7 +1592,8 @@
             0,
             3
         ],
-        "sprite": "text_a"
+        "sprite": "text_a",
+        "layer": 20
     },
     "text_above": {
         "color_inactive": [
@@ -1471,7 +1604,8 @@
             1,
             4
         ],
-        "sprite": "text_above"
+        "sprite": "text_above",
+        "layer": 20
     },
     "text_algae": {
         "color_inactive": [
@@ -1482,7 +1616,8 @@
             5,
             1
         ],
-        "sprite": "text_algae"
+        "sprite": "text_algae",
+        "layer": 20
     },
     "text_all": {
         "color_inactive": [
@@ -1493,7 +1628,8 @@
             0,
             3
         ],
-        "sprite": "text_all"
+        "sprite": "text_all",
+        "layer": 20
     },
     "text_and": {
         "color_inactive": [
@@ -1504,7 +1640,8 @@
             0,
             3
         ],
-        "sprite": "text_and"
+        "sprite": "text_and",
+        "layer": 20
     },
     "text_arrow": {
         "color_inactive": [
@@ -1515,7 +1652,8 @@
             5,
             2
         ],
-        "sprite": "text_arrow"
+        "sprite": "text_arrow",
+        "layer": 20
     },
     "text_auto": {
         "color_inactive": [
@@ -1526,7 +1664,8 @@
             4,
             1
         ],
-        "sprite": "text_auto"
+        "sprite": "text_auto",
+        "layer": 20
     },
     "text_b": {
         "color_inactive": [
@@ -1537,7 +1676,8 @@
             0,
             3
         ],
-        "sprite": "text_b"
+        "sprite": "text_b",
+        "layer": 20
     },
     "text_baba": {
         "color_inactive": [
@@ -1548,7 +1688,8 @@
             4,
             1
         ],
-        "sprite": "text_baba"
+        "sprite": "text_baba",
+        "layer": 20
     },
     "text_back": {
         "color_inactive": [
@@ -1559,7 +1700,8 @@
             4,
             1
         ],
-        "sprite": "text_back"
+        "sprite": "text_back",
+        "layer": 20
     },
     "text_banana": {
         "color_inactive": [
@@ -1570,7 +1712,8 @@
             2,
             4
         ],
-        "sprite": "text_banana"
+        "sprite": "text_banana",
+        "layer": 20
     },
     "text_bat": {
         "color_inactive": [
@@ -1581,7 +1724,8 @@
             3,
             1
         ],
-        "sprite": "text_bat"
+        "sprite": "text_bat",
+        "layer": 20
     },
     "text_bed": {
         "color_inactive": [
@@ -1592,7 +1736,8 @@
             0,
             3
         ],
-        "sprite": "text_bed"
+        "sprite": "text_bed",
+        "layer": 20
     },
     "text_bee": {
         "color_inactive": [
@@ -1603,7 +1748,8 @@
             2,
             4
         ],
-        "sprite": "text_bee"
+        "sprite": "text_bee",
+        "layer": 20
     },
     "text_below": {
         "color_inactive": [
@@ -1614,7 +1760,8 @@
             1,
             4
         ],
-        "sprite": "text_below"
+        "sprite": "text_below",
+        "layer": 20
     },
     "text_belt": {
         "color_inactive": [
@@ -1625,7 +1772,8 @@
             1,
             3
         ],
-        "sprite": "text_belt"
+        "sprite": "text_belt",
+        "layer": 20
     },
     "text_besideleft": {
         "color_inactive": [
@@ -1636,7 +1784,8 @@
             1,
             4
         ],
-        "sprite": "text_besideleft"
+        "sprite": "text_besideleft",
+        "layer": 20
     },
     "text_besideright": {
         "color_inactive": [
@@ -1647,7 +1796,8 @@
             1,
             4
         ],
-        "sprite": "text_besideright"
+        "sprite": "text_besideright",
+        "layer": 20
     },
     "text_best": {
         "color_inactive": [
@@ -1658,7 +1808,8 @@
             2,
             4
         ],
-        "sprite": "text_best"
+        "sprite": "text_best",
+        "layer": 20
     },
     "text_bird": {
         "color_inactive": [
@@ -1669,7 +1820,8 @@
             2,
             3
         ],
-        "sprite": "text_bird"
+        "sprite": "text_bird",
+        "layer": 20
     },
     "text_black": {
         "color_inactive": [
@@ -1680,7 +1832,8 @@
             0,
             1
         ],
-        "sprite": "text_black"
+        "sprite": "text_black",
+        "layer": 20
     },
     "text_blob": {
         "color_inactive": [
@@ -1691,7 +1844,8 @@
             5,
             2
         ],
-        "sprite": "text_blob"
+        "sprite": "text_blob",
+        "layer": 20
     },
     "text_blue": {
         "color_inactive": [
@@ -1702,7 +1856,8 @@
             3,
             3
         ],
-        "sprite": "text_blue"
+        "sprite": "text_blue",
+        "layer": 20
     },
     "text_boat": {
         "color_inactive": [
@@ -1713,7 +1868,8 @@
             6,
             2
         ],
-        "sprite": "text_boat"
+        "sprite": "text_boat",
+        "layer": 20
     },
     "text_bog": {
         "color_inactive": [
@@ -1724,7 +1880,8 @@
             5,
             3
         ],
-        "sprite": "text_bog"
+        "sprite": "text_bog",
+        "layer": 20
     },
     "text_bolt": {
         "color_inactive": [
@@ -1735,7 +1892,8 @@
             2,
             4
         ],
-        "sprite": "text_bolt"
+        "sprite": "text_bolt",
+        "layer": 20
     },
     "text_bonus": {
         "color_inactive": [
@@ -1746,7 +1904,8 @@
             4,
             1
         ],
-        "sprite": "text_bonus"
+        "sprite": "text_bonus",
+        "layer": 20
     },
     "text_book": {
         "color_inactive": [
@@ -1757,7 +1916,8 @@
             2,
             3
         ],
-        "sprite": "text_book"
+        "sprite": "text_book",
+        "layer": 20
     },
     "text_bottle": {
         "color_inactive": [
@@ -1768,7 +1928,8 @@
             1,
             4
         ],
-        "sprite": "text_bottle"
+        "sprite": "text_bottle",
+        "layer": 20
     },
     "text_box": {
         "color_inactive": [
@@ -1779,7 +1940,8 @@
             6,
             1
         ],
-        "sprite": "text_box"
+        "sprite": "text_box",
+        "layer": 20
     },
     "text_brick": {
         "color_inactive": [
@@ -1790,7 +1952,8 @@
             6,
             1
         ],
-        "sprite": "text_brick"
+        "sprite": "text_brick",
+        "layer": 20
     },
     "text_broken": {
         "color_inactive": [
@@ -1801,7 +1964,8 @@
             4,
             1
         ],
-        "sprite": "text_broken"
+        "sprite": "text_broken",
+        "layer": 20
     },
     "text_brown": {
         "color_inactive": [
@@ -1812,7 +1976,8 @@
             6,
             1
         ],
-        "sprite": "text_brown"
+        "sprite": "text_brown",
+        "layer": 20
     },
     "text_bubble": {
         "color_inactive": [
@@ -1823,7 +1988,8 @@
             1,
             4
         ],
-        "sprite": "text_bubble"
+        "sprite": "text_bubble",
+        "layer": 20
     },
     "text_bucket": {
         "color_inactive": [
@@ -1834,7 +2000,8 @@
             2,
             2
         ],
-        "sprite": "text_bucket"
+        "sprite": "text_bucket",
+        "layer": 20
     },
     "text_bug": {
         "color_inactive": [
@@ -1845,7 +2012,8 @@
             6,
             2
         ],
-        "sprite": "text_bug"
+        "sprite": "text_bug",
+        "layer": 20
     },
     "text_burger": {
         "color_inactive": [
@@ -1856,7 +2024,8 @@
             2,
             3
         ],
-        "sprite": "text_burger"
+        "sprite": "text_burger",
+        "layer": 20
     },
     "text_c": {
         "color_inactive": [
@@ -1867,7 +2036,8 @@
             0,
             3
         ],
-        "sprite": "text_c"
+        "sprite": "text_c",
+        "layer": 20
     },
     "text_cake": {
         "color_inactive": [
@@ -1878,7 +2048,8 @@
             4,
             2
         ],
-        "sprite": "text_cake"
+        "sprite": "text_cake",
+        "layer": 20
     },
     "text_car": {
         "color_inactive": [
@@ -1889,7 +2060,8 @@
             2,
             2
         ],
-        "sprite": "text_car"
+        "sprite": "text_car",
+        "layer": 20
     },
     "text_cart": {
         "color_inactive": [
@@ -1900,7 +2072,8 @@
             5,
             2
         ],
-        "sprite": "text_cart"
+        "sprite": "text_cart",
+        "layer": 20
     },
     "text_cash": {
         "color_inactive": [
@@ -1911,7 +2084,8 @@
             5,
             3
         ],
-        "sprite": "text_cash"
+        "sprite": "text_cash",
+        "layer": 20
     },
     "text_cat": {
         "color_inactive": [
@@ -1922,7 +2096,8 @@
             6,
             2
         ],
-        "sprite": "text_cat"
+        "sprite": "text_cat",
+        "layer": 20
     },
     "text_chill": {
         "color_inactive": [
@@ -1933,7 +2108,8 @@
             3,
             3
         ],
-        "sprite": "text_chill"
+        "sprite": "text_chill",
+        "layer": 20
     },
     "text_circle": {
         "color_inactive": [
@@ -1944,7 +2120,8 @@
             5,
             3
         ],
-        "sprite": "text_circle"
+        "sprite": "text_circle",
+        "layer": 20
     },
     "text_cliff": {
         "color_inactive": [
@@ -1955,7 +2132,8 @@
             6,
             2
         ],
-        "sprite": "text_cliff"
+        "sprite": "text_cliff",
+        "layer": 20
     },
     "text_clock": {
         "color_inactive": [
@@ -1966,7 +2144,8 @@
             1,
             3
         ],
-        "sprite": "text_clock"
+        "sprite": "text_clock",
+        "layer": 20
     },
     "text_cloud": {
         "color_inactive": [
@@ -1977,7 +2156,8 @@
             1,
             4
         ],
-        "sprite": "text_cloud"
+        "sprite": "text_cloud",
+        "layer": 20
     },
     "text_cog": {
         "color_inactive": [
@@ -1988,7 +2168,8 @@
             0,
             2
         ],
-        "sprite": "text_cog"
+        "sprite": "text_cog",
+        "layer": 20
     },
     "text_crab": {
         "color_inactive": [
@@ -1999,7 +2180,8 @@
             2,
             2
         ],
-        "sprite": "text_crab"
+        "sprite": "text_crab",
+        "layer": 20
     },
     "text_crystal": {
         "color_inactive": [
@@ -2010,7 +2192,8 @@
             4,
             2
         ],
-        "sprite": "text_crystal"
+        "sprite": "text_crystal",
+        "layer": 20
     },
     "text_cup": {
         "color_inactive": [
@@ -2021,7 +2204,8 @@
             1,
             3
         ],
-        "sprite": "text_cup"
+        "sprite": "text_cup",
+        "layer": 20
     },
     "text_cursor": {
         "color_inactive": [
@@ -2032,7 +2216,8 @@
             2,
             4
         ],
-        "sprite": "text_cursor"
+        "sprite": "text_cursor",
+        "layer": 20
     },
     "text_cyan": {
         "color_inactive": [
@@ -2043,7 +2228,8 @@
             1,
             4
         ],
-        "sprite": "text_cyan"
+        "sprite": "text_cyan",
+        "layer": 20
     },
     "text_d": {
         "color_inactive": [
@@ -2054,7 +2240,8 @@
             0,
             3
         ],
-        "sprite": "text_d"
+        "sprite": "text_d",
+        "layer": 20
     },
     "text_defeat": {
         "color_inactive": [
@@ -2065,7 +2252,8 @@
             2,
             1
         ],
-        "sprite": "text_defeat"
+        "sprite": "text_defeat",
+        "layer": 20
     },
     "text_deturn": {
         "color_inactive": [
@@ -2076,7 +2264,8 @@
             1,
             4
         ],
-        "sprite": "text_deturn"
+        "sprite": "text_deturn",
+        "layer": 20
     },
     "text_done": {
         "color_inactive": [
@@ -2087,7 +2276,8 @@
             0,
             3
         ],
-        "sprite": "text_done"
+        "sprite": "text_done",
+        "layer": 20
     },
     "text_donut": {
         "color_inactive": [
@@ -2098,7 +2288,8 @@
             4,
             2
         ],
-        "sprite": "text_donut"
+        "sprite": "text_donut",
+        "layer": 20
     },
     "text_door": {
         "color_inactive": [
@@ -2109,7 +2300,8 @@
             2,
             2
         ],
-        "sprite": "text_door"
+        "sprite": "text_door",
+        "layer": 20
     },
     "text_dot": {
         "color_inactive": [
@@ -2120,7 +2312,8 @@
             0,
             3
         ],
-        "sprite": "text_dot"
+        "sprite": "text_dot",
+        "layer": 20
     },
     "text_down": {
         "color_inactive": [
@@ -2131,7 +2324,8 @@
             1,
             4
         ],
-        "sprite": "text_down"
+        "sprite": "text_down",
+        "layer": 20
     },
     "text_drink": {
         "color_inactive": [
@@ -2142,7 +2336,8 @@
             4,
             4
         ],
-        "sprite": "text_drink"
+        "sprite": "text_drink",
+        "layer": 20
     },
     "text_drum": {
         "color_inactive": [
@@ -2153,7 +2348,8 @@
             2,
             3
         ],
-        "sprite": "text_drum"
+        "sprite": "text_drum",
+        "layer": 20
     },
     "text_dust": {
         "color_inactive": [
@@ -2164,7 +2360,8 @@
             2,
             4
         ],
-        "sprite": "text_dust"
+        "sprite": "text_dust",
+        "layer": 20
     },
     "text_e": {
         "color_inactive": [
@@ -2175,7 +2372,8 @@
             0,
             3
         ],
-        "sprite": "text_e"
+        "sprite": "text_e",
+        "layer": 20
     },
     "text_ear": {
         "color_inactive": [
@@ -2186,7 +2384,8 @@
             4,
             2
         ],
-        "sprite": "text_ear"
+        "sprite": "text_ear",
+        "layer": 20
     },
     "text_eat": {
         "color_inactive": [
@@ -2197,7 +2396,8 @@
             2,
             2
         ],
-        "sprite": "text_eat"
+        "sprite": "text_eat",
+        "layer": 20
     },
     "text_empty": {
         "color_inactive": [
@@ -2208,7 +2408,8 @@
             0,
             3
         ],
-        "sprite": "text_empty"
+        "sprite": "text_empty",
+        "layer": 20
     },
     "text_end": {
         "color_inactive": [
@@ -2219,7 +2420,8 @@
             0,
             3
         ],
-        "sprite": "text_end"
+        "sprite": "text_end",
+        "layer": 20
     },
     "text_eye": {
         "color_inactive": [
@@ -2230,7 +2432,8 @@
             4,
             2
         ],
-        "sprite": "text_eye"
+        "sprite": "text_eye",
+        "layer": 20
     },
     "text_f": {
         "color_inactive": [
@@ -2241,7 +2444,8 @@
             0,
             3
         ],
-        "sprite": "text_f"
+        "sprite": "text_f",
+        "layer": 20
     },
     "text_facing": {
         "color_inactive": [
@@ -2252,7 +2456,8 @@
             0,
             3
         ],
-        "sprite": "text_facing"
+        "sprite": "text_facing",
+        "layer": 20
     },
     "text_fall": {
         "color_inactive": [
@@ -2263,7 +2468,8 @@
             5,
             3
         ],
-        "sprite": "text_falldown"
+        "sprite": "text_falldown",
+        "layer": 20
     },
     "text_fallleft": {
         "color_inactive": [
@@ -2274,7 +2480,8 @@
             5,
             3
         ],
-        "sprite": "text_fallleft"
+        "sprite": "text_fallleft",
+        "layer": 20
     },
     "text_fallright": {
         "color_inactive": [
@@ -2285,7 +2492,8 @@
             5,
             3
         ],
-        "sprite": "text_fallright"
+        "sprite": "text_fallright",
+        "layer": 20
     },
     "text_fallup": {
         "color_inactive": [
@@ -2296,7 +2504,8 @@
             5,
             3
         ],
-        "sprite": "text_fallup"
+        "sprite": "text_fallup",
+        "layer": 20
     },
     "text_fear": {
         "color_inactive": [
@@ -2307,7 +2516,8 @@
             2,
             2
         ],
-        "sprite": "text_fear"
+        "sprite": "text_fear",
+        "layer": 20
     },
     "text_feeling": {
         "color_inactive": [
@@ -2318,7 +2528,8 @@
             0,
             3
         ],
-        "sprite": "text_feeling"
+        "sprite": "text_feeling",
+        "layer": 20
     },
     "text_fence": {
         "color_inactive": [
@@ -2329,7 +2540,8 @@
             6,
             1
         ],
-        "sprite": "text_fence"
+        "sprite": "text_fence",
+        "layer": 20
     },
     "text_fire": {
         "color_inactive": [
@@ -2340,7 +2552,8 @@
             2,
             2
         ],
-        "sprite": "text_fire"
+        "sprite": "text_fire",
+        "layer": 20
     },
     "text_fish": {
         "color_inactive": [
@@ -2351,7 +2564,8 @@
             1,
             3
         ],
-        "sprite": "text_fish"
+        "sprite": "text_fish",
+        "layer": 20
     },
     "text_flag": {
         "color_inactive": [
@@ -2362,7 +2576,8 @@
             2,
             4
         ],
-        "sprite": "text_flag"
+        "sprite": "text_flag",
+        "layer": 20
     },
     "text_flat": {
         "color_inactive": [
@@ -2373,7 +2588,8 @@
             0,
             3
         ],
-        "sprite": "text_flat"
+        "sprite": "text_flat",
+        "layer": 20
     },
     "text_float": {
         "color_inactive": [
@@ -2384,7 +2600,8 @@
             1,
             4
         ],
-        "sprite": "text_float"
+        "sprite": "text_float",
+        "layer": 20
     },
     "text_flower": {
         "color_inactive": [
@@ -2395,7 +2612,8 @@
             3,
             3
         ],
-        "sprite": "text_flower"
+        "sprite": "text_flower",
+        "layer": 20
     },
     "text_fofo": {
         "color_inactive": [
@@ -2406,7 +2624,8 @@
             5,
             2
         ],
-        "sprite": "text_fofo"
+        "sprite": "text_fofo",
+        "layer": 20
     },
     "text_foliage": {
         "color_inactive": [
@@ -2417,7 +2636,8 @@
             2,
             3
         ],
-        "sprite": "text_foliage"
+        "sprite": "text_foliage",
+        "layer": 20
     },
     "text_follow": {
         "color_inactive": [
@@ -2428,7 +2648,8 @@
             5,
             3
         ],
-        "sprite": "text_follow"
+        "sprite": "text_follow",
+        "layer": 20
     },
     "text_foot": {
         "color_inactive": [
@@ -2439,7 +2660,8 @@
             4,
             2
         ],
-        "sprite": "text_foot"
+        "sprite": "text_foot",
+        "layer": 20
     },
     "text_fort": {
         "color_inactive": [
@@ -2450,7 +2672,8 @@
             0,
             1
         ],
-        "sprite": "text_fort"
+        "sprite": "text_fort",
+        "layer": 20
     },
     "text_frog": {
         "color_inactive": [
@@ -2461,7 +2684,8 @@
             5,
             3
         ],
-        "sprite": "text_frog"
+        "sprite": "text_frog",
+        "layer": 20
     },
     "text_fruit": {
         "color_inactive": [
@@ -2472,7 +2696,8 @@
             2,
             2
         ],
-        "sprite": "text_fruit"
+        "sprite": "text_fruit",
+        "layer": 20
     },
     "text_fungi": {
         "color_inactive": [
@@ -2483,7 +2708,8 @@
             6,
             2
         ],
-        "sprite": "text_fungi"
+        "sprite": "text_fungi",
+        "layer": 20
     },
     "text_fungus": {
         "color_inactive": [
@@ -2494,7 +2720,8 @@
             6,
             1
         ],
-        "sprite": "text_fungus"
+        "sprite": "text_fungus",
+        "layer": 20
     },
     "text_g": {
         "color_inactive": [
@@ -2505,7 +2732,8 @@
             0,
             3
         ],
-        "sprite": "text_g"
+        "sprite": "text_g",
+        "layer": 20
     },
     "text_gate": {
         "color_inactive": [
@@ -2516,7 +2744,8 @@
             2,
             2
         ],
-        "sprite": "text_gate"
+        "sprite": "text_gate",
+        "layer": 20
     },
     "text_gem": {
         "color_inactive": [
@@ -2527,7 +2756,8 @@
             4,
             2
         ],
-        "sprite": "text_gem"
+        "sprite": "text_gem",
+        "layer": 20
     },
     "text_ghost": {
         "color_inactive": [
@@ -2538,7 +2768,8 @@
             4,
             2
         ],
-        "sprite": "text_ghost"
+        "sprite": "text_ghost",
+        "layer": 20
     },
     "text_grab": {
         "color_inactive": [
@@ -2559,7 +2790,8 @@
             5,
             3
         ],
-        "sprite": "text_grass"
+        "sprite": "text_grass",
+        "layer": 20
     },
     "text_green": {
         "color_inactive": [
@@ -2570,7 +2802,8 @@
             5,
             2
         ],
-        "sprite": "text_green"
+        "sprite": "text_green",
+        "layer": 20
     },
     "text_grey": {
         "color_inactive": [
@@ -2581,7 +2814,8 @@
             0,
             1
         ],
-        "sprite": "text_grey"
+        "sprite": "text_grey",
+        "layer": 20
     },
     "text_group": {
         "color_inactive": [
@@ -2592,7 +2826,8 @@
             3,
             3
         ],
-        "sprite": "text_group"
+        "sprite": "text_group",
+        "layer": 20
     },
     "text_group2": {
         "color_inactive": [
@@ -2603,7 +2838,8 @@
             2,
             2
         ],
-        "sprite": "text_group2"
+        "sprite": "text_group2",
+        "layer": 20
     },
     "text_group3": {
         "color_inactive": [
@@ -2614,7 +2850,8 @@
             5,
             3
         ],
-        "sprite": "text_group3"
+        "sprite": "text_group3",
+        "layer": 20
     },
     "text_guitar": {
         "color_inactive": [
@@ -2625,7 +2862,8 @@
             6,
             2
         ],
-        "sprite": "text_guitar"
+        "sprite": "text_guitar",
+        "layer": 20
     },
     "text_h": {
         "color_inactive": [
@@ -2636,7 +2874,8 @@
             0,
             3
         ],
-        "sprite": "text_h"
+        "sprite": "text_h",
+        "layer": 20
     },
     "text_hand": {
         "color_inactive": [
@@ -2647,7 +2886,8 @@
             4,
             2
         ],
-        "sprite": "text_hand"
+        "sprite": "text_hand",
+        "layer": 20
     },
     "text_has": {
         "color_inactive": [
@@ -2658,7 +2898,8 @@
             0,
             3
         ],
-        "sprite": "text_has"
+        "sprite": "text_has",
+        "layer": 20
     },
     "text_hedge": {
         "color_inactive": [
@@ -2669,7 +2910,8 @@
             5,
             1
         ],
-        "sprite": "text_hedge"
+        "sprite": "text_hedge",
+        "layer": 20
     },
     "text_hide": {
         "color_inactive": [
@@ -2680,7 +2922,8 @@
             3,
             3
         ],
-        "sprite": "text_hide"
+        "sprite": "text_hide",
+        "layer": 20
     },
     "text_hihat": {
         "color_inactive": [
@@ -2691,7 +2934,8 @@
             2,
             4
         ],
-        "sprite": "text_hihat"
+        "sprite": "text_hihat",
+        "layer": 20
     },
     "text_hot": {
         "color_inactive": [
@@ -2702,7 +2946,8 @@
             2,
             3
         ],
-        "sprite": "text_hot"
+        "sprite": "text_hot",
+        "layer": 20
     },
     "text_house": {
         "color_inactive": [
@@ -2713,7 +2958,8 @@
             6,
             2
         ],
-        "sprite": "text_house"
+        "sprite": "text_house",
+        "layer": 20
     },
     "text_husk": {
         "color_inactive": [
@@ -2724,7 +2970,8 @@
             6,
             1
         ],
-        "sprite": "text_husk"
+        "sprite": "text_husk",
+        "layer": 20
     },
     "text_husks": {
         "color_inactive": [
@@ -2735,7 +2982,8 @@
             6,
             2
         ],
-        "sprite": "text_husks"
+        "sprite": "text_husks",
+        "layer": 20
     },
     "text_i": {
         "color_inactive": [
@@ -2746,7 +2994,8 @@
             0,
             3
         ],
-        "sprite": "text_i"
+        "sprite": "text_i",
+        "layer": 20
     },
     "text_ice": {
         "color_inactive": [
@@ -2757,7 +3006,8 @@
             1,
             3
         ],
-        "sprite": "text_ice"
+        "sprite": "text_ice",
+        "layer": 20
     },
     "text_idle": {
         "color_inactive": [
@@ -2768,7 +3018,8 @@
             2,
             3
         ],
-        "sprite": "text_idle"
+        "sprite": "text_idle",
+        "layer": 20
     },
     "text_is": {
         "color_inactive": [
@@ -2779,7 +3030,8 @@
             0,
             3
         ],
-        "sprite": "text_is"
+        "sprite": "text_is",
+        "layer": 20
     },
     "text_it": {
         "color_inactive": [
@@ -2790,7 +3042,8 @@
             1,
             4
         ],
-        "sprite": "text_it"
+        "sprite": "text_it",
+        "layer": 20
     },
     "text_j": {
         "color_inactive": [
@@ -2801,7 +3054,8 @@
             0,
             3
         ],
-        "sprite": "text_j"
+        "sprite": "text_j",
+        "layer": 20
     },
     "text_jelly": {
         "color_inactive": [
@@ -2812,7 +3066,8 @@
             1,
             4
         ],
-        "sprite": "text_jelly"
+        "sprite": "text_jelly",
+        "layer": 20
     },
     "text_jiji": {
         "color_inactive": [
@@ -2823,7 +3078,8 @@
             2,
             3
         ],
-        "sprite": "text_jiji"
+        "sprite": "text_jiji",
+        "layer": 20
     },
     "text_k": {
         "color_inactive": [
@@ -2834,7 +3090,8 @@
             0,
             3
         ],
-        "sprite": "text_k"
+        "sprite": "text_k",
+        "layer": 20
     },
     "text_keke": {
         "color_inactive": [
@@ -2845,7 +3102,8 @@
             2,
             2
         ],
-        "sprite": "text_keke"
+        "sprite": "text_keke",
+        "layer": 20
     },
     "text_key": {
         "color_inactive": [
@@ -2856,7 +3114,8 @@
             2,
             4
         ],
-        "sprite": "text_key"
+        "sprite": "text_key",
+        "layer": 20
     },
     "text_knight": {
         "color_inactive": [
@@ -2867,7 +3126,8 @@
             2,
             2
         ],
-        "sprite": "text_knight"
+        "sprite": "text_knight",
+        "layer": 20
     },
     "text_l": {
         "color_inactive": [
@@ -2878,7 +3138,8 @@
             0,
             3
         ],
-        "sprite": "text_l"
+        "sprite": "text_l",
+        "layer": 20
     },
     "text_ladder": {
         "color_inactive": [
@@ -2889,7 +3150,8 @@
             2,
             3
         ],
-        "sprite": "text_ladder"
+        "sprite": "text_ladder",
+        "layer": 20
     },
     "text_lamp": {
         "color_inactive": [
@@ -2900,7 +3162,8 @@
             2,
             4
         ],
-        "sprite": "text_lamp"
+        "sprite": "text_lamp",
+        "layer": 20
     },
     "text_lava": {
         "color_inactive": [
@@ -2911,7 +3174,8 @@
             2,
             3
         ],
-        "sprite": "text_lava"
+        "sprite": "text_lava",
+        "layer": 20
     },
     "text_leaf": {
         "color_inactive": [
@@ -2922,7 +3186,8 @@
             2,
             4
         ],
-        "sprite": "text_leaf"
+        "sprite": "text_leaf",
+        "layer": 20
     },
     "text_left": {
         "color_inactive": [
@@ -2933,7 +3198,8 @@
             1,
             4
         ],
-        "sprite": "text_left"
+        "sprite": "text_left",
+        "layer": 20
     },
     "text_level": {
         "color_inactive": [
@@ -2944,7 +3210,8 @@
             4,
             1
         ],
-        "sprite": "text_level"
+        "sprite": "text_level",
+        "layer": 20
     },
     "text_lift": {
         "color_inactive": [
@@ -2955,7 +3222,8 @@
             0,
             2
         ],
-        "sprite": "text_lift"
+        "sprite": "text_lift",
+        "layer": 20
     },
     "text_lime": {
         "color_inactive": [
@@ -2966,7 +3234,8 @@
             5,
             3
         ],
-        "sprite": "text_lime"
+        "sprite": "text_lime",
+        "layer": 20
     },
     "text_line": {
         "color_inactive": [
@@ -2977,7 +3246,8 @@
             0,
             3
         ],
-        "sprite": "text_line"
+        "sprite": "text_line",
+        "layer": 20
     },
     "text_lizard": {
         "color_inactive": [
@@ -2988,7 +3258,8 @@
             2,
             2
         ],
-        "sprite": "text_lizard"
+        "sprite": "text_lizard",
+        "layer": 20
     },
     "text_lockeddown": {
         "color_inactive": [
@@ -2999,7 +3270,8 @@
             4,
             2
         ],
-        "sprite": "text_lockeddown"
+        "sprite": "text_lockeddown",
+        "layer": 20
     },
     "text_lockedleft": {
         "color_inactive": [
@@ -3010,7 +3282,8 @@
             4,
             2
         ],
-        "sprite": "text_lockedleft"
+        "sprite": "text_lockedleft",
+        "layer": 20
     },
     "text_lockedright": {
         "color_inactive": [
@@ -3021,7 +3294,8 @@
             4,
             2
         ],
-        "sprite": "text_lockedright"
+        "sprite": "text_lockedright",
+        "layer": 20
     },
     "text_lockedup": {
         "color_inactive": [
@@ -3032,7 +3306,8 @@
             4,
             2
         ],
-        "sprite": "text_lockedup"
+        "sprite": "text_lockedup",
+        "layer": 20
     },
     "text_lonely": {
         "color_inactive": [
@@ -3043,7 +3318,8 @@
             2,
             2
         ],
-        "sprite": "text_lonely"
+        "sprite": "text_lonely",
+        "layer": 20
     },
     "text_love": {
         "color_inactive": [
@@ -3054,7 +3330,8 @@
             4,
             2
         ],
-        "sprite": "text_love"
+        "sprite": "text_love",
+        "layer": 20
     },
     "text_m": {
         "color_inactive": [
@@ -3065,7 +3342,8 @@
             0,
             3
         ],
-        "sprite": "text_m"
+        "sprite": "text_m",
+        "layer": 20
     },
     "text_make": {
         "color_inactive": [
@@ -3076,7 +3354,8 @@
             0,
             3
         ],
-        "sprite": "text_make"
+        "sprite": "text_make",
+        "layer": 20
     },
     "text_me": {
         "color_inactive": [
@@ -3087,7 +3366,8 @@
             3,
             1
         ],
-        "sprite": "text_me"
+        "sprite": "text_me",
+        "layer": 20
     },
     "text_melt": {
         "color_inactive": [
@@ -3098,7 +3378,8 @@
             1,
             3
         ],
-        "sprite": "text_melt"
+        "sprite": "text_melt",
+        "layer": 20
     },
     "text_mimic": {
         "color_inactive": [
@@ -3109,7 +3390,8 @@
             2,
             2
         ],
-        "sprite": "text_mimic"
+        "sprite": "text_mimic",
+        "layer": 20
     },
     "text_monitor": {
         "color_inactive": [
@@ -3120,7 +3402,8 @@
             0,
             2
         ],
-        "sprite": "text_monitor"
+        "sprite": "text_monitor",
+        "layer": 20
     },
     "text_moon": {
         "color_inactive": [
@@ -3131,7 +3414,8 @@
             2,
             4
         ],
-        "sprite": "text_moon"
+        "sprite": "text_moon",
+        "layer": 20
     },
     "text_more": {
         "color_inactive": [
@@ -3142,7 +3426,8 @@
             4,
             1
         ],
-        "sprite": "text_more"
+        "sprite": "text_more",
+        "layer": 20
     },
     "text_move": {
         "color_inactive": [
@@ -3153,7 +3438,8 @@
             5,
             3
         ],
-        "sprite": "text_move"
+        "sprite": "text_move",
+        "layer": 20
     },
     "text_n": {
         "color_inactive": [
@@ -3164,7 +3450,8 @@
             0,
             3
         ],
-        "sprite": "text_n"
+        "sprite": "text_n",
+        "layer": 20
     },
     "text_near": {
         "color_inactive": [
@@ -3175,7 +3462,8 @@
             0,
             3
         ],
-        "sprite": "text_near"
+        "sprite": "text_near",
+        "layer": 20
     },
     "text_nose": {
         "color_inactive": [
@@ -3186,7 +3474,8 @@
             4,
             2
         ],
-        "sprite": "text_nose"
+        "sprite": "text_nose",
+        "layer": 20
     },
     "text_not": {
         "color_inactive": [
@@ -3197,7 +3486,8 @@
             2,
             2
         ],
-        "sprite": "text_not"
+        "sprite": "text_not",
+        "layer": 20
     },
     "text_nudgedown": {
         "color_inactive": [
@@ -3208,7 +3498,8 @@
             5,
             3
         ],
-        "sprite": "text_nudgedown"
+        "sprite": "text_nudgedown",
+        "layer": 20
     },
     "text_nudgeleft": {
         "color_inactive": [
@@ -3219,7 +3510,8 @@
             5,
             3
         ],
-        "sprite": "text_nudgeleft"
+        "sprite": "text_nudgeleft",
+        "layer": 20
     },
     "text_nudgeright": {
         "color_inactive": [
@@ -3230,7 +3522,8 @@
             5,
             3
         ],
-        "sprite": "text_nudgeright"
+        "sprite": "text_nudgeright",
+        "layer": 20
     },
     "text_nudgeup": {
         "color_inactive": [
@@ -3241,7 +3534,8 @@
             5,
             3
         ],
-        "sprite": "text_nudgeup"
+        "sprite": "text_nudgeup",
+        "layer": 20
     },
     "text_o": {
         "color_inactive": [
@@ -3252,7 +3546,8 @@
             0,
             3
         ],
-        "sprite": "text_o"
+        "sprite": "text_o",
+        "layer": 20
     },
     "text_often": {
         "color_inactive": [
@@ -3263,7 +3558,8 @@
             5,
             3
         ],
-        "sprite": "text_often"
+        "sprite": "text_often",
+        "layer": 20
     },
     "text_on": {
         "color_inactive": [
@@ -3274,7 +3570,8 @@
             0,
             3
         ],
-        "sprite": "text_on"
+        "sprite": "text_on",
+        "layer": 20
     },
     "text_open": {
         "color_inactive": [
@@ -3285,7 +3582,8 @@
             2,
             4
         ],
-        "sprite": "text_open"
+        "sprite": "text_open",
+        "layer": 20
     },
     "text_orange": {
         "color_inactive": [
@@ -3296,7 +3594,8 @@
             2,
             3
         ],
-        "sprite": "text_orange"
+        "sprite": "text_orange",
+        "layer": 20
     },
     "text_orb": {
         "color_inactive": [
@@ -3307,7 +3606,8 @@
             4,
             1
         ],
-        "sprite": "text_orb"
+        "sprite": "text_orb",
+        "layer": 20
     },
     "text_p": {
         "color_inactive": [
@@ -3318,7 +3618,8 @@
             0,
             3
         ],
-        "sprite": "text_p"
+        "sprite": "text_p",
+        "layer": 20
     },
     "text_pants": {
         "color_inactive": [
@@ -3329,7 +3630,8 @@
             3,
             3
         ],
-        "sprite": "text_pants"
+        "sprite": "text_pants",
+        "layer": 20
     },
     "text_party": {
         "color_inactive": [
@@ -3340,7 +3642,8 @@
             2,
             3
         ],
-        "sprite": "text_party"
+        "sprite": "text_party",
+        "layer": 20
     },
     "text_pawn": {
         "color_inactive": [
@@ -3351,7 +3654,8 @@
             2,
             2
         ],
-        "sprite": "text_pawn"
+        "sprite": "text_pawn",
+        "layer": 20
     },
     "text_pet": {
         "color_inactive": [
@@ -3362,7 +3666,8 @@
             4,
             2
         ],
-        "sprite": "text_pet"
+        "sprite": "text_pet",
+        "layer": 20
     },
     "text_phantom": {
         "color_inactive": [
@@ -3373,7 +3678,8 @@
             0,
             1
         ],
-        "sprite": "text_phantom"
+        "sprite": "text_phantom",
+        "layer": 20
     },
     "text_piano": {
         "color_inactive": [
@@ -3384,7 +3690,8 @@
             1,
             3
         ],
-        "sprite": "text_piano"
+        "sprite": "text_piano",
+        "layer": 20
     },
     "text_pillar": {
         "color_inactive": [
@@ -3395,7 +3702,8 @@
             0,
             1
         ],
-        "sprite": "text_pillar"
+        "sprite": "text_pillar",
+        "layer": 20
     },
     "text_pink": {
         "color_inactive": [
@@ -3406,7 +3714,8 @@
             4,
             1
         ],
-        "sprite": "text_pink"
+        "sprite": "text_pink",
+        "layer": 20
     },
     "text_pipe": {
         "color_inactive": [
@@ -3417,7 +3726,8 @@
             0,
             1
         ],
-        "sprite": "text_pipe"
+        "sprite": "text_pipe",
+        "layer": 20
     },
     "text_pixel": {
         "color_inactive": [
@@ -3428,7 +3738,8 @@
             0,
             3
         ],
-        "sprite": "text_pixel"
+        "sprite": "text_pixel",
+        "layer": 20
     },
     "text_pizza": {
         "color_inactive": [
@@ -3439,7 +3750,8 @@
             2,
             3
         ],
-        "sprite": "text_pizza"
+        "sprite": "text_pizza",
+        "layer": 20
     },
     "text_plane": {
         "color_inactive": [
@@ -3450,7 +3762,8 @@
             2,
             2
         ],
-        "sprite": "text_plane"
+        "sprite": "text_plane",
+        "layer": 20
     },
     "text_planet": {
         "color_inactive": [
@@ -3461,7 +3774,8 @@
             2,
             3
         ],
-        "sprite": "text_planet"
+        "sprite": "text_planet",
+        "layer": 20
     },
     "text_play": {
         "color_inactive": [
@@ -3472,7 +3786,8 @@
             5,
             3
         ],
-        "sprite": "text_play"
+        "sprite": "text_play",
+        "layer": 20
     },
     "text_potato": {
         "color_inactive": [
@@ -3483,7 +3798,8 @@
             6,
             2
         ],
-        "sprite": "text_potato"
+        "sprite": "text_potato",
+        "layer": 20
     },
     "text_power": {
         "color_inactive": [
@@ -3494,7 +3810,8 @@
             2,
             4
         ],
-        "sprite": "text_power"
+        "sprite": "text_power",
+        "layer": 20
     },
     "text_powered": {
         "color_inactive": [
@@ -3505,7 +3822,8 @@
             2,
             4
         ],
-        "sprite": "text_powered"
+        "sprite": "text_powered",
+        "layer": 20
     },
     "text_pull": {
         "color_inactive": [
@@ -3516,7 +3834,8 @@
             6,
             2
         ],
-        "sprite": "text_pull"
+        "sprite": "text_pull",
+        "layer": 20
     },
     "text_pumpkin": {
         "color_inactive": [
@@ -3527,7 +3846,8 @@
             2,
             3
         ],
-        "sprite": "text_pumpkin"
+        "sprite": "text_pumpkin",
+        "layer": 20
     },
     "text_purple": {
         "color_inactive": [
@@ -3538,7 +3858,8 @@
             3,
             1
         ],
-        "sprite": "text_purple"
+        "sprite": "text_purple",
+        "layer": 20
     },
     "text_push": {
         "color_inactive": [
@@ -3549,7 +3870,8 @@
             6,
             1
         ],
-        "sprite": "text_push"
+        "sprite": "text_push",
+        "layer": 20
     },
     "text_q": {
         "color_inactive": [
@@ -3560,7 +3882,8 @@
             0,
             3
         ],
-        "sprite": "text_q"
+        "sprite": "text_q",
+        "layer": 20
     },
     "text_r": {
         "color_inactive": [
@@ -3571,7 +3894,8 @@
             0,
             3
         ],
-        "sprite": "text_r"
+        "sprite": "text_r",
+        "layer": 20
     },
     "text_red": {
         "color_inactive": [
@@ -3582,7 +3906,8 @@
             2,
             2
         ],
-        "sprite": "text_red"
+        "sprite": "text_red",
+        "layer": 20
     },
     "text_reed": {
         "color_inactive": [
@@ -3593,7 +3918,8 @@
             6,
             2
         ],
-        "sprite": "text_reed"
+        "sprite": "text_reed",
+        "layer": 20
     },
     "text_reverse": {
         "color_inactive": [
@@ -3604,7 +3930,8 @@
             5,
             3
         ],
-        "sprite": "text_reverse"
+        "sprite": "text_reverse",
+        "layer": 20
     },
     "text_revert": {
         "color_inactive": [
@@ -3615,7 +3942,8 @@
             2,
             3
         ],
-        "sprite": "text_revert"
+        "sprite": "text_revert",
+        "layer": 20
     },
     "text_right": {
         "color_inactive": [
@@ -3626,7 +3954,8 @@
             1,
             4
         ],
-        "sprite": "text_right"
+        "sprite": "text_right",
+        "layer": 20
     },
     "text_ring": {
         "color_inactive": [
@@ -3637,7 +3966,8 @@
             2,
             4
         ],
-        "sprite": "text_ring"
+        "sprite": "text_ring",
+        "layer": 20
     },
     "text_road": {
         "color_inactive": [
@@ -3648,7 +3978,8 @@
             0,
             2
         ],
-        "sprite": "text_road"
+        "sprite": "text_road",
+        "layer": 20
     },
     "text_robot": {
         "color_inactive": [
@@ -3659,7 +3990,8 @@
             0,
             1
         ],
-        "sprite": "text_robot"
+        "sprite": "text_robot",
+        "layer": 20
     },
     "text_rock": {
         "color_inactive": [
@@ -3670,7 +4002,8 @@
             6,
             1
         ],
-        "sprite": "text_rock"
+        "sprite": "text_rock",
+        "layer": 20
     },
     "text_rocket": {
         "color_inactive": [
@@ -3681,7 +4014,8 @@
             0,
             1
         ],
-        "sprite": "text_rocket"
+        "sprite": "text_rocket",
+        "layer": 20
     },
     "text_rose": {
         "color_inactive": [
@@ -3692,7 +4026,8 @@
             2,
             2
         ],
-        "sprite": "text_rose"
+        "sprite": "text_rose",
+        "layer": 20
     },
     "text_rosy": {
         "color_inactive": [
@@ -3703,7 +4038,8 @@
             4,
             2
         ],
-        "sprite": "text_rosy"
+        "sprite": "text_rosy",
+        "layer": 20
     },
     "text_rubble": {
         "color_inactive": [
@@ -3714,7 +4050,8 @@
             6,
             1
         ],
-        "sprite": "text_rubble"
+        "sprite": "text_rubble",
+        "layer": 20
     },
     "text_s": {
         "color_inactive": [
@@ -3725,7 +4062,8 @@
             0,
             3
         ],
-        "sprite": "text_s"
+        "sprite": "text_s",
+        "layer": 20
     },
     "text_sad": {
         "color_inactive": [
@@ -3736,7 +4074,8 @@
             3,
             2
         ],
-        "sprite": "text_sad"
+        "sprite": "text_sad",
+        "layer": 20
     },
     "text_safe": {
         "color_inactive": [
@@ -3747,7 +4086,8 @@
             0,
             3
         ],
-        "sprite": "text_safe"
+        "sprite": "text_safe",
+        "layer": 20
     },
     "text_sax": {
         "color_inactive": [
@@ -3758,7 +4098,8 @@
             3,
             4
         ],
-        "sprite": "text_sax"
+        "sprite": "text_sax",
+        "layer": 20
     },
     "text_seed": {
         "color_inactive": [
@@ -3769,7 +4110,8 @@
             6,
             2
         ],
-        "sprite": "text_seed"
+        "sprite": "text_seed",
+        "layer": 20
     },
     "text_seldom": {
         "color_inactive": [
@@ -3780,7 +4122,8 @@
             3,
             3
         ],
-        "sprite": "text_seldom"
+        "sprite": "text_seldom",
+        "layer": 20
     },
     "text_select": {
         "color_inactive": [
@@ -3791,7 +4134,8 @@
             2,
             4
         ],
-        "sprite": "text_select"
+        "sprite": "text_select",
+        "layer": 20
     },
     "text_sharp": {
         "color_inactive": [
@@ -3802,7 +4146,8 @@
             0,
             3
         ],
-        "sprite": "text_sharp"
+        "sprite": "text_sharp",
+        "layer": 20
     },
     "text_shell": {
         "color_inactive": [
@@ -3813,7 +4158,8 @@
             4,
             2
         ],
-        "sprite": "text_shell"
+        "sprite": "text_shell",
+        "layer": 20
     },
     "text_shift": {
         "color_inactive": [
@@ -3824,7 +4170,8 @@
             1,
             3
         ],
-        "sprite": "text_shift"
+        "sprite": "text_shift",
+        "layer": 20
     },
     "text_shirt": {
         "color_inactive": [
@@ -3835,7 +4182,8 @@
             2,
             1
         ],
-        "sprite": "text_shirt"
+        "sprite": "text_shirt",
+        "layer": 20
     },
     "text_shovel": {
         "color_inactive": [
@@ -3846,7 +4194,8 @@
             4,
             2
         ],
-        "sprite": "text_shovel"
+        "sprite": "text_shovel",
+        "layer": 20
     },
     "text_shut": {
         "color_inactive": [
@@ -3857,7 +4206,8 @@
             2,
             2
         ],
-        "sprite": "text_shut"
+        "sprite": "text_shut",
+        "layer": 20
     },
     "text_sign": {
         "color_inactive": [
@@ -3868,7 +4218,8 @@
             6,
             2
         ],
-        "sprite": "text_sign"
+        "sprite": "text_sign",
+        "layer": 20
     },
     "text_silver": {
         "color_inactive": [
@@ -3879,7 +4230,8 @@
             0,
             2
         ],
-        "sprite": "text_silver"
+        "sprite": "text_silver",
+        "layer": 20
     },
     "text_sink": {
         "color_inactive": [
@@ -3890,7 +4242,8 @@
             1,
             3
         ],
-        "sprite": "text_sink"
+        "sprite": "text_sink",
+        "layer": 20
     },
     "text_skull": {
         "color_inactive": [
@@ -3901,7 +4254,8 @@
             2,
             1
         ],
-        "sprite": "text_skull"
+        "sprite": "text_skull",
+        "layer": 20
     },
     "text_sleep": {
         "color_inactive": [
@@ -3912,7 +4266,8 @@
             1,
             4
         ],
-        "sprite": "text_sleep"
+        "sprite": "text_sleep",
+        "layer": 20
     },
     "text_spike": {
         "color_inactive": [
@@ -3923,7 +4278,8 @@
             0,
             1
         ],
-        "sprite": "text_spike"
+        "sprite": "text_spike",
+        "layer": 20
     },
     "text_sprout": {
         "color_inactive": [
@@ -3934,7 +4290,8 @@
             5,
             3
         ],
-        "sprite": "text_sprout"
+        "sprite": "text_sprout",
+        "layer": 20
     },
     "text_square": {
         "color_inactive": [
@@ -3945,7 +4302,8 @@
             4,
             1
         ],
-        "sprite": "text_square"
+        "sprite": "text_square",
+        "layer": 20
     },
     "text_star": {
         "color_inactive": [
@@ -3956,7 +4314,8 @@
             2,
             4
         ],
-        "sprite": "text_star"
+        "sprite": "text_star",
+        "layer": 20
     },
     "text_statue": {
         "color_inactive": [
@@ -3967,7 +4326,8 @@
             0,
             2
         ],
-        "sprite": "text_statue"
+        "sprite": "text_statue",
+        "layer": 20
     },
     "text_stick": {
         "color_inactive": [
@@ -3978,7 +4338,8 @@
             6,
             2
         ],
-        "sprite": "text_stick"
+        "sprite": "text_stick",
+        "layer": 20
     },
     "text_still": {
         "color_inactive": [
@@ -3989,7 +4350,8 @@
             2,
             2
         ],
-        "sprite": "text_still"
+        "sprite": "text_still",
+        "layer": 20
     },
     "text_stop": {
         "color_inactive": [
@@ -4000,7 +4362,8 @@
             5,
             1
         ],
-        "sprite": "text_stop"
+        "sprite": "text_stop",
+        "layer": 20
     },
     "text_stump": {
         "color_inactive": [
@@ -4011,7 +4374,8 @@
             6,
             2
         ],
-        "sprite": "text_stump"
+        "sprite": "text_stump",
+        "layer": 20
     },
     "text_sun": {
         "color_inactive": [
@@ -4022,7 +4386,8 @@
             2,
             4
         ],
-        "sprite": "text_sun"
+        "sprite": "text_sun",
+        "layer": 20
     },
     "text_swap": {
         "color_inactive": [
@@ -4033,7 +4398,8 @@
             3,
             1
         ],
-        "sprite": "text_swap"
+        "sprite": "text_swap",
+        "layer": 20
     },
     "text_sword": {
         "color_inactive": [
@@ -4044,7 +4410,8 @@
             1,
             4
         ],
-        "sprite": "text_sword"
+        "sprite": "text_sword",
+        "layer": 20
     },
     "text_t": {
         "color_inactive": [
@@ -4055,7 +4422,8 @@
             0,
             3
         ],
-        "sprite": "text_t"
+        "sprite": "text_t",
+        "layer": 20
     },
     "text_tele": {
         "color_inactive": [
@@ -4066,7 +4434,8 @@
             1,
             4
         ],
-        "sprite": "text_tele"
+        "sprite": "text_tele",
+        "layer": 20
     },
     "text_text": {
         "color_inactive": [
@@ -4077,7 +4446,8 @@
             4,
             1
         ],
-        "sprite": "text_text"
+        "sprite": "text_text",
+        "layer": 20
     },
     "text_tile": {
         "color_inactive": [
@@ -4088,7 +4458,8 @@
             0,
             1
         ],
-        "sprite": "text_tile"
+        "sprite": "text_tile",
+        "layer": 20
     },
     "text_tower": {
         "color_inactive": [
@@ -4099,7 +4470,8 @@
             0,
             1
         ],
-        "sprite": "text_tower"
+        "sprite": "text_tower",
+        "layer": 20
     },
     "text_track": {
         "color_inactive": [
@@ -4110,7 +4482,8 @@
             6,
             1
         ],
-        "sprite": "text_track"
+        "sprite": "text_track",
+        "layer": 20
     },
     "text_train": {
         "color_inactive": [
@@ -4121,7 +4494,8 @@
             5,
             2
         ],
-        "sprite": "text_train"
+        "sprite": "text_train",
+        "layer": 20
     },
     "text_tree": {
         "color_inactive": [
@@ -4132,7 +4506,8 @@
             5,
             2
         ],
-        "sprite": "text_tree"
+        "sprite": "text_tree",
+        "layer": 20
     },
     "text_trees": {
         "color_inactive": [
@@ -4143,7 +4518,8 @@
             5,
             2
         ],
-        "sprite": "text_trees"
+        "sprite": "text_trees",
+        "layer": 20
     },
     "text_triangle": {
         "color_inactive": [
@@ -4154,7 +4530,8 @@
             3,
             3
         ],
-        "sprite": "text_triangle"
+        "sprite": "text_triangle",
+        "layer": 20
     },
     "text_trumpet": {
         "color_inactive": [
@@ -4165,7 +4542,8 @@
             2,
             4
         ],
-        "sprite": "text_trumpet"
+        "sprite": "text_trumpet",
+        "layer": 20
     },
     "text_turn": {
         "color_inactive": [
@@ -4176,7 +4554,8 @@
             1,
             4
         ],
-        "sprite": "text_turn"
+        "sprite": "text_turn",
+        "layer": 20
     },
     "text_turnip": {
         "color_inactive": [
@@ -4187,7 +4566,8 @@
             6,
             2
         ],
-        "sprite": "text_turnip"
+        "sprite": "text_turnip",
+        "layer": 20
     },
     "text_turtle": {
         "color_inactive": [
@@ -4198,7 +4578,8 @@
             5,
             4
         ],
-        "sprite": "text_turtle"
+        "sprite": "text_turtle",
+        "layer": 20
     },
     "text_u": {
         "color_inactive": [
@@ -4209,7 +4590,8 @@
             0,
             3
         ],
-        "sprite": "text_u"
+        "sprite": "text_u",
+        "layer": 20
     },
     "text_ufo": {
         "color_inactive": [
@@ -4220,7 +4602,8 @@
             4,
             1
         ],
-        "sprite": "text_ufo"
+        "sprite": "text_ufo",
+        "layer": 20
     },
     "text_up": {
         "color_inactive": [
@@ -4231,7 +4614,8 @@
             1,
             4
         ],
-        "sprite": "text_up"
+        "sprite": "text_up",
+        "layer": 20
     },
     "text_v": {
         "color_inactive": [
@@ -4242,7 +4626,8 @@
             0,
             3
         ],
-        "sprite": "text_v"
+        "sprite": "text_v",
+        "layer": 20
     },
     "text_vase": {
         "color_inactive": [
@@ -4253,7 +4638,8 @@
             0,
             1
         ],
-        "sprite": "text_vase"
+        "sprite": "text_vase",
+        "layer": 20
     },
     "text_vine": {
         "color_inactive": [
@@ -4264,7 +4650,8 @@
             5,
             2
         ],
-        "sprite": "text_vine"
+        "sprite": "text_vine",
+        "layer": 20
     },
     "text_w": {
         "color_inactive": [
@@ -4275,7 +4662,8 @@
             0,
             3
         ],
-        "sprite": "text_w"
+        "sprite": "text_w",
+        "layer": 20
     },
     "text_wall": {
         "color_inactive": [
@@ -4286,7 +4674,8 @@
             0,
             1
         ],
-        "sprite": "text_wall"
+        "sprite": "text_wall",
+        "layer": 20
     },
     "text_water": {
         "color_inactive": [
@@ -4297,7 +4686,8 @@
             1,
             3
         ],
-        "sprite": "text_water"
+        "sprite": "text_water",
+        "layer": 20
     },
     "text_weak": {
         "color_inactive": [
@@ -4308,7 +4698,8 @@
             1,
             2
         ],
-        "sprite": "text_weak"
+        "sprite": "text_weak",
+        "layer": 20
     },
     "text_white": {
         "color_inactive": [
@@ -4319,7 +4710,8 @@
             0,
             3
         ],
-        "sprite": "text_white"
+        "sprite": "text_white",
+        "layer": 20
     },
     "text_win": {
         "color_inactive": [
@@ -4330,7 +4722,8 @@
             2,
             4
         ],
-        "sprite": "text_win"
+        "sprite": "text_win",
+        "layer": 20
     },
     "text_wind": {
         "color_inactive": [
@@ -4341,7 +4734,8 @@
             1,
             4
         ],
-        "sprite": "text_wind"
+        "sprite": "text_wind",
+        "layer": 20
     },
     "text_without": {
         "color_inactive": [
@@ -4352,7 +4746,8 @@
             0,
             3
         ],
-        "sprite": "text_without"
+        "sprite": "text_without",
+        "layer": 20
     },
     "text_wonder": {
         "color_inactive": [
@@ -4363,7 +4758,8 @@
             0,
             3
         ],
-        "sprite": "text_wonder"
+        "sprite": "text_wonder",
+        "layer": 20
     },
     "text_word": {
         "color_inactive": [
@@ -4374,7 +4770,8 @@
             0,
             3
         ],
-        "sprite": "text_word"
+        "sprite": "text_word",
+        "layer": 20
     },
     "text_worm": {
         "color_inactive": [
@@ -4385,7 +4782,8 @@
             0,
             3
         ],
-        "sprite": "text_worm"
+        "sprite": "text_worm",
+        "layer": 20
     },
     "text_x": {
         "color_inactive": [
@@ -4396,7 +4794,8 @@
             0,
             3
         ],
-        "sprite": "text_x"
+        "sprite": "text_x",
+        "layer": 20
     },
     "text_y": {
         "color_inactive": [
@@ -4407,7 +4806,8 @@
             0,
             3
         ],
-        "sprite": "text_y"
+        "sprite": "text_y",
+        "layer": 20
     },
     "text_yellow": {
         "color_inactive": [
@@ -4418,7 +4818,8 @@
             2,
             4
         ],
-        "sprite": "text_yellow"
+        "sprite": "text_yellow",
+        "layer": 20
     },
     "text_you": {
         "color_inactive": [
@@ -4429,7 +4830,8 @@
             4,
             1
         ],
-        "sprite": "text_you"
+        "sprite": "text_you",
+        "layer": 20
     },
     "text_you2": {
         "color_inactive": [
@@ -4440,7 +4842,8 @@
             4,
             1
         ],
-        "sprite": "text_you2"
+        "sprite": "text_you2",
+        "layer": 20
     },
     "text_z": {
         "color_inactive": [
@@ -4451,7 +4854,8 @@
             0,
             3
         ],
-        "sprite": "text_z"
+        "sprite": "text_z",
+        "layer": 20
     },
     "tile": {
         "color_inactive": [
@@ -4462,7 +4866,8 @@
             0,
             0
         ],
-        "sprite": "tile"
+        "sprite": "tile",
+        "layer": 4
     },
     "tower": {
         "color_inactive": [
@@ -4473,7 +4878,8 @@
             0,
             1
         ],
-        "sprite": "tower"
+        "sprite": "tower",
+        "layer": 17
     },
     "track": {
         "color_inactive": [
@@ -4484,7 +4890,8 @@
             6,
             0
         ],
-        "sprite": "track"
+        "sprite": "track",
+        "layer": 10
     },
     "train": {
         "color_inactive": [
@@ -4495,7 +4902,8 @@
             5,
             2
         ],
-        "sprite": "train"
+        "sprite": "train",
+        "layer": 18
     },
     "tree": {
         "color_inactive": [
@@ -4506,7 +4914,8 @@
             5,
             2
         ],
-        "sprite": "tree"
+        "sprite": "tree",
+        "layer": 15
     },
     "trees": {
         "color_inactive": [
@@ -4517,7 +4926,8 @@
             5,
             2
         ],
-        "sprite": "trees"
+        "sprite": "trees",
+        "layer": 9
     },
     "triangle": {
         "color_inactive": [
@@ -4528,7 +4938,8 @@
             3,
             2
         ],
-        "sprite": "triangle"
+        "sprite": "triangle",
+        "layer": 17
     },
     "trumpet": {
         "color_inactive": [
@@ -4539,7 +4950,8 @@
             3,
             4
         ],
-        "sprite": "trumpet"
+        "sprite": "trumpet",
+        "layer": 19
     },
     "turnip": {
         "color_inactive": [
@@ -4550,7 +4962,8 @@
             6,
             2
         ],
-        "sprite": "turnip"
+        "sprite": "turnip",
+        "layer": 16
     },
     "turtle": {
         "color_inactive": [
@@ -4561,7 +4974,8 @@
             5,
             4
         ],
-        "sprite": "turtle"
+        "sprite": "turtle",
+        "layer": 19
     },
     "ufo": {
         "color_inactive": [
@@ -4572,7 +4986,8 @@
             4,
             2
         ],
-        "sprite": "ufo"
+        "sprite": "ufo",
+        "layer": 17
     },
     "vase": {
         "color_inactive": [
@@ -4583,7 +4998,8 @@
             0,
             2
         ],
-        "sprite": "vase"
+        "sprite": "vase",
+        "layer": 16
     },
     "vine": {
         "color_inactive": [
@@ -4594,7 +5010,8 @@
             5,
             2
         ],
-        "sprite": "vine"
+        "sprite": "vine",
+        "layer": 20
     },
     "wall": {
         "color_inactive": [
@@ -4605,7 +5022,8 @@
             1,
             1
         ],
-        "sprite": "wall"
+        "sprite": "wall",
+        "layer": 14
     },
     "water": {
         "color_inactive": [
@@ -4616,7 +5034,8 @@
             1,
             3
         ],
-        "sprite": "water"
+        "sprite": "water",
+        "layer": 2
     },
     "wind": {
         "color_inactive": [
@@ -4627,7 +5046,8 @@
             1,
             4
         ],
-        "sprite": "wind"
+        "sprite": "wind",
+        "layer": 14
     },
     "worm": {
         "color_inactive": [
@@ -4638,6 +5058,7 @@
             0,
             3
         ],
-        "sprite": "worm"
+        "sprite": "worm",
+        "layer": 19
     }
 }

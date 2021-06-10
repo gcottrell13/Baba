@@ -1,10 +1,18 @@
 import json
-from typing import Iterator
+from typing import Iterator, TypedDict
 from PIL import Image
 from vars import VALUES_FILE_PATH, CUSTOM_VALUES_FILE_PATH, FILES_PATH
 
 ColorsFormat = dict[str, dict[str, tuple[int, int, int]]]
-PaletteValuesFormat = dict[str, dict[str, tuple[int, int]]]
+
+
+class InfoItem(TypedDict):
+    color_inactive: tuple[int, int]
+    color: tuple[int, int]
+    sprite: str
+    layer: int
+
+PaletteValuesFormat = dict[str, InfoItem]
 
 
 def parse_block(lines: Iterator[str]) -> dict:
@@ -48,7 +56,14 @@ PALETTE = {
     for i in range(PALETTE_HEIGHT)
 }
 
-def load_colors():
+_cache: tuple[PaletteValuesFormat, ColorsFormat] = ()
+
+def load_colors() -> tuple[PaletteValuesFormat, ColorsFormat]:
+
+    global _cache
+    if _cache:
+        return _cache
+
     OBJECT_INFO: PaletteValuesFormat = {}
 
     with open(VALUES_FILE_PATH, 'r') as f:
@@ -66,6 +81,7 @@ def load_colors():
                 'color_inactive': attrs['colour'],
                 'color': attrs.get('colour_active', attrs['colour']),
                 'sprite': attrs.get('sprite', attrs['name']),
+                'layer': attrs['layer'],
             }
     
     with open(CUSTOM_VALUES_FILE_PATH, 'r') as f:
@@ -77,13 +93,14 @@ def load_colors():
         for key in sorted(OBJECT_INFO.keys())
     }
 
-    return OBJECT_INFO, {
+    _cache = OBJECT_INFO, {
         name: {
             'color': PALETTE[tuple(color_indexes['color'])],
             'color_inactive': PALETTE[tuple(color_indexes['color_inactive'])],
         }
         for name, color_indexes in OBJECT_INFO.items()
     }
+    return _cache
 
 if __name__ == '__main__':
     print(json.dumps(load_colors(), indent=4))

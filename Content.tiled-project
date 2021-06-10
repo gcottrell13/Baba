@@ -4,7 +4,8 @@
     ],
     "extensionsPath": "extensions",
     "folders": [
-        "BabaSource/BabaGame/Content/Maps"
+        "BabaSource/BabaGame/Content/Maps",
+        "BabaSource/BabaGame/Content/Worlds"
     ],
     "objectTypesFile": ""
 }

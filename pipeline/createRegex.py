@@ -1,12 +1,12 @@
 def OR(*alist: str):
     return F'({"|".join(alist)})'
 
-VERBS = OR('is ', 'has ', 'eat ')
+VERBS = OR('is ', 'has ', 'eat ', 'grab ', 'follow ', 'make ', 'mimic ', 'fear ')
 
 AND = 'and '
 
 OBJ_MODIFIERS = OR('not ', 'lonely ', 'idle ')
-SUB_MODIFIERS = OR('not ')
+SUB_MODIFIERS = OR('not ', 'seldom ', 'often ')
 
 COMPOUNDERS = OR('on ', 'feeling ', 'near ')
 

@@ -7,17 +7,19 @@
         "color": [
             5,
             2
-        ]
+        ],
+        "sprite": "algae"
     },
-    "text_algae": {
+    "arrow": {
         "color_inactive": [
             5,
-            0
+            2
         ],
         "color": [
             5,
-            1
-        ]
+            2
+        ],
+        "sprite": "arrow"
     },
     "baba": {
         "color_inactive": [
@@ -27,17 +29,19 @@
         "color": [
             0,
             3
-        ]
+        ],
+        "sprite": "baba"
     },
-    "text_baba": {
+    "banana": {
         "color_inactive": [
-            4,
-            0
+            2,
+            4
         ],
         "color": [
-            4,
-            1
-        ]
+            2,
+            4
+        ],
+        "sprite": "banana"
     },
     "bat": {
         "color_inactive": [
@@ -47,17 +51,30 @@
         "color": [
             3,
             1
-        ]
+        ],
+        "sprite": "bat"
     },
-    "text_bat": {
+    "bed": {
         "color_inactive": [
-            3,
-            0
+            0,
+            3
         ],
         "color": [
-            3,
-            1
-        ]
+            0,
+            3
+        ],
+        "sprite": "bed"
+    },
+    "bee": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "bee"
     },
     "belt": {
         "color_inactive": [
@@ -67,17 +84,8 @@
         "color": [
             1,
             2
-        ]
-    },
-    "text_belt": {
-        "color_inactive": [
-            1,
-            2
         ],
-        "color": [
-            1,
-            3
-        ]
+        "sprite": "belt"
     },
     "bird": {
         "color_inactive": [
@@ -87,27 +95,30 @@
         "color": [
             2,
             3
-        ]
+        ],
+        "sprite": "bird"
     },
-    "text_bird": {
+    "blob": {
         "color_inactive": [
-            2,
+            5,
             2
         ],
         "color": [
-            2,
-            3
-        ]
+            5,
+            2
+        ],
+        "sprite": "blob"
     },
-    "text_w": {
+    "boat": {
         "color_inactive": [
-            0,
+            6,
             1
         ],
         "color": [
-            0,
-            3
-        ]
+            6,
+            1
+        ],
+        "sprite": "boat"
     },
     "bog": {
         "color_inactive": [
@@ -117,17 +128,8 @@
         "color": [
             5,
             1
-        ]
-    },
-    "text_bog": {
-        "color_inactive": [
-            5,
-            1
         ],
-        "color": [
-            5,
-            3
-        ]
+        "sprite": "water"
     },
     "bolt": {
         "color_inactive": [
@@ -137,17 +139,30 @@
         "color": [
             2,
             4
-        ]
+        ],
+        "sprite": "bolt"
     },
-    "text_bolt": {
+    "book": {
         "color_inactive": [
             2,
             3
         ],
         "color": [
             2,
+            3
+        ],
+        "sprite": "book"
+    },
+    "bottle": {
+        "color_inactive": [
+            1,
             4
-        ]
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "bottle"
     },
     "box": {
         "color_inactive": [
@@ -157,17 +172,8 @@
         "color": [
             6,
             2
-        ]
-    },
-    "text_box": {
-        "color_inactive": [
-            6,
-            0
         ],
-        "color": [
-            6,
-            1
-        ]
+        "sprite": "box"
     },
     "brick": {
         "color_inactive": [
@@ -177,17 +183,8 @@
         "color": [
             6,
             3
-        ]
-    },
-    "text_brick": {
-        "color_inactive": [
-            6,
-            0
         ],
-        "color": [
-            6,
-            1
-        ]
+        "sprite": "brick"
     },
     "bubble": {
         "color_inactive": [
@@ -197,17 +194,19 @@
         "color": [
             1,
             4
-        ]
+        ],
+        "sprite": "bubble"
     },
-    "text_bubble": {
+    "bucket": {
         "color_inactive": [
-            1,
-            3
+            2,
+            2
         ],
         "color": [
-            1,
-            4
-        ]
+            2,
+            2
+        ],
+        "sprite": "bucket"
     },
     "bug": {
         "color_inactive": [
@@ -217,17 +216,19 @@
         "color": [
             6,
             2
-        ]
+        ],
+        "sprite": "bug"
     },
-    "text_bug": {
+    "burger": {
         "color_inactive": [
-            6,
-            0
+            2,
+            3
         ],
         "color": [
-            6,
-            2
-        ]
+            2,
+            3
+        ],
+        "sprite": "burger"
     },
     "cake": {
         "color_inactive": [
@@ -237,17 +238,30 @@
         "color": [
             4,
             2
-        ]
+        ],
+        "sprite": "cake"
     },
-    "text_cake": {
+    "car": {
         "color_inactive": [
-            4,
-            1
+            2,
+            2
         ],
         "color": [
-            4,
+            2,
             2
-        ]
+        ],
+        "sprite": "car"
+    },
+    "cart": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "cart"
     },
     "cash": {
         "color_inactive": [
@@ -257,17 +271,30 @@
         "color": [
             5,
             2
-        ]
+        ],
+        "sprite": "cash"
     },
-    "text_cash": {
+    "cat": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "cat"
+    },
+    "circle": {
         "color_inactive": [
             5,
-            1
+            3
         ],
         "color": [
             5,
             3
-        ]
+        ],
+        "sprite": "circle"
     },
     "cliff": {
         "color_inactive": [
@@ -277,17 +304,19 @@
         "color": [
             6,
             1
-        ]
+        ],
+        "sprite": "cliff"
     },
-    "text_cliff": {
+    "clock": {
         "color_inactive": [
-            6,
-            0
+            1,
+            3
         ],
         "color": [
-            6,
-            2
-        ]
+            1,
+            3
+        ],
+        "sprite": "clock"
     },
     "cloud": {
         "color_inactive": [
@@ -297,17 +326,8 @@
         "color": [
             1,
             4
-        ]
-    },
-    "text_cloud": {
-        "color_inactive": [
-            1,
-            3
         ],
-        "color": [
-            1,
-            4
-        ]
+        "sprite": "cloud"
     },
     "cog": {
         "color_inactive": [
@@ -317,17 +337,8 @@
         "color": [
             0,
             1
-        ]
-    },
-    "text_cog": {
-        "color_inactive": [
-            0,
-            1
         ],
-        "color": [
-            0,
-            2
-        ]
+        "sprite": "cog"
     },
     "crab": {
         "color_inactive": [
@@ -337,17 +348,19 @@
         "color": [
             2,
             2
-        ]
+        ],
+        "sprite": "crab"
     },
-    "text_crab": {
+    "crystal": {
         "color_inactive": [
-            2,
-            1
+            4,
+            2
         ],
         "color": [
-            2,
+            4,
             2
-        ]
+        ],
+        "sprite": "crystal"
     },
     "cup": {
         "color_inactive": [
@@ -357,17 +370,8 @@
         "color": [
             1,
             3
-        ]
-    },
-    "text_cup": {
-        "color_inactive": [
-            1,
-            2
         ],
-        "color": [
-            1,
-            3
-        ]
+        "sprite": "cup"
     },
     "cursor": {
         "color_inactive": [
@@ -377,7 +381,19 @@
         "color": [
             4,
             2
-        ]
+        ],
+        "sprite": "cursor"
+    },
+    "donut": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "donut"
     },
     "door": {
         "color_inactive": [
@@ -387,17 +403,8 @@
         "color": [
             2,
             2
-        ]
-    },
-    "text_door": {
-        "color_inactive": [
-            2,
-            1
         ],
-        "color": [
-            2,
-            2
-        ]
+        "sprite": "door"
     },
     "dot": {
         "color_inactive": [
@@ -407,17 +414,30 @@
         "color": [
             0,
             3
-        ]
+        ],
+        "sprite": "dot"
     },
-    "text_dot": {
+    "drink": {
         "color_inactive": [
-            0,
-            1
+            4,
+            4
         ],
         "color": [
-            0,
+            4,
+            4
+        ],
+        "sprite": "drink"
+    },
+    "drum": {
+        "color_inactive": [
+            2,
             3
-        ]
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "drum"
     },
     "dust": {
         "color_inactive": [
@@ -427,17 +447,30 @@
         "color": [
             6,
             2
-        ]
+        ],
+        "sprite": "dust"
     },
-    "text_dust": {
+    "ear": {
         "color_inactive": [
-            6,
-            2
+            3,
+            1
         ],
         "color": [
-            2,
-            4
-        ]
+            3,
+            1
+        ],
+        "sprite": "ear"
+    },
+    "eye": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "eye"
     },
     "fence": {
         "color_inactive": [
@@ -447,17 +480,8 @@
         "color": [
             6,
             1
-        ]
-    },
-    "text_fence": {
-        "color_inactive": [
-            6,
-            0
         ],
-        "color": [
-            6,
-            1
-        ]
+        "sprite": "fence"
     },
     "fire": {
         "color_inactive": [
@@ -467,17 +491,19 @@
         "color": [
             2,
             3
-        ]
+        ],
+        "sprite": "fire"
     },
-    "text_fire": {
+    "fish": {
         "color_inactive": [
-            2,
-            0
+            1,
+            3
         ],
         "color": [
-            2,
-            2
-        ]
+            1,
+            3
+        ],
+        "sprite": "fish"
     },
     "flag": {
         "color_inactive": [
@@ -487,17 +513,8 @@
         "color": [
             2,
             4
-        ]
-    },
-    "text_flag": {
-        "color_inactive": [
-            6,
-            1
         ],
-        "color": [
-            2,
-            4
-        ]
+        "sprite": "flag"
     },
     "flower": {
         "color_inactive": [
@@ -507,17 +524,19 @@
         "color": [
             3,
             3
-        ]
+        ],
+        "sprite": "flower"
     },
-    "text_flower": {
+    "fofo": {
         "color_inactive": [
-            3,
+            5,
             2
         ],
         "color": [
-            3,
-            3
-        ]
+            5,
+            2
+        ],
+        "sprite": "fofo"
     },
     "foliage": {
         "color_inactive": [
@@ -527,17 +546,41 @@
         "color": [
             6,
             0
-        ]
+        ],
+        "sprite": "foliage"
     },
-    "text_foliage": {
+    "foot": {
         "color_inactive": [
-            2,
-            2
+            3,
+            1
         ],
         "color": [
-            2,
+            3,
+            1
+        ],
+        "sprite": "foot"
+    },
+    "fort": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            1,
+            1
+        ],
+        "sprite": "fort"
+    },
+    "frog": {
+        "color_inactive": [
+            5,
             3
-        ]
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "frog"
     },
     "fruit": {
         "color_inactive": [
@@ -547,17 +590,8 @@
         "color": [
             2,
             2
-        ]
-    },
-    "text_fruit": {
-        "color_inactive": [
-            2,
-            1
         ],
-        "color": [
-            2,
-            2
-        ]
+        "sprite": "fruit"
     },
     "fungi": {
         "color_inactive": [
@@ -567,17 +601,8 @@
         "color": [
             6,
             1
-        ]
-    },
-    "text_fungi": {
-        "color_inactive": [
-            6,
-            0
         ],
-        "color": [
-            6,
-            2
-        ]
+        "sprite": "fungi"
     },
     "fungus": {
         "color_inactive": [
@@ -587,17 +612,30 @@
         "color": [
             6,
             1
-        ]
+        ],
+        "sprite": "fungus"
     },
-    "text_fungus": {
+    "gate": {
         "color_inactive": [
-            6,
-            0
+            2,
+            2
         ],
         "color": [
-            6,
-            1
-        ]
+            2,
+            2
+        ],
+        "sprite": "gate"
+    },
+    "gem": {
+        "color_inactive": [
+            4,
+            2
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "gem"
     },
     "ghost": {
         "color_inactive": [
@@ -607,17 +645,8 @@
         "color": [
             4,
             2
-        ]
-    },
-    "text_ghost": {
-        "color_inactive": [
-            4,
-            1
         ],
-        "color": [
-            4,
-            2
-        ]
+        "sprite": "ghost"
     },
     "grass": {
         "color_inactive": [
@@ -627,6 +656,1898 @@
         "color": [
             5,
             0
+        ],
+        "sprite": "grass"
+    },
+    "guitar": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "guitar"
+    },
+    "hand": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "hand"
+    },
+    "hedge": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            1
+        ],
+        "sprite": "hedge"
+    },
+    "hihat": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "hihat"
+    },
+    "house": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "house"
+    },
+    "husk": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "husk"
+    },
+    "husks": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "husks"
+    },
+    "ice": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            2
+        ],
+        "sprite": "ice"
+    },
+    "it": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "it"
+    },
+    "jelly": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "jelly"
+    },
+    "jiji": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "jiji"
+    },
+    "keke": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "keke"
+    },
+    "key": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "key"
+    },
+    "knight": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "knight"
+    },
+    "ladder": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "ladder"
+    },
+    "lamp": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "lamp"
+    },
+    "lava": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "water"
+    },
+    "leaf": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "leaf"
+    },
+    "lift": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "lift"
+    },
+    "line": {
+        "color_inactive": [
+            0,
+            3
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "line"
+    },
+    "lizard": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "lizard"
+    },
+    "love": {
+        "color_inactive": [
+            4,
+            2
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "love"
+    },
+    "me": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "me"
+    },
+    "monitor": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "monitor"
+    },
+    "moon": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "moon"
+    },
+    "nose": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "nose"
+    },
+    "orb": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "orb"
+    },
+    "pants": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            2
+        ],
+        "sprite": "pants"
+    },
+    "pawn": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "pawn"
+    },
+    "piano": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "piano"
+    },
+    "pillar": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "pillar"
+    },
+    "pipe": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            1,
+            1
+        ],
+        "sprite": "pipe"
+    },
+    "pixel": {
+        "color_inactive": [
+            0,
+            3
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "pixel"
+    },
+    "pizza": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "pizza"
+    },
+    "plane": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "plane"
+    },
+    "planet": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "planet"
+    },
+    "potato": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "potato"
+    },
+    "pumpkin": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "pumpkin"
+    },
+    "reed": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "reed"
+    },
+    "ring": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "ring"
+    },
+    "road": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "road"
+    },
+    "robot": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "robot"
+    },
+    "rock": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "rock"
+    },
+    "rocket": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "rocket"
+    },
+    "rose": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "rose"
+    },
+    "rubble": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "rubble"
+    },
+    "sax": {
+        "color_inactive": [
+            3,
+            4
+        ],
+        "color": [
+            3,
+            4
+        ],
+        "sprite": "sax"
+    },
+    "seed": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "seed"
+    },
+    "shell": {
+        "color_inactive": [
+            4,
+            2
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "shell"
+    },
+    "shirt": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            1
+        ],
+        "sprite": "shirt"
+    },
+    "shovel": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "shovel"
+    },
+    "sign": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "sign"
+    },
+    "skull": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            1
+        ],
+        "sprite": "skull"
+    },
+    "spike": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            1,
+            1
+        ],
+        "sprite": "spike"
+    },
+    "sprout": {
+        "color_inactive": [
+            5,
+            3
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "sprout"
+    },
+    "square": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "square"
+    },
+    "star": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "star"
+    },
+    "statue": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "statue"
+    },
+    "stick": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "stick"
+    },
+    "stump": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "stump"
+    },
+    "sun": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "sun"
+    },
+    "sword": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "sword"
+    },
+    "text_0": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_0"
+    },
+    "text_1": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_1"
+    },
+    "text_2": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_2"
+    },
+    "text_3": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_3"
+    },
+    "text_4": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_4"
+    },
+    "text_5": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_5"
+    },
+    "text_6": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_6"
+    },
+    "text_7": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_7"
+    },
+    "text_8": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_8"
+    },
+    "text_9": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_9"
+    },
+    "text_a": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_a"
+    },
+    "text_above": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_above"
+    },
+    "text_algae": {
+        "color_inactive": [
+            5,
+            0
+        ],
+        "color": [
+            5,
+            1
+        ],
+        "sprite": "text_algae"
+    },
+    "text_all": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_all"
+    },
+    "text_and": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_and"
+    },
+    "text_arrow": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_arrow"
+    },
+    "text_auto": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_auto"
+    },
+    "text_b": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_b"
+    },
+    "text_baba": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_baba"
+    },
+    "text_back": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_back"
+    },
+    "text_banana": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_banana"
+    },
+    "text_bat": {
+        "color_inactive": [
+            3,
+            0
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "text_bat"
+    },
+    "text_bed": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_bed"
+    },
+    "text_bee": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_bee"
+    },
+    "text_below": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_below"
+    },
+    "text_belt": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_belt"
+    },
+    "text_besideleft": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_besideleft"
+    },
+    "text_besideright": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_besideright"
+    },
+    "text_best": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_best"
+    },
+    "text_bird": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_bird"
+    },
+    "text_black": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_black"
+    },
+    "text_blob": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_blob"
+    },
+    "text_blue": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_blue"
+    },
+    "text_boat": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_boat"
+    },
+    "text_bog": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_bog"
+    },
+    "text_bolt": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_bolt"
+    },
+    "text_bonus": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_bonus"
+    },
+    "text_book": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_book"
+    },
+    "text_bottle": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_bottle"
+    },
+    "text_box": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_box"
+    },
+    "text_brick": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_brick"
+    },
+    "text_broken": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_broken"
+    },
+    "text_brown": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_brown"
+    },
+    "text_bubble": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_bubble"
+    },
+    "text_bucket": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_bucket"
+    },
+    "text_bug": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_bug"
+    },
+    "text_burger": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_burger"
+    },
+    "text_c": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_c"
+    },
+    "text_cake": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_cake"
+    },
+    "text_car": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_car"
+    },
+    "text_cart": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_cart"
+    },
+    "text_cash": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_cash"
+    },
+    "text_cat": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_cat"
+    },
+    "text_chill": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_chill"
+    },
+    "text_circle": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_circle"
+    },
+    "text_cliff": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_cliff"
+    },
+    "text_clock": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_clock"
+    },
+    "text_cloud": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_cloud"
+    },
+    "text_cog": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_cog"
+    },
+    "text_crab": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_crab"
+    },
+    "text_crystal": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_crystal"
+    },
+    "text_cup": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_cup"
+    },
+    "text_cursor": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_cursor"
+    },
+    "text_cyan": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_cyan"
+    },
+    "text_d": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_d"
+    },
+    "text_defeat": {
+        "color_inactive": [
+            2,
+            0
+        ],
+        "color": [
+            2,
+            1
+        ],
+        "sprite": "text_defeat"
+    },
+    "text_deturn": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_deturn"
+    },
+    "text_done": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_done"
+    },
+    "text_donut": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_donut"
+    },
+    "text_door": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_door"
+    },
+    "text_dot": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_dot"
+    },
+    "text_down": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_down"
+    },
+    "text_drink": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            4,
+            4
+        ],
+        "sprite": "text_drink"
+    },
+    "text_drum": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_drum"
+    },
+    "text_dust": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_dust"
+    },
+    "text_e": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_e"
+    },
+    "text_ear": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_ear"
+    },
+    "text_eat": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_eat"
+    },
+    "text_empty": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_empty"
+    },
+    "text_end": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_end"
+    },
+    "text_eye": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_eye"
+    },
+    "text_f": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_f"
+    },
+    "text_facing": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_facing"
+    },
+    "text_fall": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_falldown"
+    },
+    "text_fallleft": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_fallleft"
+    },
+    "text_fallright": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_fallright"
+    },
+    "text_fallup": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_fallup"
+    },
+    "text_fear": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_fear"
+    },
+    "text_feeling": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_feeling"
+    },
+    "text_fence": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_fence"
+    },
+    "text_fire": {
+        "color_inactive": [
+            2,
+            0
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_fire"
+    },
+    "text_fish": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_fish"
+    },
+    "text_flag": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_flag"
+    },
+    "text_flat": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_flat"
+    },
+    "text_float": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_float"
+    },
+    "text_flower": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_flower"
+    },
+    "text_fofo": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_fofo"
+    },
+    "text_foliage": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_foliage"
+    },
+    "text_follow": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_follow"
+    },
+    "text_foot": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_foot"
+    },
+    "text_fort": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_fort"
+    },
+    "text_frog": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_frog"
+    },
+    "text_fruit": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_fruit"
+    },
+    "text_fungi": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_fungi"
+    },
+    "text_fungus": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_fungus"
+    },
+    "text_g": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_g"
+    },
+    "text_gate": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_gate"
+    },
+    "text_gem": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_gem"
+    },
+    "text_ghost": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_ghost"
+    },
+    "text_grab": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
         ]
     },
     "text_grass": {
@@ -637,707 +2558,8 @@
         "color": [
             5,
             3
-        ]
-    },
-    "hand": {
-        "color_inactive": [
-            3,
-            1
         ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_hand": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "hedge": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            1
-        ]
-    },
-    "text_hedge": {
-        "color_inactive": [
-            5,
-            0
-        ],
-        "color": [
-            5,
-            1
-        ]
-    },
-    "husk": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_husk": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "ice": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            2
-        ]
-    },
-    "text_ice": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "jelly": {
-        "color_inactive": [
-            1,
-            4
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_jelly": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "keke": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_keke": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "key": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_key": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "ladder": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_ladder": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "lava": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_lava": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "leaf": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_leaf": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "line": {
-        "color_inactive": [
-            0,
-            3
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_line": {
-        "color_inactive": [
-            0,
-            2
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "love": {
-        "color_inactive": [
-            4,
-            2
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_love": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "me": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_me": {
-        "color_inactive": [
-            3,
-            0
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "moon": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_moon": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "orb": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_orb": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "pillar": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_pillar": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "pipe": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            1,
-            1
-        ]
-    },
-    "text_pipe": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "reed": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_reed": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "robot": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_robot": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "rocket": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_rocket": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "rock": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_rock": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "rose": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_rose": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "rubble": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_rubble": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_x": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "shirt": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            1
-        ]
-    },
-    "text_shirt": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            2,
-            1
-        ]
-    },
-    "skull": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            1
-        ]
-    },
-    "text_skull": {
-        "color_inactive": [
-            2,
-            0
-        ],
-        "color": [
-            2,
-            1
-        ]
-    },
-    "spike": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            1,
-            1
-        ]
-    },
-    "text_spike": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "star": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_star": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "statue": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_statue": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            2
-        ]
-    },
-    "stump": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_stump": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "sun": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_sun": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_right": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_up": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_left": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_down": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_all": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_and": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_best": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_red": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_blue": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
+        "sprite": "text_grass"
     },
     "text_green": {
         "color_inactive": [
@@ -1347,37 +2569,8 @@
         "color": [
             5,
             2
-        ]
-    },
-    "text_yellow": {
-        "color_inactive": [
-            6,
-            1
         ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_purple": {
-        "color_inactive": [
-            3,
-            0
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_pink": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
+        "sprite": "text_green"
     },
     "text_grey": {
         "color_inactive": [
@@ -1387,207 +2580,8 @@
         "color": [
             0,
             1
-        ]
-    },
-    "text_black": {
-        "color_inactive": [
-            1,
-            1
         ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_white": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_brown": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_orange": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_bonus": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_chill": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
-    },
-    "text_cursor": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_defeat": {
-        "color_inactive": [
-            2,
-            0
-        ],
-        "color": [
-            2,
-            1
-        ]
-    },
-    "text_eat": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_empty": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_end": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_facing": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_back": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_fall": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_fallright": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_fallup": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_fallleft": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_fear": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_float": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_follow": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
+        "sprite": "text_grey"
     },
     "text_group": {
         "color_inactive": [
@@ -1597,2247 +2591,8 @@
         "color": [
             3,
             3
-        ]
-    },
-    "text_has": {
-        "color_inactive": [
-            0,
-            1
         ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_hide": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
-    },
-    "text_hot": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_idle": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_is": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_level": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_lonely": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_often": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_seldom": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
-    },
-    "text_make": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_melt": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_more": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_move": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_near": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_not": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_on": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_open": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_you2": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_play": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_powered": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_power": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_pull": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_push": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_sad": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            3,
-            2
-        ]
-    },
-    "text_safe": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_shift": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_shut": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_sink": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_sleep": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_stop": {
-        "color_inactive": [
-            5,
-            0
-        ],
-        "color": [
-            5,
-            1
-        ]
-    },
-    "text_swap": {
-        "color_inactive": [
-            3,
-            0
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_tele": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_text": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "tile": {
-        "color_inactive": [
-            0,
-            0
-        ],
-        "color": [
-            0,
-            0
-        ]
-    },
-    "text_tile": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "tree": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_tree": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "ufo": {
-        "color_inactive": [
-            4,
-            2
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_ufo": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "wall": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            1,
-            1
-        ]
-    },
-    "text_wall": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "water": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_water": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_weak": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            1,
-            2
-        ]
-    },
-    "text_win": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_without": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_wonder": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_word": {
-        "color_inactive": [
-            0,
-            2
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_you": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "husks": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "trees": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_a": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_b": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_c": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_d": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_e": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_f": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_g": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_h": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_i": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_l": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_m": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_n": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_o": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_r": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_s": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_t": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_u": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_v": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_j": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_k": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_p": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_q": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_y": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_z": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_broken": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_nudgeright": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_nudgeup": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_nudgeleft": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_nudgedown": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_turn": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_deturn": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_done": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_mimic": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "sign": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_sign": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_still": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "circle": {
-        "color_inactive": [
-            5,
-            3
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_circle": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "square": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "text_square": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "triangle": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            2
-        ]
-    },
-    "text_triangle": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
-    },
-    "crystal": {
-        "color_inactive": [
-            4,
-            2
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_crystal": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "foot": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_foot": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "eye": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_eye": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "worm": {
-        "color_inactive": [
-            0,
-            3
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_worm": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_above": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_below": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_select": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "gem": {
-        "color_inactive": [
-            4,
-            2
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_gem": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_husks": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_trees": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_feeling": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_cyan": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "track": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            0
-        ]
-    },
-    "text_track": {
-        "color_inactive": [
-            6,
-            0
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "train": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_train": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_rosy": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_lime": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_silver": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            2
-        ]
-    },
-    "ring": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_ring": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "arrow": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_arrow": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "cart": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_cart": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "book": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_book": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "tower": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_tower": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "seed": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_seed": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "sprout": {
-        "color_inactive": [
-            5,
-            3
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_sprout": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "jiji": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_jiji": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "fofo": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_fofo": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "vine": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_vine": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "wind": {
-        "color_inactive": [
-            1,
-            4
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_wind": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "fort": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            1,
-            1
-        ]
-    },
-    "text_fort": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_auto": {
-        "color_inactive": [
-            4,
-            0
-        ],
-        "color": [
-            4,
-            1
-        ]
-    },
-    "bee": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_bee": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "pants": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            2
-        ]
-    },
-    "text_pants": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            3,
-            3
-        ]
-    },
-    "text_0": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_1": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_2": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_3": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_4": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_5": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_6": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_7": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_8": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_9": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_sharp": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_flat": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_revert": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "lizard": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_lizard": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "shell": {
-        "color_inactive": [
-            4,
-            2
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_shell": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "fish": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_fish": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "house": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_house": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "gate": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_gate": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "boat": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_boat": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "pumpkin": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_pumpkin": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "lamp": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_lamp": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "lift": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_lift": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            2
-        ]
-    },
-    "ear": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_ear": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "nose": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_nose": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "monitor": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_monitor": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            2
-        ]
-    },
-    "stick": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            1
-        ]
-    },
-    "text_stick": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "bucket": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_bucket": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "shovel": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            3,
-            1
-        ]
-    },
-    "text_shovel": {
-        "color_inactive": [
-            3,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "it": {
-        "color_inactive": [
-            1,
-            4
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_it": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "plane": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_plane": {
-        "color_inactive": [
-            2,
-            1
-        ],
-        "color": [
-            2,
-            2
-        ]
-    },
-    "text_lockeddown": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_lockedright": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_lockedup": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_lockedleft": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_phantom": {
-        "color_inactive": [
-            1,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "planet": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_planet": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "road": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            1
-        ]
-    },
-    "text_road": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            2
-        ]
-    },
-    "banana": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_banana": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "burger": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_burger": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "drink": {
-        "color_inactive": [
-            4,
-            4
-        ],
-        "color": [
-            4,
-            4
-        ]
-    },
-    "text_drink": {
-        "color_inactive": [
-            3,
-            2
-        ],
-        "color": [
-            4,
-            4
-        ]
-    },
-    "turnip": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_turnip": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "pixel": {
-        "color_inactive": [
-            0,
-            3
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_pixel": {
-        "color_inactive": [
-            0,
-            1
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "guitar": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_guitar": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "piano": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_piano": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "sax": {
-        "color_inactive": [
-            3,
-            4
-        ],
-        "color": [
-            3,
-            4
-        ]
-    },
-    "text_sax": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            3,
-            4
-        ]
-    },
-    "blob": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "text_blob": {
-        "color_inactive": [
-            5,
-            1
-        ],
-        "color": [
-            5,
-            2
-        ]
-    },
-    "drum": {
-        "color_inactive": [
-            2,
-            3
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "text_drum": {
-        "color_inactive": [
-            2,
-            2
-        ],
-        "color": [
-            2,
-            3
-        ]
-    },
-    "hihat": {
-        "color_inactive": [
-            2,
-            4
-        ],
-        "color": [
-            2,
-            4
-        ]
-    },
-    "text_hihat": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            2,
-            4
-        ]
+        "sprite": "text_group"
     },
     "text_group2": {
         "color_inactive": [
@@ -3847,7 +2602,8 @@
         "color": [
             2,
             2
-        ]
+        ],
+        "sprite": "text_group2"
     },
     "text_group3": {
         "color_inactive": [
@@ -3857,39 +2613,32 @@
         "color": [
             5,
             3
-        ]
+        ],
+        "sprite": "text_group3"
     },
-    "text_party": {
+    "text_guitar": {
         "color_inactive": [
-            2,
-            2
+            6,
+            1
         ],
         "color": [
-            2,
+            6,
+            2
+        ],
+        "sprite": "text_guitar"
+    },
+    "text_h": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
             3
-        ]
-    },
-    "potato": {
-        "color_inactive": [
-            6,
-            1
         ],
-        "color": [
-            6,
-            1
-        ]
+        "sprite": "text_h"
     },
-    "text_potato": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_pet": {
+    "text_hand": {
         "color_inactive": [
             3,
             1
@@ -3897,109 +2646,197 @@
         "color": [
             4,
             2
-        ]
+        ],
+        "sprite": "text_hand"
     },
-    "donut": {
+    "text_has": {
         "color_inactive": [
-            4,
+            0,
             1
         ],
         "color": [
-            4,
-            1
-        ]
-    },
-    "text_donut": {
-        "color_inactive": [
-            4,
-            1
-        ],
-        "color": [
-            4,
-            2
-        ]
-    },
-    "text_reverse": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            3
-        ]
-    },
-    "text_besideleft": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_besideright": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "frog": {
-        "color_inactive": [
-            5,
+            0,
             3
         ],
-        "color": [
-            5,
-            3
-        ]
+        "sprite": "text_has"
     },
-    "text_frog": {
+    "text_hedge": {
         "color_inactive": [
+            5,
+            0
+        ],
+        "color": [
             5,
             1
         ],
-        "color": [
-            5,
-            3
-        ]
+        "sprite": "text_hedge"
     },
-    "trumpet": {
+    "text_hide": {
         "color_inactive": [
             3,
-            4
+            2
         ],
         "color": [
             3,
-            4
-        ]
+            3
+        ],
+        "sprite": "text_hide"
     },
-    "text_trumpet": {
+    "text_hihat": {
         "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_hihat"
+    },
+    "text_hot": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
             2,
             3
         ],
-        "color": [
-            2,
-            4
-        ]
+        "sprite": "text_hot"
     },
-    "pawn": {
+    "text_house": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_house"
+    },
+    "text_husk": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_husk"
+    },
+    "text_husks": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_husks"
+    },
+    "text_i": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_i"
+    },
+    "text_ice": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_ice"
+    },
+    "text_idle": {
         "color_inactive": [
             2,
             2
         ],
         "color": [
             2,
-            2
-        ]
+            3
+        ],
+        "sprite": "text_idle"
     },
-    "text_pawn": {
+    "text_is": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_is"
+    },
+    "text_it": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_it"
+    },
+    "text_j": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_j"
+    },
+    "text_jelly": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_jelly"
+    },
+    "text_jiji": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_jiji"
+    },
+    "text_k": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_k"
+    },
+    "text_keke": {
         "color_inactive": [
             2,
             1
@@ -4007,17 +2844,19 @@
         "color": [
             2,
             2
-        ]
+        ],
+        "sprite": "text_keke"
     },
-    "knight": {
+    "text_key": {
         "color_inactive": [
-            2,
-            2
+            6,
+            1
         ],
         "color": [
             2,
-            2
-        ]
+            4
+        ],
+        "sprite": "text_key"
     },
     "text_knight": {
         "color_inactive": [
@@ -4027,99 +2866,10 @@
         "color": [
             2,
             2
-        ]
-    },
-    "turtle": {
-        "color_inactive": [
-            5,
-            4
         ],
-        "color": [
-            5,
-            4
-        ]
+        "sprite": "text_knight"
     },
-    "text_turtle": {
-        "color_inactive": [
-            5,
-            2
-        ],
-        "color": [
-            5,
-            4
-        ]
-    },
-    "cat": {
-        "color_inactive": [
-            6,
-            2
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "text_cat": {
-        "color_inactive": [
-            6,
-            1
-        ],
-        "color": [
-            6,
-            2
-        ]
-    },
-    "sword": {
-        "color_inactive": [
-            1,
-            4
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "text_sword": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            4
-        ]
-    },
-    "clock": {
-        "color_inactive": [
-            1,
-            3
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "text_clock": {
-        "color_inactive": [
-            1,
-            2
-        ],
-        "color": [
-            1,
-            3
-        ]
-    },
-    "bed": {
-        "color_inactive": [
-            0,
-            3
-        ],
-        "color": [
-            0,
-            3
-        ]
-    },
-    "text_bed": {
+    "text_l": {
         "color_inactive": [
             0,
             1
@@ -4127,17 +2877,558 @@
         "color": [
             0,
             3
-        ]
+        ],
+        "sprite": "text_l"
     },
-    "pizza": {
+    "text_ladder": {
         "color_inactive": [
             2,
-            3
+            2
         ],
         "color": [
             2,
             3
-        ]
+        ],
+        "sprite": "text_ladder"
+    },
+    "text_lamp": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_lamp"
+    },
+    "text_lava": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_lava"
+    },
+    "text_leaf": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_leaf"
+    },
+    "text_left": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_left"
+    },
+    "text_level": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_level"
+    },
+    "text_lift": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_lift"
+    },
+    "text_lime": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_lime"
+    },
+    "text_line": {
+        "color_inactive": [
+            0,
+            2
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_line"
+    },
+    "text_lizard": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_lizard"
+    },
+    "text_lockeddown": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_lockeddown"
+    },
+    "text_lockedleft": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_lockedleft"
+    },
+    "text_lockedright": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_lockedright"
+    },
+    "text_lockedup": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_lockedup"
+    },
+    "text_lonely": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_lonely"
+    },
+    "text_love": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_love"
+    },
+    "text_m": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_m"
+    },
+    "text_make": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_make"
+    },
+    "text_me": {
+        "color_inactive": [
+            3,
+            0
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "text_me"
+    },
+    "text_melt": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_melt"
+    },
+    "text_mimic": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_mimic"
+    },
+    "text_monitor": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_monitor"
+    },
+    "text_moon": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_moon"
+    },
+    "text_more": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_more"
+    },
+    "text_move": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_move"
+    },
+    "text_n": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_n"
+    },
+    "text_near": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_near"
+    },
+    "text_nose": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_nose"
+    },
+    "text_not": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_not"
+    },
+    "text_nudgedown": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_nudgedown"
+    },
+    "text_nudgeleft": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_nudgeleft"
+    },
+    "text_nudgeright": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_nudgeright"
+    },
+    "text_nudgeup": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_nudgeup"
+    },
+    "text_o": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_o"
+    },
+    "text_often": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_often"
+    },
+    "text_on": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_on"
+    },
+    "text_open": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_open"
+    },
+    "text_orange": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_orange"
+    },
+    "text_orb": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_orb"
+    },
+    "text_p": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_p"
+    },
+    "text_pants": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_pants"
+    },
+    "text_party": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_party"
+    },
+    "text_pawn": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_pawn"
+    },
+    "text_pet": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_pet"
+    },
+    "text_phantom": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_phantom"
+    },
+    "text_piano": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_piano"
+    },
+    "text_pillar": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_pillar"
+    },
+    "text_pink": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_pink"
+    },
+    "text_pipe": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_pipe"
+    },
+    "text_pixel": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_pixel"
     },
     "text_pizza": {
         "color_inactive": [
@@ -4147,17 +3438,811 @@
         "color": [
             2,
             3
-        ]
+        ],
+        "sprite": "text_pizza"
     },
-    "vase": {
+    "text_plane": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_plane"
+    },
+    "text_planet": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_planet"
+    },
+    "text_play": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_play"
+    },
+    "text_potato": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_potato"
+    },
+    "text_power": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_power"
+    },
+    "text_powered": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_powered"
+    },
+    "text_pull": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_pull"
+    },
+    "text_pumpkin": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_pumpkin"
+    },
+    "text_purple": {
+        "color_inactive": [
+            3,
+            0
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "text_purple"
+    },
+    "text_push": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_push"
+    },
+    "text_q": {
         "color_inactive": [
             0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_q"
+    },
+    "text_r": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_r"
+    },
+    "text_red": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
             2
+        ],
+        "sprite": "text_red"
+    },
+    "text_reed": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_reed"
+    },
+    "text_reverse": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_reverse"
+    },
+    "text_revert": {
+        "color_inactive": [
+            2,
+            2
+        ],
+        "color": [
+            2,
+            3
+        ],
+        "sprite": "text_revert"
+    },
+    "text_right": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_right"
+    },
+    "text_ring": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_ring"
+    },
+    "text_road": {
+        "color_inactive": [
+            0,
+            1
         ],
         "color": [
             0,
             2
-        ]
+        ],
+        "sprite": "text_road"
+    },
+    "text_robot": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_robot"
+    },
+    "text_rock": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_rock"
+    },
+    "text_rocket": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_rocket"
+    },
+    "text_rose": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_rose"
+    },
+    "text_rosy": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_rosy"
+    },
+    "text_rubble": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_rubble"
+    },
+    "text_s": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_s"
+    },
+    "text_sad": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            3,
+            2
+        ],
+        "sprite": "text_sad"
+    },
+    "text_safe": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_safe"
+    },
+    "text_sax": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            3,
+            4
+        ],
+        "sprite": "text_sax"
+    },
+    "text_seed": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_seed"
+    },
+    "text_seldom": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_seldom"
+    },
+    "text_select": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_select"
+    },
+    "text_sharp": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_sharp"
+    },
+    "text_shell": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_shell"
+    },
+    "text_shift": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_shift"
+    },
+    "text_shirt": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            2,
+            1
+        ],
+        "sprite": "text_shirt"
+    },
+    "text_shovel": {
+        "color_inactive": [
+            3,
+            1
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "text_shovel"
+    },
+    "text_shut": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_shut"
+    },
+    "text_sign": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_sign"
+    },
+    "text_silver": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_silver"
+    },
+    "text_sink": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "text_sink"
+    },
+    "text_skull": {
+        "color_inactive": [
+            2,
+            0
+        ],
+        "color": [
+            2,
+            1
+        ],
+        "sprite": "text_skull"
+    },
+    "text_sleep": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_sleep"
+    },
+    "text_spike": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_spike"
+    },
+    "text_sprout": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_sprout"
+    },
+    "text_square": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_square"
+    },
+    "text_star": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_star"
+    },
+    "text_statue": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_statue"
+    },
+    "text_stick": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_stick"
+    },
+    "text_still": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_still"
+    },
+    "text_stop": {
+        "color_inactive": [
+            5,
+            0
+        ],
+        "color": [
+            5,
+            1
+        ],
+        "sprite": "text_stop"
+    },
+    "text_stump": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_stump"
+    },
+    "text_sun": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_sun"
+    },
+    "text_swap": {
+        "color_inactive": [
+            3,
+            0
+        ],
+        "color": [
+            3,
+            1
+        ],
+        "sprite": "text_swap"
+    },
+    "text_sword": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_sword"
+    },
+    "text_t": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_t"
+    },
+    "text_tele": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_tele"
+    },
+    "text_text": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_text"
+    },
+    "text_tile": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_tile"
+    },
+    "text_tower": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_tower"
+    },
+    "text_track": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "text_track"
+    },
+    "text_train": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_train"
+    },
+    "text_tree": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_tree"
+    },
+    "text_trees": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_trees"
+    },
+    "text_triangle": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            3
+        ],
+        "sprite": "text_triangle"
+    },
+    "text_trumpet": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_trumpet"
+    },
+    "text_turn": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_turn"
+    },
+    "text_turnip": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_turnip"
+    },
+    "text_turtle": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            4
+        ],
+        "sprite": "text_turtle"
+    },
+    "text_u": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_u"
+    },
+    "text_ufo": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_ufo"
+    },
+    "text_up": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_up"
+    },
+    "text_v": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_v"
     },
     "text_vase": {
         "color_inactive": [
@@ -4167,46 +4252,392 @@
         "color": [
             0,
             1
-        ]
+        ],
+        "sprite": "text_vase"
     },
-    "bottle": {
+    "text_vine": {
         "color_inactive": [
-            1,
-            4
+            5,
+            1
         ],
         "color": [
-            1,
-            4
-        ]
+            5,
+            2
+        ],
+        "sprite": "text_vine"
     },
-    "text_bottle": {
+    "text_w": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_w"
+    },
+    "text_wall": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "text_wall"
+    },
+    "text_water": {
         "color_inactive": [
             1,
             2
         ],
         "color": [
             1,
-            4
-        ]
+            3
+        ],
+        "sprite": "text_water"
     },
-    "car": {
+    "text_weak": {
         "color_inactive": [
-            2,
-            2
+            1,
+            1
         ],
         "color": [
-            2,
+            1,
             2
-        ]
+        ],
+        "sprite": "text_weak"
     },
-    "text_car": {
+    "text_white": {
         "color_inactive": [
-            2,
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_white"
+    },
+    "text_win": {
+        "color_inactive": [
+            6,
             1
         ],
         "color": [
             2,
+            4
+        ],
+        "sprite": "text_win"
+    },
+    "text_wind": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_wind"
+    },
+    "text_without": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_without"
+    },
+    "text_wonder": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_wonder"
+    },
+    "text_word": {
+        "color_inactive": [
+            0,
             2
-        ]
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_word"
+    },
+    "text_worm": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_worm"
+    },
+    "text_x": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_x"
+    },
+    "text_y": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_y"
+    },
+    "text_yellow": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_yellow"
+    },
+    "text_you": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_you"
+    },
+    "text_you2": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_you2"
+    },
+    "text_z": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_z"
+    },
+    "tile": {
+        "color_inactive": [
+            0,
+            0
+        ],
+        "color": [
+            0,
+            0
+        ],
+        "sprite": "tile"
+    },
+    "tower": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "tower"
+    },
+    "track": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            0
+        ],
+        "sprite": "track"
+    },
+    "train": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "train"
+    },
+    "tree": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "tree"
+    },
+    "trees": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "trees"
+    },
+    "triangle": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            3,
+            2
+        ],
+        "sprite": "triangle"
+    },
+    "trumpet": {
+        "color_inactive": [
+            3,
+            4
+        ],
+        "color": [
+            3,
+            4
+        ],
+        "sprite": "trumpet"
+    },
+    "turnip": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "turnip"
+    },
+    "turtle": {
+        "color_inactive": [
+            5,
+            4
+        ],
+        "color": [
+            5,
+            4
+        ],
+        "sprite": "turtle"
+    },
+    "ufo": {
+        "color_inactive": [
+            4,
+            2
+        ],
+        "color": [
+            4,
+            2
+        ],
+        "sprite": "ufo"
+    },
+    "vase": {
+        "color_inactive": [
+            0,
+            2
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "vase"
+    },
+    "vine": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "vine"
+    },
+    "wall": {
+        "color_inactive": [
+            1,
+            1
+        ],
+        "color": [
+            1,
+            1
+        ],
+        "sprite": "wall"
+    },
+    "water": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            3
+        ],
+        "sprite": "water"
+    },
+    "wind": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "wind"
+    },
+    "worm": {
+        "color_inactive": [
+            0,
+            3
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "worm"
     }
 }

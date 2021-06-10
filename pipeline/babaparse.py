@@ -12,6 +12,7 @@ from vars import (
     SPRITES_PATH,
     OUTPUT_DIRECTORY,
     STORE_PATH,
+    CUSTOM_SPRITES_PATH,
 )
 from load_colors_from_baba import load_colors
 
@@ -24,13 +25,13 @@ ImageCollection = dict[str, dict[int, dict[int, Image.Image]]]
 OBJECT_INFO, COLORS = load_colors()
 
 ALL_FILES = glob.glob(str(SPRITES_PATH / "*.png")) + glob.glob(
-    str(CUSTOM_FILES_PATH / "*.png")
+    str(CUSTOM_SPRITES_PATH / "*.png")
 )
 
 WIDTH = 24
 HEIGHT = 24
-WPAD = 1
-HPAD = 1
+WPAD = 2
+HPAD = 2
 
 DIRECTIONS = {
     0: "right",
@@ -249,7 +250,7 @@ def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
         ],
     }
     if name.startswith("text"):
-        layout = [[]]
+        layout = [['sprite', 'sprite_inactive']]
     else:
         layout = [
             ["sprite", "name"],
@@ -275,6 +276,11 @@ def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
             elif item == "text":
                 sprites = load_sprites(f"text_text")
                 sprites = colorized_images("text_text", sprites)
+            elif item == 'sprite_inactive':
+                sprites = [
+                    image for phase in images.values() for image in phase.values()
+                ]
+                sprites = colorized_images(f'{name}_inactive', sprites)
             elif item == "sprite":
                 sprites = [
                     image for phase in images.values() for image in phase.values()
@@ -286,7 +292,7 @@ def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
                     sprites, output_images, get_output_coord(col_id, row_id)
                 )
 
-    if not name.startswith("text"):
+    if not name.startswith("text_") or name[5:] not in OBJECT_INFO:
         save_gif(name, output_images)
     return output_data
 
@@ -447,7 +453,10 @@ def pack_images_into_tileset(
         add(name, images[name])
 
     existing_objects = set(existing_tileset_info)
-    for name, animations in images.items():
+    for name, info in OBJECT_INFO.items():
+
+        animations = images[info.get('sprite', name)]
+
         if name.startswith('text_'):
             if name[5:] in images:
                 continue
@@ -473,7 +482,9 @@ def pack_images_into_tileset(
 def analyze_images(images: ImageCollection) -> AnalysisResult:
 
     OUTPUT: AnalysisResult = {}
-    for name, values in images.items():
+    for name, info in OBJECT_INFO.items():
+
+        values = images.get(info.get('sprite', name))
         output = None
 
         has_facing = all(direction in values for direction in DIRECTIONS)

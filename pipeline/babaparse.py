@@ -140,7 +140,6 @@ def get_new_gif(num_frames: int, width_in_blocks: int, height_in_blocks: int):
 
 
 def save_gif(name: str, frames: list[Image.Image]):
-    return
     frames[0].save(
         str(VISUAL_OUTPUT_DIRECTORY / f"{name}.gif"),
         save_all=True,
@@ -249,11 +248,11 @@ def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
         ],
     }
     if name.startswith("text"):
-        layout = [["sprite", "is", "text"]]
+        layout = [[]]
     else:
         layout = [
-            ["sprite", "is", "name"],
-            ["", "", "name_inactive"],
+            ["sprite", "name"],
+            ["is", "name_inactive"],
         ]
 
     animation_length = len(images) * 3

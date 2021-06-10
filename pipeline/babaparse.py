@@ -3,64 +3,26 @@ import glob
 import re
 import pathlib
 from collections import defaultdict
-import logging
 import json
 import math
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-# logger.addHandler(logging.StreamHandler())
-
+from vars import OUTPUT_DIRECTORY, CUSTOM_FILES_PATH, SPRITES_PATH
+from load_colors_from_baba import load_colors
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
-
-FILES_PATH = r"E:\SteamLibrary\steamapps\common\Baba Is You\Data\Sprites"
-
-OUTPUT_DIRECTORY = r'baba_analysis/'
 
 THEME = 'default'
 
 THEMES = {
     'default': 9,
 }
-THEME_DATA = OUTPUT_DIRECTORY + f'Themes/{THEMES[THEME]}theme.txt'
-
-
-PALETTE_FILE_NAME = OUTPUT_DIRECTORY + f'Palettes/{THEME}.png'
-palette_file = Image.open(PALETTE_FILE_NAME)
-PALETTE_WIDTH = 7
-PALETTE_HEIGHT = 5
-PALETTE_FLAT_DATA = list(palette_file.getdata())
-PALETTE = [
-    [
-        PALETTE_FLAT_DATA[i * PALETTE_WIDTH + j]
-        for j in range(PALETTE_WIDTH)
-    ]
-    for i in range(PALETTE_HEIGHT)
-]
+THEME_DATA = OUTPUT_DIRECTORY / f'Themes/{THEMES[THEME]}theme.txt'
 
 
 
-COLORS = {}
+COLORS = load_colors()
 
-with open(OUTPUT_DIRECTORY + f'json/COLORS.json', 'r') as f:
-    j = f.read()
-    color_data = json.loads(j)
-
-    for data in color_data:
-        try:
-            color_x, color_y = data.get('colour_active', data['colour'])
-            color = PALETTE[color_y][color_x]
-            COLORS[data['name']] = color
-        except IndexError as e:
-            print(data['colour'],data['name'], e)
-        except KeyError as e:
-            print(objid, e)
-
-        
-            
-
-ALL_FILES = glob.glob(FILES_PATH + r'\*.png')
+ALL_FILES = glob.glob(str(SPRITES_PATH  / '*.png')) + glob.glob(str(CUSTOM_FILES_PATH / '*.png'))
 
 WIDTH = 24
 HEIGHT = 24
@@ -111,13 +73,25 @@ def load_image(name: str, file: str):
     return img
 
 
-def colorized_image(name: str, img: Image):
+def colorized_images(name: str, images: list[Image.Image]):
+    return [colorized_image(name, img) for img in images]
+
+
+def colorized_image(name: str, img: Image.Image):
     r, g, b, a = img.split()
+    inactive = False
+
+    if name.endswith('_inactive'):
+        name = name[:-len('_inactive')]
+        inactive = True
 
     if name in WORD_MAP:
         name = WORD_MAP[name]
     
-    p = COLORS.get(name, (255, 255, 255))
+    info = COLORS.get(name, (255, 255, 255))
+
+    p = info['color'] if inactive
+
     pr, pg, pb = p[0]/255, p[1]/255, p[2]/255
     r = r.point(lambda i: i * pr)
     g = g.point(lambda i: i * pg)
@@ -127,12 +101,14 @@ def colorized_image(name: str, img: Image):
     
 
 def load_sprites(name: str):
-    matches = glob.glob(FILES_PATH + '\\' + name + '_*.png')
+    matches = glob.glob(str(SPRITES_PATH / f'{name}_*.png'))
+    if not matches:
+        matches = glob.glob(str(CUSTOM_FILES_PATH / f'{name}_*.png'))
     return [
         load_image(name, file) for file in matches
     ]
 
-def copy_animation_across(animation: list[Image], destination: list[Image], coord):
+def copy_animation_across(animation: list[Image.Image], destination: list[Image.Image], coord):
     for i, dest in enumerate(destination):
         anim = animation[i % len(animation)]
         dest.paste(anim, coord)
@@ -148,17 +124,16 @@ def get_new_gif(num_frames: int, width_in_blocks: int, height_in_blocks: int):
         for i in range(num_frames)
     ]
 
-def save_gif(name: str, frames: list[Image]):
-    return
-    frames[0].save(OUTPUT_DIRECTORY + f'{name}.gif',
+def save_gif(name: str, frames: list[Image.Image]):
+    frames[0].save(str(OUTPUT_DIRECTORY / f'{name}.gif'),
                           save_all=True,
                           append_images=frames[1:],
                           duration=300,
                            optimize=True,
                           loop=0)
 
-def save_image(name: str, frames: list[Image]):
-    frames[0].save(OUTPUT_DIRECTORY + f'Sheets/{name}.png')
+def save_image(name: str, frames: list[Image.Image]):
+    frames[0].save(str(OUTPUT_DIRECTORY / f'Sheets/{name}.png'))
     
 
 def get_text_name(name: str):
@@ -166,8 +141,8 @@ def get_text_name(name: str):
         return get_text_name(WORD_MAP[name])
     return f'text_{name}'
 
-def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
-    directions: dict[str, list[list[Image]]] = defaultdict(list)
+def output_facing_and_animation(name: str, images: dict[int, dict[int, Image.Image]]):
+    directions: dict[str, list[list[Image.Image]]] = defaultdict(list)
     current = None
 
     output_data: dict[str, list[list[str]]] = defaultdict(list)
@@ -203,8 +178,8 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
     } | {3}
     
     layout = [
-        ['name', up, down, right, left],
-        ['', 'up', 'down', 'right', 'left'],
+        ['name_active', up, down, right, left],
+        ['name_inactive', 'up', 'down', 'right', 'left'],
     ]
 
     if any(key in directions for key in SLEEP.values()):
@@ -224,12 +199,19 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
             sprites = []
             if item in [up, left, down, right, 'text_sleep']:
                 sprites = load_sprites(item)
+                sprites = colorized_images(item, sprites)
             elif item in ['up', 'left', 'down', 'right']:
                 sprites = [i for j in directions[item] for i in j]
+                sprites = colorized_images(name, sprites)
             elif item in ['sleep_up', 'sleep_left', 'sleep_down', 'sleep_right']:
                 sprites = [i for j in directions[item] for i in j]
-            elif item == 'name':
+                sprites = colorized_images(name, sprites)
+            elif item == 'name_active':
                 sprites = load_sprites(get_text_name(name))
+                sprites = colorized_images(f'text_{name}', sprites)
+            elif item == 'name_inactive':
+                sprites = load_sprites(get_text_name(name))
+                sprites = colorized_images(f'text_{name}_inactive', sprites)
             #print(item, len(sprites))
             if sprites:
                 copy_animation_across(sprites, output_images, get_output_coord(col_id, row_id))
@@ -239,7 +221,7 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image]]):
     return output_data
 
 
-def output_simple(name: str, images: dict[int, dict[int, Image]]):
+def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
     output_data = {
         'all': [
             [
@@ -253,7 +235,8 @@ def output_simple(name: str, images: dict[int, dict[int, Image]]):
         layout = [['sprite', 'is', 'text']]
     else:
         layout = [
-            ['sprite', 'is', 'name'],
+            ['sprite', 'is', 'name_active'],
+            ['', '', 'name'],
         ]
 
     animation_length = len(images) * 3
@@ -264,12 +247,18 @@ def output_simple(name: str, images: dict[int, dict[int, Image]]):
             sprites = []
             if item == 'name':
                 sprites = load_sprites(get_text_name(name))
+                sprites = colorized_images(f'text_{name}_inactive', sprites)
+            elif item == 'name_active':
+                sprites = load_sprites(get_text_name(name))
+                sprites = colorized_images(f'text_{name}', sprites)
             elif item == 'is':
                 sprites = load_sprites(f'text_is')
             elif item == 'text':
                 sprites = load_sprites(f'text_text')
+                sprites = colorized_images('text_text', sprites)
             elif item == 'sprite':
                 sprites = [image for phase in images.values() for image in phase.values()]
+                sprites = colorized_images(name, sprites)
                 
             if sprites:
                 copy_animation_across(sprites, output_images, get_output_coord(col_id, row_id))
@@ -277,13 +266,18 @@ def output_simple(name: str, images: dict[int, dict[int, Image]]):
     save_gif(name, output_images)
     return output_data
 
-def output_joinable(name: str, images: dict[int, dict[int, Image]]):
+def output_joinable(name: str, images: dict[int, dict[int, Image.Image]]):
     output_images = get_new_gif(3, 12, 12)
 
     above = list(images[8].values())
     below = list(images[2].values())
     beside_right = list(images[4].values())
     beside_left = list(images[1].values())
+
+    above = colorized_images(name, above)
+    below = colorized_images(name, below)
+    beside_right = colorized_images(name, beside_right)
+    beside_left = colorized_images(name, beside_left)
     
     for mask in range(16):
         col = (mask % 4) * 3 + 1
@@ -297,14 +291,18 @@ def output_joinable(name: str, images: dict[int, dict[int, Image]]):
         if mask & 1:
             copy_animation_across(beside_right, output_images, get_output_coord(col+1, row))
 
-        copy_animation_across(list(images[mask].values()), output_images, get_output_coord(col, row))
-            
-    copy_animation_across(load_sprites(get_text_name(name)), output_images, get_output_coord(0, 0))
+        center = list(images[mask].values())
+        center = colorized_images(name, center)
+        copy_animation_across(center, output_images, get_output_coord(col, row))
+    
+    text_name = load_sprites(get_text_name(name))
+    copy_animation_across(colorized_images(f'text_{name}', text_name), output_images, get_output_coord(0, 0))
+    copy_animation_across(colorized_images(f'text_{name}_inactive', text_name), output_images, get_output_coord(0, 1))
     
     save_gif(name, output_images)
 
 
-def create_sheet(images: list[Image]):
+def create_sheet(images: list[Image.Image]):
     square = math.ceil(math.sqrt(len(images)))
     output_image = get_new_gif(1, square, square)
     mapping = []
@@ -317,7 +315,7 @@ def create_sheet(images: list[Image]):
     return output_image, mapping
 
 
-def open_all_images() -> dict[str, dict[int, dict[int, Image]]]:
+def open_all_images() -> dict[str, dict[int, dict[int, Image.Image]]]:
     objects = RecursiveDefaultDict(int)
     for file in ALL_FILES:
         try:
@@ -330,7 +328,7 @@ def open_all_images() -> dict[str, dict[int, dict[int, Image]]]:
     return objects
 
 
-def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], images: dict[int, dict[int, Image]]):
+def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], images: dict[int, dict[int, Image.Image]]):
     if data == {'type': 'joinable'}:
         all_images = {
             f'{phase}_{wobble}': image
@@ -338,7 +336,7 @@ def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], im
             for wobble, image in images[phase].items()
         }
     else:        
-        all_images: dict[str, Image] = {
+        all_images: dict[str, Image.Image] = {
             f'{phase}_{wobble}': image
             for phase, wobbles in images.items()
             for wobble, image in wobbles.items()
@@ -372,8 +370,8 @@ def pack_images_into_spritesheet(name: str, data: dict[str, list[list[str]]], im
         }
 
 
-def pack_images_into_tileset(images: dict[str, dict[int, dict[int, Image]]]):
-    representatives: list[Image] = []
+def pack_images_into_tileset(images: dict[str, dict[int, dict[int, Image.Image]]]):
+    representatives: list[Image.Image] = []
     names: list[str] = []
 
     for name, animations in images.items():
@@ -410,53 +408,54 @@ def pack_images_into_tileset(images: dict[str, dict[int, dict[int, Image]]]):
     
     
 
+def analyze_images():
 
-
-OUTPUT = {}
-images = open_all_images()
-for name, values in images.items():
-    output = None
-    
-    has_facing = all(direction in values for direction in DIRECTIONS)
-    if has_facing and len(values) == 4:
-        # this object has separate sprites for each direction
-        logger.info(f'{name} has facing sprites')
-        output = output_facing_and_animation(name, values)
-    elif has_facing and len(values) > 4:
-        # this object has separate sprites for each direction, AND has animations
-        logger.info(f'{name} has facing sprites AND animations')
-        output = output_facing_and_animation(name, values)
-    elif len(values) == 16:
-        # this object can 'join' with others nearby, like WALL or WATER
-        logger.info(f'{name} can join with others')
-        output_joinable(name, values)
-        output = {
-            'type': 'joinable',
-        }
+    OUTPUT = {}
+    images = open_all_images()
+    for name, values in images.items():
+        output = None
         
-    elif len(values) > 1:
-        # this object has no direction, but does have animation sprites
-        logger.info(f'{name} has an animation, but no facing sprites')
-        output = output_simple(name, values)
-    else:
-        # this object is simple
-        logger.info(f'{name} is simple')
-        output = output_simple(name, values)
+        has_facing = all(direction in values for direction in DIRECTIONS)
+        if has_facing and len(values) == 4:
+            # this object has separate sprites for each direction
+            print(f'{name} has facing sprites')
+            output = output_facing_and_animation(name, values)
+        elif has_facing and len(values) > 4:
+            # this object has separate sprites for each direction, AND has animations
+            print(f'{name} has facing sprites AND animations')
+            output = output_facing_and_animation(name, values)
+        elif len(values) == 16:
+            # this object can 'join' with others nearby, like WALL or WATER
+            print(f'{name} can join with others')
+            output_joinable(name, values)
+            output = {
+                'type': 'joinable',
+            }
+            
+        elif len(values) > 1:
+            # this object has no direction, but does have animation sprites
+            print(f'{name} has an animation, but no facing sprites')
+            output = output_simple(name, values)
+        else:
+            # this object is simple
+            print(f'{name} is simple')
+            output = output_simple(name, values)
 
-    if output:
-        output = pack_images_into_spritesheet(name, output, values)
-        OUTPUT[name] = output
-        
-with open(OUTPUT_DIRECTORY + f'json/OUTPUT.json', 'w') as f:
-    f.write(json.dumps(OUTPUT, indent=4))
+        if output:
+            output = pack_images_into_spritesheet(name, output, values)
+            OUTPUT[name] = output
+            
+    with open(OUTPUT_DIRECTORY / f'json/OUTPUT.json', 'w') as f:
+        f.write(json.dumps(OUTPUT, indent=4))
 
-sheet_info = pack_images_into_tileset(images)
+    sheet_info = pack_images_into_tileset(images)
 
-with open(OUTPUT_DIRECTORY + f'json/TILESET.json', 'w') as f:
-    f.write(json.dumps(sheet_info, indent=4))
+    with open(OUTPUT_DIRECTORY / f'json/TILESET.json', 'w') as f:
+        f.write(json.dumps(sheet_info, indent=4))
 
 
-
+if __name__ == '__main__':
+    analyze_images()
 
 
 

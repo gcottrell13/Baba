@@ -14,3 +14,9 @@ BabaSource/.vs/Baba/v16/
 BabaSource/Core/bin
 
 BabaSource/Core/obj
+
+BabaSource/.vs/
+
+pipeline/.vscode/
+
+pipeline/__pycache__/

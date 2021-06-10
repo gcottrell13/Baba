@@ -20,3 +20,5 @@ BabaSource/.vs/
 pipeline/.vscode/
 
 pipeline/__pycache__/
+
+*.tiled-session

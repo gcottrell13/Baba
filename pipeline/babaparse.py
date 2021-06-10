@@ -458,14 +458,14 @@ def pack_images_into_tileset(
         animations = images[info.get('sprite', name)]
 
         if name.startswith('text_'):
-            if name[5:] in images:
+            if name[5:] in OBJECT_INFO:
                 continue
 
         if name not in existing_objects:
             add(name, animations)
 
             txt = f'text_{name}'
-            if txt in images:
+            if txt in OBJECT_INFO:
                 add(txt, images[txt])
 
     sheet, coordinates = create_sheet(representatives, width=24)

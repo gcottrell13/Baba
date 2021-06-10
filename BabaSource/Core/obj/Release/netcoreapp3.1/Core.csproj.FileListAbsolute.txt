@@ -1,8 +1,0 @@
-E:\Projects\FactoryAmongUs\Core\bin\Release\netcoreapp3.1\Core.deps.json
-E:\Projects\FactoryAmongUs\Core\bin\Release\netcoreapp3.1\Core.dll
-E:\Projects\FactoryAmongUs\Core\bin\Release\netcoreapp3.1\Core.pdb
-E:\Projects\FactoryAmongUs\Core\obj\Release\netcoreapp3.1\Core.csprojAssemblyReference.cache
-E:\Projects\FactoryAmongUs\Core\obj\Release\netcoreapp3.1\Core.AssemblyInfoInputs.cache
-E:\Projects\FactoryAmongUs\Core\obj\Release\netcoreapp3.1\Core.AssemblyInfo.cs
-E:\Projects\FactoryAmongUs\Core\obj\Release\netcoreapp3.1\Core.dll
-E:\Projects\FactoryAmongUs\Core\obj\Release\netcoreapp3.1\Core.pdb

@@ -11,7 +11,7 @@ namespace BabaGame.src.Engine
     public class WorldStructure
     {
 
-        private MapData[,] Maps;
+        public MapData[,] Maps;
         public const int MapWidth = 24;
         public const int MapHeight = 18;
         private readonly string worldName;
@@ -26,26 +26,11 @@ namespace BabaGame.src.Engine
             engine = new WordEngine();
             Maps = new MapData[0, 0];
 
-            engine.AddRule(new WordEngine.FullRule
-            {
-                TargetName = "baba",
-                Verb = "is",
-                Feature = "you",
-            });
+            engine.AddRule(WordEngine.ParsePhrase("baba is you"));
 
-            engine.AddRule(new WordEngine.FullRule
-            {
-                TargetName = "wall",
-                Verb = "is",
-                Feature = "stop",
-            });
+            engine.AddRule(WordEngine.ParsePhrase("not baba is push"));
 
-            engine.AddRule(new WordEngine.FullRule
-            {
-                TargetName = "box",
-                Verb = "is",
-                Feature = "push",
-            });
+            engine.AddRule(WordEngine.ParsePhrase("box is stop"));
 
             this.worldName = worldName;
         }

@@ -22,13 +22,13 @@ namespace BabaGame.src
 
         private bool allowInput = false;
 
-        private Dictionary<(int, int), GameObject> MapDisplays;
+        private Dictionary<(int, int), MapDisplay> MapDisplays;
 
         private List<Keys> AllKeysPressed;
 
         public World(string world)
         {
-            MapDisplays = new Dictionary<(int, int), GameObject>();
+            MapDisplays = new Dictionary<(int, int), MapDisplay>();
 
             lastInput = DateTime.Today;
             data = new WorldStructure(world);
@@ -53,6 +53,8 @@ namespace BabaGame.src
         {
             Graphics.xscale = WorldVariables.Scale;
             Graphics.yscale = WorldVariables.Scale;
+
+            base.OnUpdate(gameTime);
 
             if (allowInput && AllKeysPressed?.Count > 0)
             {
@@ -80,11 +82,19 @@ namespace BabaGame.src
                     {
                         data.TakeAction("wait");
                     }
+                    else
+                    {
+                        return;
+                    }
+
+                    foreach (var ((x, y), map) in MapDisplays)
+                    {
+                        data.Maps[x, y]?.DoJoinable();
+                    }
                 }
 
             }
 
-            base.OnUpdate(gameTime);
         }
 
         void onCharacterControl(CharacterControl characterControl)
@@ -106,10 +116,16 @@ namespace BabaGame.src
             Graphics.children.Clear();
             children.Clear();
 
+            var display = new MapDisplay();
+
+            MapDisplays[(ev.X, ev.Y)] = display;
+
             foreach (var obj in data.SetMap(ev))
             {
-                AddChild(obj, addGraphics: true);
+                display.AddChild(obj, addGraphics: true);
             }
+
+            AddChild(display, addGraphics: true);
         }
 
         void onKeyPress(KeyEvent keyEvent)

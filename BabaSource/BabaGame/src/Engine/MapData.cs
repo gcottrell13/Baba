@@ -72,18 +72,20 @@ namespace BabaGame.src.Engine
                 }
             }
 
-            _doJoinable();
+            DoJoinable();
 
             return objects;
         }
 
         public Dictionary<Direction, List<BaseObject>> GetObjectsNear(int x, int y)
         {
-            var near = new Dictionary<Direction, List<BaseObject>>();
-            near[Direction.Up] = AllObjects.Where(o => o.X == x && o.Y == y - 1).Concat(world.ObjectsAt(this, x, y - 1)).ToList();
-            near[Direction.Down] = AllObjects.Where(o => o.X == x && o.Y == y + 1).Concat(world.ObjectsAt(this, x, y + 1)).ToList();
-            near[Direction.Left] = AllObjects.Where(o => o.X == x - 1 && o.Y == y).Concat(world.ObjectsAt(this, x - 1, y)).ToList();
-            near[Direction.Right] = AllObjects.Where(o => o.X == x + 1 && o.Y == y).Concat(world.ObjectsAt(this, x + 1, y)).ToList();
+            var near = new Dictionary<Direction, List<BaseObject>>
+            {
+                [Direction.Up] = AllObjects.Where(o => o.X == x && o.Y == y - 1).Concat(world.ObjectsAt(this, x, y - 1)).ToList(),
+                [Direction.Down] = AllObjects.Where(o => o.X == x && o.Y == y + 1).Concat(world.ObjectsAt(this, x, y + 1)).ToList(),
+                [Direction.Left] = AllObjects.Where(o => o.X == x - 1 && o.Y == y).Concat(world.ObjectsAt(this, x - 1, y)).ToList(),
+                [Direction.Right] = AllObjects.Where(o => o.X == x + 1 && o.Y == y).Concat(world.ObjectsAt(this, x + 1, y)).ToList()
+            };
             return near;
         }
 
@@ -124,9 +126,10 @@ namespace BabaGame.src.Engine
                 var nearObjects = GetObjectsNear(oldX, oldY)[dir.Value];
                 var query = new QueryCache(nearObjects, engine);
 
-                if (query.GetUnitsWithEffect("stop").Any()) return false;
-
                 var pushAtDest = query.GetUnitsWithEffect("push");
+
+                if (query.GetUnitsWithEffect("stop").Except(pushAtDest).Any()) return false;
+
                 if (pushAtDest.Any())
                 {
                     if (!canMove(newX, newY, newX + dx, newY + dy))
@@ -139,7 +142,7 @@ namespace BabaGame.src.Engine
                 {
                     if (!canMove(newX, newY, newX + dx, newY + dy))
                         return false;
-                    foreach (var s in query.GetUnitsWithEffect("sticky").Where(a => Math.Abs(a.X - newX) != Math.Abs(a.Y - newY)))
+                    foreach (var s in stickyAtDest.Where(a => Math.Abs(a.X - newX) != Math.Abs(a.Y - newY)))
                     {
                         canMove(s.X, s.Y, s.X + dx, s.Y + dy);
                     }
@@ -169,32 +172,25 @@ namespace BabaGame.src.Engine
                 moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
 
-            intentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
-            newIntentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
+            intentsToMove.Clear();
+            newIntentsToMove.Clear();
 
 
-            #region Scary / Scared
-            //if (_getUnitsWithEffect("scary").ToList() is List<BaseObject> b && b.Any())
-            //{
+            #region Fear
+            if (engine.FindFeature(null, "fear", null).Any())
+            {
+                var fear = cache.GetUnitVerbTargets("fear");
+                var scaryNear = fear.Where(pair => Math.Abs(pair.b.X - pair.a.X) + Math.Abs(pair.b.Y - pair.a.Y) == 1).ToList();
 
-            //    var scared = getCache(cache, "scared");
-            //    var scary = getCache(cache, "scary");
-            //    var scaryNear = (
-            //        from aah in scared
-            //        from boo in scary
-            //        select new { boo = boo.Object, aah = aah.Object }).Where(pair => Math.Abs(pair.boo.X - pair.aah.X) + Math.Abs(pair.boo.Y - pair.aah.Y) == 1).ToList();
-
-            //    if (scaryNear.Any())
-            //    {
-            //        foreach (var s in scaryNear)
-            //        {
-            //            var boo = s.boo;
-            //            var aah = s.aah;
-            //            if (boo.X == aah.X) intentsToMove.Add((aah.X, aah.Y, aah.X, aah.Y + (aah.Y - boo.Y), aah)); // aah.MoveY(aah.Y - boo.Y);
-            //            else if (boo.Y == aah.Y) intentsToMove.Add((aah.X, aah.Y, aah.X + (aah.X - boo.X), aah.Y, aah)); //aah.MoveX(aah.X - boo.X);
-            //        }
-            //    }
-            //}
+                if (scaryNear.Any())
+                {
+                    foreach (var (aah, boo) in scaryNear)
+                    {
+                        if (boo.X == aah.X) intentsToMove.Add((aah.X, aah.Y, aah.X, aah.Y + (aah.Y - boo.Y), aah)); // aah.MoveY(aah.Y - boo.Y);
+                        else if (boo.Y == aah.Y) intentsToMove.Add((aah.X, aah.Y, aah.X + (aah.X - boo.X), aah.Y, aah)); //aah.MoveX(aah.X - boo.X);
+                    }
+                }
+            }
             #endregion
 
             #region Shift
@@ -219,8 +215,6 @@ namespace BabaGame.src.Engine
             {
                 moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
-
-            _doJoinable();
         }
 
         private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
@@ -250,7 +244,7 @@ namespace BabaGame.src.Engine
             return null;
         }
 
-        private void _doJoinable()
+        public void DoJoinable()
         {
             foreach (var obj in AllObjects)
             {
@@ -292,14 +286,11 @@ namespace BabaGame.src.Engine
                 {
                     foreach (var item in group)
                     {
-                        if (item.TargetName != "empty")
+                        foreach (var unit in GetAllUnitsOfType(item.TargetName, item.TargetNot))
                         {
-                            foreach (var unit in GetAllUnitsOfType(item.TargetName))
+                            if (_testCondition(item.TargetCondition, unit, item.TargetNot) && !unit.Dead)
                             {
-                                if (_testCondition(item.TargetCondition, unit, SearchThese) && !unit.Dead)
-                                {
-                                    yield return unit;
-                                }
+                                yield return unit;
                             }
                         }
                     }
@@ -307,46 +298,74 @@ namespace BabaGame.src.Engine
 
                 return iter().ToList();
             }
-
-
-            public IEnumerable<BaseObject> GetAllUnitsOfType(string type)
+            
+            public IEnumerable<(BaseObject a, BaseObject b)> GetUnitVerbTargets(string verb)
             {
-                if (type == "empty")
+                if (Engine.FeatureIndex.ContainsKey(verb))
                 {
-
-                }
-                else if (type == "all")
-                {
-
-                }
-                else if (type == "level")
-                {
-
-                }
-                else if (type == "group")
-                {
-                    foreach (var memberKind in Engine.FindFeature(null, "is", "group"))
+                    foreach (var feat in Engine.FeatureIndex[verb])
                     {
-                        foreach (var unit in GetAllUnitsOfType(memberKind.TargetName).Where(obj => _testCondition(memberKind.TargetCondition, obj)))
+                        if (feat.TargetCondition?.FullModifier != "never" && feat.TargetName != "empty")
                         {
-                            yield return unit;
+                            foreach (var item in GetAllUnitsOfType(feat.TargetName, feat.TargetNot))
+                            {
+                                if (_testCondition(feat.TargetCondition, item, feat.TargetNot)) { 
+                                    foreach (var scary in GetAllUnitsOfType(feat.Feature, feat.FeatureNot))
+                                        yield return (item, scary);
+                                }
+
+                            }
                         }
-                    }
-                }
-                else
-                {
-                    foreach (var unit in SearchThese)
-                    {
-                        if (unit.Type == ObjectType.Text ? type == "text" : unit.Name == type)
-                            yield return unit;
                     }
                 }
             }
 
-            private bool _testCondition(TargetCondition? conds, BaseObject obj, IEnumerable<BaseObject>? ignore = null)
+
+            public IEnumerable<BaseObject> GetAllUnitsOfType(string type, bool not = false)
             {
-                if (conds == null)
-                    return true;
+                if (Cache.ContainsKey(type))
+                    return Cache[type];
+
+                IEnumerable<BaseObject> iter()
+                {
+                    if (type == "empty")
+                    {
+
+                    }
+                    else if (type == "all")
+                    {
+
+                    }
+                    else if (type == "level")
+                    {
+
+                    }
+                    else if (type == "group")
+                    {
+                        foreach (var memberKind in Engine.FindFeature(null, "is", "group"))
+                        {
+                            foreach (var unit in GetAllUnitsOfType(memberKind.TargetName, not)
+                                .Where(obj => _testCondition(memberKind.TargetCondition, obj, memberKind.TargetNot)))
+                            {
+                                yield return unit;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var unit in SearchThese)
+                        {
+                            if (unit.Type == ObjectType.Text ? type == "text" : (unit.Name == type) != not)
+                                yield return unit;
+                        }
+                    }
+                }
+                return iter();
+            }
+
+            private bool _testCondition(TargetCondition? cond, BaseObject obj, bool targetNot, IEnumerable<BaseObject>? ignore = null)
+            {
+                if (cond == null) return true;
                 return false;
             }
         }

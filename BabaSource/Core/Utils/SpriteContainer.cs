@@ -32,7 +32,6 @@ namespace Core.Utils
             ReorderChildren();
         }
 
-
         public void ReorderChildren()
         {
             // do the sorting after the current update to avoid performance issues
@@ -46,6 +45,13 @@ namespace Core.Utils
                 children.Sort((a, b) => (int)a.zindex - (int)b.zindex);
                 _shouldReorder = false;
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            foreach (var child in children)
+                child.Destroy();
+            children.Clear();
         }
     }
 }

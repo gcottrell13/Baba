@@ -95,6 +95,10 @@ namespace Core.Utils
             }
         }
 
+        public void Destroy() { OnDestroy();  }
+
+        protected virtual void OnDestroy() { }
+
         public abstract void Draw();
 
         public void RecalculateTransform()

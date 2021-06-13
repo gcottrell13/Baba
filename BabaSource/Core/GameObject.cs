@@ -25,6 +25,22 @@ namespace Core
         protected virtual void OnAfterChildrenUpdate(GameTime gameTime) { }
         protected virtual void OnAfterInitialize() { }
 
+        protected virtual void OnDestroy() { }
+
+        public void Destroy()
+        {
+            foreach (var child in children)
+            {
+                child.Destroy();
+            }
+
+            Graphics.Destroy();
+
+            OnDestroy();
+
+            children.Clear();
+        }
+
         public void AfterInitialize()
         {
             foreach (var child in children)

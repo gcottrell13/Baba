@@ -72,30 +72,18 @@ namespace BabaGame.src.Engine
                 }
             }
 
-            foreach (var obj in AllObjects)
-            {
-                if (obj.Joinable)
-                {
-                    var flag = 0;
-                    var near = GetObjectsNear(obj);
-                    if (near[Direction.Up].Any(o => o.Name == obj.Name) == true) flag += 2;
-                    if (near[Direction.Right].Any(o => o.Name == obj.Name) == true) flag += 1;
-                    if (near[Direction.Down].Any(o => o.Name == obj.Name) == true) flag += 8;
-                    if (near[Direction.Left].Any(o => o.Name == obj.Name) == true) flag += 4;
-                    obj.SetJoinWithNeighbors(flag.ToString());
-                }
-            }
+            _doJoinable();
 
             return objects;
         }
 
-        public Dictionary<Direction, List<BaseObject>> GetObjectsNear(BaseObject obj)
+        public Dictionary<Direction, List<BaseObject>> GetObjectsNear(int x, int y)
         {
             var near = new Dictionary<Direction, List<BaseObject>>();
-            near[Direction.Up] = AllObjects.Where(o => o.X == obj.X && o.Y == obj.Y - 1).Concat(world.ObjectsAt(this, obj.X, obj.Y - 1)).ToList();
-            near[Direction.Down] = AllObjects.Where(o => o.X == obj.X && o.Y == obj.Y + 1).Concat(world.ObjectsAt(this, obj.X, obj.Y + 1)).ToList();
-            near[Direction.Left] = AllObjects.Where(o => o.X == obj.X - 1 && o.Y == obj.Y).Concat(world.ObjectsAt(this, obj.X - 1, obj.Y)).ToList();
-            near[Direction.Right] = AllObjects.Where(o => o.X == obj.X + 1 && o.Y == obj.Y).Concat(world.ObjectsAt(this, obj.X + 1, obj.Y)).ToList();
+            near[Direction.Up] = AllObjects.Where(o => o.X == x && o.Y == y - 1).Concat(world.ObjectsAt(this, x, y - 1)).ToList();
+            near[Direction.Down] = AllObjects.Where(o => o.X == x && o.Y == y + 1).Concat(world.ObjectsAt(this, x, y + 1)).ToList();
+            near[Direction.Left] = AllObjects.Where(o => o.X == x - 1 && o.Y == y).Concat(world.ObjectsAt(this, x - 1, y)).ToList();
+            near[Direction.Right] = AllObjects.Where(o => o.X == x + 1 && o.Y == y).Concat(world.ObjectsAt(this, x + 1, y)).ToList();
             return near;
         }
 
@@ -113,10 +101,12 @@ namespace BabaGame.src.Engine
             var intentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
             var newIntentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
 
-            foreach (var you in _getUnitsWithEffect("you"))
-                intentsToMove.Add(directionMoveObject(you, action[0]));
+            var cache = new QueryCache(AllObjects, engine);
 
-            foreach (var move in _getUnitsWithEffect("move"))
+            foreach (var you in cache.GetUnitsWithEffect("you"))
+                intentsToMove.Add(directionMoveObject(you, DirectionExtensions.FromString(action)));
+
+            foreach (var move in cache.GetUnitsWithEffect("move"))
                 intentsToMove.Add(directionMoveObject(move, move.Facing));
 
             bool canMove(int oldX, int oldY, int newX, int newY)
@@ -125,12 +115,18 @@ namespace BabaGame.src.Engine
 
                 if (newX >= gridx || newY >= gridy || newX < 0 || newY < 0) return false;
 
-                if (_getUnitsWithEffect("stop").Any(obj => obj.X == newX && obj.Y == newY)) return false;
-
                 var dx = newX - oldX;
                 var dy = newY - oldY;
+                var dir = directionFromDelta(dx, dy);
 
-                var pushAtDest = _getUnitsWithEffect("push").Where(a => a.X == newX && a.Y == newY).ToList();
+                if (dir == null) return false;
+
+                var nearObjects = GetObjectsNear(oldX, oldY)[dir.Value];
+                var query = new QueryCache(nearObjects, engine);
+
+                if (query.GetUnitsWithEffect("stop").Any()) return false;
+
+                var pushAtDest = query.GetUnitsWithEffect("push");
                 if (pushAtDest.Any())
                 {
                     if (!canMove(newX, newY, newX + dx, newY + dy))
@@ -138,12 +134,12 @@ namespace BabaGame.src.Engine
                     newIntentsToMove.AddRange(pushAtDest.Select(p => (newX, newY, newX + dx, newY + dy, p)));
                 }
 
-                var stickyAtDest = _getUnitsWithEffect("sticky").Where(a => a.X == newX && a.Y == newY).ToList();
+                var stickyAtDest = query.GetUnitsWithEffect("sticky");
                 if (stickyAtDest.Any())
                 {
                     if (!canMove(newX, newY, newX + dx, newY + dy))
                         return false;
-                    foreach (var s in _getUnitsWithEffect("sticky").Where(a => Math.Abs(a.X - newX) != Math.Abs(a.Y - newY)))
+                    foreach (var s in query.GetUnitsWithEffect("sticky").Where(a => Math.Abs(a.X - newX) != Math.Abs(a.Y - newY)))
                     {
                         canMove(s.X, s.Y, s.X + dx, s.Y + dy);
                     }
@@ -159,7 +155,7 @@ namespace BabaGame.src.Engine
                 {
                     moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
                 }
-                else if (_getUnitsWithEffect("move").Any(j => j == obj))
+                else if (cache.GetUnitsWithEffect("move").Any(j => j == obj))
                 {
                     obj.AboutFace();
                 }
@@ -202,7 +198,7 @@ namespace BabaGame.src.Engine
             #endregion
 
             #region Shift
-            foreach (var shift in _getUnitsWithEffect("shift"))
+            foreach (var shift in cache.GetUnitsWithEffect("shift"))
             {
                 foreach (var shifted in AllObjects.Where(obj => obj.X == shift.X && obj.Y == shift.Y && obj != shift))
                 {
@@ -224,15 +220,7 @@ namespace BabaGame.src.Engine
                 moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
 
-            //foreach (var obj in Objects.Where(o => o.Joinable))
-            //{
-            //    var flag = 0;
-            //    if (obj.Y > 0 && Grid[obj.X, obj.Y - 1]?.Any(o => o.Name == obj.Name) == true) flag += 2;
-            //    if (obj.X < gridx - 1 && Grid[obj.X + 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 1;
-            //    if (obj.Y < gridy - 1 && Grid[obj.X, obj.Y + 1]?.Any(o => o.Name == obj.Name) == true) flag += 8;
-            //    if (obj.X > 0 && Grid[obj.X - 1, obj.Y]?.Any(o => o.Name == obj.Name) == true) flag += 4;
-            //    obj.SetJoinWithNeighbors(flag.ToString());
-            //}
+            _doJoinable();
         }
 
         private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
@@ -241,101 +229,126 @@ namespace BabaGame.src.Engine
             obj.SetY(newY);
         }
 
-        private (int, int, int, int, BaseObject) directionMoveObject(BaseObject obj, char direction)
+        private (int, int, int, int, BaseObject) directionMoveObject(BaseObject obj, Direction direction)
         {
-            if (direction == 'u')
+            return direction switch
             {
-                return (obj.X, obj.Y, obj.X, obj.Y - 1, obj);
-            }
-            else if (direction == 'd')
-            {
-                return (obj.X, obj.Y, obj.X, obj.Y + 1, obj);
-            }
-            else if (direction == 'l')
-            {
-                return (obj.X, obj.Y, obj.X - 1, obj.Y, obj);
-            }
-            else if (direction == 'r')
-            {
-                return (obj.X, obj.Y, obj.X + 1, obj.Y, obj);
-            }
-            return (0, 0, 0, 0, obj);
+                Direction.Up => (obj.X, obj.Y, obj.X, obj.Y - 1, obj),
+                Direction.Down => (obj.X, obj.Y, obj.X, obj.Y + 1, obj),
+                Direction.Left => (obj.X, obj.Y, obj.X - 1, obj.Y, obj),
+                Direction.Right => (obj.X, obj.Y, obj.X + 1, obj.Y, obj),
+                _ => (0, 0, 0, 0, obj),
+            };
         }
 
-        private char directionFromDelta(int dx, int dy)
+        private Direction? directionFromDelta(int dx, int dy)
         {
-            if (dx < 0) return 'l';
-            if (dx > 0) return 'r';
-            if (dy < 0) return 'u';
-            if (dy > 0) return 'd';
-            return ' ';
+            if (dx < 0) return Direction.Left;
+            if (dx > 0) return Direction.Right;
+            if (dy < 0) return Direction.Up;
+            if (dy > 0) return Direction.Down;
+            return null;
         }
 
-        private IEnumerable<BaseObject> _getUnitsWithEffect(string property, IEnumerable<BaseObject>? ignore = null)
+        private void _doJoinable()
         {
-            var group = engine.FindFeature(null, "is", property).Where(item => !ContainsNoun(BriefNounList, item.TargetName));
-
-            foreach (var item in group)
+            foreach (var obj in AllObjects)
             {
-                if (item.TargetName != "empty")
+                if (obj.Joinable)
                 {
-                    foreach (var unit in GetAllUnitsOfType(item.TargetName))
+                    var flag = 0;
+                    var near = GetObjectsNear(obj.X, obj.Y);
+                    if (near[Direction.Up].Any(o => o.Name == obj.Name) == true) flag += 2;
+                    if (near[Direction.Right].Any(o => o.Name == obj.Name) == true) flag += 1;
+                    if (near[Direction.Down].Any(o => o.Name == obj.Name) == true) flag += 8;
+                    if (near[Direction.Left].Any(o => o.Name == obj.Name) == true) flag += 4;
+                    obj.SetJoinWithNeighbors(flag.ToString());
+                }
+            }
+        }
+
+
+        class QueryCache
+        {
+            public List<BaseObject> SearchThese { get; }
+            public WordEngine Engine { get; }
+            public Dictionary<string, List<BaseObject>> Cache { get; }
+
+            public QueryCache(List<BaseObject> searchThese, WordEngine engine)
+            {
+                SearchThese = searchThese;
+                Engine = engine;
+                Cache = new Dictionary<string, List<BaseObject>>();
+            }
+
+            public List<BaseObject> GetUnitsWithEffect(string effect)
+            {
+                if (Cache.ContainsKey(effect)) 
+                    return Cache[effect];
+
+                var group = Engine.FindFeature(null, "is", effect).Where(item => !ContainsNoun(BriefNounList, item.TargetName));
+
+                IEnumerable<BaseObject> iter()
+                {
+                    foreach (var item in group)
                     {
-                        if (_testCondition(item.TargetCondition, unit) && !unit.Dead && (ignore?.Contains(unit) ?? true))
+                        if (item.TargetName != "empty")
+                        {
+                            foreach (var unit in GetAllUnitsOfType(item.TargetName))
+                            {
+                                if (_testCondition(item.TargetCondition, unit, SearchThese) && !unit.Dead)
+                                {
+                                    yield return unit;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return iter().ToList();
+            }
+
+
+            public IEnumerable<BaseObject> GetAllUnitsOfType(string type)
+            {
+                if (type == "empty")
+                {
+
+                }
+                else if (type == "all")
+                {
+
+                }
+                else if (type == "level")
+                {
+
+                }
+                else if (type == "group")
+                {
+                    foreach (var memberKind in Engine.FindFeature(null, "is", "group"))
+                    {
+                        foreach (var unit in GetAllUnitsOfType(memberKind.TargetName).Where(obj => _testCondition(memberKind.TargetCondition, obj)))
                         {
                             yield return unit;
                         }
                     }
                 }
-            }
-        }
-
-        private bool _testCondition(TargetCondition? conds, BaseObject obj, IEnumerable<BaseObject>? ignore = null)
-        {
-            if (conds == null) 
-                return true;
-            return false;
-        }
-
-        public IEnumerable<BaseObject> GetAllUnitsOfType(string type)
-        {
-            if (type == "empty")
-            {
-
-            }
-            else if (type == "all")
-            {
-
-            }
-            else if (type == "level")
-            {
-
-            }
-            else if (type == "group")
-            {
-                foreach (var memberKind in engine.FindFeature(null, "is", "group"))
+                else
                 {
-                    foreach (var unit in GetAllUnitsOfType(memberKind.TargetName).Where(obj => _testCondition(memberKind.TargetCondition, obj))) {
-                        yield return unit;
+                    foreach (var unit in SearchThese)
+                    {
+                        if (unit.Type == ObjectType.Text ? type == "text" : unit.Name == type)
+                            yield return unit;
                     }
                 }
             }
-            else
+
+            private bool _testCondition(TargetCondition? conds, BaseObject obj, IEnumerable<BaseObject>? ignore = null)
             {
-                foreach (var unit in AllObjects)
-                {
-                    if (unit.Type == ObjectType.Text ? type == "text" : unit.Name == type)
-                        yield return unit;
-                }
+                if (conds == null)
+                    return true;
+                return false;
             }
-        }
-
-
-        struct CacheItem
-        {
-            public BaseObject Object;
-            public int BeginningX;
-            public int BeginningY;
         }
     }
 }

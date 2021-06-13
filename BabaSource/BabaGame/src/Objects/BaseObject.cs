@@ -23,7 +23,7 @@ namespace BabaGame.src.Objects
 
         public bool Dead { get; set; }
 
-        public char Facing { get; private set; }
+        public Direction Facing { get; private set; }
 
         public ObjectType Type { get; private set; }
 
@@ -41,7 +41,7 @@ namespace BabaGame.src.Objects
             var (px, py) = WorldVariables.GameCoordToScreenCoord(x, y);
             Graphics.x = px;
             Graphics.y = py;
-            Facing = (phase ?? "u")[0];
+            Facing = DirectionExtensions.FromString(phase);
 
             var info = JsonValues.ObjectInfo[name];
 
@@ -58,21 +58,21 @@ namespace BabaGame.src.Objects
             Joinable = JsonValues.Animations[name].ContainsKey("0");
         }
 
-        public void Move(char direction)
+        public void Move(Direction direction)
         {
-            if (direction == 'u')
+            if (direction == Direction.Up)
             {
                 MoveY(-1);
             }
-            else if (direction == 'd')
+            else if (direction == Direction.Down)
             {
                 MoveY(1);
             }
-            else if (direction == 'l')
+            else if (direction == Direction.Left)
             {
                 MoveX(-1);
             }
-            else if (direction == 'r')
+            else if (direction == Direction.Right)
             {
                 MoveX(1);
             }
@@ -95,7 +95,7 @@ namespace BabaGame.src.Objects
                 var (sx, _) = WorldVariables.GameCoordToScreenCoord(x, Y);
                 animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
-                if (x < X) FaceDirection('l'); else FaceDirection('r');
+                if (x < X) FaceDirection(Direction.Left); else FaceDirection(Direction.Right);
                 X = x;
             }
         }
@@ -107,7 +107,7 @@ namespace BabaGame.src.Objects
                 var (_, sy) = WorldVariables.GameCoordToScreenCoord(X, y);
                 animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
-                if (y < Y) FaceDirection('u'); else FaceDirection('d');
+                if (y < Y) FaceDirection(Direction.Up); else FaceDirection(Direction.Down);
                 Y = y;
             }
         }
@@ -130,38 +130,27 @@ namespace BabaGame.src.Objects
             }
         }
 
-        public void FaceDirection(char direction)
+        public void FaceDirection(Direction? direction)
         {
-            string phase = "";
-            switch (direction)
-            {
-                case 'd': phase = "down"; break;
-                case 'u': phase = "up"; break;
-                case 'l': phase = "left"; break;
-                case 'r': phase = "right"; break;
-            }
-            if (sprite.HasPhase(phase) && Facing != direction)
+            string phase = direction?.ToString().ToLower() ?? "up";
+
+            if (sprite.HasPhase(phase) && Facing != direction && direction != null)
             {
                 sprite.SetPhase(phase); 
-                Facing = direction;
+                Facing = direction ?? Direction.None;
             }
         }
 
         public void AboutFace()
         {
-            string phase = "";
-            switch (Facing)
+            FaceDirection(Facing switch
             {
-                case 'd': phase = "up"; break;
-                case 'u': phase = "down"; break;
-                case 'l': phase = "right"; break;
-                case 'r': phase = "left"; break;
-            }
-            if (sprite.HasPhase(phase))
-            {
-                sprite.SetPhase(phase);
-                Facing = phase[0];
-            }
+                Direction.Up => Direction.Down,
+                Direction.Down => Direction.Up,
+                Direction.Left => Direction.Right,
+                Direction.Right => Direction.Left,
+                _ => Facing,
+            });
         }
 
         public void SetJoinWithNeighbors(string phase)

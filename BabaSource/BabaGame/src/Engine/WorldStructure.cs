@@ -24,6 +24,7 @@ namespace BabaGame.src.Engine
         public WorldStructure(string worldName)
         {
             engine = new WordEngine();
+            Maps = new MapData[0, 0];
 
             engine.AddRule(new WordEngine.FullRule
             {
@@ -52,17 +53,9 @@ namespace BabaGame.src.Engine
         public IEnumerable<BaseObject> SetMap(MapChange mapChange)
         {
             var world = AllMaps.GetWorldHandle(worldName);
-
-            if (Maps == null)
+            if (Maps.Length == 0 && world != null)
             {
-                if (world != null)
-                {
-                    Maps = new MapData[world.Width + 1, world.Height + 1];
-                }
-                else
-                {
-                    Maps = new MapData[0, 0];
-                }
+                Maps = new MapData[world.Width + 1, world.Height + 1];
             }
 
             CurrentX = mapChange.X;

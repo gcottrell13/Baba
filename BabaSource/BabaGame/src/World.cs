@@ -42,7 +42,7 @@ namespace BabaGame.src
             AllKeysPressed = new List<Keys>();
         }
 
-        ~World()
+        protected override void OnDestroy()
         {
             EventChannels.MapChange.Unsubscribe(setMap);
             EventChannels.KeyPress.Unsubscribe(onKeyPress);

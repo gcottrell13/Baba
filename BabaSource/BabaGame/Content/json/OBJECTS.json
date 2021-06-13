@@ -1260,6 +1260,19 @@
         "layer": 12,
         "unittype": "object"
     },
+    "plank": {
+        "color_inactive": [
+            6,
+            0
+        ],
+        "color": [
+            6,
+            0
+        ],
+        "sprite": "plank",
+        "layer": 8,
+        "unittype": "object"
+    },
     "potato": {
         "color_inactive": [
             6,
@@ -4116,6 +4129,19 @@
             3
         ],
         "sprite": "text_planet",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_plank": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_plank",
         "layer": 20,
         "unittype": "text"
     },

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BabaGame.src.Objects
 {
-    public static class World
+    public static class WorldVariables
     {
         public static float CameraX = 0f;
         public static float CameraY = 0f;
@@ -14,7 +14,8 @@ namespace BabaGame.src.Objects
         public static float TileWidth = 24f;
         public static float TileHeight = 24f;
 
-        public static float InputDelaySeconds = 0.1f;
+        public static float InputDelaySeconds = 0.02f;
+        public static float MoveAnimationSeconds = 0.15f;
 
         public static string Palette = "default";
 

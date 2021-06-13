@@ -1,10 +1,10 @@
 from PIL import Image
 from vars import IMAGE_MODE, WORD_MAP
-from load_colors_from_baba import load_colors
+from load_object_information import load_information
 from vars import *
 import glob
 
-OBJECT_INFO, COLORS = load_colors()
+OBJECT_INFO, COLORS = load_information()
 
 
 __all__ = [
@@ -16,7 +16,7 @@ __all__ = [
     'get_output_coord',
     'get_new_gif',
     'save_gif',
-    'save_image',
+    'save_spritesheet',
     'resize_sprites',
 ]
 
@@ -110,5 +110,5 @@ def save_gif(name: str, frames: list[Image.Image]):
     )
 
 
-def save_image(name: str, frames: list[Image.Image]):
-    frames[0].save(str(VISUAL_OUTPUT_DIRECTORY / f"Sheets/{name}.png"))
+def save_spritesheet(name: str, frames: list[Image.Image]):
+    frames[0].save(str(OUTPUT_DIRECTORY / f"Sheets/{name}.png"))

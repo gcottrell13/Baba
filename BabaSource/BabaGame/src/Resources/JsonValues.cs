@@ -30,6 +30,9 @@ namespace BabaGame.src.Resources
         {
             public int[] color_inactive;
             public int[] color;
+            public string sprite;
+            public int layer;
+            public string unittype;
         }
     }
 }

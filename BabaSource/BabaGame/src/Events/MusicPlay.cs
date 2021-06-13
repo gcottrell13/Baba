@@ -4,10 +4,8 @@ using System.Text;
 
 namespace BabaGame.src.Events
 {
-    public class MapChange
+    public class MusicPlay
     {
-        public int X;
-        public int Y;
-        public Direction? Direction;
+        public string? TrackName;
     }
 }

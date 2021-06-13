@@ -22,3 +22,5 @@ pipeline/.vscode/
 pipeline/__pycache__/
 
 *.tiled-session
+
+BabaSource/BabaGame/Content/Sheets/

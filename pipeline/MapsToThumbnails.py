@@ -6,9 +6,9 @@ import pathlib
 from PIL import Image
 from vars import MAPS_DIRECTORY, OUTPUT_DIRECTORY, PIPELINE_PATH
 from imageUtils import *
-from load_colors_from_baba import load_colors
+from load_object_information import load_information
 
-INFO, COLORS = load_colors()
+INFO, COLORS = load_information()
 
 MAP_WIDTH = 24
 MAP_HEIGHT = 18
@@ -75,7 +75,7 @@ def group_to_tileset(
         print(f"created thumbnail {map_name}")
 
     sheet = resize_sprites(sheet, 0.25)
-    save_image(f"{group_name}_map", sheet)
+    save_spritesheet(f"{group_name}_map", sheet)
 
 
 def create_groups():

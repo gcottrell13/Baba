@@ -549,5 +549,10 @@
     "548": "worm-up",
     "549": "worm-left",
     "550": "worm-down",
-    "551": "text_worm"
+    "551": "text_worm",
+    "552": "egg-right",
+    "553": "egg-up",
+    "554": "egg-left",
+    "555": "egg-down",
+    "556": "text_egg"
 }

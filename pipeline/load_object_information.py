@@ -11,11 +11,16 @@ class InfoItem(TypedDict):
     color: tuple[int, int]
     sprite: str
     layer: int
+    unittype: str
 
-PaletteValuesFormat = dict[str, InfoItem]
+ObjectInformationCollection = dict[str, InfoItem]
 
 
 def parse_block(lines: Iterator[str]) -> dict:
+    """
+    for parsing a lua table that has a very specific format (this is incredibly brittle)
+    """
+
     props = {}
 
     while True:
@@ -56,15 +61,15 @@ PALETTE = {
     for i in range(PALETTE_HEIGHT)
 }
 
-_cache: tuple[PaletteValuesFormat, ColorsFormat] = ()
+_cache: tuple[ObjectInformationCollection, ColorsFormat] = ()
 
-def load_colors() -> tuple[PaletteValuesFormat, ColorsFormat]:
+def load_information() -> tuple[ObjectInformationCollection, ColorsFormat]:
 
     global _cache
     if _cache:
         return _cache
 
-    OBJECT_INFO: PaletteValuesFormat = {}
+    OBJECT_INFO: ObjectInformationCollection = {}
 
     with open(VALUES_FILE_PATH, 'r') as f:
         lines = iter(f.readlines())
@@ -82,6 +87,7 @@ def load_colors() -> tuple[PaletteValuesFormat, ColorsFormat]:
                 'color': attrs.get('colour_active', attrs['colour']),
                 'sprite': attrs.get('sprite', attrs['name']),
                 'layer': attrs['layer'],
+                'unittype': attrs['unittype'],
             }
     
     with open(CUSTOM_VALUES_FILE_PATH, 'r') as f:
@@ -103,4 +109,4 @@ def load_colors() -> tuple[PaletteValuesFormat, ColorsFormat]:
     return _cache
 
 if __name__ == '__main__':
-    print(json.dumps(load_colors(), indent=4))
+    print(json.dumps(load_information(), indent=4))

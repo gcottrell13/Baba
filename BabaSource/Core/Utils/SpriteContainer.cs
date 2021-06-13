@@ -29,6 +29,7 @@ namespace Core.Utils
         {
             children.Add(child);
             child.parent = this;
+            ReorderChildren();
         }
 
 

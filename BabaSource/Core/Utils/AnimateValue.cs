@@ -27,7 +27,7 @@ namespace Core.Utils
                 value = end;
                 return false;
             }
-            value = ((float)currentTime / time) * (end - start) + start;
+            value = (float)Math.Sqrt(currentTime / time) * (end - start) + start;
             return true;
         }
     }

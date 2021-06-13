@@ -9,11 +9,11 @@ using System.Text;
 
 namespace BabaGame.src
 {
-    class KeyListener : GameObject
+    public class KeyListener : GameObject
     {
         private Keys[] pressedKeys = Array.Empty<Keys>();
 
-        protected override void OnBeforeUpdate(GameTime gameTime)
+        protected override void OnUpdate(GameTime gameTime)
         {
             foreach (var key in pressedKeys.Union(KeyboardState.GetPressedKeys()))
             {
@@ -21,11 +21,11 @@ namespace BabaGame.src
                 var wasDown = pressedKeys.Contains(key);
                 if (isDown && wasDown == false)
                 {
-                    EventChannels.KeyPress.SendMessage(new KeyEvent { Key = key, Up = true });
+                    EventChannels.KeyPress.SendMessage(new KeyEvent { ChangedKey = key, Up = false});
                 }
                 else if (isDown == false && wasDown)
                 {
-                    EventChannels.KeyPress.SendMessage(new KeyEvent { Key = key, Up = false });
+                    EventChannels.KeyPress.SendMessage(new KeyEvent { ChangedKey = key, Up = true});
                 }
             }
             pressedKeys = KeyboardState.GetPressedKeys();

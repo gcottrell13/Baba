@@ -2,7 +2,6 @@
 using BabaGame.src;
 using BabaGame.src.Objects;
 using BabaGame.src.Resources;
-using BabaGame.src.WordEngine;
 using Core;
 using Core.Configuration;
 using Core.Utils;
@@ -35,11 +34,13 @@ namespace BabaGame
         public void Initialize(string connectTo)
         {
             AllMaps.LoadMaps();
+            AllMaps.LoadWorlds();
             ObjectSprites.LoadTextures();
 
-            AddChild(new Map(), true);
+            AddChild(new World("world1"), true);
 
-            EventChannels.MapChange.SendAsyncMessage(new MapChange { NewMapName = "start" });
+            EventChannels.MapChange.SendAsyncMessage(new MapChange { X = 24, Y = 30 });
+            EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
         }
 
     }

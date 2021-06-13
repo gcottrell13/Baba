@@ -7,7 +7,7 @@ namespace BabaGame.src.Events
 {
     class KeyEvent
     {
-        public Keys Key;
+        public Keys ChangedKey;
         public bool Up;
     }
 }

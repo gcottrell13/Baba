@@ -1,4 +1,5 @@
-﻿using BabaGame.src.Resources;
+﻿using BabaGame.src.Events;
+using BabaGame.src.Resources;
 using Core;
 using Core.Configuration;
 using Core.Events;
@@ -28,7 +29,19 @@ namespace BabaGame
         {
             SetScreenSize(1080, 720);
             GameEntryPoint.ROOT.Initialize(CommandLineArguments.Args?.Connect ?? "127.0.0.1");
+            Window.KeyDown += _window_KeyDown;
+            Window.KeyUp += _window_KeyUp;
             base.Initialize();
+        }
+
+        private void _window_KeyUp(object? sender, InputKeyEventArgs e)
+        {
+            EventChannels.KeyPress.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = true });
+        }
+
+        private void _window_KeyDown(object? sender, InputKeyEventArgs e)
+        {
+            EventChannels.KeyPress.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = false });
         }
 
         public void SetScreenSize(int x, int y)

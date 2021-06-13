@@ -23,13 +23,14 @@ namespace Core.Events
 
         internal override void SendAsyncMessages()
         {
-            foreach (var message in pendingAsyncMessages.ToList()) 
+            var messages = pendingAsyncMessages.ToList();
+            pendingAsyncMessages.Clear();
+
+            foreach (var message in messages) 
             foreach (var subscriber in subscriptions.ToList())
             {
                 subscriber(message);
             }
-
-            pendingAsyncMessages = new List<TMessage>();
         }
 
         public void SendAsyncMessage(TMessage message)

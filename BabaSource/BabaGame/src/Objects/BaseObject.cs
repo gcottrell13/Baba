@@ -21,6 +21,8 @@ namespace BabaGame.src.Objects
         private AnimateValue? animateX;
         private AnimateValue? animateY;
 
+        public bool Dead { get; set; }
+
         public char Facing { get; private set; }
 
         public ObjectType Type { get; private set; }
@@ -36,15 +38,22 @@ namespace BabaGame.src.Objects
             Y = y;
             sprite = new BaseObjectSprite(name, phase);
             Graphics.AddChild(sprite);
-            var (px, py) = World.GameCoordToScreenCoord(x, y);
+            var (px, py) = WorldVariables.GameCoordToScreenCoord(x, y);
             Graphics.x = px;
             Graphics.y = py;
             Facing = (phase ?? "u")[0];
 
-            Type = name.StartsWith("text_") ? ObjectType.Text : ObjectType.Object;
+            var info = JsonValues.ObjectInfo[name];
 
-            var palettePointer = JsonValues.ObjectInfo[name].color_inactive;
-            sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+            Type = info.unittype switch
+            {
+                "text" => ObjectType.Text,
+                "object" => ObjectType.Object,
+                _ => ObjectType.Unknown,
+            };
+
+            var palettePointer = info.color_inactive;
+            sprite.color = JsonValues.TryGetPaletteColor(WorldVariables.Palette, palettePointer);
             Color = "";
             Joinable = JsonValues.Animations[name].ContainsKey("0");
         }
@@ -83,8 +92,8 @@ namespace BabaGame.src.Objects
         {
             if (x != X)
             {
-                var (sx, _) = World.GameCoordToScreenCoord(x, Y);
-                animateX = new AnimateValue(Graphics.x, sx, World.InputDelaySeconds);
+                var (sx, _) = WorldVariables.GameCoordToScreenCoord(x, Y);
+                animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
                 if (x < X) FaceDirection('l'); else FaceDirection('r');
                 X = x;
@@ -95,8 +104,8 @@ namespace BabaGame.src.Objects
         {
             if (y != Y)
             {
-                var (_, sy) = World.GameCoordToScreenCoord(X, y);
-                animateY = new AnimateValue(Graphics.y, sy, World.InputDelaySeconds);
+                var (_, sy) = WorldVariables.GameCoordToScreenCoord(X, y);
+                animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
                 if (y < Y) FaceDirection('u'); else FaceDirection('d');
                 Y = y;
@@ -109,7 +118,7 @@ namespace BabaGame.src.Objects
             {
                 var c = JsonValues.ObjectInfo["text_" + color];
                 var palettePointer = c.color ?? c.color_inactive;
-                sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+                sprite.color = JsonValues.TryGetPaletteColor(WorldVariables.Palette, palettePointer);
                 Color = color;
             }
             else
@@ -117,7 +126,7 @@ namespace BabaGame.src.Objects
                 Color = "";
                 var c = JsonValues.ObjectInfo[Name];
                 var palettePointer = c.color ?? c.color_inactive;
-                sprite.color = JsonValues.TryGetPaletteColor(World.Palette, palettePointer);
+                sprite.color = JsonValues.TryGetPaletteColor(WorldVariables.Palette, palettePointer);
             }
         }
 
@@ -131,7 +140,7 @@ namespace BabaGame.src.Objects
                 case 'l': phase = "left"; break;
                 case 'r': phase = "right"; break;
             }
-            if (sprite.HasPhase(phase))
+            if (sprite.HasPhase(phase) && Facing != direction)
             {
                 sprite.SetPhase(phase); 
                 Facing = direction;
@@ -161,7 +170,7 @@ namespace BabaGame.src.Objects
                 sprite.SetPhase(phase);
         }
 
-        protected override void OnBeforeUpdate(GameTime gameTime)
+        protected override void OnUpdate(GameTime gameTime)
         {
             if (animateX != null)
             {
@@ -175,7 +184,7 @@ namespace BabaGame.src.Objects
                 Graphics.y = y;
             }
 
-            base.OnBeforeUpdate(gameTime);
+            base.OnUpdate(gameTime);
         }
     }
 }

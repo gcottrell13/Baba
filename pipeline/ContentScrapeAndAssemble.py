@@ -7,7 +7,7 @@ import json
 import math
 
 from vars import *
-from load_colors_from_baba import load_colors
+from load_object_information import load_information
 from imageUtils import *
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
@@ -16,7 +16,7 @@ AnalysisResult = dict[str, dict[str, list[list[list[int]]]]]
 ImageCollection = dict[str, dict[int, dict[int, Image.Image]]]
 
 
-OBJECT_INFO, COLORS = load_colors()
+OBJECT_INFO, COLORS = load_information()
 
 ALL_FILES = glob.glob(str(SPRITES_PATH / "*.png")) + glob.glob(
     str(CUSTOM_SPRITES_PATH / "*.png")
@@ -275,7 +275,7 @@ def pack_images_into_spritesheet(
         for index, (image_name, image) in enumerate(reverse_map)
     }
 
-    save_image(name, sheet)
+    save_spritesheet(name, sheet)
 
     try:
         return {k: [[mapping[j] for j in i] for i in v] for k, v in data.items()}
@@ -345,7 +345,7 @@ def pack_images_into_tileset(
         f"{index+1}": names[index] for index, (x, y) in enumerate(coordinates)
     }
 
-    save_image("tileset", sheet)
+    save_spritesheet("tileset", sheet)
 
     return sprite_sheet_info, new_order
 

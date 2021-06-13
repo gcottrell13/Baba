@@ -21,8 +21,8 @@ namespace Core
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
 
-        protected virtual void OnBeforeUpdate(GameTime gameTime) { }
-        protected virtual void OnAfterUpdate(GameTime gameTime) { }
+        protected virtual void OnUpdate(GameTime gameTime) { }
+        protected virtual void OnAfterChildrenUpdate(GameTime gameTime) { }
         protected virtual void OnAfterInitialize() { }
 
         public void AfterInitialize()
@@ -37,14 +37,14 @@ namespace Core
 
         public void Tick(GameTime gameTime)
         {
-            OnBeforeUpdate(gameTime);
+            OnUpdate(gameTime);
 
             foreach (var child in children)
             {
                 child.Tick(gameTime);
             }
 
-            OnAfterUpdate(gameTime);
+            OnAfterChildrenUpdate(gameTime);
         }
 
         public void AddChild(GameObject gameObject, bool addGraphics = false)

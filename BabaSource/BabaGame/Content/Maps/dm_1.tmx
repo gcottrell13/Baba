@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="babaisyou" tilewidth="24" tileheight="24" spacing="2" margin="2" tilecount="576" columns="24">
   <image source="../Sheets/tileset.png" trans="000000" width="626" height="626"/>
  </tileset>
- <layer id="1" name="Tile Layer 1" width="24" height="18">
+ <layer id="1" name="Map" width="24" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,310,310,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,310,310,0,0,0,0,0,0,

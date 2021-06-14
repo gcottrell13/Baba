@@ -68,7 +68,11 @@ namespace Core
             if (children.Contains(gameObject))
             {
                 children.Remove(gameObject);
-                gameObject.RemoveParent(graphics);
+                if (graphics)
+                {
+                    Graphics.RemoveChild(gameObject.Graphics);
+                }
+                gameObject.parent = null;
             }
         }
 
@@ -92,19 +96,6 @@ namespace Core
             else
             {
                 throw new Exception("GameObject already has a parent");
-            }
-        }
-
-        public void RemoveParent(bool graphics = false)
-        {
-            if (parent != null)
-            {
-                parent = null;
-
-                if (graphics)
-                {
-                    Graphics.parent = null;
-                }
             }
         }
     }

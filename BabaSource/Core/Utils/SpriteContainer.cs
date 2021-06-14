@@ -32,6 +32,15 @@ namespace Core.Utils
             ReorderChildren();
         }
 
+        public void RemoveChild(BaseSprite child)
+        {
+            if (children.Contains(child))
+            {
+                children.Remove(child);
+                child.parent = null;
+            }
+        }
+
         public void ReorderChildren()
         {
             // do the sorting after the current update to avoid performance issues

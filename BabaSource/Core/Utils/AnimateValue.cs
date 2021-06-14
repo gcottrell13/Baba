@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core.Utils
@@ -12,6 +13,7 @@ namespace Core.Utils
         private readonly float time;
         private readonly Func<float, float>? transform;
         private double currentTime;
+        private DateTime startTime;
 
         public AnimateValue(float start, float end, float time, Func<float, float>? transform = null)
         {
@@ -19,14 +21,16 @@ namespace Core.Utils
             this.end = end;
             this.time = time;
             this.transform = transform;
+            startTime = DateTime.Now;
         }
 
-        public bool ValueStillAlive(GameTime gameTime, out float value)
+        public bool ValueStillAlive(double elapsed, out float value)
         {
-            currentTime += gameTime.ElapsedGameTime.TotalSeconds;
+            currentTime += elapsed;
             if (currentTime >= time)
             {
                 value = end;
+                Debug.WriteLine($"Animation for {time} seconds took {(DateTime.Now - startTime).TotalSeconds}");
                 return false;
             }
             if (transform != null)

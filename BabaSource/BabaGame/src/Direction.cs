@@ -23,5 +23,23 @@ namespace BabaGame.src
             "right" => Direction.Right,
             _ => Direction.None,
         };
+
+        public static Direction? Opposite(Direction? direction) => direction switch
+        {
+            Direction.Up => Direction.Down,
+            Direction.Down => Direction.Up,
+            Direction.Left => Direction.Right,
+            Direction.Right => Direction.Left,
+            _ => direction,
+        };
+
+        public static Direction Opposite(Direction direction) => direction switch
+        {
+            Direction.Up => Direction.Down,
+            Direction.Down => Direction.Up,
+            Direction.Left => Direction.Right,
+            Direction.Right => Direction.Left,
+            _ => direction,
+        };
     }
 }

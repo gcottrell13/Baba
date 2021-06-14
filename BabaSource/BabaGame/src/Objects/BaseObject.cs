@@ -44,13 +44,14 @@ namespace BabaGame.src.Objects
             MapData = map;
             PreviousCoordinates = new List<(int x, int y)>();
 
-            X = x;
-            Y = y;
 
             sprite = new BaseObjectSprite(name, phase);
             Graphics.AddChild(sprite);
 
-            AnimateGraphicsToPoint(X, Y);
+            X = x;
+            Y = y;
+            Graphics.x = GetScreenCoordOffsetByMap(x, y).x;
+            Graphics.y = GetScreenCoordOffsetByMap(x, y).y;
 
             Facing = DirectionExtensions.FromString(phase);
 
@@ -95,11 +96,18 @@ namespace BabaGame.src.Objects
                 PreviousCoordinates.RemoveAt(0);
         }
 
-        private void AnimateGraphicsToPoint(int x, int y)
+
+        private (int x, int y) GetScreenCoordOffsetByMap(int x, int y)
         {
             var (sx, sy) = WorldVariables.GameCoordToScreenCoord(x, y);
             sx -= MapData.MapX * WorldVariables.MapWidthPixels;
             sy -= MapData.MapY * WorldVariables.MapHeightPixels;
+            return ((int)sx, (int)sy);
+        }
+
+        private void AnimateGraphicsToPoint(int x, int y)
+        {
+            var (sx, sy) = GetScreenCoordOffsetByMap(x, y);
 
             animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds, f => (float)Math.Sqrt(f));
             animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds, f => (float)Math.Sqrt(f));
@@ -109,6 +117,8 @@ namespace BabaGame.src.Objects
         {
             if (x != X)
             {
+                Graphics.x = GetScreenCoordOffsetByMap(X, Y).x;
+
                 AnimateGraphicsToPoint(x, Y);
 
                 sprite.StepIndex();
@@ -123,7 +133,10 @@ namespace BabaGame.src.Objects
         {
             if (y != Y)
             {
+                Graphics.y = GetScreenCoordOffsetByMap(X, Y).y;
+
                 AnimateGraphicsToPoint(X, y);
+
                 sprite.StepIndex();
                 if (y < Y) FaceDirection(Direction.Up); else FaceDirection(Direction.Down);
 
@@ -163,14 +176,7 @@ namespace BabaGame.src.Objects
 
         public void AboutFace()
         {
-            FaceDirection(Facing switch
-            {
-                Direction.Up => Direction.Down,
-                Direction.Down => Direction.Up,
-                Direction.Left => Direction.Right,
-                Direction.Right => Direction.Left,
-                _ => Facing,
-            });
+            FaceDirection(DirectionExtensions.Opposite(Facing));
         }
 
         public void SetJoinWithNeighbors(string phase)
@@ -183,13 +189,16 @@ namespace BabaGame.src.Objects
         {
             if (animateX != null)
             {
-                if (!animateX.ValueStillAlive(gameTime, out var x)) animateX = null;
+                if (!animateX.ValueStillAlive(gameTime.ElapsedGameTime.TotalSeconds, out var x))
+                {
+                    animateX = null;
+                }
                 Graphics.x = x;
             }
 
             if (animateY != null)
             {
-                if (!animateY.ValueStillAlive(gameTime, out var y)) animateY = null;
+                if (!animateY.ValueStillAlive(gameTime.ElapsedGameTime.TotalSeconds, out var y)) animateY = null;
                 Graphics.y = y;
             }
 

@@ -12,30 +12,27 @@ namespace BabaGame.src.Engine
 {
     public class MapData
     {
-        private readonly int gridx;
-        private readonly int gridy;
         public List<BaseObject> AllObjects;
 
-        private WordEngine engine;
-        private readonly WorldStructure world;
+        private WordEngine WorldWordEngine;
+        private WordEngine ThisMapEngine;
+        private readonly World world;
         private TiledMap? tiledMap;
 
         public int MapX { get; }
         public int MapY { get; }
 
-        public MapData(string mapName, WordEngine engine, WorldStructure world, int mapX, int mapY)
+        public MapData(string mapName, WordEngine engine, World world, int mapX, int mapY)
         {
             tiledMap = AllMaps.GetMapHandle(mapName);
 
             WorldVariables.TileWidth = tiledMap.TileWidth;
             WorldVariables.TileHeight = tiledMap.TileHeight;
 
-            gridx = tiledMap.Width;
-            gridy = tiledMap.Height;
-
             AllObjects = new List<BaseObject>();
 
-            this.engine = engine;
+            WorldWordEngine = engine;
+            ThisMapEngine = new WordEngine();
             this.world = world;
             MapX = mapX;
             MapY = mapY;
@@ -88,14 +85,12 @@ namespace BabaGame.src.Engine
                     {
                         foreach (var line in builtInSentences.Split('\n'))
                         {
-                            engine.AddRule(WordEngine.ParsePhrase(line.Trim()));
+                            ThisMapEngine.AddRule(WordEngine.ParsePhrase(line.Trim()));
                         }
                     }
                 }
 
             }
-
-            DoJoinable();
 
             return objects;
         }
@@ -119,16 +114,16 @@ namespace BabaGame.src.Engine
 
         public IEnumerable<BaseObject> OutOfBoundsObjects()
         {
-            return AllObjects.Where(IsObjectOutOfBounds);
+            return AllObjects.Where(obj => IsObjectOutOfBounds(obj.X, obj.Y) != null);
         }
 
-        public bool IsObjectOutOfBounds(BaseObject obj)
+        public Direction? IsObjectOutOfBounds(int x, int y)
         {
-            if (obj.X < WorldVariables.MapWidth * MapX) return true;
-            else if (obj.X >= WorldVariables.MapWidth * (MapX + 1)) return true;
-            else if (obj.Y < WorldVariables.MapHeight * MapY) return true;
-            else if (obj.Y >= WorldVariables.MapHeight * (MapY + 1)) return true;
-            return false;
+            if (x < WorldVariables.MapWidth * MapX) return Direction.Left;
+            else if (x >= WorldVariables.MapWidth * (MapX + 1)) return Direction.Right;
+            else if (y < WorldVariables.MapHeight * MapY) return Direction.Up;
+            else if (y >= WorldVariables.MapHeight * (MapY + 1)) return Direction.Down;
+            return null;
         }
 
         public void AddObject(BaseObject obj)
@@ -146,7 +141,7 @@ namespace BabaGame.src.Engine
             var intentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
             var newIntentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
 
-            var cache = new QueryCache(AllObjects, engine);
+            var cache = new QueryCache(AllObjects, ThisMapEngine);
 
             if (action != "wait")
             {
@@ -170,7 +165,7 @@ namespace BabaGame.src.Engine
                 if (dir == null) return false;
 
                 var nearObjects = GetObjectsNear(oldX, oldY)[dir.Value];
-                var query = new QueryCache(nearObjects, engine);
+                var query = new QueryCache(nearObjects, WorldWordEngine);
 
                 var pushAtDest = query.GetUnitsWithEffect("push");
 
@@ -223,7 +218,7 @@ namespace BabaGame.src.Engine
 
 
             #region Fear
-            if (engine.FindFeature(null, "fear", null).Any())
+            if (WorldWordEngine.FindFeature(null, "fear", null).Any())
             {
                 var fear = cache.GetUnitVerbTargets("fear");
                 var scaryNear = fear.Where(pair => Math.Abs(pair.b.X - pair.a.X) + Math.Abs(pair.b.Y - pair.a.Y) == 1).ToList();
@@ -281,19 +276,20 @@ namespace BabaGame.src.Engine
 
         private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
         {
-            obj.SetX(newX);
-            obj.SetY(newY);
-
-            if (IsObjectOutOfBounds(obj))
+            if (IsObjectOutOfBounds(newX, newY) is Direction dir)
             {
                 // move the object
-                AllObjects.Remove(obj);
-                if (world.GetNeighborByTileCoord(this, newX, newY) is MapData neighbor)
+                if (world.GetNeighbor(this, dir) is MapData neighbor)
                 {
-                    neighbor.AddObject(obj);
+                    world.MoveObjectToMap(this, neighbor, obj);
                     obj.SetX(newX);
                     obj.SetY(newY);
                 }
+            }
+            else
+            {
+                obj.SetX(newX);
+                obj.SetY(newY);
             }
         }
 

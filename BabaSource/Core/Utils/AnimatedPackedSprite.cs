@@ -19,7 +19,7 @@ namespace Core.Utils
         protected void SetAnimation(int[][] anim)
         {
             animation = anim;
-            index = 0;
+            index = (uint)new Random().Next(anim.Length);
         }
 
         protected void Step()

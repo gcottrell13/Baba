@@ -20,6 +20,11 @@
     <property name="name" value="dm_1"/>
    </properties>
   </tile>
+  <tile id="2">
+   <properties>
+    <property name="name" value="dm_2"/>
+   </properties>
+  </tile>
  </tileset>
  <layer id="2" name="theme" width="50" height="50">
   <data encoding="csv">
@@ -131,7 +136,7 @@
  </layer>
  <objectgroup id="3" name="Connections">
   <object id="1" x="3521.33" y="3184">
-   <polyline points="0,0 149.333,212"/>
+   <polyline points="0,0 317.833,222.5"/>
   </object>
   <object id="2" x="3370.67" y="3072">
    <polyline points="0,0 298.667,-222.667"/>

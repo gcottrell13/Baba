@@ -41,38 +41,53 @@ namespace BabaGame.src.Engine
 
             foreach (var layer in tiledMap.TileLayers)
             {
-                foreach (var tile in layer.Tiles)
+                if (layer.Name == "Map")
                 {
-                    if (tile.GlobalIdentifier != 0)
+                    foreach (var tile in layer.Tiles)
                     {
-                        var name = JsonValues.Tileset[tile.GlobalIdentifier];
-                        if (name.Contains("-") == false)
+                        if (tile.GlobalIdentifier != 0)
                         {
-                            // non-directional
-                            var stats = JsonValues.ObjectInfo[name];
-                            var f = new BaseObject(name, tile.X, tile.Y);
-                            f.MapData = this;
-                            objects.Add(f);
-                            AddObject(f);
-                            f.Graphics.zindex = stats.layer;
-                        }
-                        else
-                        {
-                            var parts = name.Split("-");
-                            name = parts[0];
-                            var direction = parts[1];
+                            var name = JsonValues.Tileset[tile.GlobalIdentifier];
+                            if (name.Contains("-") == false)
+                            {
+                                // non-directional
+                                var stats = JsonValues.ObjectInfo[name];
+                                var f = new BaseObject(name, tile.X, tile.Y);
+                                f.MapData = this;
+                                objects.Add(f);
+                                AddObject(f);
+                                f.Graphics.zindex = stats.layer;
+                            }
+                            else
+                            {
+                                var parts = name.Split("-");
+                                name = parts[0];
+                                var direction = parts[1];
 
-                            var stats = JsonValues.ObjectInfo[name];
+                                var stats = JsonValues.ObjectInfo[name];
 
-                            var f = new BaseObject(name, tile.X, tile.Y, direction);
-                            f.MapData = this;
-                            objects.Add(f);
-                            AddObject(f);
-                            f.Graphics.zindex = stats.layer;
+                                var f = new BaseObject(name, tile.X, tile.Y, direction);
+                                f.MapData = this;
+                                objects.Add(f);
+                                AddObject(f);
+                                f.Graphics.zindex = stats.layer;
+                            }
                         }
                     }
                 }
+                else if (layer.Name == "Words")
+                {
+                    if (layer.Properties.TryGetValue("sentences", out var builtInSentences))
+                    {
+                        foreach (var line in builtInSentences.Split('\n'))
+                        {
+                            engine.AddRule(WordEngine.ParsePhrase(line.Trim()));
+                        }
+                    }
+                }
+
             }
+
 
             DoJoinable();
 

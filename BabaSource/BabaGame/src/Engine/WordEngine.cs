@@ -83,7 +83,13 @@ namespace BabaGame.src.Engine
             // for stuff like "fear" or "eat" or "has" or "follow"
             if (target == null && feature == null && verb != null && FeatureIndex.ContainsKey(verb))
             {
-                // features.lua line 47
+                foreach (var feat in FeatureIndex[verb])
+                {
+                    if (feat.TargetCondition?.ToString() != "never")
+                    {
+                        options.Add(feat);
+                    }
+                }
             }
 
             foreach (var fullRule in options)

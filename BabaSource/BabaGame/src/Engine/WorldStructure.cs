@@ -28,9 +28,13 @@ namespace BabaGame.src.Engine
 
             engine.AddRule(WordEngine.ParsePhrase("baba is you"));
 
-            engine.AddRule(WordEngine.ParsePhrase("not baba is push"));
+            engine.AddRule(WordEngine.ParsePhrase("not box is push"));
 
             engine.AddRule(WordEngine.ParsePhrase("box is stop"));
+
+            engine.AddRule(WordEngine.ParsePhrase("me is move"));
+
+            engine.AddRule(WordEngine.ParsePhrase("me fear baba"));
 
             this.worldName = worldName;
         }

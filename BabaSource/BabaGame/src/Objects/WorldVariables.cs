@@ -19,13 +19,16 @@ namespace BabaGame.src.Objects
         public static float InputDelaySeconds = 0.02f;
         public static float MoveAnimationSeconds = 0.15f;
 
+        public const int MapWidth = 24;
+        public const int MapHeight = 18;
+
         public static string Palette = "default";
 
         public static (float x, float y) GameCoordToScreenCoord(int x, int y)
         {
             return (
-                Margin + (TileWidth + Padding) * x - CameraX,
-                Margin + (TileHeight + Padding) * y - CameraY
+                Margin + (TileWidth + Padding) * (x % MapWidth) - CameraX,
+                Margin + (TileHeight + Padding) * (y % MapHeight) - CameraY
             );
         }
 

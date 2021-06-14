@@ -36,7 +36,7 @@ namespace BabaGame.src
             EventChannels.KeyPress.Subscribe(onKeyPress);
             EventChannels.CharacterControl.Subscribe(onCharacterControl);
 
-            var (px, ph) = WorldVariables.GetSizeInPixels(WorldStructure.MapWidth + 2, WorldStructure.MapHeight + 2);
+            var (px, ph) = WorldVariables.GetSizeInPixels(WorldVariables.MapWidth + 2, WorldVariables.MapHeight + 2);
             var scale = BabaGame.Game?.SetScreenSize(px, ph);
             WorldVariables.Scale = (scale ?? 1f) * WorldVariables.BaseScale;
 
@@ -105,20 +105,33 @@ namespace BabaGame.src
             Graphics.x = px;
             Graphics.y = py;
 
-
             Graphics.children.Clear();
             children.Clear();
 
-            var display = new MapDisplay();
+            data.SetMap(ev);
 
-            MapDisplays[(ev.X, ev.Y)] = display;
-
-            foreach (var obj in data.SetMap(ev))
+            foreach (var (dx, dy) in loadMapDeltas)
             {
-                display.AddChild(obj, addGraphics: true);
+                if (data.GetOrLoadMap(ev.X + dx, ev.Y + dy) is MapData md)
+                {
+                    if (!MapDisplays.ContainsKey((ev.X + dx, ev.Y + dy)))
+                    {
+                        var display = new MapDisplay();
+                        MapDisplays[(ev.X + dx, ev.Y + dy)] = display;
+
+                        foreach (var obj in md.AllObjects)
+                        {
+                            display.AddChild(obj, addGraphics: true);
+                        }
+
+                        AddChild(display, addGraphics: true);
+                        display.Graphics.x = dx * WorldVariables.MapWidth * WorldVariables.TileWidth;
+                        display.Graphics.y = dy * WorldVariables.MapHeight * WorldVariables.TileHeight;
+                    }
+                }
+
             }
 
-            AddChild(display, addGraphics: true);
         }
 
         void onKeyPress(KeyEvent keyEvent)
@@ -133,6 +146,15 @@ namespace BabaGame.src
                 AllKeysPressed.Remove(keyEvent.ChangedKey);
             }
         }
+
+        private static (int x, int y)[] loadMapDeltas = new[]
+        {
+            (1, 0),
+            (-1, 0),
+            (0, 1),
+            (0, -1),
+            (0, 0),
+        };
 
     }
 }

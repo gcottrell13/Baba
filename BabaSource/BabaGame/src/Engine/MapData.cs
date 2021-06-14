@@ -19,7 +19,10 @@ namespace BabaGame.src.Engine
         private readonly WorldStructure world;
         private TiledMap? tiledMap;
 
-        public MapData(string mapName, WordEngine engine, WorldStructure world)
+        public int MapX { get; }
+        public int MapY { get; }
+
+        public MapData(string mapName, WordEngine engine, WorldStructure world, int mapX, int mapY)
         {
             tiledMap = AllMaps.GetMapHandle(mapName);
 
@@ -33,11 +36,16 @@ namespace BabaGame.src.Engine
 
             this.engine = engine;
             this.world = world;
+            MapX = mapX;
+            MapY = mapY;
         }
 
         public IEnumerable<BaseObject> Initialize()
         {
             var objects = new List<BaseObject>();
+
+            var offsetX = MapX * WorldVariables.MapWidth;
+            var offsetY = MapY * WorldVariables.MapHeight;
 
             foreach (var layer in tiledMap.TileLayers)
             {
@@ -52,8 +60,7 @@ namespace BabaGame.src.Engine
                             {
                                 // non-directional
                                 var stats = JsonValues.ObjectInfo[name];
-                                var f = new BaseObject(name, tile.X, tile.Y);
-                                f.MapData = this;
+                                var f = new BaseObject(name, tile.X + offsetX, tile.Y + offsetY, this);
                                 objects.Add(f);
                                 AddObject(f);
                                 f.Graphics.zindex = stats.layer;
@@ -66,8 +73,7 @@ namespace BabaGame.src.Engine
 
                                 var stats = JsonValues.ObjectInfo[name];
 
-                                var f = new BaseObject(name, tile.X, tile.Y, direction);
-                                f.MapData = this;
+                                var f = new BaseObject(name, tile.X + offsetX, tile.Y + offsetY, this, direction);
                                 objects.Add(f);
                                 AddObject(f);
                                 f.Graphics.zindex = stats.layer;
@@ -88,7 +94,6 @@ namespace BabaGame.src.Engine
 
             }
 
-
             DoJoinable();
 
             return objects;
@@ -98,12 +103,31 @@ namespace BabaGame.src.Engine
         {
             var near = new Dictionary<Direction, List<BaseObject>>
             {
-                [Direction.Up] = AllObjects.Where(o => o.X == x && o.Y == y - 1).Concat(world.ObjectsAt(this, x, y - 1)).ToList(),
-                [Direction.Down] = AllObjects.Where(o => o.X == x && o.Y == y + 1).Concat(world.ObjectsAt(this, x, y + 1)).ToList(),
-                [Direction.Left] = AllObjects.Where(o => o.X == x - 1 && o.Y == y).Concat(world.ObjectsAt(this, x - 1, y)).ToList(),
-                [Direction.Right] = AllObjects.Where(o => o.X == x + 1 && o.Y == y).Concat(world.ObjectsAt(this, x + 1, y)).ToList()
+                [Direction.Up] = ObjectsAt(x, y - 1).Concat(world.ObjectsAt(this, x, y - 1)).ToList(),
+                [Direction.Down] = ObjectsAt(x, y + 1).Concat(world.ObjectsAt(this, x, y + 1)).ToList(),
+                [Direction.Left] = ObjectsAt(x - 1, y).Concat(world.ObjectsAt(this, x - 1, y)).ToList(),
+                [Direction.Right] = ObjectsAt(x + 1, y).Concat(world.ObjectsAt(this, x + 1, y)).ToList()
             };
             return near;
+        }
+
+        public IEnumerable<BaseObject> ObjectsAt(int x, int y)
+        {
+            return AllObjects.Where(o => o.X == x && o.Y == y);
+        }
+
+        public IEnumerable<BaseObject> OutOfBoundsObjects()
+        {
+            return AllObjects.Where(IsObjectOutOfBounds);
+        }
+
+        public bool IsObjectOutOfBounds(BaseObject obj)
+        {
+            if (obj.X < WorldVariables.MapWidth * MapX) return true;
+            else if (obj.X > WorldVariables.MapWidth * (MapX + 1)) return true;
+            else if (obj.Y < WorldVariables.MapHeight * MapY) return true;
+            else if (obj.Y > WorldVariables.MapHeight * (MapY + 1)) return true;
+            return false;
         }
 
         public void AddObject(BaseObject obj)
@@ -122,8 +146,11 @@ namespace BabaGame.src.Engine
 
             var cache = new QueryCache(AllObjects, engine);
 
-            foreach (var you in cache.GetUnitsWithEffect("you"))
-                intentsToMove.Add(directionMoveObject(you, DirectionExtensions.FromString(action)));
+            if (action != "wait")
+            {
+                foreach (var you in cache.GetUnitsWithEffect("you"))
+                    intentsToMove.Add(directionMoveObject(you, DirectionExtensions.FromString(action)));
+            }
 
             foreach (var move in cache.GetUnitsWithEffect("move"))
                 intentsToMove.Add(directionMoveObject(move, move.Facing));
@@ -132,7 +159,7 @@ namespace BabaGame.src.Engine
             {
                 if (oldX == newX && oldY == newY) return false;
 
-                if (newX >= gridx || newY >= gridy || newX < 0 || newY < 0) return false;
+                if (!world.ExistsMapDataAtTileCoords(newX, newY)) return false;
 
                 var dx = newX - oldX;
                 var dy = newY - oldY;
@@ -159,7 +186,7 @@ namespace BabaGame.src.Engine
                 {
                     if (!canMove(newX, newY, newX + dx, newY + dy))
                         return false;
-                    foreach (var s in stickyAtDest.Where(a => Math.Abs(a.X - newX) != Math.Abs(a.Y - newY)))
+                    foreach (var s in stickyAtDest)
                     {
                         canMove(s.X, s.Y, s.X + dx, s.Y + dy);
                     }

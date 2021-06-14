@@ -36,11 +36,17 @@ namespace BabaGame.src.Objects
 
         public string Color { get; private set; }
 
-        public BaseObject(string name, int x, int y, string? phase=null)
+        public List<(int x, int y)> PreviousCoordinates { get; }
+
+        public BaseObject(string name, int x, int y, MapData map, string? phase=null)
         {
             Name = name;
+            MapData = map;
+            PreviousCoordinates = new List<(int x, int y)>();
+
             X = x;
             Y = y;
+
             sprite = new BaseObjectSprite(name, phase);
             Graphics.AddChild(sprite);
             var (px, py) = WorldVariables.GameCoordToScreenCoord(x, y);
@@ -83,6 +89,10 @@ namespace BabaGame.src.Objects
                     },
                 });
             }
+
+            PreviousCoordinates.Add((oldX, oldY));
+            if (PreviousCoordinates.Count > 10)
+                PreviousCoordinates.RemoveAt(0);
         }
 
         public void MoveX(int direction)

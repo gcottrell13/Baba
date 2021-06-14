@@ -82,15 +82,6 @@ namespace BabaGame.src
                     {
                         data.TakeAction("wait");
                     }
-                    else
-                    {
-                        return;
-                    }
-
-                    foreach (var ((x, y), map) in MapDisplays)
-                    {
-                        data.Maps[x, y]?.DoJoinable();
-                    }
                 }
 
             }

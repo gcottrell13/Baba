@@ -51,6 +51,7 @@ namespace BabaGame.src.Engine
                             // non-directional
                             var stats = JsonValues.ObjectInfo[name];
                             var f = new BaseObject(name, tile.X, tile.Y);
+                            f.MapData = this;
                             objects.Add(f);
                             AddObject(f);
                             f.Graphics.zindex = stats.layer;
@@ -64,6 +65,7 @@ namespace BabaGame.src.Engine
                             var stats = JsonValues.ObjectInfo[name];
 
                             var f = new BaseObject(name, tile.X, tile.Y, direction);
+                            f.MapData = this;
                             objects.Add(f);
                             AddObject(f);
                             f.Graphics.zindex = stats.layer;
@@ -248,16 +250,21 @@ namespace BabaGame.src.Engine
         {
             foreach (var obj in AllObjects)
             {
-                if (obj.Joinable)
-                {
-                    var flag = 0;
-                    var near = GetObjectsNear(obj.X, obj.Y);
-                    if (near[Direction.Up].Any(o => o.Name == obj.Name) == true) flag += 2;
-                    if (near[Direction.Right].Any(o => o.Name == obj.Name) == true) flag += 1;
-                    if (near[Direction.Down].Any(o => o.Name == obj.Name) == true) flag += 8;
-                    if (near[Direction.Left].Any(o => o.Name == obj.Name) == true) flag += 4;
-                    obj.SetJoinWithNeighbors(flag.ToString());
-                }
+                JoinableObjectUpdate(obj);
+            }
+        }
+
+        public void JoinableObjectUpdate(BaseObject obj)
+        {
+            if (obj?.Joinable == true)
+            {
+                var flag = 0;
+                var near = GetObjectsNear(obj.X, obj.Y);
+                if (near[Direction.Up].Any(o => o.Name == obj.Name) == true) flag += 2;
+                if (near[Direction.Right].Any(o => o.Name == obj.Name) == true) flag += 1;
+                if (near[Direction.Down].Any(o => o.Name == obj.Name) == true) flag += 8;
+                if (near[Direction.Left].Any(o => o.Name == obj.Name) == true) flag += 4;
+                obj.SetJoinWithNeighbors(flag.ToString());
             }
         }
 

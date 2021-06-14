@@ -1,10 +1,13 @@
-﻿using BabaGame.src.Resources;
+﻿using BabaGame.src.Engine;
+using BabaGame.src.Events;
+using BabaGame.src.Resources;
 using Core;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace BabaGame.src.Objects
@@ -20,6 +23,8 @@ namespace BabaGame.src.Objects
 
         private AnimateValue? animateX;
         private AnimateValue? animateY;
+
+        public MapData? MapData;
 
         public bool Dead { get; set; }
 
@@ -58,33 +63,37 @@ namespace BabaGame.src.Objects
             Joinable = JsonValues.Animations[name].ContainsKey("0");
         }
 
-        public void Move(Direction direction)
+        protected void OnMove(int oldX, int oldY, Direction direction)
         {
-            if (direction == Direction.Up)
+            if (MapData != null && Joinable)
             {
-                MoveY(-1);
-            }
-            else if (direction == Direction.Down)
-            {
-                MoveY(1);
-            }
-            else if (direction == Direction.Left)
-            {
-                MoveX(-1);
-            }
-            else if (direction == Direction.Right)
-            {
-                MoveX(1);
+                EventChannels.ScheduledCallback.SendAsyncMessage(new Core.Events.ScheduledCallback(0.001f)
+                {
+                    Callback= () =>
+                    {
+                        MapData.JoinableObjectUpdate(this);
+                        foreach (var obj in MapData.GetObjectsNear(oldX, oldY).SelectMany(kvp => kvp.Value))
+                        {
+                            MapData.JoinableObjectUpdate(obj);
+                        }
+                        foreach (var obj in MapData.GetObjectsNear(X, Y).SelectMany(kvp => kvp.Value))
+                        {
+                            MapData.JoinableObjectUpdate(obj);
+                        }
+                    },
+                });
             }
         }
 
         public void MoveX(int direction)
         {
+            OnMove(X, Y, direction == -1 ? Direction.Left : Direction.Right);
             SetX(X + direction);
         }
 
         public void MoveY(int direction)
         {
+            OnMove(X, Y, direction == -1 ? Direction.Up : Direction.Down);
             SetY(Y + direction);
         }
 
@@ -96,6 +105,8 @@ namespace BabaGame.src.Objects
                 animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
                 if (x < X) FaceDirection(Direction.Left); else FaceDirection(Direction.Right);
+
+                OnMove(X, Y, x < X ? Direction.Left : Direction.Right);
                 X = x;
             }
         }
@@ -108,6 +119,8 @@ namespace BabaGame.src.Objects
                 animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds);
                 sprite.StepIndex();
                 if (y < Y) FaceDirection(Direction.Up); else FaceDirection(Direction.Down);
+
+                OnMove(X, Y, y < Y ? Direction.Up : Direction.Down);
                 Y = y;
             }
         }

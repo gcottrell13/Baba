@@ -10,9 +10,11 @@ namespace BabaGame.src.Objects
         public static float CameraY = 0f;
         public static int Padding = 0;
         public static int Margin = 1;
-        public static float Scale = 2f;
+        public static float Scale = BaseScale;
         public static float TileWidth = 24f;
         public static float TileHeight = 24f;
+
+        public const float BaseScale = 2f;
 
         public static float InputDelaySeconds = 0.02f;
         public static float MoveAnimationSeconds = 0.15f;

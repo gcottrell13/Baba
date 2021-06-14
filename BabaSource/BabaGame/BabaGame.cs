@@ -15,6 +15,9 @@ namespace BabaGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch? _spriteBatch;
 
+        public static int MAX_WIDTH = 1080;
+        public static int MAX_HEIGHT = 720;
+
         public static BabaGame? Game;
 
         public BabaGame()
@@ -44,13 +47,32 @@ namespace BabaGame
             EventChannels.KeyPress.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = false });
         }
 
-        public void SetScreenSize(int x, int y)
+        public float SetScreenSize(int x, int y)
         {
+            var maxRatio = (float)MAX_WIDTH / MAX_HEIGHT;
+            var ratio = (float)x / y;
+            var scale = 1f;
+
+            if (ratio >= maxRatio && x > MAX_WIDTH)
+            {
+                scale = (float)MAX_WIDTH / x;
+                x = MAX_WIDTH;
+                y = (int)(y * scale);
+            }
+            else if (ratio <= maxRatio && y > MAX_HEIGHT)
+            {
+                scale = (float)MAX_HEIGHT / y;
+                y = MAX_HEIGHT;
+                x = (int)(x * scale);
+            }
+
             _graphics.PreferredBackBufferWidth = x;
             _graphics.PreferredBackBufferHeight = y;
             _graphics.ApplyChanges();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Scene.Initialize(_spriteBatch, x, y);
+
+            return scale;
         }
 
         protected override void LoadContent()

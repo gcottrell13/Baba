@@ -36,8 +36,9 @@ namespace BabaGame.src
             EventChannels.KeyPress.Subscribe(onKeyPress);
             EventChannels.CharacterControl.Subscribe(onCharacterControl);
 
-            var (px, ph) = WorldVariables.GetSizeInPixels(WorldStructure.MapWidth, WorldStructure.MapHeight);
-            BabaGame.Game?.SetScreenSize(px, ph);
+            var (px, ph) = WorldVariables.GetSizeInPixels(WorldStructure.MapWidth + 2, WorldStructure.MapHeight + 2);
+            var scale = BabaGame.Game?.SetScreenSize(px, ph);
+            WorldVariables.Scale = (scale ?? 1f) * WorldVariables.BaseScale;
 
             AllKeysPressed = new List<Keys>();
         }
@@ -100,8 +101,9 @@ namespace BabaGame.src
                 EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
             }
 
-            Graphics.x = WorldVariables.Margin;
-            Graphics.y = WorldVariables.Margin;
+            var (px, py) = WorldVariables.GetSizeInPixels(1, 1);
+            Graphics.x = px;
+            Graphics.y = py;
 
 
             Graphics.children.Clear();

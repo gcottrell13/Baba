@@ -14,6 +14,38 @@ MAP_WIDTH = 24
 MAP_HEIGHT = 18
 
 
+class Layer:
+    def __init__(self, layer: ET.Element):
+        self.layer = layer
+    
+    @property
+    def name(self) -> str:
+        return self.layer.attrib['name']
+    
+    @property
+    def properties(self) -> dict[str, str]:
+        return {
+            child.attrb['name']: child.text
+            for child in self.layer.iter('property')
+        }
+    
+    @property
+    def data(self) -> str:
+        return list(self.layer.iter('data'))[0].text
+    
+class Map:
+    def __init__(self, root: ET.Element):
+        self.root = root
+    
+    @property
+    def layers(self) -> list[Layer]:
+        return [
+            Layer(child)
+            for child in self.root
+            if child.tag == "layer"
+        ]
+
+
 def save_thumbnail(name: str, frames: list[Image.Image]):
     frames[0].save(str(PIPELINE_PATH / f"thumbs/{name}.png"))
 
@@ -25,11 +57,13 @@ def load_xml(filename: str) -> ET.ElementTree:
 def parse_group(group_name: str, group: dict[str, ET.ElementTree]):
     output: dict[str, list[list[str]]] = {}
     for map_name, doc in group.items():
-        rows = doc.getroot()[1][0].text.strip().splitlines()
-        if len(rows) != MAP_HEIGHT:
-            raise Exception()
-        data = [row.split(",") for row in rows]
-        output[map_name] = data
+        for layer in Map(doc.getroot()).layers:
+            if layer.name == 'Map' or layer.name == 'Tile Layer 1':
+                rows = layer.data.strip().splitlines()
+                if len(rows) != MAP_HEIGHT:
+                    raise Exception()
+                data = [row.split(",") for row in rows]
+                output[map_name] = data
     return output
 
 

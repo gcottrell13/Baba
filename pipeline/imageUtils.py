@@ -7,6 +7,8 @@ import glob
 OBJECT_INFO, COLORS = load_information()
 
 
+CACHED_SPRITES: dict[str, list[Image.Image]] = {}
+
 __all__ = [
     'load_image',
     'colorized_images',
@@ -58,11 +60,16 @@ def colorized_image(name: str, img: Image.Image):
     return Image.merge(IMAGE_MODE, (r, g, b, a))
 
 
-def load_sprites(name: str):
+def load_sprites(name: str) -> list[Image.Image]:
+    if name in CACHED_SPRITES:
+        return CACHED_SPRITES[name]
+
     matches = glob.glob(str(SPRITES_PATH / f"{name}_*.png"))
     if not matches:
         matches = glob.glob(str(CUSTOM_FILES_PATH / f"{name}_*.png"))
-    return [load_image(name, file) for file in matches]
+    images = [load_image(name, file) for file in matches]
+    CACHED_SPRITES[name] = images
+    return images
 
 
 def resize_sprites(sprites: list[Image.Image], scale: float) -> list[Image.Image]:

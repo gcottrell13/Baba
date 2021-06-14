@@ -43,7 +43,7 @@ namespace Core.Utils
             {
                 var elapsed = DateTime.Now - cb.StartTime;
 
-                cb.ScheduledCallback.PerFrameCallback?.Invoke(elapsed.TotalSeconds);
+                cb.ScheduledCallback.PerFrameCallback?.Invoke(gameTime);
 
                 if (elapsed > cb.TimeSpan)
                 {

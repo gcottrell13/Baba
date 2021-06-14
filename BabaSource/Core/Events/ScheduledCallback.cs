@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,7 @@ namespace Core.Events
         }
 
         public Action? Callback;
-        public Action<double>? PerFrameCallback;
+        public Action<GameTime>? PerFrameCallback;
         public double DurationSeconds;
     }
 }

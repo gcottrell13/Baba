@@ -74,11 +74,18 @@ namespace BabaGame.src.Engine
 
         public void TakeAction(string action)
         {
+            var _currentMap = Maps[CurrentX, CurrentY];
+
+            if (_currentMap is MapData current)
+            {
+                current.TakeAction(action);
+            }
+
             foreach (var _map in Maps)
             {
-                if (_map is MapData map)
+                if (_map is MapData map && map != _currentMap)
                 {
-                    map.TakeAction(action);
+                    map.TakeAction("wait");
                 }
             }
         }
@@ -96,7 +103,7 @@ namespace BabaGame.src.Engine
             return Array.Empty<BaseObject>();
         }
 
-        private MapData? GetNeighborByTileCoord(MapData from, int mapX, int mapY)
+        public MapData? GetNeighborByTileCoord(MapData from, int mapX, int mapY)
         {
             return GetNeighbor(from, mapX / WorldVariables.MapWidth, mapY / WorldVariables.MapHeight);
         }

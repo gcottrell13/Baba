@@ -11,8 +11,8 @@ namespace BabaGame.src.Objects
         public static int Padding = 0;
         public static int Margin = 1;
         public static float Scale = BaseScale;
-        public static float TileWidth = 24f;
-        public static float TileHeight = 24f;
+        public static int TileWidth = 24;
+        public static int TileHeight = 24;
 
         public const float BaseScale = 2f;
 
@@ -22,13 +22,16 @@ namespace BabaGame.src.Objects
         public const int MapWidth = 24;
         public const int MapHeight = 18;
 
+        public static int MapWidthPixels => MapWidth * TileWidth;
+        public static int MapHeightPixels => MapHeight * TileHeight;
+
         public static string Palette = "default";
 
         public static (float x, float y) GameCoordToScreenCoord(int x, int y)
         {
             return (
-                Margin + (TileWidth + Padding) * (x % MapWidth) - CameraX,
-                Margin + (TileHeight + Padding) * (y % MapHeight) - CameraY
+                Margin + (TileWidth + Padding) * x - CameraX,
+                Margin + (TileHeight + Padding) * y - CameraY
             );
         }
 

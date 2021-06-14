@@ -24,7 +24,7 @@ namespace BabaGame.src.Objects
         private AnimateValue? animateX;
         private AnimateValue? animateY;
 
-        public MapData? MapData;
+        public MapData MapData;
 
         public bool Dead { get; set; }
 
@@ -49,9 +49,9 @@ namespace BabaGame.src.Objects
 
             sprite = new BaseObjectSprite(name, phase);
             Graphics.AddChild(sprite);
-            var (px, py) = WorldVariables.GameCoordToScreenCoord(x, y);
-            Graphics.x = px;
-            Graphics.y = py;
+
+            AnimateGraphicsToPoint(X, Y);
+
             Facing = DirectionExtensions.FromString(phase);
 
             var info = JsonValues.ObjectInfo[name];
@@ -75,7 +75,7 @@ namespace BabaGame.src.Objects
             {
                 EventChannels.ScheduledCallback.SendAsyncMessage(new Core.Events.ScheduledCallback(0.001f)
                 {
-                    Callback= () =>
+                    Callback = () =>
                     {
                         MapData.JoinableObjectUpdate(this);
                         foreach (var obj in MapData.GetObjectsNear(oldX, oldY).SelectMany(kvp => kvp.Value))
@@ -95,24 +95,22 @@ namespace BabaGame.src.Objects
                 PreviousCoordinates.RemoveAt(0);
         }
 
-        public void MoveX(int direction)
+        private void AnimateGraphicsToPoint(int x, int y)
         {
-            OnMove(X, Y, direction == -1 ? Direction.Left : Direction.Right);
-            SetX(X + direction);
-        }
+            var (sx, sy) = WorldVariables.GameCoordToScreenCoord(x, y);
+            sx -= MapData.MapX * WorldVariables.MapWidthPixels;
+            sy -= MapData.MapY * WorldVariables.MapHeightPixels;
 
-        public void MoveY(int direction)
-        {
-            OnMove(X, Y, direction == -1 ? Direction.Up : Direction.Down);
-            SetY(Y + direction);
+            animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds, f => (float)Math.Sqrt(f));
+            animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds, f => (float)Math.Sqrt(f));
         }
 
         public void SetX(int x)
         {
             if (x != X)
             {
-                var (sx, _) = WorldVariables.GameCoordToScreenCoord(x, Y);
-                animateX = new AnimateValue(Graphics.x, sx, WorldVariables.MoveAnimationSeconds);
+                AnimateGraphicsToPoint(x, Y);
+
                 sprite.StepIndex();
                 if (x < X) FaceDirection(Direction.Left); else FaceDirection(Direction.Right);
 
@@ -125,8 +123,7 @@ namespace BabaGame.src.Objects
         {
             if (y != Y)
             {
-                var (_, sy) = WorldVariables.GameCoordToScreenCoord(X, y);
-                animateY = new AnimateValue(Graphics.y, sy, WorldVariables.MoveAnimationSeconds);
+                AnimateGraphicsToPoint(X, y);
                 sprite.StepIndex();
                 if (y < Y) FaceDirection(Direction.Up); else FaceDirection(Direction.Down);
 

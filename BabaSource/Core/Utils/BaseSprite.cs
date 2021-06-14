@@ -77,7 +77,7 @@ namespace Core.Utils
         }
 
 
-        public SpriteContainer parent;
+        public SpriteContainer? parent;
 
         private Matrix transformMatrix = Matrix.Identity;
         public Matrix TransformMatrix => transformMatrix;

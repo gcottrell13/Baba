@@ -1,4 +1,5 @@
-﻿using BabaGame.src.Objects;
+﻿using BabaGame.src.Events;
+using BabaGame.src.Objects;
 using BabaGame.src.Resources;
 using MonoGame.Extended.Tiled;
 using System;
@@ -124,9 +125,9 @@ namespace BabaGame.src.Engine
         public bool IsObjectOutOfBounds(BaseObject obj)
         {
             if (obj.X < WorldVariables.MapWidth * MapX) return true;
-            else if (obj.X > WorldVariables.MapWidth * (MapX + 1)) return true;
+            else if (obj.X >= WorldVariables.MapWidth * (MapX + 1)) return true;
             else if (obj.Y < WorldVariables.MapHeight * MapY) return true;
-            else if (obj.Y > WorldVariables.MapHeight * (MapY + 1)) return true;
+            else if (obj.Y >= WorldVariables.MapHeight * (MapY + 1)) return true;
             return false;
         }
 
@@ -136,6 +137,7 @@ namespace BabaGame.src.Engine
             {
                 throw new Exception();
             }
+            obj.MapData = this;
             AllObjects.Add(obj);
         }
 
@@ -259,12 +261,40 @@ namespace BabaGame.src.Engine
             {
                 moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
+
+            if (action != "wait")
+            {
+                foreach (var you in cache.GetUnitsWithEffect("you"))
+                {
+                    if (you.MapData != this)
+                    {
+                        EventChannels.MapChange.SendAsyncMessage(new MapChange
+                        {
+                            X = you.MapData.MapX,
+                            Y = you.MapData.MapY,
+                            Direction = directionFromDelta(you.MapData.MapX - MapX, you.MapData.MapY - MapY),
+                        });
+                    }
+                }
+            }
         }
 
         private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
         {
             obj.SetX(newX);
             obj.SetY(newY);
+
+            if (IsObjectOutOfBounds(obj))
+            {
+                // move the object
+                AllObjects.Remove(obj);
+                if (world.GetNeighborByTileCoord(this, newX, newY) is MapData neighbor)
+                {
+                    neighbor.AddObject(obj);
+                    obj.SetX(newX);
+                    obj.SetY(newY);
+                }
+            }
         }
 
         private (int, int, int, int, BaseObject) directionMoveObject(BaseObject obj, Direction direction)
@@ -329,6 +359,8 @@ namespace BabaGame.src.Engine
                 if (Cache.ContainsKey(effect)) 
                     return Cache[effect];
 
+                Cache[effect] = new List<BaseObject>();
+
                 var group = Engine.FindFeature(null, "is", effect).Where(item => !ContainsNoun(BriefNounList, item.TargetName));
 
                 IEnumerable<BaseObject> iter()
@@ -345,7 +377,9 @@ namespace BabaGame.src.Engine
                     }
                 }
 
-                return iter().ToList();
+                var results = iter().ToList();
+                Cache[effect].AddRange(results);
+                return results;
             }
             
             public IEnumerable<(BaseObject a, BaseObject b)> GetUnitVerbTargets(string verb)

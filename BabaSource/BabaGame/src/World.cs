@@ -5,6 +5,7 @@ using BabaGame.src.Objects;
 using BabaGame.src.Resources;
 using Core;
 using Core.Configuration;
+using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -96,14 +97,54 @@ namespace BabaGame.src
 
         void setMap(MapChange ev)
         {
-            if (ev.Direction != null)
-            {
-                EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
-            }
-
             var (px, py) = WorldVariables.GetSizeInPixels(1, 1);
             Graphics.x = px;
             Graphics.y = py;
+
+            if (ev.Direction != null)
+            {
+                EventChannels.CharacterControl.SendMessage(new CharacterControl { Enable = false });
+
+                static float smoothing(float t)
+                {
+                    return t * t * (-2 * t + 3);
+                }
+                
+                var time = 1f;
+                (AnimateValue? x, AnimateValue? y) animate = ev.Direction switch
+                {
+                    Direction.Up => (null, new AnimateValue(WorldVariables.MapHeightPixels, py, time, smoothing)),
+                    Direction.Down => (null, new AnimateValue(-WorldVariables.MapHeightPixels, py, time, smoothing)),
+                    Direction.Left => (new AnimateValue(-WorldVariables.MapWidthPixels, px, time, smoothing), null),
+                    Direction.Right => (new AnimateValue(WorldVariables.MapWidthPixels, px, time, smoothing), null),
+                    _ => (null, null),
+                };
+
+                EventChannels.ScheduledCallback.SendAsyncMessage(new Core.Events.ScheduledCallback(1.0f)
+                {
+                    PerFrameCallback = (time) =>
+                    {
+                        if (animate.x is AnimateValue x && x.ValueStillAlive(time, out var valueX))
+                        {
+                            Graphics.x = valueX;
+                        }
+                        if (animate.y is AnimateValue y && y.ValueStillAlive(time, out var valueY))
+                        {
+                            Graphics.y = valueY;
+                        }
+                    },
+                    Callback = () =>
+                    {
+                        EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
+                    },
+                });
+            }
+            else
+            {
+                Graphics.x = px;
+                Graphics.y = py;
+            }
+
 
             Graphics.children.Clear();
             children.Clear();
@@ -116,20 +157,20 @@ namespace BabaGame.src
                 {
                     if (!MapDisplays.ContainsKey((ev.X + dx, ev.Y + dy)))
                     {
-                        var display = new MapDisplay();
-                        MapDisplays[(ev.X + dx, ev.Y + dy)] = display;
+                        var newDisplay = new MapDisplay();
+                        MapDisplays[(ev.X + dx, ev.Y + dy)] = newDisplay;
 
                         foreach (var obj in md.AllObjects)
                         {
-                            display.AddChild(obj, addGraphics: true);
+                            newDisplay.AddChild(obj, addGraphics: true);
                         }
-
-                        AddChild(display, addGraphics: true);
-                        display.Graphics.x = dx * WorldVariables.MapWidth * WorldVariables.TileWidth;
-                        display.Graphics.y = dy * WorldVariables.MapHeight * WorldVariables.TileHeight;
                     }
-                }
 
+                    var display = MapDisplays[(ev.X + dx, ev.Y + dy)];
+                    AddChild(display, addGraphics: true);
+                    display.Graphics.x = dx * WorldVariables.MapWidth * WorldVariables.TileWidth;
+                    display.Graphics.y = dy * WorldVariables.MapHeight * WorldVariables.TileHeight;
+                }
             }
 
         }

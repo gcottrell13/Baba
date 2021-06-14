@@ -16,7 +16,7 @@ namespace Core
         protected int ScreenWidth => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         protected int ScreenHeight => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-        protected GameObject parent { get; private set; }
+        protected GameObject? parent { get; private set; }
         protected List<GameObject> children = new List<GameObject>();
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
@@ -63,6 +63,15 @@ namespace Core
             OnAfterChildrenUpdate(gameTime);
         }
 
+        public void RemoveChild(GameObject gameObject, bool graphics = false)
+        {
+            if (children.Contains(gameObject))
+            {
+                children.Remove(gameObject);
+                gameObject.RemoveParent(graphics);
+            }
+        }
+
         public void AddChild(GameObject gameObject, bool addGraphics = false)
         {
             children.Add(gameObject);
@@ -71,7 +80,7 @@ namespace Core
 
         public void SetParent(GameObject newParent, bool addGraphics = false)
         {
-            if (parent == null)
+            if (parent == null || parent == newParent)
             {
                 parent = newParent;
 
@@ -83,6 +92,19 @@ namespace Core
             else
             {
                 throw new Exception("GameObject already has a parent");
+            }
+        }
+
+        public void RemoveParent(bool graphics = false)
+        {
+            if (parent != null)
+            {
+                parent = null;
+
+                if (graphics)
+                {
+                    Graphics.parent = null;
+                }
             }
         }
     }

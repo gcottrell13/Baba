@@ -4,12 +4,14 @@ using BabaGame.src.Resources;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using static BabaGame.src.Engine.WordEngine;
 
 namespace BabaGame.src.Engine
 {
+    [DebuggerDisplay("{MapName} ({MapX} ,{MapY})")]
     public class MapData
     {
         public List<BaseObject> AllObjects;
@@ -19,6 +21,7 @@ namespace BabaGame.src.Engine
         private readonly World world;
         private TiledMap? tiledMap;
 
+        public string MapName { get; }
         public int MapX { get; }
         public int MapY { get; }
 
@@ -30,7 +33,7 @@ namespace BabaGame.src.Engine
             WorldVariables.TileHeight = tiledMap.TileHeight;
 
             AllObjects = new List<BaseObject>();
-
+            MapName = mapName;
             WorldWordEngine = engine;
             ThisMapEngine = new WordEngine();
             this.world = world;

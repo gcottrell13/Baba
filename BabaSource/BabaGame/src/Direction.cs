@@ -41,5 +41,14 @@ namespace BabaGame.src
             Direction.Right => Direction.Left,
             _ => direction,
         };
+
+        public static (int x, int y) DeltaFromDirection(Direction direction) => direction switch
+        {
+            Direction.Up => (0, -1),
+            Direction.Down => (0, 1),
+            Direction.Left => (-1, 0),
+            Direction.Right => (1, 0),
+            _ => (0, 0),
+        };
     }
 }

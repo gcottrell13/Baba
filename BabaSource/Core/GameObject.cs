@@ -16,8 +16,8 @@ namespace Core
         protected int ScreenWidth => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         protected int ScreenHeight => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-        protected GameObject? parent { get; private set; }
-        protected List<GameObject> children = new List<GameObject>();
+        public GameObject? Parent { get; private set; }
+        public List<GameObject> Children { get; private set; } = new List<GameObject>();
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
 
@@ -29,7 +29,7 @@ namespace Core
 
         public void Destroy()
         {
-            foreach (var child in children)
+            foreach (var child in Children)
             {
                 child.Destroy();
             }
@@ -38,12 +38,12 @@ namespace Core
 
             OnDestroy();
 
-            children.Clear();
+            Children.Clear();
         }
 
         public void AfterInitialize()
         {
-            foreach (var child in children)
+            foreach (var child in Children)
             {
                 child.OnAfterInitialize();
                 child.AfterInitialize();
@@ -55,7 +55,7 @@ namespace Core
         {
             OnUpdate(gameTime);
 
-            foreach (var child in children)
+            foreach (var child in Children)
             {
                 child.Tick(gameTime);
             }
@@ -65,32 +65,33 @@ namespace Core
 
         public void RemoveChild(GameObject gameObject, bool graphics = false)
         {
-            if (children.Contains(gameObject))
+            if (Children.Contains(gameObject))
             {
-                children.Remove(gameObject);
+                Children.Remove(gameObject);
                 if (graphics)
                 {
                     Graphics.RemoveChild(gameObject.Graphics);
                 }
-                gameObject.parent = null;
+                gameObject.Parent = null;
             }
         }
 
         public void AddChild(GameObject gameObject, bool addGraphics = false)
         {
-            children.Add(gameObject);
+            if (Children.Contains(gameObject)) return;
+            Children.Add(gameObject);
             gameObject.SetParent(this, addGraphics);
         }
 
         public void SetParent(GameObject newParent, bool addGraphics = false)
         {
-            if (parent == null || parent == newParent)
+            if (Parent == null || Parent == newParent)
             {
-                parent = newParent;
+                Parent = newParent;
 
                 if (addGraphics)
                 {
-                    parent.Graphics.AddChild(Graphics);
+                    Parent.Graphics.AddChild(Graphics);
                 }
             }
             else

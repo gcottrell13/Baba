@@ -17,7 +17,7 @@ namespace BabaGame.src.Objects
         public const float BaseScale = 2f;
 
         public static float InputDelaySeconds = 0.02f;
-        public static float MoveAnimationSeconds = 0.3f;
+        public static float MoveAnimationSeconds = 0.2f;
 
         public const int MapWidth = 24;
         public const int MapHeight = 18;

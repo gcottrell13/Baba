@@ -54,7 +54,7 @@ namespace BabaGame.src
 
             var (px, ph) = WorldVariables.GetSizeInPixels(WorldVariables.MapWidth + 2, WorldVariables.MapHeight + 2);
             var scale = BabaGame.Game?.SetScreenSize(px, ph);
-            WorldVariables.Scale = (scale ?? 1f) * WorldVariables.BaseScale / 2;
+            WorldVariables.Scale = (scale ?? 1f) * WorldVariables.BaseScale;
 
             AllKeysPressed = new List<Keys>();
         }
@@ -132,7 +132,7 @@ namespace BabaGame.src
                     Direction.Left => -WorldVariables.MapWidthPixels * WorldVariables.Scale,
                     Direction.Right => WorldVariables.MapWidthPixels * WorldVariables.Scale,
                     _ => 0,
-                } + 300;
+                };
 
                 Graphics.y = ev.Direction switch
                 {
@@ -142,8 +142,6 @@ namespace BabaGame.src
                     Direction.Right => 0,
                     _ => 0,
                 };
-
-                px += 300;
 
                 var time = 1f;
                 (AnimateValue? x, AnimateValue? y) animate = ev.Direction switch
@@ -208,8 +206,9 @@ namespace BabaGame.src
                             continue;
 
                         AddChild(display, addGraphics: true);
-                        display.Graphics.x = (md.MapX - currentMap.MapX) * WorldVariables.MapWidthPixels;
-                        display.Graphics.y = (md.MapY - currentMap.MapY) * WorldVariables.MapHeightPixels;
+                        var (dx, dy) = DirectionExtensions.DeltaFromDirection(dir);
+                        display.Graphics.x = dx * WorldVariables.MapWidthPixels;
+                        display.Graphics.y = dy * WorldVariables.MapHeightPixels;
                         mapsLoaded.Add(md);
                     }
                 }
@@ -267,10 +266,7 @@ namespace BabaGame.src
         {
             oldMap.AllObjects.Remove(obj);
             newMap.AddObject(obj);
-            if (MapDisplays.TryGetValue((oldMap.MapX, oldMap.MapY), out var oldMapDisplay))
-            {
-                oldMapDisplay.RemoveChild(obj, graphics: true);
-            }
+            obj.Parent?.RemoveChild(obj, graphics: true);
             if (MapDisplays.TryGetValue((newMap.MapX, newMap.MapY), out var newMapDisplay))
             {
                 newMapDisplay.AddChild(obj, addGraphics: true);
@@ -338,6 +334,8 @@ namespace BabaGame.src
                             var (p1, p2) = polyLineToMapCoord(poly);
 
                             var destinationMapCoord = new Vector2(x, y);
+                            p1.Floor();
+                            p2.Floor();
                             var destinationLink = p1 == destinationMapCoord ? p2 : p1;
 
                             var linkedX = (int)destinationLink.X;

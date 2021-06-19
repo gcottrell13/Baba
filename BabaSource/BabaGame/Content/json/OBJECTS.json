@@ -454,6 +454,19 @@
         "layer": 20,
         "unittype": "object"
     },
+    "dog": {
+        "color_inactive": [
+            0,
+            2
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "dog",
+        "layer": 19,
+        "unittype": "object"
+    },
     "donut": {
         "color_inactive": [
             4,
@@ -1039,6 +1052,19 @@
         "layer": 17,
         "unittype": "object"
     },
+    "lily": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "lily",
+        "layer": 9,
+        "unittype": "object"
+    },
     "line": {
         "color_inactive": [
             0,
@@ -1089,6 +1115,19 @@
         ],
         "sprite": "me",
         "layer": 18,
+        "unittype": "object"
+    },
+    "mirror": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "mirror",
+        "layer": 17,
         "unittype": "object"
     },
     "monitor": {
@@ -2482,6 +2521,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_dog": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_dog",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_done": {
         "color_inactive": [
             0,
@@ -3534,6 +3586,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_lily": {
+        "color_inactive": [
+            5,
+            1
+        ],
+        "color": [
+            5,
+            2
+        ],
+        "sprite": "text_lily",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_lime": {
         "color_inactive": [
             5,
@@ -3713,6 +3778,19 @@
             2
         ],
         "sprite": "text_mimic",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_mirror": {
+        "color_inactive": [
+            1,
+            3
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_mirror",
         "layer": 20,
         "unittype": "text"
     },

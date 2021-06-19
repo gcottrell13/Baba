@@ -155,40 +155,46 @@ namespace BabaGame.src.Engine
             foreach (var move in cache.GetUnitsWithEffect("move"))
                 intentsToMove.Add(directionMoveObject(move, move.Facing));
 
-            bool canMove(int oldX, int oldY, int newX, int newY)
+            bool canMove(int oldX, int oldY, int newX, int newY, MapData currentMap)
             {
-                if (oldX == newX && oldY == newY) return false;
-
-                if (!world.ExistsMapDataAtTileCoords(newX, newY)) return false;
+                if (oldX == newX && oldY == newY) 
+                    return false;
 
                 var dx = newX - oldX;
                 var dy = newY - oldY;
                 var dir = directionFromDelta(dx, dy);
 
-                if (dir == null) return false;
+                if (dir == Direction.None) 
+                    return false;
 
-                var nearObjects = GetObjectsNear(oldX, oldY)[dir.Value];
-                var query = new QueryCache(nearObjects, WorldWordEngine);
+                var nearObjects = GetObjectsNear(oldX, oldY)[dir];
+                if (currentMap.IsObjectOutOfBounds(newX, newY) != null && world.GetNeighbor(currentMap, dir) is MapData neighbor)
+                    currentMap = neighbor;
+
+                var query = new QueryCache(nearObjects, currentMap.ThisMapEngine);
 
                 var pushAtDest = query.GetUnitsWithEffect("push");
 
-                if (query.GetUnitsWithEffect("stop").Except(pushAtDest).Any()) return false;
+                if (query.GetUnitsWithEffect("stop").Except(pushAtDest).Any()) 
+                    return false;
 
                 if (pushAtDest.Any())
                 {
-                    if (!canMove(newX, newY, newX + dx, newY + dy))
+                    if (!canMove(newX, newY, newX + dx, newY + dy, currentMap))
                         return false;
+
                     newIntentsToMove.AddRange(pushAtDest.Select(p => (newX, newY, newX + dx, newY + dy, p)));
                 }
 
                 var stickyAtDest = query.GetUnitsWithEffect("sticky");
                 if (stickyAtDest.Any())
                 {
-                    if (!canMove(newX, newY, newX + dx, newY + dy))
+                    if (!canMove(newX, newY, newX + dx, newY + dy, currentMap))
                         return false;
+
                     foreach (var s in stickyAtDest)
                     {
-                        canMove(s.X, s.Y, s.X + dx, s.Y + dy);
+                        canMove(s.X, s.Y, s.X + dx, s.Y + dy, currentMap);
                     }
                     newIntentsToMove.AddRange(stickyAtDest.Select(p => (newX, newY, newX + dx, newY + dy, p)));
                 }
@@ -198,7 +204,7 @@ namespace BabaGame.src.Engine
 
             foreach (var (ox, oy, nx, ny, obj) in intentsToMove.ToList())
             {
-                if (canMove(ox, oy, nx, ny))
+                if (canMove(ox, oy, nx, ny, this))
                 {
                     moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
                 }
@@ -221,7 +227,7 @@ namespace BabaGame.src.Engine
 
 
             #region Fear
-            if (WorldWordEngine.FindFeature(null, "fear", null).Any())
+            if (ThisMapEngine.FindFeature(null, "fear", null).Any())
             {
                 var fear = cache.GetUnitVerbTargets("fear");
                 var scaryNear = fear.Where(pair => Math.Abs(pair.b.X - pair.a.X) + Math.Abs(pair.b.Y - pair.a.Y) == 1).ToList();
@@ -250,7 +256,7 @@ namespace BabaGame.src.Engine
 
             foreach (var (ox, oy, nx, ny, obj) in intentsToMove.ToList())
             {
-                if (canMove(ox, oy, nx, ny))
+                if (canMove(ox, oy, nx, ny, this))
                 {
                     moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
                 }
@@ -260,33 +266,30 @@ namespace BabaGame.src.Engine
                 moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
             }
 
-            if (action != "wait")
+            foreach (var you in cache.GetUnitsWithEffect("you"))
             {
-                foreach (var you in cache.GetUnitsWithEffect("you"))
+                if (you.MapData != this)
                 {
-                    if (you.MapData != this)
+                    EventChannels.MapChange.SendAsyncMessage(new MapChange
                     {
-                        EventChannels.MapChange.SendAsyncMessage(new MapChange
-                        {
-                            X = you.MapData.MapX,
-                            Y = you.MapData.MapY,
-                            Direction = directionFromDelta(you.MapData.MapX - MapX, you.MapData.MapY - MapY),
-                        });
-                    }
+                        X = you.MapData.MapX,
+                        Y = you.MapData.MapY,
+                        Direction = world.GetDirectionOfNeighbor(this, you.MapData),
+                    });
                 }
             }
         }
 
         private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
         {
-            if (IsObjectOutOfBounds(newX, newY) is Direction dir)
+            if (obj.MapData == this && IsObjectOutOfBounds(newX, newY) is Direction dir)
             {
                 // move the object
                 if (world.GetNeighbor(this, dir) is MapData neighbor)
                 {
                     world.MoveObjectToMap(this, neighbor, obj);
-                    obj.SetX(newX);
-                    obj.SetY(newY);
+                    obj.SetX(newX % WorldVariables.MapWidth + neighbor.MapX * WorldVariables.MapWidth);
+                    obj.SetY(newY % WorldVariables.MapHeight + neighbor.MapY * WorldVariables.MapHeight);
                 }
             }
             else
@@ -308,13 +311,13 @@ namespace BabaGame.src.Engine
             };
         }
 
-        private Direction? directionFromDelta(int dx, int dy)
+        private Direction directionFromDelta(int dx, int dy)
         {
             if (dx < 0) return Direction.Left;
             if (dx > 0) return Direction.Right;
             if (dy < 0) return Direction.Up;
             if (dy > 0) return Direction.Down;
-            return null;
+            return Direction.None;
         }
 
         public void DoJoinable()

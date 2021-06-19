@@ -132,16 +132,16 @@ namespace BabaGame.src
                     Direction.Left => -WorldVariables.MapWidthPixels * WorldVariables.Scale,
                     Direction.Right => WorldVariables.MapWidthPixels * WorldVariables.Scale,
                     _ => 0,
-                };
+                } + px;
 
                 Graphics.y = ev.Direction switch
                 {
-                    Direction.Up => WorldVariables.MapHeightPixels * WorldVariables.Scale,
-                    Direction.Down => -WorldVariables.MapHeightPixels * WorldVariables.Scale,
+                    Direction.Up => -WorldVariables.MapHeightPixels * WorldVariables.Scale,
+                    Direction.Down => WorldVariables.MapHeightPixels * WorldVariables.Scale,
                     Direction.Left => 0,
                     Direction.Right => 0,
                     _ => 0,
-                };
+                } + py;
 
                 var time = 1f;
                 (AnimateValue? x, AnimateValue? y) animate = ev.Direction switch
@@ -253,13 +253,13 @@ namespace BabaGame.src
         {
             currentMap?.TakeAction(action);
 
-            foreach (var _map in Maps.ToList())
-            {
-                if (_map is MapData map && map != currentMap)
-                {
-                    map.TakeAction("wait");
-                }
-            }
+            //foreach (var _map in Maps.ToList())
+            //{
+            //    if (_map is MapData map && map != currentMap)
+            //    {
+            //        map.TakeAction("wait");
+            //    }
+            //}
         }
 
         public void MoveObjectToMap(MapData oldMap, MapData newMap, BaseObject obj)
@@ -298,6 +298,17 @@ namespace BabaGame.src
                 return null;
             var (x, y) = neighborCoord;
             return GetOrLoadMap(x, y);
+        }
+
+        public Direction? GetDirectionOfNeighbor(MapData from, MapData to)
+        {
+            if (Connections.TryGetValue(from, out var conns))
+            {
+                var n = conns.FirstOrDefault(k => GetOrLoadMap(k.Value.x, k.Value.y) == to).Key;
+                if (n != default) 
+                    return n;
+            }
+            return null;
         }
 
         public MapData? LoadNeighbor(MapData me, Direction dir) 
@@ -377,13 +388,6 @@ namespace BabaGame.src
             return (p1, p2);
         }
 
-        public bool ExistsMapDataAtTileCoords(int x, int y)
-        {
-            var worldX = x / WorldVariables.MapWidth;
-            var worldY = y / WorldVariables.MapHeight;
-            return ExistsMapDataAtMapCoords(worldX, worldY);
-        }
-
         private void AddConnection(MapData from, Direction dir, MapData to)
         {
             if (Connections.ContainsKey(from) == false)
@@ -399,19 +403,40 @@ namespace BabaGame.src
             }
         }
 
+        public bool ExistsMapDataAtTileCoords(int x, int y, out MapData? mapData)
+        {
+            var worldX = x / WorldVariables.MapWidth;
+            var worldY = y / WorldVariables.MapHeight;
+            return ExistsMapDataAtMapCoords(worldX, worldY, out mapData);
+        }
+
         public bool ExistsMapDataAtMapCoords(int worldX, int worldY)
         {
+            return ExistsMapDataAtMapCoords(worldX, worldY, out var _);
+        }
+
+        public bool ExistsMapDataAtMapCoords(int worldX, int worldY, out MapData? mapData)
+        {
+            mapData = null;
             try
             {
                 var gid = WorldHandle?.TileLayers.First(layer => layer.Name == "Terrain").Tiles[worldX + worldY * WorldHandle.Width].GlobalIdentifier;
                 if (gid == null || gid == 0)
                     return false;
+                mapData = GetOrLoadMap(worldX, worldY);
                 return true;
             }
             catch (IndexOutOfRangeException)
             {
                 return false;
             }
+        }
+
+        public MapData? GetMapByTileCoord(int x, int y)
+        {
+            var worldX = x / WorldVariables.MapWidth;
+            var worldY = y / WorldVariables.MapHeight;
+            return GetOrLoadMap(worldX, worldY);
         }
 
         public MapData? GetOrLoadMap(int mapX, int mapY)

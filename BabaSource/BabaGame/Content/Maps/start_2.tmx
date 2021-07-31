@@ -12,7 +12,8 @@ baba is you
 water is stop
 door is stop 
 me is move
-crystal is stop</property>
+crystal is stop
+blob is sticky</property>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

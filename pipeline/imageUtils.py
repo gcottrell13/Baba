@@ -84,12 +84,12 @@ def copy_animation_across(
 ):
     for i, dest in enumerate(destination):
         anim = animation[i % len(animation)]
-
         if center:
             x = coord[0] - (anim.width - WIDTH) // 2
             y = coord[1] - (anim.height - HEIGHT) // 2
-            coord = (x, y)
-        dest.paste(anim, coord)
+            dest.paste(anim, (x, y))
+        else:
+            dest.paste(anim, coord)
 
 
 def get_output_coord(block_x: int, block_y: int, wpad=None, hpad=None):

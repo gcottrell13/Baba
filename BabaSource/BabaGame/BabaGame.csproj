@@ -41,6 +41,9 @@
     <None Update="Content\json\ANIMATIONS.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\json\globalSentences.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\json\OBJECTS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

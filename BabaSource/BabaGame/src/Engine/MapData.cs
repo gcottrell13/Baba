@@ -95,6 +95,11 @@ namespace BabaGame.src.Engine
 
             }
 
+            foreach (var sentence in JsonValues.GlobalSentences.sentences)
+            {
+                ThisMapEngine.AddRule(WordEngine.ParsePhrase(sentence.Trim()));
+            }
+
             return objects;
         }
 
@@ -112,12 +117,12 @@ namespace BabaGame.src.Engine
 
         public IEnumerable<BaseObject> ObjectsAt(int x, int y)
         {
-            return AllObjects.Where(o => o.X == x && o.Y == y);
+            return AllObjects.Where(o => o.TileX == x && o.TileY == y);
         }
 
         public IEnumerable<BaseObject> OutOfBoundsObjects()
         {
-            return AllObjects.Where(obj => IsObjectOutOfBounds(obj.X, obj.Y) != null);
+            return AllObjects.Where(obj => IsObjectOutOfBounds(obj.TileX, obj.TileY) != null);
         }
 
         public Direction? IsObjectOutOfBounds(int x, int y)
@@ -135,14 +140,14 @@ namespace BabaGame.src.Engine
             {
                 throw new Exception();
             }
-            obj.MapData = this;
+            obj.SetMap(this);
             AllObjects.Add(obj);
         }
 
         public void TakeAction(string action)
         {
-            var intentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
-            var newIntentsToMove = new List<(int oldX, int oldY, int newX, int newY, BaseObject obj)>();
+            var intentsToMove = new List<(int oldX, int oldY, Direction dir, BaseObject obj)>();
+            var newIntentsToMove = new List<(int oldX, int oldY, Direction dir, BaseObject obj)>();
 
             var cache = new QueryCache(AllObjects, ThisMapEngine);
 
@@ -155,23 +160,21 @@ namespace BabaGame.src.Engine
             foreach (var move in cache.GetUnitsWithEffect("move"))
                 intentsToMove.Add(directionMoveObject(move, move.Facing));
 
-            bool canMove(int oldX, int oldY, int newX, int newY, MapData currentMap)
+            var stickyObjectsMoving = new List<BaseObject>();
+
+            bool canMove(int oldX, int oldY, Direction dir, MapData currentMap)
             {
-                if (oldX == newX && oldY == newY) 
+                if (dir == Direction.None)
                     return false;
 
-                var dx = newX - oldX;
-                var dy = newY - oldY;
-                var dir = directionFromDelta(dx, dy);
+                var allNearObjects = GetObjectsNear(oldX, oldY);
+                var nearObjectsInDir = allNearObjects[dir];
+                var (newX, newY) = GetTileCoordInDirection(oldX, oldY, dir);
 
-                if (dir == Direction.None) 
+                if (newX == oldX && newY == oldY)
                     return false;
 
-                var nearObjects = GetObjectsNear(oldX, oldY)[dir];
-                if (currentMap.IsObjectOutOfBounds(newX, newY) != null && world.GetNeighbor(currentMap, dir) is MapData neighbor)
-                    currentMap = neighbor;
-
-                var query = new QueryCache(nearObjects, currentMap.ThisMapEngine);
+                var query = new QueryCache(nearObjectsInDir, currentMap.ThisMapEngine);
 
                 var pushAtDest = query.GetUnitsWithEffect("push");
 
@@ -180,33 +183,39 @@ namespace BabaGame.src.Engine
 
                 if (pushAtDest.Any())
                 {
-                    if (!canMove(newX, newY, newX + dx, newY + dy, currentMap))
+                    if (!canMove(newX, newY, dir, currentMap))
                         return false;
 
-                    newIntentsToMove.AddRange(pushAtDest.Select(p => (newX, newY, newX + dx, newY + dy, p)));
+                    newIntentsToMove.AddRange(pushAtDest.Select(p => (newX, newY, dir, p)));
                 }
 
                 var stickyAtDest = query.GetUnitsWithEffect("sticky");
                 if (stickyAtDest.Any())
                 {
-                    if (!canMove(newX, newY, newX + dx, newY + dy, currentMap))
+                    if (!canMove(newX, newY, dir, currentMap))
                         return false;
-
-                    foreach (var s in stickyAtDest)
+                    var s = stickyAtDest.Select(p => (newX, newY, dir, p));
+                    newIntentsToMove.AddRange(s);
+                    foreach (var stick in stickyAtDest)
                     {
-                        canMove(s.X, s.Y, s.X + dx, s.Y + dy, currentMap);
+                        if (stickyObjectsMoving.Contains(stick) == false) stickyObjectsMoving.Add(stick);
                     }
-                    newIntentsToMove.AddRange(stickyAtDest.Select(p => (newX, newY, newX + dx, newY + dy, p)));
+
+                    var sticky = new QueryCache(GetObjectsNear(newX, newY).SelectMany(k => k.Value).ToList(), currentMap.ThisMapEngine);
+                    foreach (var ss in sticky.GetUnitsWithEffect("sticky").Except(stickyObjectsMoving))
+                    {
+                        canMove(ss.TileX, ss.TileY, dir, currentMap);
+                    }
                 }
 
                 return true;
             }
 
-            foreach (var (ox, oy, nx, ny, obj) in intentsToMove.ToList())
+            foreach (var (ox, oy, dir, obj) in intentsToMove.ToList())
             {
-                if (canMove(ox, oy, nx, ny, this))
+                if (canMove(ox, oy, dir, this))
                 {
-                    moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
+                    moveObjectInGridAndWorld(ox, oy, dir, obj);
                 }
                 else if (cache.GetUnitsWithEffect("move").Any(j => j == obj))
                 {
@@ -214,12 +223,12 @@ namespace BabaGame.src.Engine
                 }
                 else
                 {
-                    obj.FaceDirection(directionFromDelta(nx - ox, ny - oy));
+                    obj.FaceDirection(dir);
                 }
             }
-            foreach (var (ox, oy, nx, ny, obj) in newIntentsToMove.ToList())
+            foreach (var (ox, oy, dir, obj) in newIntentsToMove.ToList())
             {
-                moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
+                moveObjectInGridAndWorld(ox, oy, dir, obj);
             }
 
             intentsToMove.Clear();
@@ -230,14 +239,14 @@ namespace BabaGame.src.Engine
             if (ThisMapEngine.FindFeature(null, "fear", null).Any())
             {
                 var fear = cache.GetUnitVerbTargets("fear");
-                var scaryNear = fear.Where(pair => Math.Abs(pair.b.X - pair.a.X) + Math.Abs(pair.b.Y - pair.a.Y) == 1).ToList();
+                var scaryNear = fear.Where(pair => Math.Abs(pair.b.TileX - pair.a.TileX) + Math.Abs(pair.b.TileY - pair.a.TileY) == 1).ToList();
 
                 if (scaryNear.Any())
                 {
                     foreach (var (aah, boo) in scaryNear)
                     {
-                        if (boo.X == aah.X) intentsToMove.Add((aah.X, aah.Y, aah.X, aah.Y + (aah.Y - boo.Y), aah)); // aah.MoveY(aah.Y - boo.Y);
-                        else if (boo.Y == aah.Y) intentsToMove.Add((aah.X, aah.Y, aah.X + (aah.X - boo.X), aah.Y, aah)); //aah.MoveX(aah.X - boo.X);
+                        if (boo.TileX == aah.TileX) intentsToMove.Add((aah.TileX, aah.TileY, DirectionExtensions.DirectionFromDelta((0, aah.TileY - boo.TileY)), aah)); // aah.MoveY(aah.Y - boo.Y);
+                        else if (boo.TileY == aah.TileY) intentsToMove.Add((aah.TileX, aah.TileY, DirectionExtensions.DirectionFromDelta((aah.TileX - boo.TileX, 0)), aah)); //aah.MoveX(aah.X - boo.X);
                     }
                 }
             }
@@ -246,7 +255,7 @@ namespace BabaGame.src.Engine
             #region Shift
             foreach (var shift in cache.GetUnitsWithEffect("shift"))
             {
-                foreach (var shifted in AllObjects.Where(obj => obj.X == shift.X && obj.Y == shift.Y && obj != shift))
+                foreach (var shifted in AllObjects.Where(obj => obj.TileX == shift.TileX && obj.TileY == shift.TileY && obj != shift))
                 {
                     intentsToMove.Add(directionMoveObject(shifted, shift.Facing));
                 }
@@ -254,16 +263,16 @@ namespace BabaGame.src.Engine
             #endregion
 
 
-            foreach (var (ox, oy, nx, ny, obj) in intentsToMove.ToList())
+            foreach (var (ox, oy, dir, obj) in intentsToMove.ToList())
             {
-                if (canMove(ox, oy, nx, ny, this))
+                if (canMove(ox, oy, dir, this))
                 {
-                    moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
+                    moveObjectInGridAndWorld(ox, oy, dir, obj);
                 }
             }
-            foreach (var (ox, oy, nx, ny, obj) in newIntentsToMove.ToList())
+            foreach (var (ox, oy, dir, obj) in newIntentsToMove.ToList())
             {
-                moveObjectInGridAndWorld(ox, oy, nx, ny, obj);
+                moveObjectInGridAndWorld(ox, oy, dir, obj);
             }
 
             foreach (var you in cache.GetUnitsWithEffect("you"))
@@ -280,9 +289,10 @@ namespace BabaGame.src.Engine
             }
         }
 
-        private void moveObjectInGridAndWorld(int oldX, int oldY, int newX, int newY, BaseObject obj)
+        private void moveObjectInGridAndWorld(int oldX, int oldY, Direction dir, BaseObject obj)
         {
-            if (obj.MapData == this && IsObjectOutOfBounds(newX, newY) is Direction dir)
+            var (newX, newY) = GetTileCoordInDirection(oldX, oldY, dir);
+            if (obj.MapData == this && IsObjectOutOfBounds(newX, newY) is Direction _)
             {
                 // move the object
                 if (world.GetNeighbor(this, dir) is MapData neighbor)
@@ -299,25 +309,23 @@ namespace BabaGame.src.Engine
             }
         }
 
-        private (int, int, int, int, BaseObject) directionMoveObject(BaseObject obj, Direction direction)
+        private (int, int, Direction, BaseObject) directionMoveObject(BaseObject obj, Direction direction)
         {
-            return direction switch
-            {
-                Direction.Up => (obj.X, obj.Y, obj.X, obj.Y - 1, obj),
-                Direction.Down => (obj.X, obj.Y, obj.X, obj.Y + 1, obj),
-                Direction.Left => (obj.X, obj.Y, obj.X - 1, obj.Y, obj),
-                Direction.Right => (obj.X, obj.Y, obj.X + 1, obj.Y, obj),
-                _ => (0, 0, 0, 0, obj),
-            };
+            return (obj.TileX, obj.TileY, direction, obj);
         }
 
-        private Direction directionFromDelta(int dx, int dy)
+        public (int x, int y) GetTileCoordInDirection(int x, int y, Direction dir)
         {
-            if (dx < 0) return Direction.Left;
-            if (dx > 0) return Direction.Right;
-            if (dy < 0) return Direction.Up;
-            if (dy > 0) return Direction.Down;
-            return Direction.None;
+            var (newX, newY) = dir switch
+            {
+                Direction.Up => (x, y - 1),
+                Direction.Down => (x, y + 1),
+                Direction.Left => (x - 1, y),
+                Direction.Right => (x + 1, y),
+                _ => (x, y),
+            };
+
+            return IsObjectOutOfBounds(newX, newY) != null ? world.GetNeighbor(this, dir)?.AdjustTileCoord(newX, newY) ?? (x, y) : (newX, newY);
         }
 
         public void DoJoinable()
@@ -328,12 +336,17 @@ namespace BabaGame.src.Engine
             }
         }
 
+        public (int x, int y) AdjustTileCoord(int x, int y)
+        {
+            return WorldVariables.TileCoordinateRebaseToNewMap(MapX, MapY, x, y);
+        }
+
         public void JoinableObjectUpdate(BaseObject obj)
         {
             if (obj?.Joinable == true)
             {
                 var flag = 0;
-                var near = GetObjectsNear(obj.X, obj.Y);
+                var near = GetObjectsNear(obj.TileX, obj.TileY);
                 if (near[Direction.Up].Any(o => o.Name == obj.Name) == true) flag += 2;
                 if (near[Direction.Right].Any(o => o.Name == obj.Name) == true) flag += 1;
                 if (near[Direction.Down].Any(o => o.Name == obj.Name) == true) flag += 8;

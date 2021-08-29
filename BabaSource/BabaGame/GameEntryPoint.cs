@@ -41,7 +41,7 @@ namespace BabaGame
 
             AddChild(new CallbackRunner(EventChannels.ScheduledCallback.Subscribe, EventChannels.ScheduledCallback.Unsubscribe));
 
-            EventChannels.MapChange.SendAsyncMessage(new MapChange { X = 24, Y = 30 });
+            EventChannels.MapChange.SendAsyncMessage(new MapChange { X = 22, Y = 26 });
             EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
         }
 

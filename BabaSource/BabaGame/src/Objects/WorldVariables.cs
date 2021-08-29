@@ -41,5 +41,12 @@ namespace BabaGame.src.Objects
             var sy = Margin * 2 + TileHeight * y + Padding * (y - 1);
             return ((int)(sx * Scale), (int)(sy * Scale));
         }
+
+        public static (int x, int y) TileCoordinateRebaseToNewMap(int mapX, int mapY, int x, int y)
+        {
+            return (
+                x % MapWidth + mapX * MapWidth,
+                y % MapHeight + mapY * MapHeight);
+        }
     }
 }

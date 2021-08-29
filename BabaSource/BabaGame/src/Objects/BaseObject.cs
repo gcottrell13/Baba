@@ -12,12 +12,12 @@ using System.Text;
 
 namespace BabaGame.src.Objects
 {
-    [DebuggerDisplay("{Name} ({X} ,{Y}) {Facing}")]
+    [DebuggerDisplay("{Name} ({TileX} ,{TileY}) {Facing}")]
     public class BaseObject : GameObject
     {
         public string Name { get; private set; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public int TileX { get; private set; }
+        public int TileY { get; private set; }
 
         private readonly BaseObjectSprite sprite;
 
@@ -36,6 +36,8 @@ namespace BabaGame.src.Objects
 
         public string Color { get; private set; }
 
+        public bool Active { get; private set; }
+
         public List<(int x, int y)> PreviousCoordinates { get; }
 
         public BaseObject(string name, int x, int y, MapData map, string? phase=null)
@@ -48,8 +50,8 @@ namespace BabaGame.src.Objects
             sprite = new BaseObjectSprite(name, phase);
             Graphics.AddChild(sprite);
 
-            X = x;
-            Y = y;
+            TileX = x;
+            TileY = y;
             Graphics.x = GetScreenCoordOffsetByMap(x, y).x;
             Graphics.y = GetScreenCoordOffsetByMap(x, y).y;
 
@@ -70,7 +72,7 @@ namespace BabaGame.src.Objects
             Joinable = JsonValues.Animations[name].ContainsKey("0");
         }
 
-        protected void OnMove(int oldX, int oldY, Direction direction)
+        protected void OnMove(int oldX, int oldY, int newX, int newY, Direction direction)
         {
             if (MapData != null && Joinable)
             {
@@ -83,7 +85,7 @@ namespace BabaGame.src.Objects
                         {
                             MapData.JoinableObjectUpdate(obj);
                         }
-                        foreach (var obj in MapData.GetObjectsNear(X, Y).SelectMany(kvp => kvp.Value))
+                        foreach (var obj in MapData.GetObjectsNear(newX, newY).SelectMany(kvp => kvp.Value))
                         {
                             MapData.JoinableObjectUpdate(obj);
                         }
@@ -91,7 +93,11 @@ namespace BabaGame.src.Objects
                 });
             }
 
-            PreviousCoordinates.Add((oldX, oldY));
+            AnimateGraphicsToPoint(newX, newY);
+            sprite.StepIndex();
+            FaceDirection(direction);
+
+            PreviousCoordinates.Add((newX, newY));
             if (PreviousCoordinates.Count > 10)
                 PreviousCoordinates.RemoveAt(0);
         }
@@ -115,34 +121,27 @@ namespace BabaGame.src.Objects
 
         public void SetX(int x)
         {
-            if (x != X)
-            {
-                Graphics.x = GetScreenCoordOffsetByMap(X, Y).x;
-
-                AnimateGraphicsToPoint(x, Y);
-
-                sprite.StepIndex();
-                if (x < X) FaceDirection(Direction.Left); else FaceDirection(Direction.Right);
-
-                OnMove(X, Y, x < X ? Direction.Left : Direction.Right);
-                X = x;
-            }
+            TileX = x;
         }
 
         public void SetY(int y)
         {
-            if (y != Y)
-            {
-                Graphics.y = GetScreenCoordOffsetByMap(X, Y).y;
+            TileY = y;
+        }
 
-                AnimateGraphicsToPoint(X, y);
+        public void SetActive(bool active)
+        {
+            Active = active;
+            SetColor(Color);
+        }
 
-                sprite.StepIndex();
-                if (y < Y) FaceDirection(Direction.Up); else FaceDirection(Direction.Down);
-
-                OnMove(X, Y, y < Y ? Direction.Up : Direction.Down);
-                Y = y;
-            }
+        public void SetMap(MapData map)
+        {
+            var (sx, sy) = WorldVariables.TileCoordinateRebaseToNewMap(map.MapX, map.MapY, TileX, TileY);
+            var (newX, newY) = GetScreenCoordOffsetByMap(sx, sy);
+            Graphics.x = newX;
+            Graphics.y = newY;
+            MapData = map;
         }
 
         public void SetColor(string color)
@@ -150,7 +149,7 @@ namespace BabaGame.src.Objects
             if (JsonValues.ObjectInfo.ContainsKey("text_" + color))
             {
                 var c = JsonValues.ObjectInfo["text_" + color];
-                var palettePointer = c.color ?? c.color_inactive;
+                var palettePointer = Active ? c.color : c.color_inactive;
                 sprite.color = JsonValues.TryGetPaletteColor(WorldVariables.Palette, palettePointer);
                 Color = color;
             }
@@ -187,12 +186,15 @@ namespace BabaGame.src.Objects
 
         protected override void OnUpdate(GameTime gameTime)
         {
+            if (PreviousCoordinates.LastOrDefault() != (TileX, TileY))
+            {
+                var (oldX, oldY) = PreviousCoordinates.LastOrDefault();
+                OnMove(oldX, oldY, TileX, TileY, DirectionExtensions.DirectionFromDelta((TileX - oldX, TileY - oldY)));
+            }
+
             if (animateX != null)
             {
-                if (!animateX.ValueStillAlive(gameTime.ElapsedGameTime.TotalSeconds, out var x))
-                {
-                    animateX = null;
-                }
+                if (!animateX.ValueStillAlive(gameTime.ElapsedGameTime.TotalSeconds, out var x)) animateX = null;
                 Graphics.x = x;
             }
 

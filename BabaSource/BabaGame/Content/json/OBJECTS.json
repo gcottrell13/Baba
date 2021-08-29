@@ -22,7 +22,7 @@
             2
         ],
         "sprite": "arrow",
-        "layer": 14,
+        "layer": 9,
         "unittype": "object"
     },
     "baba": {
@@ -87,7 +87,7 @@
             3
         ],
         "sprite": "bed",
-        "layer": 14,
+        "layer": 16,
         "unittype": "object"
     },
     "bee": {
@@ -100,7 +100,7 @@
             4
         ],
         "sprite": "bee",
-        "layer": 16,
+        "layer": 17,
         "unittype": "object"
     },
     "belt": {
@@ -139,7 +139,7 @@
             2
         ],
         "sprite": "blob",
-        "layer": 16,
+        "layer": 14,
         "unittype": "object"
     },
     "boat": {
@@ -152,7 +152,7 @@
             1
         ],
         "sprite": "boat",
-        "layer": 14,
+        "layer": 16,
         "unittype": "object"
     },
     "boba": {
@@ -204,7 +204,7 @@
             3
         ],
         "sprite": "book",
-        "layer": 15,
+        "layer": 16,
         "unittype": "object"
     },
     "bottle": {
@@ -269,7 +269,7 @@
             2
         ],
         "sprite": "bucket",
-        "layer": 14,
+        "layer": 16,
         "unittype": "object"
     },
     "bug": {
@@ -360,7 +360,7 @@
             2
         ],
         "sprite": "cat",
-        "layer": 19,
+        "layer": 18,
         "unittype": "object"
     },
     "circle": {
@@ -451,7 +451,7 @@
             2
         ],
         "sprite": "crystal",
-        "layer": 12,
+        "layer": 16,
         "unittype": "object"
     },
     "cup": {
@@ -490,7 +490,7 @@
             2
         ],
         "sprite": "dog",
-        "layer": 19,
+        "layer": 18,
         "unittype": "object"
     },
     "donut": {
@@ -555,7 +555,7 @@
             3
         ],
         "sprite": "drum",
-        "layer": 17,
+        "layer": 16,
         "unittype": "object"
     },
     "dust": {
@@ -594,7 +594,7 @@
             3
         ],
         "sprite": "egg",
-        "layer": 17,
+        "layer": 16,
         "unittype": "object"
     },
     "eye": {
@@ -646,7 +646,7 @@
             3
         ],
         "sprite": "fish",
-        "layer": 14,
+        "layer": 17,
         "unittype": "object"
     },
     "flag": {
@@ -737,7 +737,7 @@
             3
         ],
         "sprite": "frog",
-        "layer": 19,
+        "layer": 18,
         "unittype": "object"
     },
     "fruit": {
@@ -789,7 +789,7 @@
             2
         ],
         "sprite": "gate",
-        "layer": 18,
+        "layer": 15,
         "unittype": "object"
     },
     "gem": {
@@ -802,7 +802,7 @@
             2
         ],
         "sprite": "gem",
-        "layer": 15,
+        "layer": 16,
         "unittype": "object"
     },
     "ghost": {
@@ -880,7 +880,7 @@
             4
         ],
         "sprite": "hihat",
-        "layer": 17,
+        "layer": 16,
         "unittype": "object"
     },
     "house": {
@@ -1010,7 +1010,7 @@
             2
         ],
         "sprite": "knight",
-        "layer": 16,
+        "layer": 17,
         "unittype": "object"
     },
     "ladder": {
@@ -1127,7 +1127,7 @@
             2
         ],
         "sprite": "lock",
-        "layer": 16,
+        "layer": 14,
         "unittype": "object"
     },
     "love": {
@@ -1166,7 +1166,7 @@
             4
         ],
         "sprite": "mirror",
-        "layer": 17,
+        "layer": 16,
         "unittype": "object"
     },
     "monitor": {
@@ -1179,7 +1179,7 @@
             1
         ],
         "sprite": "monitor",
-        "layer": 14,
+        "layer": 16,
         "unittype": "object"
     },
     "moon": {
@@ -1231,7 +1231,7 @@
             2
         ],
         "sprite": "pants",
-        "layer": 15,
+        "layer": 16,
         "unittype": "object"
     },
     "pawn": {
@@ -1244,7 +1244,7 @@
             2
         ],
         "sprite": "pawn",
-        "layer": 16,
+        "layer": 17,
         "unittype": "object"
     },
     "piano": {
@@ -1296,7 +1296,7 @@
             3
         ],
         "sprite": "pixel",
-        "layer": 18,
+        "layer": 9,
         "unittype": "object"
     },
     "pizza": {
@@ -1335,7 +1335,7 @@
             3
         ],
         "sprite": "planet",
-        "layer": 12,
+        "layer": 16,
         "unittype": "object"
     },
     "plank": {
@@ -1400,7 +1400,7 @@
             4
         ],
         "sprite": "ring",
-        "layer": 18,
+        "layer": 17,
         "unittype": "object"
     },
     "road": {
@@ -1504,7 +1504,7 @@
             2
         ],
         "sprite": "seed",
-        "layer": 12,
+        "layer": 16,
         "unittype": "object"
     },
     "shell": {
@@ -1517,7 +1517,7 @@
             2
         ],
         "sprite": "shell",
-        "layer": 13,
+        "layer": 16,
         "unittype": "object"
     },
     "shirt": {
@@ -1543,7 +1543,7 @@
             1
         ],
         "sprite": "shovel",
-        "layer": 15,
+        "layer": 16,
         "unittype": "object"
     },
     "sign": {
@@ -1556,7 +1556,7 @@
             1
         ],
         "sprite": "sign",
-        "layer": 12,
+        "layer": 16,
         "unittype": "object"
     },
     "skull": {
@@ -1647,7 +1647,7 @@
             1
         ],
         "sprite": "stick",
-        "layer": 12,
+        "layer": 16,
         "unittype": "object"
     },
     "stump": {
@@ -1686,7 +1686,7 @@
             4
         ],
         "sprite": "sword",
-        "layer": 17,
+        "layer": 16,
         "unittype": "object"
     },
     "text_0": {
@@ -5533,7 +5533,7 @@
             0
         ],
         "sprite": "track",
-        "layer": 10,
+        "layer": 9,
         "unittype": "object"
     },
     "train": {
@@ -5559,7 +5559,7 @@
             2
         ],
         "sprite": "tree",
-        "layer": 15,
+        "layer": 16,
         "unittype": "object"
     },
     "trees": {
@@ -5598,7 +5598,7 @@
             4
         ],
         "sprite": "trumpet",
-        "layer": 19,
+        "layer": 16,
         "unittype": "object"
     },
     "turnip": {
@@ -5624,7 +5624,7 @@
             4
         ],
         "sprite": "turtle",
-        "layer": 19,
+        "layer": 18,
         "unittype": "object"
     },
     "ufo": {
@@ -5663,7 +5663,7 @@
             2
         ],
         "sprite": "vine",
-        "layer": 20,
+        "layer": 15,
         "unittype": "object"
     },
     "wall": {
@@ -5702,7 +5702,7 @@
             3
         ],
         "sprite": "what",
-        "layer": 17,
+        "layer": 10,
         "unittype": "object"
     },
     "wind": {
@@ -5715,7 +5715,7 @@
             4
         ],
         "sprite": "wind",
-        "layer": 14,
+        "layer": 8,
         "unittype": "object"
     },
     "worm": {

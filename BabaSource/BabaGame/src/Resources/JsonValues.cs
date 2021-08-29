@@ -18,6 +18,7 @@ namespace BabaGame.src.Resources
         public static TilesetMapStructure Tileset = Load.loadJson<Dictionary<string, string>>("TILESET").ToDictionary(kvp => int.Parse(kvp.Key), kvp => kvp.Value);
         public static PaletteStructure Palettes = Load.loadJson<Dictionary<string, int[][][]>>("PALETTES")
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Select(i => i.Select(c => new Color(c[0], c[1], c[2])).ToArray()).ToArray());
+        public static Sentences GlobalSentences = Load.loadJson<Sentences>("globalSentences");
 
 
         public static Color TryGetPaletteColor(string theme, int[] coord)
@@ -33,6 +34,11 @@ namespace BabaGame.src.Resources
             public string sprite;
             public int layer;
             public string unittype;
+        }
+
+        public struct Sentences
+        {
+            public List<string> sentences;
         }
     }
 }

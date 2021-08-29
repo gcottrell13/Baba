@@ -329,11 +329,14 @@ namespace BabaGame.src
                 _ => me.MapY,
             };
 
-            MapData? load()
+            var (dx, dy) = DirectionExtensions.DeltaFromDirection(dir);
+            var delta = new Vector2(dx, dy);
+
+            MapData? load(int mapX, int mapY)
             {
-                if (ExistsMapDataAtMapCoords(x, y))
+                if (ExistsMapDataAtMapCoords(mapX, mapY))
                 {
-                    return GetOrLoadMap(x, y);
+                    return GetOrLoadMap(mapX, mapY);
                 }
 
                 if (WorldHandle?.ObjectLayers.First(layer => layer.Name == "Connections") is TiledMapObjectLayer layer)
@@ -344,9 +347,13 @@ namespace BabaGame.src
                         {
                             var (p1, p2) = polyLineToMapCoord(poly);
 
-                            var destinationMapCoord = new Vector2(x, y);
+                            var destinationMapCoord = new Vector2(mapX, mapY);
                             p1.Floor();
                             p2.Floor();
+
+                            if (p1 != destinationMapCoord && p2 != destinationMapCoord)
+                                continue;
+
                             var destinationLink = p1 == destinationMapCoord ? p2 : p1;
 
                             var linkedX = (int)destinationLink.X;
@@ -357,13 +364,12 @@ namespace BabaGame.src
                                 return GetOrLoadMap(linkedX, linkedY);
                             }
 
-                            var delta = new Vector2(x - me.MapX, y - me.MapY);
                             destinationLink += delta;
 
                             linkedX = (int)destinationLink.X;
                             linkedY = (int)destinationLink.Y;
 
-                            return GetOrLoadMap(linkedX, linkedY);
+                            return load(linkedX, linkedY);
                         }
                     }
                 }
@@ -371,7 +377,7 @@ namespace BabaGame.src
                 return null;
             }
 
-            var loaded = load();
+            var loaded = load(x, y);
             if (loaded != null)
             {
                 AddConnection(me, dir, loaded);

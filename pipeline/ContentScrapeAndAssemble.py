@@ -111,6 +111,13 @@ def output_facing_and_animation(name: str, images: dict[int, dict[int, Image.Ima
 
     save_gif(name, output_images)
 
+    # fun gifs
+    alone_output = get_new_gif(
+        12, 1, 1
+    )
+    copy_animation_across(colorized_images(name, [i for j in directions['right'] for i in j]), alone_output, (2, 2))
+    save_gif(name + '_alone', alone_output)
+
     return output_data
 
 
@@ -120,8 +127,20 @@ def output_simple(name: str, images: dict[int, dict[int, Image.Image]]):
             [f"{phase}_{wobble}" for wobble in p.keys()] for phase, p in images.items()
         ],
     }
+
     if name.startswith("text"):
         layout = [['sprite', 'sprite_inactive']]
+        alone_images = get_new_gif(
+            3, 1, 1
+        )
+        sprites = [
+            image for phase in images.values() for image in phase.values()
+        ]
+        copy_animation_across(
+            colorized_images(name, sprites), alone_images, (2, 2)
+        )
+        save_gif(name + '_alone', alone_images)
+
     else:
         layout = [
             ["sprite", "name"],

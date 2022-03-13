@@ -1,6 +1,7 @@
 ﻿using BabaGame.src.Events;
 using BabaGame.src.Objects;
 using BabaGame.src.Resources;
+using Core.Utils;
 using MonoGame.Extended.Tiled;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace BabaGame.src.Engine
     public class MapData
     {
         public List<BaseObject> AllObjects;
+        public ObjectIndex ObjectIndex;
 
         private WordEngine WorldWordEngine;
         private WordEngine ThisMapEngine;
@@ -31,6 +33,8 @@ namespace BabaGame.src.Engine
 
             WorldVariables.TileWidth = tiledMap.TileWidth;
             WorldVariables.TileHeight = tiledMap.TileHeight;
+
+            ObjectIndex = new ObjectIndex();
 
             AllObjects = new List<BaseObject>();
             MapName = mapName;
@@ -142,6 +146,12 @@ namespace BabaGame.src.Engine
             }
             obj.SetMap(this);
             AllObjects.Add(obj);
+            ObjectIndex.IndexObject(obj);
+        }
+
+        public void RemoveObject(BaseObject obj)
+        {
+            ObjectIndex.RemoveObject(obj);
         }
 
         public void TakeAction(string action)
@@ -358,11 +368,11 @@ namespace BabaGame.src.Engine
 
         class QueryCache
         {
-            public List<BaseObject> SearchThese { get; }
+            public ObjectIndex SearchThese { get; }
             public WordEngine Engine { get; }
             public Dictionary<string, List<BaseObject>> Cache { get; }
 
-            public QueryCache(List<BaseObject> searchThese, WordEngine engine)
+            public QueryCache(ObjectIndex searchThese, WordEngine engine)
             {
                 SearchThese = searchThese;
                 Engine = engine;

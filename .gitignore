@@ -23,8 +23,6 @@ pipeline/__pycache__/
 
 *.tiled-session
 
-BabaSource/BabaGame/Content/Sheets/
-
 BabaSource/Tests/obj/
 
 BabaSource/Tests/bin/

@@ -1,7 +1,7 @@
 import json
 from typing import Iterator, TypedDict
 from PIL import Image
-from vars import VALUES_FILE_PATH, CUSTOM_VALUES_FILE_PATH, FILES_PATH
+from vars import CUSTOM_VALUES_FILE_PATH, FILES_PATH
 
 ColorsFormat = dict[str, dict[str, tuple[int, int, int]]]
 
@@ -71,24 +71,24 @@ def load_information() -> tuple[ObjectInformationCollection, ColorsFormat]:
 
     OBJECT_INFO: ObjectInformationCollection = {}
 
-    with open(VALUES_FILE_PATH, 'r') as f:
-        lines = iter(f.readlines())
+    # with open(VALUES_FILE_PATH, 'r') as f:
+    #     lines = iter(f.readlines())
 
-        while not next(lines).startswith('editor_objlist = '):
-            pass
+    #     while not next(lines).startswith('editor_objlist = '):
+    #         pass
         
-        d = parse_block(lines)
+    #     d = parse_block(lines)
 
-        for obj, attrs in d.items():
-            if 'name' not in attrs:
-                continue
-            OBJECT_INFO[attrs['name']] = {
-                'color_inactive': attrs['colour'],
-                'color': attrs.get('colour_active', attrs['colour']),
-                'sprite': attrs.get('sprite', attrs['name']),
-                'layer': attrs['layer'],
-                'unittype': attrs['unittype'],
-            }
+    #     for obj, attrs in d.items():
+    #         if 'name' not in attrs:
+    #             continue
+    #         OBJECT_INFO[attrs['name']] = {
+    #             'color_inactive': attrs['colour'],
+    #             'color': attrs.get('colour_active', attrs['colour']),
+    #             'sprite': attrs.get('sprite', attrs['name']),
+    #             'layer': attrs['layer'],
+    #             'unittype': attrs['unittype'],
+    #         }
     
     with open(CUSTOM_VALUES_FILE_PATH, 'r') as f:
         custom_colors = json.loads(f.read())

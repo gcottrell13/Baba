@@ -113,7 +113,7 @@
             2
         ],
         "sprite": "belt",
-        "layer": 11,
+        "layer": 9,
         "unittype": "object"
     },
     "bird": {
@@ -191,6 +191,19 @@
             4
         ],
         "sprite": "bolt",
+        "layer": 16,
+        "unittype": "object"
+    },
+    "bomb": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            1
+        ],
+        "sprite": "bomb",
         "layer": 16,
         "unittype": "object"
     },
@@ -361,6 +374,32 @@
         ],
         "sprite": "cat",
         "layer": 18,
+        "unittype": "object"
+    },
+    "chair": {
+        "color_inactive": [
+            6,
+            2
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "chair",
+        "layer": 16,
+        "unittype": "object"
+    },
+    "cheese": {
+        "color_inactive": [
+            2,
+            4
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "cheese",
+        "layer": 16,
         "unittype": "object"
     },
     "circle": {
@@ -1065,6 +1104,19 @@
         "layer": 8,
         "unittype": "object"
     },
+    "lever": {
+        "color_inactive": [
+            0,
+            2
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "lever",
+        "layer": 16,
+        "unittype": "object"
+    },
     "lift": {
         "color_inactive": [
             0,
@@ -1182,6 +1234,19 @@
         "layer": 16,
         "unittype": "object"
     },
+    "monster": {
+        "color_inactive": [
+            4,
+            1
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "monster",
+        "layer": 19,
+        "unittype": "object"
+    },
     "moon": {
         "color_inactive": [
             2,
@@ -1232,6 +1297,19 @@
         ],
         "sprite": "pants",
         "layer": 16,
+        "unittype": "object"
+    },
+    "paper": {
+        "color_inactive": [
+            0,
+            3
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "paper",
+        "layer": 9,
         "unittype": "object"
     },
     "pawn": {
@@ -1494,6 +1572,19 @@
         "layer": 16,
         "unittype": "object"
     },
+    "scissors": {
+        "color_inactive": [
+            1,
+            4
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "scissors",
+        "layer": 16,
+        "unittype": "object"
+    },
     "seed": {
         "color_inactive": [
             6,
@@ -1687,6 +1778,32 @@
         ],
         "sprite": "sword",
         "layer": 16,
+        "unittype": "object"
+    },
+    "table": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            1
+        ],
+        "sprite": "table",
+        "layer": 16,
+        "unittype": "object"
+    },
+    "teeth": {
+        "color_inactive": [
+            0,
+            3
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "teeth",
+        "layer": 18,
         "unittype": "object"
     },
     "text_0": {
@@ -2196,6 +2313,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_bomb": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_bomb",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_bonus": {
         "color_inactive": [
             4,
@@ -2219,6 +2349,19 @@
             3
         ],
         "sprite": "text_book",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_boom": {
+        "color_inactive": [
+            2,
+            1
+        ],
+        "color": [
+            2,
+            2
+        ],
+        "sprite": "text_boom",
         "layer": 20,
         "unittype": "text"
     },
@@ -2414,6 +2557,32 @@
             2
         ],
         "sprite": "text_cat",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_chair": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_chair",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_cheese": {
+        "color_inactive": [
+            2,
+            3
+        ],
+        "color": [
+            2,
+            4
+        ],
+        "sprite": "text_cheese",
         "layer": 20,
         "unittype": "text"
     },
@@ -3651,6 +3820,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_lever": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            2
+        ],
+        "sprite": "text_lever",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_lift": {
         "color_inactive": [
             0,
@@ -3898,6 +4080,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_monster": {
+        "color_inactive": [
+            4,
+            0
+        ],
+        "color": [
+            4,
+            1
+        ],
+        "sprite": "text_monster",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_moon": {
         "color_inactive": [
             6,
@@ -3960,6 +4155,19 @@
             3
         ],
         "sprite": "text_near",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_nextto": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_nextto",
         "layer": 20,
         "unittype": "text"
     },
@@ -4142,6 +4350,19 @@
             3
         ],
         "sprite": "text_pants",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_paper": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_paper",
         "layer": 20,
         "unittype": "text"
     },
@@ -4353,6 +4574,32 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_power2": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_power2",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_power3": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            4,
+            4
+        ],
+        "sprite": "text_power3",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_powered": {
         "color_inactive": [
             6,
@@ -4363,6 +4610,32 @@
             4
         ],
         "sprite": "text_powered",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_powered2": {
+        "color_inactive": [
+            5,
+            2
+        ],
+        "color": [
+            5,
+            3
+        ],
+        "sprite": "text_powered2",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_powered3": {
+        "color_inactive": [
+            3,
+            2
+        ],
+        "color": [
+            4,
+            4
+        ],
+        "sprite": "text_powered3",
         "layer": 20,
         "unittype": "text"
     },
@@ -4665,6 +4938,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_scissors": {
+        "color_inactive": [
+            1,
+            2
+        ],
+        "color": [
+            1,
+            4
+        ],
+        "sprite": "text_scissors",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_seed": {
         "color_inactive": [
             6,
@@ -4675,6 +4961,19 @@
             2
         ],
         "sprite": "text_seed",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_seeing": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_seeing",
         "layer": 20,
         "unittype": "text"
     },
@@ -5013,6 +5312,32 @@
             3
         ],
         "sprite": "text_t",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_table": {
+        "color_inactive": [
+            6,
+            1
+        ],
+        "color": [
+            6,
+            2
+        ],
+        "sprite": "text_table",
+        "layer": 20,
+        "unittype": "text"
+    },
+    "text_teeth": {
+        "color_inactive": [
+            0,
+            2
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_teeth",
         "layer": 20,
         "unittype": "text"
     },
@@ -5419,6 +5744,19 @@
         "layer": 20,
         "unittype": "text"
     },
+    "text_write": {
+        "color_inactive": [
+            0,
+            1
+        ],
+        "color": [
+            0,
+            3
+        ],
+        "sprite": "text_write",
+        "layer": 20,
+        "unittype": "text"
+    },
     "text_x": {
         "color_inactive": [
             0,
@@ -5702,7 +6040,7 @@
             3
         ],
         "sprite": "what",
-        "layer": 10,
+        "layer": 16,
         "unittype": "object"
     },
     "wind": {

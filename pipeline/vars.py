@@ -1,9 +1,10 @@
 import pathlib
 import re
+import os
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
 
-FILES_PATH = pathlib.Path("E:/SteamLibrary/steamapps/common/Baba Is You/Data")
+FILES_PATH = pathlib.Path(r"C:\Program Files (x86)\Steam\steamapps\common\Baba Is You") / "Data"
 
 PIPELINE_PATH = pathlib.Path(__file__).absolute().parent
 
@@ -22,8 +23,11 @@ STORE_PATH = PIPELINE_PATH / 'store'
 VISUAL_OUTPUT_DIRECTORY = PIPELINE_PATH / 'baba_analysis'
 OUTPUT_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'BabaGame' / 'Content'
 
-
 MAPS_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'BabaGame' / 'Content' / 'Maps'
+
+os.makedirs(VISUAL_OUTPUT_DIRECTORY, exist_ok=True)
+os.makedirs(OUTPUT_DIRECTORY / 'Sheets', exist_ok=True)
+os.makedirs(MAPS_DIRECTORY, exist_ok=True)
 
 WIDTH = 24
 HEIGHT = 24

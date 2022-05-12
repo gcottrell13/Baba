@@ -18,7 +18,7 @@ ImageCollection = dict[str, dict[int, dict[int, Image.Image]]]
 
 OBJECT_INFO, COLORS = load_information()
 
-ALL_FILES = glob.glob(str(SPRITES_PATH / "*.png")) + glob.glob(
+ALL_FILES = glob.glob(
     str(CUSTOM_SPRITES_PATH / "*.png")
 )
 
@@ -377,16 +377,18 @@ def analyze_images(images: ImageCollection) -> AnalysisResult:
         values = images.get(info.get('sprite', name))
         output = None
 
-        has_facing = all(direction in values for direction in DIRECTIONS)
+        has_facing = all(direction in values for direction in DIRECTIONS) and name not in ['cliff']
         if has_facing and len(values) == 4:
             # this object has separate sprites for each direction
             print(f"{name} has facing sprites")
             output = output_facing_and_animation(name, values)
+
         elif has_facing and len(values) > 4:
             # this object has separate sprites for each direction, AND has animations
             print(f"{name} has facing sprites AND animations")
             output = output_facing_and_animation(name, values)
-        elif len(values) == 16:
+
+        elif len(values) == 16 or name == 'cliff':
             # this object can 'join' with others nearby, like WALL or WATER
             print(f"{name} can join with others")
             output_joinable(name, values)

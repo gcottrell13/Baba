@@ -54,9 +54,9 @@ def colorized_image(name: str, img: Image.Image):
         p = info.get("color", default)
 
     pr, pg, pb = p[0] / 255, p[1] / 255, p[2] / 255
-    r = r.point(lambda i: i * pr)
-    g = g.point(lambda i: i * pg)
-    b = b.point(lambda i: i * pb)
+    r = r.point(lambda i: int(i * pr))
+    g = g.point(lambda i: int(i * pg))
+    b = b.point(lambda i: int(i * pb))
     return Image.merge(IMAGE_MODE, (r, g, b, a))
 
 
@@ -112,6 +112,7 @@ def save_gif(name: str, frames: list[Image.Image]):
         save_all=True,
         append_images=frames[1:],
         duration=300,
+        disposal=2,
         optimize=True,
         loop=0,
     )

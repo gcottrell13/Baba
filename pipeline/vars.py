@@ -1,10 +1,11 @@
 import pathlib
 import re
 import os
+import env
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
 
-FILES_PATH = pathlib.Path(r"C:\Program Files (x86)\Steam\steamapps\common\Baba Is You") / "Data"
+FILES_PATH = pathlib.Path(env.game_path) / "Data"
 
 PIPELINE_PATH = pathlib.Path(__file__).absolute().parent
 

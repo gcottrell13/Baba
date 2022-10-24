@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src
+namespace BabaGame.src.Engine
 {
     public enum Direction
     {

@@ -4,9 +4,9 @@ import xml.etree.ElementTree as ET
 import glob
 import pathlib
 from PIL import Image
-from vars import MAPS_DIRECTORY, OUTPUT_DIRECTORY, PIPELINE_PATH
-from imageUtils import *
-from load_object_information import load_information
+from modules.vars import MAPS_DIRECTORY, OUTPUT_DIRECTORY, PIPELINE_PATH
+from modules.imageUtils import *
+from modules.load_object_information import load_information
 
 INFO, COLORS = load_information()
 

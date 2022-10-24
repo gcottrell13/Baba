@@ -2,15 +2,15 @@ import pathlib
 import re
 import os
 import env
+import glob
+
+__all__ = []
 
 info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png")
 
 FILES_PATH = pathlib.Path(env.game_path) / "Data"
 
 PIPELINE_PATH = pathlib.Path(__file__).absolute().parent
-
-del pathlib
-del re
 
 SPRITES_PATH = FILES_PATH / 'Sprites'
 VALUES_FILE_PATH = FILES_PATH / 'Editor' / 'editor_objectlist.lua'
@@ -29,6 +29,10 @@ MAPS_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'BabaGame' / 'Content' / 
 os.makedirs(VISUAL_OUTPUT_DIRECTORY, exist_ok=True)
 os.makedirs(OUTPUT_DIRECTORY / 'Sheets', exist_ok=True)
 os.makedirs(MAPS_DIRECTORY, exist_ok=True)
+
+ALL_FILES = glob.glob(
+    str(CUSTOM_SPRITES_PATH / "*.png")
+)
 
 WIDTH = 24
 HEIGHT = 24

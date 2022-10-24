@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BabaGame.src
 {
@@ -110,7 +111,7 @@ namespace BabaGame.src
             allowInput = characterControl.Enable;
         }
 
-        public void OnSetMapEvent(MapChange ev)
+        public async Task OnSetMapEvent(MapChange ev)
         {
             var (px, py) = WorldVariables.GetSizeInPixels(1, 1);
             Graphics.x = px;
@@ -334,7 +335,7 @@ namespace BabaGame.src
 
             MapData? load(int mapX, int mapY)
             {
-                if (ExistsMapDataAtMapCoords(mapX, mapY))
+                if (ExistsMapDataAtMapCoords(mapX, mapY)) 
                 {
                     return GetOrLoadMap(mapX, mapY);
                 }

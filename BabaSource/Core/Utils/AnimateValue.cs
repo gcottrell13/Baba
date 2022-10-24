@@ -2,26 +2,34 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace Core.Utils
 {
     public class AnimateValue
     {
-        private readonly float start;
-        private readonly float end;
+        private readonly List<float> points;
         private readonly float time;
-        private readonly Func<float, float>? transform;
+        private readonly Func<float, float> transform;
         private double currentTime;
         private DateTime startTime;
 
-        public AnimateValue(float start, float end, float time, Func<float, float>? transform = null)
+        private double inverseChunkTime;
+
+        public AnimateValue(float start, float end, float time, Func<float, float>? transform = null): this(start, new[] {end}, time, transform)
         {
-            this.start = start;
-            this.end = end;
+        }
+
+        private float defaultTransform(float t) => t;
+
+        public AnimateValue(float start, IEnumerable<float> end, float time, Func<float, float>? transform = null)
+        {
+            this.points = new[] { start }.Concat(end).ToList();
             this.time = time;
-            this.transform = transform;
+            this.transform = transform ?? defaultTransform;
             startTime = DateTime.Now;
+            inverseChunkTime = end.Count() / time;
         }
 
         public bool ValueStillAlive(double elapsed, out float value)
@@ -29,18 +37,14 @@ namespace Core.Utils
             currentTime += elapsed;
             if (currentTime >= time)
             {
-                value = end;
+                value = points.Last();
                 Debug.WriteLine($"Animation for {time} seconds took {(DateTime.Now - startTime).TotalSeconds}");
                 return false;
             }
-            if (transform != null)
-            {
-                value = transform((float)currentTime / time) * (end - start) + start;
-            }
-            else
-            {
-                value = ((float)currentTime / time) * (end - start) + start;
-            }
+            var index = (int)Math.Ceiling(currentTime * inverseChunkTime);
+            var start = points[index - 1];
+            var end = points[index];
+            value = transform((float)currentTime / time) * (end - start) + start;
             return true;
         }
     }

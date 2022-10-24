@@ -1,7 +1,8 @@
+import functools
 import json
 from typing import Iterator, TypedDict
 from PIL import Image
-from vars import CUSTOM_VALUES_FILE_PATH, FILES_PATH
+from .vars import CUSTOM_VALUES_FILE_PATH, FILES_PATH
 
 ColorsFormat = dict[str, dict[str, tuple[int, int, int]]]
 
@@ -61,13 +62,8 @@ PALETTE = {
     for i in range(PALETTE_HEIGHT)
 }
 
-_cache: tuple[ObjectInformationCollection, ColorsFormat] = ()
-
+@functools.lru_cache
 def load_information() -> tuple[ObjectInformationCollection, ColorsFormat]:
-
-    global _cache
-    if _cache:
-        return _cache
 
     OBJECT_INFO: ObjectInformationCollection = {}
 

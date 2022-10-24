@@ -81,14 +81,6 @@ namespace BabaGame.src.Objects
                     Callback = () =>
                     {
                         MapData.JoinableObjectUpdate(this);
-                        foreach (var obj in MapData.GetObjectsNear(oldX, oldY).SelectMany(kvp => kvp.Value))
-                        {
-                            MapData.JoinableObjectUpdate(obj);
-                        }
-                        foreach (var obj in MapData.GetObjectsNear(newX, newY).SelectMany(kvp => kvp.Value))
-                        {
-                            MapData.JoinableObjectUpdate(obj);
-                        }
                     },
                 });
             }
@@ -133,15 +125,6 @@ namespace BabaGame.src.Objects
         {
             Active = active;
             SetColor(Color);
-        }
-
-        public void SetMap(MapData map)
-        {
-            var (sx, sy) = WorldVariables.TileCoordinateRebaseToNewMap(map.MapX, map.MapY, TileX, TileY);
-            var (newX, newY) = GetScreenCoordOffsetByMap(sx, sy);
-            Graphics.x = newX;
-            Graphics.y = newY;
-            MapData = map;
         }
 
         public void SetColor(string color)

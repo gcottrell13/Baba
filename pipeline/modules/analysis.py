@@ -1,18 +1,12 @@
-
-
 from typing import Any
 
-from modules.vars import SLEEP
+from modules.formats import ImageCollection, ObjectSprites, Wobbler, FacingOnMove, Joinable, AnimateOnMove
+from modules.load_object_information import InfoItem
+from modules.vars import SLEEP, DIRECTIONS
 
 
-# data[direction_name][phase number] = [wobble number]
-
-ANALYSIS_OUTPUT = dict[str, dict[int, list[int]]]
-
-
-def analyze_facing_and_animation(images: dict[int, dict[int, Any]]) -> ANALYSIS_OUTPUT:
-    
-    output_data: ANALYSIS_OUTPUT = {}
+def analyze_facing_and_animation(name: str, images: dict[int, dict[int, Any]]) -> FacingOnMove:
+    output_data: dict[str, list[Wobbler]] = {}
 
     for phase in sorted(images.keys()):
         if phase in SLEEP:
@@ -25,20 +19,87 @@ def analyze_facing_and_animation(images: dict[int, dict[int, Any]]) -> ANALYSIS_
             direc = "left"
         else:
             direc = "down"
-        output_data.setdefault(direc, {})[phase] = list(images[phase].keys())
-    
-    return output_data
+        output_data.setdefault(direc, []).append(analyze_simple(f'{name}.{direc}.{len(output_data[direc])}', images[phase]))
+
+    return FacingOnMove(name, **{
+        k: AnimateOnMove(f'{name}.{k}', *f) for k, f in output_data.items()
+    })
 
 
-def analyze_simple(images: dict[int, dict[int, Any]]) -> ANALYSIS_OUTPUT:
-    output_data = {
-        "all": {
-            phase: list(p.keys())
-            for phase, p in images.items()
-        },
-    }
-    return output_data
+def analyze_simple(name: str, phase: dict[int, Any]) -> Wobbler:
+    return Wobbler(name, [phase[1], phase[2], phase[3]])
 
 
-def analyze_joinable() -> ANALYSIS_OUTPUT:
-    return {}
+def analyze_simple_animated_on_move(name: str, images: dict[int, dict[int, Any]]):
+    return AnimateOnMove(
+        name,
+        *[analyze_simple(f'{name}.{i}', x) for i, x in images.items()],
+    )
+
+
+def analyze_joinable(name: str, images: dict[int, dict[int, Any]]) -> Joinable:
+    def d():
+        for phase in sorted(images.keys()):
+            yield analyze_simple(name, images[phase])
+
+    phases = d()
+    return Joinable(
+        name,
+        u=next(phases),
+        d=next(phases),
+        l=next(phases),
+        r=next(phases),
+        ul=next(phases),
+        ud=next(phases),
+        ur=next(phases),
+        dl=next(phases),
+        dr=next(phases),
+        lr=next(phases),
+        udl=next(phases),
+        udr=next(phases),
+        url=next(phases),
+        drl=next(phases),
+        udlr=next(phases),
+    )
+
+
+def analyze_images(images: ImageCollection, all_info: dict[str, InfoItem]) -> dict[str, ObjectSprites]:
+    OUTPUT: dict[str, ObjectSprites] = {}
+    for name, info in all_info.items():
+
+        values = images.get(info.get('sprite', name))
+        if not values:
+            continue
+
+        output: ObjectSprites
+
+        has_facing = all(
+            direction in values for direction in DIRECTIONS
+        ) and name not in ['cliff']
+
+        if has_facing and len(values) == 4:
+            # this object has separate sprites for each direction
+            print(f"{name} has facing sprites")
+            output = analyze_facing_and_animation(name, values)
+
+        elif has_facing and len(values) > 4:
+            # this object has separate sprites for each direction, AND has animations
+            print(f"{name} has facing sprites AND animations")
+            output = analyze_facing_and_animation(name, values)
+
+        elif len(values) == 16 or name == 'cliff':
+            # this object can 'join' with others nearby, like WALL or WATER
+            print(f"{name} can join with others")
+            output = analyze_joinable(name, values)
+        elif len(values) > 1:
+            # this object has no direction, but does have animation sprites
+            print(f"{name} has an animation, but no facing sprites")
+            output = analyze_simple_animated_on_move(name, values)
+        else:
+            # this object is simple
+            print(f"{name} is simple")
+            output = analyze_simple(name, values[0])
+
+        OUTPUT[name] = output
+
+    return OUTPUT

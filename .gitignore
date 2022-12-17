@@ -28,3 +28,7 @@ BabaSource/Tests/obj/
 BabaSource/Tests/bin/
 
 pipeline/env.py
+
+*.pyc
+
+pipeline/modules/env.py

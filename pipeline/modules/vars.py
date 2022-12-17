@@ -1,7 +1,7 @@
 import pathlib
 import re
 import os
-import env
+import modules.env as env
 import glob
 
 __all__ = []
@@ -10,7 +10,7 @@ info_re = re.compile(r"(?P<name>[\w_]+?)_(?P<phase>\d{1,2})_(?P<wobble>\d)\.png"
 
 FILES_PATH = pathlib.Path(env.game_path) / "Data"
 
-PIPELINE_PATH = pathlib.Path(__file__).absolute().parent
+PIPELINE_PATH = pathlib.Path(__file__).parent.absolute().parent
 
 SPRITES_PATH = FILES_PATH / 'Sprites'
 VALUES_FILE_PATH = FILES_PATH / 'Editor' / 'editor_objectlist.lua'
@@ -32,6 +32,8 @@ os.makedirs(MAPS_DIRECTORY, exist_ok=True)
 
 ALL_FILES = glob.glob(
     str(CUSTOM_SPRITES_PATH / "*.png")
+) + glob.glob(
+    str(SPRITES_PATH / '*.png')
 )
 
 WIDTH = 24
@@ -66,7 +68,6 @@ WORD_MAP = {
 }
 
 IMAGE_MODE = "RGBA"
-
 
 up = r"text_up"
 left = r"text_left"

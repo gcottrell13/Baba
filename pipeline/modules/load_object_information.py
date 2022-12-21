@@ -1,5 +1,7 @@
 import functools
 import json
+from glob import glob
+from pathlib import Path
 from typing import Iterator, TypedDict
 from PIL import Image
 from modules.vars import CUSTOM_VALUES_FILE_PATH, FILES_PATH, VALUES_FILE_PATH
@@ -52,15 +54,24 @@ def parse_block(lines: Iterator[str]) -> dict:
 
 PALETTE_FILE_NAME = FILES_PATH / f'Palettes/default.png'
 
-palette_file = Image.open(PALETTE_FILE_NAME)
-PALETTE_WIDTH = 7
-PALETTE_HEIGHT = 5
-PALETTE_FLAT_DATA = list(palette_file.getdata())
-PALETTE = {
-    (j, i): PALETTE_FLAT_DATA[i * PALETTE_WIDTH + j]
-    for j in range(PALETTE_WIDTH)
-    for i in range(PALETTE_HEIGHT)
-}
+
+@functools.lru_cache
+def all_palettes() -> dict[str, dict[tuple[int, int], tuple[int, int, int]]]:
+    palettes = glob(str(FILES_PATH / f'Palettes/*.png'))
+    palette_infos = {}
+    for file_name in palettes:
+        name = Path(file_name).name.removesuffix('.png')
+        palette_file = Image.open(file_name)
+        PALETTE_WIDTH = 7
+        PALETTE_HEIGHT = 5
+        PALETTE_FLAT_DATA = list(palette_file.getdata())
+        PALETTE = {
+            (j, i): PALETTE_FLAT_DATA[i * PALETTE_WIDTH + j]
+            for j in range(PALETTE_WIDTH)
+            for i in range(PALETTE_HEIGHT)
+        }
+        palette_infos[name] = PALETTE
+    return palette_infos
 
 
 @functools.lru_cache
@@ -95,10 +106,12 @@ def load_information() -> tuple[ObjectInformationCollection, ColorsFormat]:
         for key in sorted(OBJECT_INFO.keys())
     }
 
+    palette = all_palettes()['default']
+
     return OBJECT_INFO, {
         name: {
-            'color_active': PALETTE[tuple(color_indexes['color_active'])],
-            'color': PALETTE[tuple(color_indexes['color'])],
+            'color_active': palette[tuple(color_indexes['color_active'])],
+            'color': palette[tuple(color_indexes['color'])],
         }
         for name, color_indexes in OBJECT_INFO.items()
     }

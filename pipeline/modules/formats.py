@@ -29,8 +29,8 @@ class ObjectSprites:
     def __iter__(self) -> Iterable[Image]:
         raise NotImplementedError()
 
-    def __len__(self):
-        return math.lcm(*map(len, self))
+    def frames_count(self):
+        return math.lcm(*map(lambda x: x.frames_count(), self))
 
     def __repr__(self):
         return f'{self.__class__.__name__}<{".".join([self.name, *self.rest])}>'
@@ -53,7 +53,7 @@ class Wobbler(ObjectSprites):
     def __iter__(self):
         return iter(self.wobbles)
 
-    def __len__(self):
+    def frames_count(self):
         return len(self.wobbles)
 
 
@@ -66,9 +66,8 @@ class AnimateOnMove(ObjectSprites):
         for frame in self.frames:
             yield from iter(frame)
 
-    def __len__(self):
-        return sum(map(len, self.frames))
-
+    def frames_count(self):
+        return sum(map(lambda x: x.frames_count(), self.frames))
 
 
 class FacingOnMove(ObjectSprites):
@@ -95,13 +94,29 @@ class FacingOnMove(ObjectSprites):
 
     def __iter__(self):
         yield from self.up
+        if self.sleep_up:
+            yield from self.sleep_up
         yield from self.left
-        yield from self.right
+        if self.sleep_left:
+            yield from self.sleep_left
         yield from self.down
-        yield from self.sleep_up
-        yield from self.sleep_left
-        yield from self.sleep_right
-        yield from self.sleep_down
+        if self.sleep_down:
+            yield from self.sleep_down
+        yield from self.right
+        if self.sleep_right:
+            yield from self.sleep_right
+
+    def frames_count(self):
+        return sum(i.frames_count() for i in [
+            self.up,
+            self.left,
+            self.down,
+            self.right,
+            self.sleep_up,
+            self.sleep_left,
+            self.sleep_down,
+            self.sleep_right,
+        ] if i)
 
 
 class Joinable(ObjectSprites):
@@ -155,3 +170,22 @@ class Joinable(ObjectSprites):
         yield from self.url
         yield from self.drl
         yield from self.udlr
+
+    def frames_count(self):
+        return sum(i.frames_count() for i in [
+            self.u,
+            self.d,
+            self.l,
+            self.r,
+            self.ul,
+            self.ud,
+            self.ur,
+            self.dl,
+            self.dr,
+            self.lr,
+            self.udl,
+            self.udr,
+            self.url,
+            self.drl,
+            self.udlr,
+        ] if i)

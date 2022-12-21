@@ -20,7 +20,7 @@ def save_gif(name: str, frames: list[Image.Image]):
 
 
 def make_proof(layout: list[list[ObjectSprites | None]], actives: list[list[bool | int | None]]):
-    length = math.lcm(*[len(item) for row in layout for item in row if item])
+    length = math.lcm(*[item.frames_count() for row in layout for item in row if item])
     lx, ly = map(lambda x: max(*x), zip(*[item.largest_dimensions() for row in layout for item in row if item]))
     proof = get_new_gif(length, len(layout[0]), len(layout), block_width=lx, block_height=ly)
     for y, row in enumerate(layout):
@@ -94,6 +94,11 @@ def make_all_proofs(data: dict[str, ObjectSprites]):
                 continue
         if proof:
             save_gif(name, proof)
+
+        solo = get_new_gif(obj.frames_count(), 1, 1, *obj.largest_dimensions())
+        if solo:
+            copy_animation_across(colorized_images(name, list(obj)), solo, (1, 1))
+            save_gif(f'{name}-solo', solo)
 
 
 def colorized_images(name: str, images: list[Image.Image], active: bool = True):

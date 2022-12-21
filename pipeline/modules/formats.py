@@ -120,72 +120,20 @@ class FacingOnMove(ObjectSprites):
 
 
 class Joinable(ObjectSprites):
+    up = 0b10
+    down = 0b1000
+    left = 0b100
+    right = 0b1
+
     def __init__(self, name: str,
-                 u: Wobbler,
-                 d: Wobbler,
-                 l: Wobbler,
-                 r: Wobbler,
-                 ul: Wobbler,
-                 ud: Wobbler,
-                 ur: Wobbler,
-                 dl: Wobbler,
-                 dr: Wobbler,
-                 lr: Wobbler,
-                 udl: Wobbler,
-                 udr: Wobbler,
-                 url: Wobbler,
-                 drl: Wobbler,
-                 udlr: Wobbler,
+                 *args: Wobbler
                  ):
         super().__init__(name)
-        self.u = u
-        self.d = d
-        self.l = l
-        self.r = r
-        self.ul = ul
-        self.ud = ud
-        self.ur = ur
-        self.dl = dl
-        self.dr = dr
-        self.lr = lr
-        self.udl = udl
-        self.udr = udr
-        self.url = url
-        self.drl = drl
-        self.udlr = udlr
+        self.frames = args
 
     def __iter__(self):
-        yield from self.u
-        yield from self.d
-        yield from self.l
-        yield from self.r
-        yield from self.ul
-        yield from self.ud
-        yield from self.ur
-        yield from self.dl
-        yield from self.dr
-        yield from self.lr
-        yield from self.udl
-        yield from self.udr
-        yield from self.url
-        yield from self.drl
-        yield from self.udlr
+        for item in self.frames:
+            yield from item
 
     def frames_count(self):
-        return sum(i.frames_count() for i in [
-            self.u,
-            self.d,
-            self.l,
-            self.r,
-            self.ul,
-            self.ud,
-            self.ur,
-            self.dl,
-            self.dr,
-            self.lr,
-            self.udl,
-            self.udr,
-            self.url,
-            self.drl,
-            self.udlr,
-        ] if i)
+        return sum(i.frames_count() for i in self.frames if i)

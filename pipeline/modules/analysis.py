@@ -40,26 +40,22 @@ def analyze_simple_animated_on_move(name: str, images: dict[int, dict[int, Any]]
 def analyze_joinable(name: str, images: dict[int, dict[int, Any]]) -> Joinable:
     def d():
         for phase in sorted(images.keys()):
-            yield analyze_simple(name, images[phase])
+            pname = name + '.'
+            if phase == 0:
+                pname += '0'
+            if phase & Joinable.up:
+                pname += 'u'
+            if phase & Joinable.down:
+                pname += 'd'
+            if phase & Joinable.left:
+                pname += 'l'
+            if phase & Joinable.right:
+                pname += 'r'
+            yield analyze_simple(pname, images[phase])
 
-    phases = d()
     return Joinable(
         name,
-        u=next(phases),
-        d=next(phases),
-        l=next(phases),
-        r=next(phases),
-        ul=next(phases),
-        ud=next(phases),
-        ur=next(phases),
-        dl=next(phases),
-        dr=next(phases),
-        lr=next(phases),
-        udl=next(phases),
-        udr=next(phases),
-        url=next(phases),
-        drl=next(phases),
-        udlr=next(phases),
+        *d(),
     )
 
 

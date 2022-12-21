@@ -100,4 +100,4 @@ if __name__ == "__main__":
     analysis_result = analyze_images(images, load_information()[0])
     save_object_info()
     save_palette_info()
-    # make_all_proofs(analysis_result)
+    make_all_proofs(analysis_result)

@@ -33,7 +33,7 @@ class ObjectSprites:
         return math.lcm(*map(lambda x: x.frames_count(), self))
 
     def __repr__(self):
-        return f'{self.__class__.__name__}<{".".join([self.name, *self.rest])}>'
+        return f'{self.__class__.__name__}<{str(self)}>'
 
     def largest_dimensions(self) -> tuple[int, int]:
         xs = []
@@ -43,6 +43,9 @@ class ObjectSprites:
             xs.append(x)
             ys.append(y)
         return max(xs), max(ys)
+
+    def __str__(self):
+        return ".".join([self.name, *self.rest])
 
 
 class Wobbler(ObjectSprites):
@@ -84,13 +87,13 @@ class FacingOnMove(ObjectSprites):
                  ):
         super().__init__(name)
         self.up = up
-        self.left = left
-        self.right = right
-        self.down = down
         self.sleep_up = sleep_up
+        self.left = left
         self.sleep_left = sleep_left
-        self.sleep_right = sleep_right
+        self.down = down
         self.sleep_down = sleep_down
+        self.right = right
+        self.sleep_right = sleep_right
 
     def __iter__(self):
         yield from self.up

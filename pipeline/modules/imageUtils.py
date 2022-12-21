@@ -1,27 +1,16 @@
 import functools
-import glob
 import pathlib
 from PIL import Image
 
 from modules.formats import ImageCollection
-from modules.vars import ALL_FILES, CUSTOM_FILES_PATH, IMAGE_MODE, SPRITES_PATH, info_re, WIDTH, HEIGHT, WPAD, HPAD
+from modules.vars import ALL_FILES, IMAGE_MODE, info_re, WIDTH, HEIGHT, WPAD, HPAD
 
 CACHED_SPRITES: dict[str, list[Image.Image]] = {}
 
 __all__ = [
     'load_image',
     'open_all_images',
-    'load_sprites',
 ]
-
-
-@functools.lru_cache
-def load_sprites(name: str) -> list[Image.Image]:
-    matches = glob.glob(str(SPRITES_PATH / f"{name}_*.png"))
-    if not matches:
-        matches = glob.glob(str(CUSTOM_FILES_PATH / f"{name}_*.png"))
-    images = [load_image(file) for file in matches]
-    return images
 
 
 @functools.lru_cache

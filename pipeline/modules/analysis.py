@@ -39,7 +39,7 @@ def analyze_simple_animated_on_move(name: str, images: dict[int, dict[int, Any]]
 
 def analyze_joinable(name: str, images: dict[int, dict[int, Any]]) -> Joinable:
     def d():
-        for phase in sorted(images.keys()):
+        for phase in sorted(images.keys())[:16]:
             pname = name + '.'
             if phase == 0:
                 pname += '0'

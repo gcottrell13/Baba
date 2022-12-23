@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 
-namespace BabaGame.Content {
+namespace Content {
     public static class Sheets {
         public static Dictionary<string, Texture2D> GetSheets(GraphicsDevice graphics) => new Dictionary<string, Texture2D>() {
 			{ "algae", Texture2D.FromStream(graphics, new MemoryStream(System.Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAABm0lEQVR4nO2Zy5IDIQhF6an5/192NknKMvJG+/aUZxtAUMAOEh0OEFzcD6219hG6LlZulLfIZnSsuj+S0hPgfP0KbBT07mZ7UeGchObX9MSsypLs6uA0eTawSN57daKbYal/NrBISkkLVclbffoKbHdKzda02pb0pidWkSIetjaPSI159aPpbiHcFSWnPBe6pNc6NHsjYmCcwepdvl5ovvQy4XZvcT6brpqNjP2potZ9Mt94szUsp+VdT0xFzVhV8a9oICWfVBXturqe1RPjnFpdX0S5kwx1xTcVwVmIbKTpy2NG9eWq1bLbXsSJ7H+2HeuEaqxfaGU6ZmynAkMeIaQCW82yrsixqxvevebhsJLofBClU6rNA8VRL2XtHm0DSoY5aEERJUcDM1Dum9LXFpSgiJKjgRGklBSfkaxBecZiu1jyEYwQXGo00F/ISPVFtOC1BYXS1xZO/w7M4y+pQSAEMuK+oJ8QFJGxK3LOowZFVHxBI3GmVG+ech2UvG8RPTdlWZDGAT3QA9MMv1FFxFPqKTmxf1dfhxv4A2uxUDG9ZCe1AAAAAElFTkSuQmCC"))) },

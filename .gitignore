@@ -1,34 +1,18 @@
 
 baba_analysis/
 
-BabaSource/BabaGame/bin/
-
-BabaSource/BabaGame/Content/bin/
-
-BabaSource/BabaGame/Content/obj/
-
-BabaSource/BabaGame/obj/
-
-BabaSource/.vs/Baba/v16/
-
-BabaSource/Core/bin
-
-BabaSource/Core/obj
-
-BabaSource/.vs/
+**/bin/
+**/obj/
+**/.vs/
 
 pipeline/.vscode/
 
-pipeline/__pycache__/
+**/__pycache__/
 
 *.tiled-session
 
-BabaSource/Tests/obj/
-
-BabaSource/Tests/bin/
-
 pipeline/env.py
 
-*.pyc
-
 pipeline/modules/env.py
+
+.idea

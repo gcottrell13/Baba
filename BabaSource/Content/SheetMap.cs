@@ -1,17 +1,14 @@
 
 using Microsoft.Xna.Framework.Graphics; 
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.IO;
-using BabaGame.src.Objects;
 
-namespace BabaGame.Content {
+namespace Content {
     public static class SheetMap {
         public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {
             return new Dictionary<string, SpriteValues>() {
 			{ "algae", new Wobbler("algae", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["algae"]) },
 			{ "arm", new FacingOnMove(
-    name: "arm", 
+                name: "arm", 
 				up: new AnimateOnMove("arm", new Wobbler[] {
 	new Wobbler("arm.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["arm"]), 
 	new Wobbler("arm.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["arm"]), 
@@ -38,7 +35,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "arrow", new FacingOnMove(
-    name: "arrow", 
+                name: "arrow", 
 				up: new AnimateOnMove("arrow", new Wobbler[] {
 	new Wobbler("arrow.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["arrow"]) }), 
 				sleep_up: null, 
@@ -53,7 +50,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "baba", new FacingOnMove(
-    name: "baba", 
+                name: "baba", 
 				up: new AnimateOnMove("baba", new Wobbler[] {
 	new Wobbler("baba.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["baba"]), 
 	new Wobbler("baba.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["baba"]), 
@@ -84,7 +81,7 @@ namespace BabaGame.Content {
 	new Wobbler("baba.sleep_right.0", new[] { new Vector2(1, 7), new Vector2(2, 7), new Vector2(3, 7) }, sheets["baba"]) })
 ) },
 			{ "badbad", new FacingOnMove(
-    name: "badbad", 
+                name: "badbad", 
 				up: new AnimateOnMove("badbad", new Wobbler[] {
 	new Wobbler("badbad.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["badbad"]), 
 	new Wobbler("badbad.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["badbad"]), 
@@ -121,7 +118,7 @@ namespace BabaGame.Content {
 	new Wobbler("bat.2", new[] { new Vector2(2, 1), new Vector2(3, 1), new Vector2(0, 2) }, sheets["bat"]), 
 	new Wobbler("bat.3", new[] { new Vector2(1, 2), new Vector2(2, 2), new Vector2(3, 2) }, sheets["bat"]) }) },
 			{ "bed", new FacingOnMove(
-    name: "bed", 
+                name: "bed", 
 				up: new AnimateOnMove("bed", new Wobbler[] {
 	new Wobbler("bed.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bed"]) }), 
 				sleep_up: null, 
@@ -136,7 +133,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "bee", new FacingOnMove(
-    name: "bee", 
+                name: "bee", 
 				up: new AnimateOnMove("bee", new Wobbler[] {
 	new Wobbler("bee.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bee"]) }), 
 				sleep_up: null, 
@@ -151,7 +148,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "belt", new FacingOnMove(
-    name: "belt", 
+                name: "belt", 
 				up: new AnimateOnMove("belt", new Wobbler[] {
 	new Wobbler("belt.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["belt"]), 
 	new Wobbler("belt.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["belt"]), 
@@ -178,7 +175,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "bird", new FacingOnMove(
-    name: "bird", 
+                name: "bird", 
 				up: new AnimateOnMove("bird", new Wobbler[] {
 	new Wobbler("bird.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bird"]) }), 
 				sleep_up: null, 
@@ -210,7 +207,7 @@ namespace BabaGame.Content {
 	new Wobbler("blob.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["blob"]), 
 	new Wobbler("blob.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["blob"]) }) },
 			{ "boat", new FacingOnMove(
-    name: "boat", 
+                name: "boat", 
 				up: new AnimateOnMove("boat", new Wobbler[] {
 	new Wobbler("boat.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["boat"]) }), 
 				sleep_up: null, 
@@ -243,7 +240,7 @@ namespace BabaGame.Content {
 	new Wobbler("bog.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["bog"]), 
 	new Wobbler("bog.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["bog"]) }) },
 			{ "bolt", new FacingOnMove(
-    name: "bolt", 
+                name: "bolt", 
 				up: new AnimateOnMove("bolt", new Wobbler[] {
 	new Wobbler("bolt.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bolt"]) }), 
 				sleep_up: null, 
@@ -285,7 +282,7 @@ namespace BabaGame.Content {
 	new Wobbler("bubble.3", new[] { new Vector2(1, 2), new Vector2(2, 2), new Vector2(3, 2) }, sheets["bubble"]) }) },
 			{ "bucket", new Wobbler("bucket", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["bucket"]) },
 			{ "bug", new FacingOnMove(
-    name: "bug", 
+                name: "bug", 
 				up: new AnimateOnMove("bug", new Wobbler[] {
 	new Wobbler("bug.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bug"]) }), 
 				sleep_up: null, 
@@ -300,7 +297,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "bunny", new FacingOnMove(
-    name: "bunny", 
+                name: "bunny", 
 				up: new AnimateOnMove("bunny", new Wobbler[] {
 	new Wobbler("bunny.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["bunny"]), 
 	new Wobbler("bunny.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["bunny"]), 
@@ -334,7 +331,7 @@ namespace BabaGame.Content {
 			{ "burger", new Wobbler("burger", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["burger"]) },
 			{ "cake", new Wobbler("cake", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["cake"]) },
 			{ "car", new FacingOnMove(
-    name: "car", 
+                name: "car", 
 				up: new AnimateOnMove("car", new Wobbler[] {
 	new Wobbler("car.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["car"]) }), 
 				sleep_up: null, 
@@ -349,7 +346,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "cart", new FacingOnMove(
-    name: "cart", 
+                name: "cart", 
 				up: new AnimateOnMove("cart", new Wobbler[] {
 	new Wobbler("cart.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["cart"]) }), 
 				sleep_up: null, 
@@ -365,7 +362,7 @@ namespace BabaGame.Content {
 ) },
 			{ "cash", new Wobbler("cash", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["cash"]) },
 			{ "cat", new FacingOnMove(
-    name: "cat", 
+                name: "cat", 
 				up: new AnimateOnMove("cat", new Wobbler[] {
 	new Wobbler("cat.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["cat"]), 
 	new Wobbler("cat.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["cat"]), 
@@ -396,7 +393,7 @@ namespace BabaGame.Content {
 	new Wobbler("cat.sleep_right.0", new[] { new Vector2(1, 7), new Vector2(2, 7), new Vector2(3, 7) }, sheets["cat"]) })
 ) },
 			{ "chair", new FacingOnMove(
-    name: "chair", 
+                name: "chair", 
 				up: new AnimateOnMove("chair", new Wobbler[] {
 	new Wobbler("chair.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["chair"]) }), 
 				sleep_up: null, 
@@ -457,7 +454,7 @@ namespace BabaGame.Content {
 	new Wobbler("cog.2", new[] { new Vector2(2, 1), new Vector2(3, 1), new Vector2(0, 2) }, sheets["cog"]), 
 	new Wobbler("cog.3", new[] { new Vector2(1, 2), new Vector2(2, 2), new Vector2(3, 2) }, sheets["cog"]) }) },
 			{ "crab", new FacingOnMove(
-    name: "crab", 
+                name: "crab", 
 				up: new AnimateOnMove("crab", new Wobbler[] {
 	new Wobbler("crab.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["crab"]) }), 
 				sleep_up: null, 
@@ -472,7 +469,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "crystal", new FacingOnMove(
-    name: "crystal", 
+                name: "crystal", 
 				up: new AnimateOnMove("crystal", new Wobbler[] {
 	new Wobbler("crystal.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["crystal"]) }), 
 				sleep_up: null, 
@@ -489,7 +486,7 @@ namespace BabaGame.Content {
 			{ "cup", new Wobbler("cup", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["cup"]) },
 			{ "cursor", new Wobbler("cursor", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["cursor"]) },
 			{ "dog", new FacingOnMove(
-    name: "dog", 
+                name: "dog", 
 				up: new AnimateOnMove("dog", new Wobbler[] {
 	new Wobbler("dog.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["dog"]), 
 	new Wobbler("dog.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["dog"]), 
@@ -526,7 +523,7 @@ namespace BabaGame.Content {
 			{ "drum", new Wobbler("drum", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["drum"]) },
 			{ "dust", new Wobbler("dust", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["dust"]) },
 			{ "ear", new FacingOnMove(
-    name: "ear", 
+                name: "ear", 
 				up: new AnimateOnMove("ear", new Wobbler[] {
 	new Wobbler("ear.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["ear"]) }), 
 				sleep_up: null, 
@@ -541,7 +538,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "egg", new FacingOnMove(
-    name: "egg", 
+                name: "egg", 
 				up: new AnimateOnMove("egg", new Wobbler[] {
 	new Wobbler("egg.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["egg"]) }), 
 				sleep_up: null, 
@@ -556,7 +553,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "eye", new FacingOnMove(
-    name: "eye", 
+                name: "eye", 
 				up: new AnimateOnMove("eye", new Wobbler[] {
 	new Wobbler("eye.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["eye"]), 
 	new Wobbler("eye.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["eye"]), 
@@ -605,7 +602,7 @@ namespace BabaGame.Content {
 	new Wobbler("fence.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["fence"]) }) },
 			{ "fire", new Wobbler("fire", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["fire"]) },
 			{ "fish", new FacingOnMove(
-    name: "fish", 
+                name: "fish", 
 				up: new AnimateOnMove("fish", new Wobbler[] {
 	new Wobbler("fish.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["fish"]) }), 
 				sleep_up: null, 
@@ -622,7 +619,7 @@ namespace BabaGame.Content {
 			{ "flag", new Wobbler("flag", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["flag"]) },
 			{ "flower", new Wobbler("flower", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["flower"]) },
 			{ "fofo", new FacingOnMove(
-    name: "fofo", 
+                name: "fofo", 
 				up: new AnimateOnMove("fofo", new Wobbler[] {
 	new Wobbler("fofo.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["fofo"]), 
 	new Wobbler("fofo.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["fofo"]), 
@@ -654,7 +651,7 @@ namespace BabaGame.Content {
 ) },
 			{ "foliage", new Wobbler("foliage", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["foliage"]) },
 			{ "foot", new FacingOnMove(
-    name: "foot", 
+                name: "foot", 
 				up: new AnimateOnMove("foot", new Wobbler[] {
 	new Wobbler("foot.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["foot"]) }), 
 				sleep_up: null, 
@@ -686,7 +683,7 @@ namespace BabaGame.Content {
 	new Wobbler("fort.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["fort"]), 
 	new Wobbler("fort.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["fort"]) }) },
 			{ "frog", new FacingOnMove(
-    name: "frog", 
+                name: "frog", 
 				up: new AnimateOnMove("frog", new Wobbler[] {
 	new Wobbler("frog.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["frog"]), 
 	new Wobbler("frog.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["frog"]), 
@@ -722,7 +719,7 @@ namespace BabaGame.Content {
 			{ "gate", new Wobbler("gate", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["gate"]) },
 			{ "gem", new Wobbler("gem", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["gem"]) },
 			{ "ghost", new FacingOnMove(
-    name: "ghost", 
+                name: "ghost", 
 				up: new AnimateOnMove("ghost", new Wobbler[] {
 	new Wobbler("ghost.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["ghost"]) }), 
 				sleep_up: null, 
@@ -755,7 +752,7 @@ namespace BabaGame.Content {
 	new Wobbler("grass.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["grass"]) }) },
 			{ "guitar", new Wobbler("guitar", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["guitar"]) },
 			{ "hand", new FacingOnMove(
-    name: "hand", 
+                name: "hand", 
 				up: new AnimateOnMove("hand", new Wobbler[] {
 	new Wobbler("hand.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["hand"]) }), 
 				sleep_up: null, 
@@ -808,7 +805,7 @@ namespace BabaGame.Content {
 	new Wobbler("ice.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["ice"]), 
 	new Wobbler("ice.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["ice"]) }) },
 			{ "it", new FacingOnMove(
-    name: "it", 
+                name: "it", 
 				up: new AnimateOnMove("it", new Wobbler[] {
 	new Wobbler("it.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["it"]), 
 	new Wobbler("it.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["it"]), 
@@ -840,7 +837,7 @@ namespace BabaGame.Content {
 ) },
 			{ "jelly", new Wobbler("jelly", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["jelly"]) },
 			{ "jiji", new FacingOnMove(
-    name: "jiji", 
+                name: "jiji", 
 				up: new AnimateOnMove("jiji", new Wobbler[] {
 	new Wobbler("jiji.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["jiji"]), 
 	new Wobbler("jiji.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["jiji"]), 
@@ -871,7 +868,7 @@ namespace BabaGame.Content {
 	new Wobbler("jiji.sleep_right.0", new[] { new Vector2(1, 7), new Vector2(2, 7), new Vector2(3, 7) }, sheets["jiji"]) })
 ) },
 			{ "keke", new FacingOnMove(
-    name: "keke", 
+                name: "keke", 
 				up: new AnimateOnMove("keke", new Wobbler[] {
 	new Wobbler("keke.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["keke"]), 
 	new Wobbler("keke.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["keke"]), 
@@ -924,7 +921,7 @@ namespace BabaGame.Content {
 	new Wobbler("lava.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["lava"]) }) },
 			{ "leaf", new Wobbler("leaf", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["leaf"]) },
 			{ "lever", new FacingOnMove(
-    name: "lever", 
+                name: "lever", 
 				up: new AnimateOnMove("lever", new Wobbler[] {
 	new Wobbler("lever.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["lever"]) }), 
 				sleep_up: null, 
@@ -939,7 +936,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "lift", new FacingOnMove(
-    name: "lift", 
+                name: "lift", 
 				up: new AnimateOnMove("lift", new Wobbler[] {
 	new Wobbler("lift.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["lift"]) }), 
 				sleep_up: null, 
@@ -972,7 +969,7 @@ namespace BabaGame.Content {
 	new Wobbler("line.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["line"]), 
 	new Wobbler("line.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["line"]) }) },
 			{ "lizard", new FacingOnMove(
-    name: "lizard", 
+                name: "lizard", 
 				up: new AnimateOnMove("lizard", new Wobbler[] {
 	new Wobbler("lizard.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["lizard"]), 
 	new Wobbler("lizard.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["lizard"]), 
@@ -1005,7 +1002,7 @@ namespace BabaGame.Content {
 			{ "lock", new Wobbler("lock", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["lock"]) },
 			{ "love", new Wobbler("love", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["love"]) },
 			{ "me", new FacingOnMove(
-    name: "me", 
+                name: "me", 
 				up: new AnimateOnMove("me", new Wobbler[] {
 	new Wobbler("me.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["me"]), 
 	new Wobbler("me.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["me"]), 
@@ -1038,7 +1035,7 @@ namespace BabaGame.Content {
 			{ "mirror", new Wobbler("mirror", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["mirror"]) },
 			{ "monitor", new Wobbler("monitor", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["monitor"]) },
 			{ "monster", new FacingOnMove(
-    name: "monster", 
+                name: "monster", 
 				up: new AnimateOnMove("monster", new Wobbler[] {
 	new Wobbler("monster.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["monster"]), 
 	new Wobbler("monster.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["monster"]), 
@@ -1070,7 +1067,7 @@ namespace BabaGame.Content {
 ) },
 			{ "moon", new Wobbler("moon", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["moon"]) },
 			{ "nose", new FacingOnMove(
-    name: "nose", 
+                name: "nose", 
 				up: new AnimateOnMove("nose", new Wobbler[] {
 	new Wobbler("nose.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["nose"]) }), 
 				sleep_up: null, 
@@ -1089,7 +1086,7 @@ namespace BabaGame.Content {
 			{ "paper", new Wobbler("paper", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["paper"]) },
 			{ "pawn", new Wobbler("pawn", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["pawn"]) },
 			{ "piano", new FacingOnMove(
-    name: "piano", 
+                name: "piano", 
 				up: new AnimateOnMove("piano", new Wobbler[] {
 	new Wobbler("piano.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["piano"]) }), 
 				sleep_up: null, 
@@ -1124,7 +1121,7 @@ namespace BabaGame.Content {
 			{ "pixel", new Wobbler("pixel", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["pixel"]) },
 			{ "pizza", new Wobbler("pizza", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["pizza"]) },
 			{ "plane", new FacingOnMove(
-    name: "plane", 
+                name: "plane", 
 				up: new AnimateOnMove("plane", new Wobbler[] {
 	new Wobbler("plane.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["plane"]) }), 
 				sleep_up: null, 
@@ -1158,7 +1155,7 @@ namespace BabaGame.Content {
 	new Wobbler("plank.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["plank"]) }) },
 			{ "potato", new Wobbler("potato", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["potato"]) },
 			{ "pumpkin", new FacingOnMove(
-    name: "pumpkin", 
+                name: "pumpkin", 
 				up: new AnimateOnMove("pumpkin", new Wobbler[] {
 	new Wobbler("pumpkin.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["pumpkin"]) }), 
 				sleep_up: null, 
@@ -1192,7 +1189,7 @@ namespace BabaGame.Content {
 	new Wobbler("road.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["road"]), 
 	new Wobbler("road.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["road"]) }) },
 			{ "robot", new FacingOnMove(
-    name: "robot", 
+                name: "robot", 
 				up: new AnimateOnMove("robot", new Wobbler[] {
 	new Wobbler("robot.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["robot"]), 
 	new Wobbler("robot.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["robot"]), 
@@ -1224,7 +1221,7 @@ namespace BabaGame.Content {
 ) },
 			{ "rock", new Wobbler("rock", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["rock"]) },
 			{ "rocket", new FacingOnMove(
-    name: "rocket", 
+                name: "rocket", 
 				up: new AnimateOnMove("rocket", new Wobbler[] {
 	new Wobbler("rocket.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["rocket"]) }), 
 				sleep_up: null, 
@@ -1257,7 +1254,7 @@ namespace BabaGame.Content {
 	new Wobbler("rubble.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["rubble"]), 
 	new Wobbler("rubble.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["rubble"]) }) },
 			{ "sax", new FacingOnMove(
-    name: "sax", 
+                name: "sax", 
 				up: new AnimateOnMove("sax", new Wobbler[] {
 	new Wobbler("sax.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["sax"]) }), 
 				sleep_up: null, 
@@ -1272,7 +1269,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "scissors", new FacingOnMove(
-    name: "scissors", 
+                name: "scissors", 
 				up: new AnimateOnMove("scissors", new Wobbler[] {
 	new Wobbler("scissors.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["scissors"]), 
 	new Wobbler("scissors.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["scissors"]), 
@@ -1302,7 +1299,7 @@ namespace BabaGame.Content {
 			{ "shell", new Wobbler("shell", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["shell"]) },
 			{ "shirt", new Wobbler("shirt", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["shirt"]) },
 			{ "shovel", new FacingOnMove(
-    name: "shovel", 
+                name: "shovel", 
 				up: new AnimateOnMove("shovel", new Wobbler[] {
 	new Wobbler("shovel.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["shovel"]) }), 
 				sleep_up: null, 
@@ -1318,7 +1315,7 @@ namespace BabaGame.Content {
 ) },
 			{ "sign", new Wobbler("sign", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["sign"]) },
 			{ "skull", new FacingOnMove(
-    name: "skull", 
+                name: "skull", 
 				up: new AnimateOnMove("skull", new Wobbler[] {
 	new Wobbler("skull.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["skull"]) }), 
 				sleep_up: null, 
@@ -1333,7 +1330,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "snail", new FacingOnMove(
-    name: "snail", 
+                name: "snail", 
 				up: new AnimateOnMove("snail", new Wobbler[] {
 	new Wobbler("snail.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["snail"]) }), 
 				sleep_up: null, 
@@ -1352,7 +1349,7 @@ namespace BabaGame.Content {
 			{ "square", new Wobbler("square", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["square"]) },
 			{ "star", new Wobbler("star", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["star"]) },
 			{ "statue", new FacingOnMove(
-    name: "statue", 
+                name: "statue", 
 				up: new AnimateOnMove("statue", new Wobbler[] {
 	new Wobbler("statue.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["statue"]) }), 
 				sleep_up: null, 
@@ -1370,7 +1367,7 @@ namespace BabaGame.Content {
 			{ "stump", new Wobbler("stump", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["stump"]) },
 			{ "sun", new Wobbler("sun", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["sun"]) },
 			{ "sword", new FacingOnMove(
-    name: "sword", 
+                name: "sword", 
 				up: new AnimateOnMove("sword", new Wobbler[] {
 	new Wobbler("sword.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["sword"]) }), 
 				sleep_up: null, 
@@ -1723,7 +1720,7 @@ namespace BabaGame.Content {
 	new Wobbler("track.udl", new[] { new Vector2(0, 6), new Vector2(1, 6), new Vector2(2, 6) }, sheets["track"]), 
 	new Wobbler("track.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["track"]) }) },
 			{ "train", new FacingOnMove(
-    name: "train", 
+                name: "train", 
 				up: new AnimateOnMove("train", new Wobbler[] {
 	new Wobbler("train.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["train"]) }), 
 				sleep_up: null, 
@@ -1741,7 +1738,7 @@ namespace BabaGame.Content {
 			{ "trees", new Wobbler("trees", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["trees"]) },
 			{ "triangle", new Wobbler("triangle", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["triangle"]) },
 			{ "trumpet", new FacingOnMove(
-    name: "trumpet", 
+                name: "trumpet", 
 				up: new AnimateOnMove("trumpet", new Wobbler[] {
 	new Wobbler("trumpet.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["trumpet"]) }), 
 				sleep_up: null, 
@@ -1757,7 +1754,7 @@ namespace BabaGame.Content {
 ) },
 			{ "turnip", new Wobbler("turnip", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["turnip"]) },
 			{ "turtle", new FacingOnMove(
-    name: "turtle", 
+                name: "turtle", 
 				up: new AnimateOnMove("turtle", new Wobbler[] {
 	new Wobbler("turtle.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["turtle"]), 
 	new Wobbler("turtle.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["turtle"]), 
@@ -1842,7 +1839,7 @@ namespace BabaGame.Content {
 	new Wobbler("water.udlr", new[] { new Vector2(3, 6), new Vector2(4, 6), new Vector2(5, 6) }, sheets["water"]) }) },
 			{ "what", new Wobbler("what", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1) }, sheets["what"]) },
 			{ "wind", new FacingOnMove(
-    name: "wind", 
+                name: "wind", 
 				up: new AnimateOnMove("wind", new Wobbler[] {
 	new Wobbler("wind.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["wind"]) }), 
 				sleep_up: null, 
@@ -1857,7 +1854,7 @@ namespace BabaGame.Content {
 				sleep_right: null
 ) },
 			{ "worm", new FacingOnMove(
-    name: "worm", 
+                name: "worm", 
 				up: new AnimateOnMove("worm", new Wobbler[] {
 	new Wobbler("worm.up.0", new[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(2, 0) }, sheets["worm"]), 
 	new Wobbler("worm.up.1", new[] { new Vector2(3, 0), new Vector2(4, 0), new Vector2(5, 0) }, sheets["worm"]), 

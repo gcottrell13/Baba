@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
 
-namespace BabaGame.Content {
+namespace Content {
     public static class PaletteInfo {
         private const int shift = 3;
 		private static readonly Dictionary<int, Color> palette_abstract = new Dictionary<int, Color>() { 

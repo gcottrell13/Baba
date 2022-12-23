@@ -20,12 +20,12 @@ CUSTOM_SPRITES_PATH = CUSTOM_FILES_PATH / 'images'
 CUSTOM_VALUES_FILE_PATH = CUSTOM_FILES_PATH / 'CustomColors.json'
 
 VISUAL_OUTPUT_DIRECTORY = PIPELINE_PATH / 'baba_analysis'
-OUTPUT_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'BabaGame' / 'Content'
+OUTPUT_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'Content'
 
-MAPS_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'BabaGame' / 'Content' / 'Maps'
+MAPS_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'Content' / 'Maps'
 
 os.makedirs(VISUAL_OUTPUT_DIRECTORY, exist_ok=True)
-os.makedirs(OUTPUT_DIRECTORY / 'Sheets', exist_ok=True)
+# os.makedirs(OUTPUT_DIRECTORY / 'Sheets', exist_ok=True)
 os.makedirs(MAPS_DIRECTORY, exist_ok=True)
 
 ALL_FILES = glob.glob(

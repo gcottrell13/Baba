@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src.Engine
+namespace Core.Utils
 {
     public enum Direction
     {
@@ -15,7 +15,7 @@ namespace BabaGame.src.Engine
 
     public static class DirectionExtensions
     {
-        public static Direction FromString(string? direction) => direction switch
+        public static Direction FromString(string? direction) => direction?.ToLower() switch
         {
             "up" => Direction.Up,
             "down" => Direction.Down,

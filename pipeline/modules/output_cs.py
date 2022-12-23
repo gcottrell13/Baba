@@ -38,7 +38,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BabaGame.Content {{
+namespace Content {{
     public struct ObjectInfoItem {{
         public int color;
         public int color_active;
@@ -83,7 +83,7 @@ def save_palette_info():
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
 
-namespace BabaGame.Content {{
+namespace Content {{
     public static class PaletteInfo {{
         private const int shift = {(7).bit_length()};
 {items}
@@ -193,7 +193,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 
-namespace BabaGame.Content {{
+namespace Content {{
     public static class Sheets {{
         public static Dictionary<string, Texture2D> GetSheets(GraphicsDevice graphics) => new Dictionary<string, Texture2D>() {{
 {sheet_text}
@@ -203,12 +203,9 @@ namespace BabaGame.Content {{
     """,
             'SheetMap.cs': f"""
 using Microsoft.Xna.Framework.Graphics; 
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using System.IO;
-using BabaGame.src.Objects;
 
-namespace BabaGame.Content {{
+namespace Content {{
     public static class SheetMap {{
         public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {{
             return new Dictionary<string, SpriteValues>() {{

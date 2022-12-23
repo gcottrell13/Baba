@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BabaGame.Content {
+namespace Content {
     public struct ObjectInfoItem {
         public int color;
         public int color_active;
@@ -11,7 +11,7 @@ namespace BabaGame.Content {
         public int layer;
         public string unittype;
     }
-    
+
     public static class ObjectInfo {
         private const int shift = 3;
         public static readonly Dictionary<string, ObjectInfoItem> Info = new Dictionary<string, ObjectInfoItem>() {

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BabaGame", "BabaGame\BabaGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{9224C5A9-75AB-422C-8507-C6242CA2BF3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content", "Content\Content.csproj", "{5F0A7FF7-9C33-498D-871F-1AF4E07E0D86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content", "Content\Content.csproj", "{5F0A7FF7-9C33-498D-871F-1AF4E07E0D86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{77018DE6-DCF6-48D7-B828-9BA97D974722}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5F0A7FF7-9C33-498D-871F-1AF4E07E0D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F0A7FF7-9C33-498D-871F-1AF4E07E0D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F0A7FF7-9C33-498D-871F-1AF4E07E0D86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,8 +7,6 @@ namespace Core.Utils
 {
     public sealed class SpriteContainer : BaseSprite
     {
-        public static SpriteContainer ROOT = new SpriteContainer();
-
         public readonly List<BaseSprite> children = new List<BaseSprite>();
 
         private bool _shouldReorder = false;

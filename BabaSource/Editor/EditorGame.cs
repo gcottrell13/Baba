@@ -34,7 +34,7 @@ namespace Editor
         {
             public override void Initialize()
             {
-                AddChild(new Text("hello-[blue]there/[100,255,100]?\nBaba [white][baba][green] says:[200, 200, 200] \"hi\"", Color.Red), true);
+                AddChild(new Text("hello-[blue]there/[100,255,100]?\nBaba [arrow] [white][baba:17][green] says:[200, 200, 200] \"hi\"", Color.Red), true);
             }
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Core.Utils
@@ -21,6 +22,7 @@ namespace Core.Utils
         public abstract Wobbler GetInitial(int d);
     }
 
+    [DebuggerDisplay("Wobbler {Name,nq} {RestName,nq}")]
     public class Wobbler : SpriteValues
     {
         public Wobbler(string name, Point[] positions, Point size, Texture2D tex) : base(name)
@@ -43,6 +45,7 @@ namespace Core.Utils
         public override Wobbler GetInitial(int d) => this;
     }
 
+    [DebuggerDisplay("Joinable {Name,nq} {RestName,nq}")]
     public class Joinable : SpriteValues
     {
         public const int Up = 0b10;
@@ -65,6 +68,7 @@ namespace Core.Utils
         }
     }
 
+    [DebuggerDisplay("AnimateOnMove {Name,nq} {RestName,nq}")]
     public class AnimateOnMove : SpriteValues
     {
         public AnimateOnMove(string name, Wobbler[] frames) : base(name)
@@ -83,6 +87,7 @@ namespace Core.Utils
         }
     }
 
+    [DebuggerDisplay("FacingOnMove {Name,nq} {RestName,nq}")]
     public class FacingOnMove : SpriteValues
     {
         public const int SLEEP = 16;

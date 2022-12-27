@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Core
 {
-    [DebuggerDisplay("GameObject {name}")]
+    [DebuggerDisplay("GameObject {Name}")]
     public abstract class GameObject
     {
         protected MouseState MouseState => CoreMouse.mouseState;

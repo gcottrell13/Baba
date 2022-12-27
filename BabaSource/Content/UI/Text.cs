@@ -27,27 +27,38 @@ namespace Content.UI
             }
         }
 
-        private bool _tryGetLetter(string letter, out AnimatedWobblerSprite sprite)
+        private bool _tryGetLetter(string name, out AnimatedWobblerSprite sprite, out string compoundName)
         {
             sprite = null;
+            compoundName = "";
             if (ContentLoader.LoadedContent == null) return false;
 
-            if (!_cache.ContainsKey(letter))
-            {
-                var name = letter switch
-                {
-                    "?" => "what",
-                    "/" => "text_fwslash",
-                    "-" => "text_hyphen",
-                    "\"" => "text_quote",
-                    "'" => "text_apos",
-                    ":" => "text_colon",
-                    _ => letter.Length == 1 ? $"text_{letter}" : letter,
-                };
+            var state = 0;
 
-                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue(name, out var textSprite))
+            if (name != ":" && name.Contains(':'))
+            {
+                var items = name.Split(':');
+                name = items[0];
+                state = int.TryParse(items[1], out var _s) ? _s : 0;
+            }
+
+            var entityName = name switch
+            {
+                "?" => "what",
+                "/" => "text_fwslash",
+                "-" => "text_hyphen",
+                "\"" => "text_quote",
+                "'" => "text_apos",
+                ":" => "text_colon",
+                _ => name.Length == 1 ? $"text_{name}" : name,
+            };
+            compoundName = $"{entityName}.{state}";
+
+            if (!_cache.ContainsKey(compoundName))
+            {
+                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue(entityName, out var textSprite))
                 {
-                    _cache[letter] = new AnimatedWobblerSprite(textSprite, 0);
+                    _cache[compoundName] = new AnimatedWobblerSprite(textSprite, state);
                 }
                 else
                 {
@@ -55,7 +66,7 @@ namespace Content.UI
                 }
             }
 
-            sprite = _cache[letter];
+            sprite = _cache[compoundName];
             return true;
         }
 
@@ -91,15 +102,16 @@ namespace Content.UI
             var x = 0;
             var y = 0;
             AnimatedWobblerSprite letter;
+            string compoundName;
 
             void addCharacter(string character)
             {
-                _currentLetters[character] = letter;
+                _currentLetters[compoundName] = letter;
                 var sprite = new SpriteContainer()
                 {
                     x = x,
                     y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
-                    Name = character + "-textcontainer",
+                    Name = compoundName + "-textcontainer",
                 };
                 sprite.SetColor(color);
                 sprite.AddChild(letter);
@@ -118,7 +130,7 @@ namespace Content.UI
                         {
                             color = _color;
                         }
-                        else if (_tryGetLetter(parsingItem, out letter))
+                        else if (_tryGetLetter(parsingItem, out letter, out compoundName))
                         {
                             addCharacter(character);
                         }
@@ -145,7 +157,7 @@ namespace Content.UI
                     continue;
                 }
 
-                if (_tryGetLetter(character, out letter))
+                if (_tryGetLetter(character, out letter, out compoundName))
                 {
                     addCharacter(character);
                     continue;

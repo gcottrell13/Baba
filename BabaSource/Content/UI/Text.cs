@@ -2,12 +2,12 @@
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
+using System.Reflection;
 
 namespace Content.UI
 {
     public class Text : GameObject
     {
-        private SpriteContainer?[]? _chars;
         private Dictionary<char, AnimatedWobblerSprite>? _currentLetters;
         private Dictionary<char, AnimatedWobblerSprite> _cache = new();
 
@@ -55,42 +55,83 @@ namespace Content.UI
             return true;
         }
 
+        private Color _getColor(string str)
+        {
+            str = str.ToLower();
+            var namedColorProps = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static).ToList();
+            var namedColorProp = namedColorProps.FirstOrDefault(x => x?.Name.ToLower() == str, null);
+            if (namedColorProp?.GetValue(null) is Color c)
+            {
+                return c;
+            }
+
+            var rgb = str.Split(',').Select(c => float.TryParse(c, out var r) ? r : -1).ToArray();
+            if (rgb.Length == 3 && rgb.All(x => x > 0f)) 
+            {
+                return new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);
+            }
+
+            throw new ArgumentException($"Invalid color string: \"{str}\". Must be a named color, or a triplet of numbers 0 to 255");
+        }
+
         public void SetText(string text, Color? color = null, int padding = 0, int lineHeight = 24)
         {
             Graphics.RemoveAllChildren();
+            Name = $"Text: {text}";
+            Graphics.Name = Name;
 
             _currentLetters = new();
+
+            string? parsingColor = null;
+            
+
             var x = 0;
             var y = 0;
-            _chars = text.Select(c =>
-            {
+            foreach (var c in text) {
+                if (parsingColor != null)
+                {
+                    if (c == ']')
+                    {
+                        color = _getColor(parsingColor);
+                        parsingColor = null;
+                        continue;
+                    }
+
+                    parsingColor += c;
+                    continue;
+                }
+
                 if (c == '\n')
                 {
                     y += lineHeight;
                     x = 0;
-                    return null;
+                    continue;
                 }
-                else if (_tryGetLetter(c, out var letter))
+
+                if (c == '[')
+                {
+                    parsingColor = "";
+                    continue;
+                }
+
+                if (_tryGetLetter(c, out var letter))
                 {
                     _currentLetters[c] = letter;
-                    letter.SetColor(color);
-
                     var sprite = new SpriteContainer()
                     {
                         x = x,
                         y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
+                        Name = c.ToString() + "-container",
                     };
+                    sprite.SetColor(color);
                     sprite.AddChild(letter);
                     Graphics.AddChild(sprite);
                     x += letter.CurrentWobbler.Size.X + padding;
-                    return sprite;
+                    continue;
                 }
-                else
-                {
-                    x += 24;
-                    return null;
-                }
-            }).ToArray();
+
+                x += 24;
+            }
         }
     }
 }

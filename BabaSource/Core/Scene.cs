@@ -33,6 +33,7 @@ namespace Core
                 Transform = Matrix.Identity,
                 Rotation = 0,
                 Alpha = 1.0f,
+                Color = Color.White,
             });
         }
 
@@ -43,6 +44,7 @@ namespace Core
                 Transform = sprite.TransformMatrix,
                 Rotation = sprite.rotation,
                 Alpha = sprite.alpha,
+                Color = sprite.color,
             } * transformStack.Peek());
         }
 
@@ -84,6 +86,7 @@ namespace Core
         public Matrix Transform;
         public double Rotation;
         public float Alpha;
+        public Color Color;
 
         public static TransformationItem operator *(TransformationItem t1, TransformationItem t2)
         {
@@ -92,6 +95,7 @@ namespace Core
                 Transform = t1.Transform * t2.Transform,
                 Rotation = t1.Rotation + t2.Rotation,
                 Alpha = t1.Alpha * t2.Alpha,
+                Color = new Color(t1.Color.ToVector3() * t2.Color.ToVector3()),
             };
         }
     }

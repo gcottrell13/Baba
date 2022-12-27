@@ -1,4 +1,4 @@
-using Core.Configuration;
+﻿using Core.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -29,7 +29,7 @@ namespace Core.Utils
                 Scene.spriteBatch.Draw(graphicsResource.Value,
                     position: new Vector2(pos.X, pos.Y),
                     sourceRectangle: sourceRectangle,
-                    color: new Color(color, totalTransform.Alpha),
+                    color: new Color(totalTransform.Color, totalTransform.Alpha),
                     origin: new Vector2(xanchor, yanchor),
                     rotation: (float)totalTransform.Rotation,
                     scale: new Vector2(scale.X, scale.Y),

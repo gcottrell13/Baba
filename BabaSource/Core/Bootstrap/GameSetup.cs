@@ -32,6 +32,7 @@ namespace Core.Bootstrap
             EntryPoint.Initialize();
             Window.KeyDown += _window_KeyDown;
             Window.KeyUp += _window_KeyUp;
+            Window.TextInput += _window_TextInput;
             base.Initialize();
         }
 
@@ -43,6 +44,11 @@ namespace Core.Bootstrap
         private void _window_KeyDown(object? sender, InputKeyEventArgs e)
         {
             CoreEventChannels.KeyEvent.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = false });
+        }
+
+        private void _window_TextInput(object? sender, TextInputEventArgs e)
+        {
+            CoreEventChannels.TextInput.SendAsyncMessage(new TextInput { Character = e.Character });
         }
 
         public float SetScreenSize(int x, int y)

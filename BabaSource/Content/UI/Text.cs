@@ -50,6 +50,8 @@ namespace Content.UI
                 "\"" => "text_quote",
                 "'" => "text_apos",
                 ":" => "text_colon",
+                "[" => "text_lsqbr",
+                "]" => "text_rsqbr",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}.{state}";
@@ -89,10 +91,10 @@ namespace Content.UI
             return null;
         }
 
-        public void SetText(string text, int padding = 0, int lineHeight = 24)
+        public void SetText(string str, int padding = 0, int lineHeight = 24)
         {
             Graphics.RemoveAllChildren();
-            Name = $"Text: {text}";
+            Name = $"Text: {str}";
             Graphics.Name = Name;
 
             _currentLetters = new();
@@ -120,58 +122,85 @@ namespace Content.UI
                 x += letter.CurrentWobbler.Size.X + padding;
             }
 
-            foreach (var c in text) {
-                var character = c.ToString().ToLower();
+            void forceOutputOfParsing(bool closeBracket)
+            {
+                if (parsingItem == null) return;
 
-                if (parsingItem != null)
-                {
-                    if (c == ']')
-                    {
-                        if (_getColor(parsingItem) is Color _color)
-                        {
-                            color = _color;
-                        }
-                        else if (_tryGetLetter(parsingItem, out letter, out compoundName))
-                        {
-                            addCharacter();
-                        }
-                        parsingItem = null;
-                        continue;
-                    }
-                    else
-                    {
-                        parsingItem += c;
-                        continue;
-                    }
-                }
-
-                if (c == '\n')
-                {
-                    y += lineHeight;
-                    x = 0;
-                    continue;
-                }
-
-                if (c == '\t')
-                {
-                    x += 48;
-                    continue;
-                }
-
-                if (c == '[')
-                {
-                    parsingItem = "";
-                    continue;
-                }
-
-                if (_tryGetLetter(character, out letter, out compoundName))
-                {
+                if (_tryGetLetter("[", out letter, out compoundName))
                     addCharacter();
-                    continue;
+                var t = parsingItem;
+                parsingItem = null;
+                addCharacters(t);
+                if (closeBracket)
+                {
+                    if (_tryGetLetter("]", out letter, out compoundName))
+                        addCharacter();
                 }
-
-                x += 24;
             }
+
+            void addCharacters(string text)
+            {
+                foreach (var c in text)
+                {
+                    var character = c.ToString().ToLower();
+
+                    if (parsingItem != null)
+                    {
+                        if (c == ']')
+                        {
+                            if (_getColor(parsingItem) is Color _color)
+                            {
+                                color = _color;
+                            }
+                            else if (_tryGetLetter(parsingItem, out letter, out compoundName))
+                            {
+                                addCharacter();
+                            }
+                            else
+                            {
+                                forceOutputOfParsing(true);
+                            }
+                            parsingItem = null;
+                            continue;
+                        }
+                        else
+                        {
+                            parsingItem += c;
+                            continue;
+                        }
+                    }
+
+                    if (c == '\n')
+                    {
+                        y += lineHeight;
+                        x = 0;
+                        continue;
+                    }
+
+                    if (c == '\t')
+                    {
+                        x += 48;
+                        continue;
+                    }
+
+                    if (c == '[')
+                    {
+                        parsingItem = "";
+                        continue;
+                    }
+
+                    if (_tryGetLetter(character, out letter, out compoundName))
+                    {
+                        addCharacter();
+                        continue;
+                    }
+
+                    x += 24;
+                }
+            }
+
+            addCharacters(str);
+            forceOutputOfParsing(false);
         }
     }
 }

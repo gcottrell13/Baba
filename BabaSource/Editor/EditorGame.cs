@@ -45,29 +45,24 @@ namespace Editor
                 var t = new Text(pre);
                 t.Graphics.y = 100;
 
-                CoreEventChannels.KeyEvent.Subscribe(ev =>
-                {
+                CoreEventChannels.KeyEvent.Subscribe(ev => {
                     if (ev.Up) return;
 
-                    switch (ev.ChangedKey) {
-                        case Keys.Back:
-                            {
-                                if (buffer.Count > 0)
-                                    buffer.RemoveAt(buffer.Count - 1);
-                                break;
-                            }
-                        case Keys.Enter:
-                            {
-                                buffer.Add('\n');
-                                break;
-                            }
-                        default:
-                            {
-                                Debug.WriteLine(Enum.GetName(typeof(Keys), ev.ChangedKey));
-                                buffer.Add((char)(int)ev.ChangedKey);
-                                break;
-                            }
+                    if (ev.ChangedKey == Keys.Back)
+                    {
+                        if (buffer.Count > 0)
+                        {
+                            buffer.RemoveAt(buffer.Count - 1);
+                            t.SetText(pre + string.Join("", buffer));
+                        }
                     }
+                });
+
+                CoreEventChannels.TextInput.Subscribe(ev =>
+                {
+                    if (ev.Character == 8) return;
+
+                    buffer.Add(ev.Character);
                     t.SetText(pre + string.Join("", buffer));
                 });
 

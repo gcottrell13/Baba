@@ -1,4 +1,6 @@
-﻿using Core.Bootstrap;
+﻿using Content;
+using Content.UI;
+using Core.Bootstrap;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -10,6 +12,12 @@ namespace Editor
         {
             MAX_WIDTH = 1080;
             MAX_HEIGHT = 720;
+        }
+
+        protected override void Initialize()
+        {
+            ContentLoader.LoadContent(GraphicsDevice);
+            base.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
@@ -26,6 +34,7 @@ namespace Editor
         {
             public override void Initialize()
             {
+                AddChild(new Text("hello there"), true);
             }
         }
     }

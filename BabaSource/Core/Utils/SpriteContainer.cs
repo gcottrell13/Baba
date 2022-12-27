@@ -30,6 +30,11 @@ namespace Core.Utils
             ReorderChildren();
         }
 
+        public void RemoveAllChildren()
+        {
+            OnDestroy();
+        }
+
         public void RemoveChild(BaseSprite child)
         {
             if (children.Contains(child))

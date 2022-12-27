@@ -9,19 +9,19 @@ def create_sheet(images: list[Image.Image], width: int = 0) -> tuple[list[Image.
     block_width, block_height = map(max, zip(*map(lambda x: x.size, images)))
     if width:
         height = math.ceil(len(images) / width)
-        output_image = get_new_gif(1, width, height, block_width, block_height)
+        output_image = get_new_gif(1, width, height, block_width, block_height, 0, 0)
     else:
         square = math.ceil(math.sqrt(len(images)))
         width = square
         height = square
-        output_image = get_new_gif(1, square, square, block_width, block_height)
+        output_image = get_new_gif(1, square, square, block_width, block_height, 0, 0)
 
     mapping = []
 
     for index, image in enumerate(images):
         coord = (index % width, index // width)
         mapping.append(coord)
-        copy_animation_across([image], output_image, get_output_coord(*coord, *image.size), True, block_width,
+        copy_animation_across([image], output_image, get_output_coord(*coord, *image.size, 0, 0), True, block_width,
                               block_height)
 
     return output_image, mapping

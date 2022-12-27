@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Content {
+namespace Content.Content {
     public struct ObjectInfoItem {
         public int color;
         public int color_active;

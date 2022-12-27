@@ -7,10 +7,10 @@ namespace Core.Utils
     public enum Direction
     {
         None = 0,
-        Up,
-        Left,
-        Down,
-        Right,
+        Right = 0b1,
+        Up = 0b10,
+        Left = 0b100,
+        Down = 0b1000,
     }
 
     public static class DirectionExtensions

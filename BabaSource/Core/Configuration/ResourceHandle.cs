@@ -6,26 +6,27 @@ namespace Core.Configuration
 {
     public interface IResourceHandle
     {
-        string Name { get; }
-        object Value { get; }
+        string? Name { get; }
+        object? Value { get; }
     }
 
     public class ResourceHandle<T> : IResourceHandle
+        where T : class
     {
-        internal ResourceHandle(string name)
+        public ResourceHandle(string? name)
         {
             Name = name;
         }
 
-        internal void SetValue(T value)
+        public void SetValue(T value)
         {
             Value = value;
         }
 
-        public T Value { get; private set; }
+        public T? Value { get; private set; }
 
-        object IResourceHandle.Value => Value;
+        object? IResourceHandle.Value => Value;
 
-        public string Name { get; }
+        public string? Name { get; }
     }
 }

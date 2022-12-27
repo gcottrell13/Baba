@@ -1,8 +1,10 @@
 ﻿using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Linq;
 
-namespace Content
+namespace Core.Utils
 {
     public abstract class SpriteValues
     {
@@ -10,24 +12,35 @@ namespace Content
         {
             var parts = name.Split('.', 1);
             Name = parts[0];
-            RestName = parts[1];
+            RestName = string.Join(".", parts.Skip(1));
         }
 
         public string Name { get; }
         public string RestName { get; }
+
+        public abstract Wobbler GetInitial(int d);
     }
 
     public class Wobbler : SpriteValues
     {
-        public Wobbler(string name, Vector2[] positions, Texture2D tex) : base(name)
+        public Wobbler(string name, Point[] positions, Point size, Texture2D tex) : base(name)
         {
             Positions = positions;
-            Tex = tex;
+            Size = size;
+            Texture = tex;
         }
 
-        public Vector2[] Positions { get; }
-        public Texture2D Tex { get; }
+        public Point[] Positions { get; }
+        public Point Size { get; }
+        public Texture2D Texture { get; }
 
+        public Point GetPosition(ref int step)
+        {
+            step %= Positions.Length;
+            return Positions[step];
+        }
+
+        public override Wobbler GetInitial(int d) => this;
     }
 
     public class Joinable : SpriteValues
@@ -44,6 +57,8 @@ namespace Content
 
         public Wobbler[] Wobblers { get; }
 
+        public override Wobbler GetInitial(int d) => Wobblers[d];
+
         public Wobbler Join(int direction)
         {
             return Wobblers[direction];
@@ -59,7 +74,9 @@ namespace Content
 
         public Wobbler[] Frames { get; }
 
-        public Wobbler Move(int step)
+        public override Wobbler GetInitial(int d) => Frames.First();
+
+        public Wobbler Move(ref int step)
         {
             step = (step + 1) % Frames.Length;
             return Frames[step];
@@ -68,6 +85,8 @@ namespace Content
 
     public class FacingOnMove : SpriteValues
     {
+        public const int SLEEP = 16;
+
         public FacingOnMove(
             string name,
             AnimateOnMove up, 
@@ -84,22 +103,37 @@ namespace Content
             Down = down;
             Left = left;
             Right = right;
-            Sleep_Up = sleep_up;
-            Sleep_Left = sleep_left;
-            Sleep_Down = sleep_down;
-            Sleep_Right = sleep_right;
+            SleepUp = sleep_up;
+            SleepLeft = sleep_left;
+            SleepDown = sleep_down;
+            SleepRight = sleep_right;
         }
 
         public AnimateOnMove Up { get; }
         public AnimateOnMove Down { get; }
         public AnimateOnMove Left { get; }
         public AnimateOnMove Right { get; }
-        public AnimateOnMove? Sleep_Up { get; }
-        public AnimateOnMove? Sleep_Left { get; }
-        public AnimateOnMove? Sleep_Down { get; }
-        public AnimateOnMove? Sleep_Right { get; }
+        public AnimateOnMove? SleepUp { get; }
+        public AnimateOnMove? SleepLeft { get; }
+        public AnimateOnMove? SleepDown { get; }
+        public AnimateOnMove? SleepRight { get; }
 
-        public Wobbler Move(Direction direction, int step)
+        public override Wobbler GetInitial(int d) => d switch
+        {
+            (int)Direction.Up => Up.GetInitial(d),
+            (int)Direction.Down => Down.GetInitial(d),
+            (int)Direction.Left => Left.GetInitial(d),
+            (int)Direction.Right => Right.GetInitial(d),
+
+            SLEEP + (int)Direction.Up => SleepUp?.GetInitial(d) ?? throw new NotImplementedException(),
+            SLEEP + (int)Direction.Down => SleepDown?.GetInitial(d) ?? throw new NotImplementedException(),
+            SLEEP + (int)Direction.Left => SleepLeft?.GetInitial(d) ?? throw new NotImplementedException(),
+            SLEEP + (int)Direction.Right => SleepRight?.GetInitial(d) ?? throw new NotImplementedException(),
+
+            _ => Right.GetInitial(d),
+        };
+
+        public Wobbler Move(Direction direction, ref int step)
         {
             var dir = direction switch
             {
@@ -109,10 +143,10 @@ namespace Content
                 Direction.Down => Down,
                 _ => throw new NotImplementedException()
             };
-            return dir.Move(step);
+            return dir.Move(ref step);
         }
 
-        public Wobbler Sleep(Direction direction)
+        public Wobbler Sleep(Direction direction, ref int step)
         {
             var dir = direction switch
             {
@@ -122,7 +156,7 @@ namespace Content
                 Direction.Down => Down,
                 _ => throw new NotImplementedException()
             };
-            return dir.Move(0);
+            return dir.Move(ref step);
         }
     }
 }

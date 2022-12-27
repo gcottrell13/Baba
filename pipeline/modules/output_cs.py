@@ -33,12 +33,12 @@ def save_object_info():
     ])
 
     output_directory_structure(OUTPUT_DIRECTORY, {
-        'ObjectInfo.cs': f"""
+        'Content/ObjectInfo.cs': f"""
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Content {{
+namespace Content.Content {{
     public struct ObjectInfoItem {{
         public int color;
         public int color_active;
@@ -79,11 +79,11 @@ def save_palette_info():
     ])
 
     output_directory_structure(OUTPUT_DIRECTORY, {
-        'PaletteInfo.cs': f"""
+        'Content/PaletteInfo.cs': f"""
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
 
-namespace Content {{
+namespace Content.Content {{
     public static class PaletteInfo {{
         private const int shift = {(7).bit_length()};
 {items}
@@ -98,10 +98,11 @@ namespace Content {{
 
 def output_spritesheets(data: dict[str, ObjectSprites]):
     def vec2(x, y):
-        return f'new Vector2({x}, {y})'
+        return f'new Point({x}, {y})'
 
-    def wobbler(w: Wobbler, positions: list[tuple[int, int]]):
-        return f'new Wobbler("{w}", new[] {{ {joinmap(vec2, positions)} }}, sheets["{w.name}"])'
+    def wobbler(wobbler: Wobbler, positions: list[tuple[int, int]]):
+        w, h = wobbler.largest_dimensions()
+        return f'new Wobbler("{wobbler}", new[] {{ {joinmap(vec2, positions)} }}, new Point({w}, {h}), sheets["{wobbler.name}"])'
 
     def joinmap(fn, alist: Iterable, indent=0):
         i = '\t' * indent
@@ -188,12 +189,12 @@ new FacingOnMove(
     sheet_text = ',\n'.join(sheets)
     lines_text = ',\n'.join(lines)
     output_directory_structure(OUTPUT_DIRECTORY, {
-            'Sheets.cs': f"""
+            'Content/Sheets.cs': f"""
 using Microsoft.Xna.Framework.Graphics; 
 using System.Collections.Generic;
 using System.IO;
 
-namespace Content {{
+namespace Content.Content {{
     public static class Sheets {{
         public static Dictionary<string, Texture2D> GetSheets(GraphicsDevice graphics) => new Dictionary<string, Texture2D>() {{
 {sheet_text}
@@ -201,11 +202,12 @@ namespace Content {{
     }}
 }}
     """,
-            'SheetMap.cs': f"""
+            'Content/SheetMap.cs': f"""
+using Core.Utils; 
 using Microsoft.Xna.Framework.Graphics; 
 using Microsoft.Xna.Framework;
 
-namespace Content {{
+namespace Content.Content {{
     public static class SheetMap {{
         public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {{
             return new Dictionary<string, SpriteValues>() {{

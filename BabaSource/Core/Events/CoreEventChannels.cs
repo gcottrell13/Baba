@@ -6,7 +6,7 @@ namespace Core.Events
 {
     public class CoreEventChannels
     {
-        public static EventChannel<KeyEvent> KeyPress = EventManager.CreateChannel<KeyEvent>();
+        public static EventChannel<KeyEvent> KeyEvent = EventManager.CreateChannel<KeyEvent>();
         public static EventChannel<ScheduledCallback> ScheduledCallback = EventManager.CreateChannel<ScheduledCallback>();
     }
 }

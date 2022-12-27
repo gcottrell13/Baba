@@ -37,12 +37,12 @@ namespace Core.Bootstrap
 
         private void _window_KeyUp(object? sender, InputKeyEventArgs e)
         {
-            CoreEventChannels.KeyPress.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = true });
+            CoreEventChannels.KeyEvent.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = true });
         }
 
         private void _window_KeyDown(object? sender, InputKeyEventArgs e)
         {
-            CoreEventChannels.KeyPress.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = false });
+            CoreEventChannels.KeyEvent.SendAsyncMessage(new KeyEvent { ChangedKey = e.Key, Up = false });
         }
 
         public float SetScreenSize(int x, int y)

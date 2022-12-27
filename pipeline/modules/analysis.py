@@ -27,7 +27,7 @@ def analyze_facing_and_animation(name: str, images: dict[int, dict[int, Any]]) -
 
 
 def analyze_simple(name: str, phase: dict[int, Any]) -> Wobbler:
-    return Wobbler(name, [phase[1], phase[2], phase[3]])
+    return Wobbler(name, [phase[i] for i in sorted(phase.keys())])
 
 
 def analyze_simple_animated_on_move(name: str, images: dict[int, dict[int, Any]]):

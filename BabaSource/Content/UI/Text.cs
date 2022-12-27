@@ -11,9 +11,9 @@ namespace Content.UI
         private Dictionary<char, AnimatedWobblerSprite>? _currentLetters;
         private Dictionary<char, AnimatedWobblerSprite> _cache = new();
 
-        public Text(string text = "", Color? color = null)
+        public Text(string text = "", Color? color = null, int padding = 0, int lineHeight = 24)
         {
-            SetText(text, color);
+            SetText(text, color, padding, lineHeight);
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -33,7 +33,15 @@ namespace Content.UI
 
             if (!_cache.ContainsKey(letter))
             {
-                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue($"text_{letter}", out var textSprite))
+                var name = letter switch
+                {
+                    '?' => "what",
+                    '/' => "text_fwslash",
+                    '-' => "text_hyphen",
+                    _ => $"text_{letter}",
+                };
+
+                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue(name, out var textSprite))
                 {
                     _cache[letter] = new AnimatedWobblerSprite(textSprite, 0);
                 }
@@ -47,21 +55,30 @@ namespace Content.UI
             return true;
         }
 
-        public void SetText(string text, Color? color = null, int padding = 0)
+        public void SetText(string text, Color? color = null, int padding = 0, int lineHeight = 24)
         {
             Graphics.RemoveAllChildren();
 
             _currentLetters = new();
             var x = 0;
+            var y = 0;
             _chars = text.Select(c =>
             {
-                if (_tryGetLetter(c, out var letter))
+                if (c == '\n')
+                {
+                    y += lineHeight;
+                    x = 0;
+                    return null;
+                }
+                else if (_tryGetLetter(c, out var letter))
                 {
                     _currentLetters[c] = letter;
+                    letter.SetColor(color);
 
                     var sprite = new SpriteContainer()
                     {
                         x = x,
+                        y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
                     };
                     sprite.AddChild(letter);
                     Graphics.AddChild(sprite);

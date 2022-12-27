@@ -34,7 +34,7 @@ namespace Editor
         {
             public override void Initialize()
             {
-                AddChild(new Text("hello there"), true);
+                AddChild(new Text("hello-there/?\nhi", Color.Red), true);
             }
         }
     }

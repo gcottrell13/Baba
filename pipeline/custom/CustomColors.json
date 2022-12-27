@@ -5,5 +5,19 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_grab"
+  },
+  "text_hyphen": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_hyphen"
+  },
+  "text_fwslash": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_fwslash"
   }
 }

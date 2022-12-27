@@ -2,58 +2,78 @@
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Content.UI
 {
     public class Text : GameObject
     {
-        private AnimatedWobblerSprite[]? _chars;
+        private SpriteContainer?[]? _chars;
+        private Dictionary<char, AnimatedWobblerSprite>? _currentLetters;
+        private Dictionary<char, AnimatedWobblerSprite> _cache = new();
 
-        public Text(string text = "")
+        public Text(string text = "", Color? color = null)
         {
-            SetText(text);
+            SetText(text, color);
         }
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (_chars == null) return;
+            if (_currentLetters == null) return;
 
-            foreach (var s in _chars)
+            foreach (var s in _currentLetters.Values)
             {
                 s?.Update(gameTime);
             }
         }
 
-        public void SetText(string text)
+        private bool _tryGetLetter(char letter, out AnimatedWobblerSprite sprite)
+        {
+            sprite = null;
+            if (ContentLoader.LoadedContent == null) return false;
+
+            if (!_cache.ContainsKey(letter))
+            {
+                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue($"text_{letter}", out var textSprite))
+                {
+                    _cache[letter] = new AnimatedWobblerSprite(textSprite, 0);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            sprite = _cache[letter];
+            return true;
+        }
+
+        public void SetText(string text, Color? color = null, int padding = 0)
         {
             Graphics.RemoveAllChildren();
 
-            if (ContentLoader.LoadedContent == null) return;
-
-            _chars = new AnimatedWobblerSprite[text.Length];
+            _currentLetters = new();
             var x = 0;
-            foreach (var (c, i) in text.ToLower().Select((v, i) => (v, i)))
+            _chars = text.Select(c =>
             {
-                if (ContentLoader.LoadedContent.SpriteValues.TryGetValue($"text_{c}", out var textSprite))
+                if (_tryGetLetter(c, out var letter))
                 {
-                    var sprite = new AnimatedWobblerSprite(textSprite, 0)
+                    _currentLetters[c] = letter;
+
+                    var sprite = new SpriteContainer()
                     {
-                        x = x
+                        x = x,
                     };
-
-                    x += textSprite?.GetInitial(0).Size.X ?? 0;
-
-                    _chars[i] = sprite;
+                    sprite.AddChild(letter);
                     Graphics.AddChild(sprite);
+                    x += letter.CurrentWobbler.Size.X + padding;
+                    return sprite;
                 }
                 else
                 {
                     x += 24;
+                    return null;
                 }
-            }
+            }).ToArray();
         }
     }
 }

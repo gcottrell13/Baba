@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Core.Utils
@@ -20,7 +21,12 @@ namespace Core.Utils
 
         public float alpha { get; set; } = 1;
 
-        public Color color { get; set; } = Color.White;
+        public Color color { get; private set; } = Color.White;
+        public void SetColor(Color? color)
+        {
+            this.color = color ?? Color.White;
+        }
+
 
         public float x
         {

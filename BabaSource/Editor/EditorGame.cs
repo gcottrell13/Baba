@@ -56,12 +56,18 @@ namespace Editor
                             t.SetText(pre + string.Join("", buffer));
                         }
                     }
+                    if (ev.ChangedKey == Keys.Enter)
+                    {
+                        buffer.Add('\n');
+                        t.SetText(pre + string.Join("", buffer));
+                    }
                 });
 
                 CoreEventChannels.TextInput.Subscribe(ev =>
                 {
                     if (ev.Character == 8) return;
-
+                    if (ev.Character == 10) return;
+                    if (ev.Character == 13) return;
                     buffer.Add(ev.Character);
                     t.SetText(pre + string.Join("", buffer));
                 });

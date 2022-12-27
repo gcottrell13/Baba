@@ -227,6 +227,7 @@ namespace Content.Content {
 			{"text_cloud", new ObjectInfoItem() { color = (1 << shift) + 3, color_active = (1 << shift) + 4, sprite = "text_cloud", layer = 20, unittype = "text" } },
 			{"text_cog", new ObjectInfoItem() { color = (0 << shift) + 1, color_active = (0 << shift) + 2, sprite = "text_cog", layer = 20, unittype = "text" } },
 			{"text_colon", new ObjectInfoItem() { color = (1 << shift) + 3, color_active = (1 << shift) + 4, sprite = "text_colon", layer = 10, unittype = "text" } },
+			{"text_comma", new ObjectInfoItem() { color = (1 << shift) + 3, color_active = (1 << shift) + 4, sprite = "text_comma", layer = 10, unittype = "text" } },
 			{"text_crab", new ObjectInfoItem() { color = (2 << shift) + 1, color_active = (2 << shift) + 2, sprite = "text_crab", layer = 20, unittype = "text" } },
 			{"text_crystal", new ObjectInfoItem() { color = (4 << shift) + 1, color_active = (4 << shift) + 2, sprite = "text_crystal", layer = 20, unittype = "text" } },
 			{"text_cup", new ObjectInfoItem() { color = (1 << shift) + 2, color_active = (1 << shift) + 3, sprite = "text_cup", layer = 20, unittype = "text" } },

@@ -1458,6 +1458,7 @@ namespace Content.Content {
 			{ "text_cloud", new Wobbler("text_cloud", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cloud"]) },
 			{ "text_cog", new Wobbler("text_cog", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cog"]) },
 			{ "text_colon", new Wobbler("text_colon", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_colon"]) },
+			{ "text_comma", new Wobbler("text_comma", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_comma"]) },
 			{ "text_crab", new Wobbler("text_crab", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_crab"]) },
 			{ "text_crystal", new Wobbler("text_crystal", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_crystal"]) },
 			{ "text_cup", new Wobbler("text_cup", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cup"]) },

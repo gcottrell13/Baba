@@ -3,6 +3,7 @@ using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics.Metrics;
+using System.Globalization;
 using System.Reflection;
 
 namespace Content.UI
@@ -52,6 +53,7 @@ namespace Content.UI
                 ":" => "text_colon",
                 "[" => "text_lsqbr",
                 "]" => "text_rsqbr",
+                "," => "text_comma",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}.{state}";
@@ -82,7 +84,7 @@ namespace Content.UI
                 return c;
             }
 
-            var rgb = str.Split(',').Select(c => float.TryParse(c.Trim(), out var r) ? r : -1).ToArray();
+            var rgb = str.Split(',').Select(c => int.TryParse(c.Trim(), NumberStyles.HexNumber, null, out var r) ? r : -1).ToArray();
             if (rgb.Length == 3 && rgb.All(x => x > 0f)) 
             {
                 return new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);

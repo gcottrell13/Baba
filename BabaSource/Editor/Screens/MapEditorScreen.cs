@@ -1,4 +1,4 @@
-using Core.UI;
+﻿using Core.UI;
 using Core.Screens;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,11 @@ namespace Editor.Screens
         public MapEditorScreen()
         {
             AddChild(new Text("Map editor, [text_escape] to go back, [text_ctrl]+s to save"));
+            SetCommands(20, new()
+            {
+                { "[text_escape]", "to go back" },
+                { "[text_ctrl]+s", "to save" },
+            });
         }
 
         public int TrySavingMap()

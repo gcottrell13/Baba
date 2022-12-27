@@ -15,7 +15,7 @@ namespace Core.Screens
     {
         private StateMachine<PickerState, int> smachine;
         private string filter;
-        private T? selected;
+        public T? Selected { get; private set; }
         private readonly List<T> items;
         private readonly Func<T, string> filterBy;
         private readonly Func<T, string> display;
@@ -25,6 +25,7 @@ namespace Core.Screens
         private readonly List<Text> texts = new();
         private readonly SpriteContainer itemDisplay = new();
         private List<T> filteredChildren = new();
+        public Color HighlightColor = Color.Brown;
 
         private const string baseFilterDisplayText = "filter:\n";
         private readonly Text filterDisplay = new(baseFilterDisplayText);
@@ -81,14 +82,14 @@ namespace Core.Screens
             itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 2;
             Graphics.AddChild(itemDisplay);
             AddChild(filterDisplay);
-            selected = items[0];
+            Selected = items[0];
             _drawChildren();
         }
 
         private int? getSelectedItemIndex()
         {
-            if (selected == null) return null;
-            return filteredChildren.IndexOf(selected);
+            if (Selected == null) return null;
+            return filteredChildren.IndexOf(Selected);
         }
 
         private void selectingCommands()
@@ -143,18 +144,13 @@ namespace Core.Screens
 
         private void _setSelected(int newSelected)
         {
-            foreach (var child in texts)
-            {
-                child.background?.SetColor(Color.Black);
-            }
             if (filteredChildren.Count > 0)
             {
-                selected = filteredChildren[newSelected];
-                texts[newSelected].SetText(display(selected), new() { background = Color.Brown }); // highlighted background
+                Selected = filteredChildren[newSelected];
             }
             else
             {
-                selected = null;
+                Selected = null;
             }
 
             _drawChildren();
@@ -174,7 +170,7 @@ namespace Core.Screens
             var y = 0;
             foreach (var (t, child) in filteredChildren.Skip(startIndex).Take(maxDisplay).Zip(texts.Take(maxDisplay)))
             {
-                var color = object.Equals(t, selected) ? Color.Brown : Color.Black;
+                var color = object.Equals(t, Selected) ? HighlightColor : Color.Black;
                 child.SetText(display(t), new() { background = color });
                 child.Graphics.y = y;
                 child.Graphics.alpha = 1f;
@@ -207,14 +203,14 @@ namespace Core.Screens
                 case Keys.P:
                     {
                         // pick
-                        if (selected != null) 
+                        if (Selected != null) 
                             return 1;
                         return 0;
                     }
                 case Keys.E:
                     {
                         // edit
-                        if (selected == null)
+                        if (Selected == null)
                             return 0;
                         return edit ? 2 : 0;
                     }

@@ -95,9 +95,12 @@ namespace Editor
                             .Change(1, States.MapEditor)
                             .AddOnEnter(() => mapStack.EnsureTop(mapPickerScreen))
                             .AddOnEnter(() => mapPickerScreen.SetFilter(""))
-                            .AddOnLeave(() =>
+                            .AddOnLeave(state =>
                             {
-
+                                if (state == States.MapEditor && mapPickerScreen.Selected != null)
+                                {
+                                    mapEditor.LoadMap(mapPickerScreen.Selected);
+                                }
                             })
                     );
 

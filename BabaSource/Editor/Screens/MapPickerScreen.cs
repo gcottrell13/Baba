@@ -13,10 +13,11 @@ namespace Editor.Screens
 {
     internal class MapPickerScreen : FiltererModal<string>
     {
-        public MapPickerScreen(List<string> items) : base(items, x => x, x => $"map: {x}")
+        public MapPickerScreen(List<string> items) : base(items, x => x, x => $"map: {x}", maxDisplay: 8)
         {
             Transparent = true;
             SetOffsetX(100);
+            HighlightColor = Color.Blue;
         }
     }
 }

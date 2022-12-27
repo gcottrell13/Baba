@@ -11,14 +11,24 @@ namespace Editor.Screens
 {
     internal class MapEditorScreen : BaseScreen
     {
+        private string loadedMapName = string.Empty;
+        private Text t;
+
         public MapEditorScreen()
         {
-            AddChild(new Text("Map editor"));
+            t = new Text("Map editor");
+            AddChild(t);
             SetCommands(new()
             {
                 { "[text_escape]", "go back to world" },
                 { "[text_ctrl]+s", "to save" },
             });
+        }
+
+        public void LoadMap(string name)
+        {
+            loadedMapName = name;
+            t.SetText($"Map Editor: {name}");
         }
 
         public int TrySavingMap()

@@ -1,6 +1,7 @@
 ﻿using Core.Events;
 using Core.Utils;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace Core.Bootstrap
 {
@@ -10,7 +11,8 @@ namespace Core.Bootstrap
 
         public GameEntryPoint()
         {
-            RootSprite = new SpriteContainer();
+            Name = "ROOT";
+            RootSprite = new SpriteContainer() { Name = "ROOT" };
 
         }
 

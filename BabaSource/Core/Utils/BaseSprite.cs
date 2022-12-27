@@ -3,10 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core.Utils
 {
+    [DebuggerDisplay("BaseSprite: {Name}")]
     public abstract class BaseSprite
     {
         private bool _shouldRecalculateTransform = false;
@@ -18,6 +20,8 @@ namespace Core.Utils
         private float _rotation;
         private float _xanchor;
         private float _yanchor;
+
+        public string Name { get; set; }
 
         public float alpha { get; set; } = 1;
 

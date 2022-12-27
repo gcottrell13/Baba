@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core
 {
+    [DebuggerDisplay("GameObject {name}")]
     public abstract class GameObject
     {
         protected MouseState MouseState => CoreMouse.mouseState;
@@ -20,6 +22,8 @@ namespace Core
         public List<GameObject> Children { get; private set; } = new List<GameObject>();
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
+
+        public string Name { get; set; }
 
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnAfterChildrenUpdate(GameTime gameTime) { }

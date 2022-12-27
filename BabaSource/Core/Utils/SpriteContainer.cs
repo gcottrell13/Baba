@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core.Utils
 {
+    [DebuggerDisplay("SpriteContainer: {Name}")]
     public sealed class SpriteContainer : BaseSprite
     {
         public readonly List<BaseSprite> children = new List<BaseSprite>();

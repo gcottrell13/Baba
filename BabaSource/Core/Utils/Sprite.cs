@@ -1,12 +1,14 @@
-﻿using Core.Configuration;
+using Core.Configuration;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core.Utils
 {
+    [DebuggerDisplay("Sprite: {Name}")]
     public class Sprite : BaseSprite
     {
         protected ResourceHandle<Texture2D> graphicsResource;

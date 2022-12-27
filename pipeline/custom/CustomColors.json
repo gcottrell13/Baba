@@ -19,5 +19,26 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_fwslash"
+  },
+  "text_apos": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_apos"
+  },
+  "text_quote": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_quote"
+  },
+  "text_colon": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_colon"
   }
 }

@@ -39,6 +39,9 @@ namespace Content.UI
                     "?" => "what",
                     "/" => "text_fwslash",
                     "-" => "text_hyphen",
+                    "\"" => "text_quote",
+                    "'" => "text_apos",
+                    ":" => "text_colon",
                     _ => letter.Length == 1 ? $"text_{letter}" : letter,
                 };
 

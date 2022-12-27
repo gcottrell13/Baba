@@ -12,9 +12,9 @@ namespace Content.UI
         private Dictionary<string, AnimatedWobblerSprite> _currentLetters;
         private Dictionary<string, AnimatedWobblerSprite> _cache = new();
 
-        public Text(string text = "", Color? color = null, int padding = 0, int lineHeight = 24)
+        public Text(string text = "", int padding = 0, int lineHeight = 24)
         {
-            SetText(text, color, padding, lineHeight);
+            SetText(text, padding, lineHeight);
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -89,7 +89,7 @@ namespace Content.UI
             return null;
         }
 
-        public void SetText(string text, Color? color = null, int padding = 0, int lineHeight = 24)
+        public void SetText(string text, int padding = 0, int lineHeight = 24)
         {
             Graphics.RemoveAllChildren();
             Name = $"Text: {text}";
@@ -103,8 +103,9 @@ namespace Content.UI
             var y = 0;
             AnimatedWobblerSprite letter;
             string compoundName;
+            var color = Color.White;
 
-            void addCharacter(string character)
+            void addCharacter()
             {
                 _currentLetters[compoundName] = letter;
                 var sprite = new SpriteContainer()
@@ -132,7 +133,7 @@ namespace Content.UI
                         }
                         else if (_tryGetLetter(parsingItem, out letter, out compoundName))
                         {
-                            addCharacter(character);
+                            addCharacter();
                         }
                         parsingItem = null;
                         continue;
@@ -151,6 +152,12 @@ namespace Content.UI
                     continue;
                 }
 
+                if (c == '\t')
+                {
+                    x += 48;
+                    continue;
+                }
+
                 if (c == '[')
                 {
                     parsingItem = "";
@@ -159,7 +166,7 @@ namespace Content.UI
 
                 if (_tryGetLetter(character, out letter, out compoundName))
                 {
-                    addCharacter(character);
+                    addCharacter();
                     continue;
                 }
 

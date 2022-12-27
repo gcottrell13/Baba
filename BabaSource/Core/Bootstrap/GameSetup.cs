@@ -101,7 +101,7 @@ namespace Core.Bootstrap
         {
             GraphicsDevice.Clear(Color.Black);
             Scene.Begin();
-            EntryPoint.RootSprite.Draw();
+            EntryPoint.Graphics.Draw();
             Scene.End();
 
             _spriteBatch?.Begin();

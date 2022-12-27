@@ -2,6 +2,9 @@
 using Content.UI;
 using Core.Bootstrap;
 using Core.Events;
+using Core.Screens;
+using Core.Utils;
+using Editor.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -24,56 +27,106 @@ namespace Editor
             base.Initialize();
         }
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            base.Update(gameTime);
-
-            // TODO: Add your update logic here
-        }
-
         private class EditorGameEntryPoint : GameEntryPoint
         {
             public override void Initialize()
             {
-                AddChild(new Text("[red]hello-[blue]there/[100,255,100]?\nBaba [arrow] [white][baba:17][green] says:[200, 200, 200] \"hi\"\n\t[gray][wall:1][wall:5][wall:5][wall:5][wall:4]"), true);
+                MapEditorScreen mapEditor = new();
+                WorldEditorScreen worldEditor = new();
+                var mapStack = new ScreenStack(this);
 
-                var buffer = new List<char>();
-                var pre = "Type here:\n";
-                var t = new Text(pre);
-                t.Graphics.y = 100;
-
-                CoreEventChannels.KeyEvent.Subscribe(ev => {
-                    if (ev.Up) return;
-
-                    if (ev.ChangedKey == Keys.Back)
-                    {
-                        if (buffer.Count > 0)
+                var s = new StateMachine<States, int>()
+                    .State(
+                        States.Initial, 
+                        c => c switch
                         {
-                            buffer.RemoveAt(buffer.Count - 1);
-                            t.SetText(pre + string.Join("", buffer));
-                        }
-                    }
-                    if (ev.ChangedKey == Keys.Enter)
-                    {
-                        buffer.Add('\n');
-                        t.SetText(pre + string.Join("", buffer));
-                    }
-                });
+                            TextInput { Character: 'w' } => 1,
+                            TextInput { Character: 'm' } => 2,
+                            _ => 0,
+                        },
+                        def => def
+                            .Change(1, States.WorldEditor)
+                            .Change(2, States.MapEditor)
+                            .AddOnEnter(() =>
+                            {
+                                mapStack.PopTo(null);
+                                mapStack.Add(new InitialScreen());
+                            })
+                    ).State(
+                        States.WorldEditor,
+                        c => c switch
+                        {
+                            KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            _ => 0,
+                        },
+                        def => def
+                            .AddOnEnter(() =>
+                            {
+                                mapStack.PopTo(worldEditor);
+                                mapStack.Pop();
+                                worldEditor = new();
+                                mapStack.Add(worldEditor);
+                            })
+                            .Change(-1, States.Initial)
+                    ).State(
+                        States.MapEditor,
+                        c => c switch
+                        {
+                            TextInput { Character: 'c' } => 1,
+                            TextInput { Character: 't' } => 2,
+                            TextInput { Character: 'p' } => 3,
+                            TextInput { Character: 'l' } => 4,
+                            TextInput { Character: 'r' } => 5,
+                            KeyEvent { ChangedKey: Keys.S, Up: false } => mapEditor.TrySavingMap(),
+                            TextInput { Character: char f } => 0,
+                            KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            _ => 0,
+                        },
+                        def => def
+                            .Change(-1, States.Initial)
+                            .Change(1, States.ChangeObjectColor)
+                            .Change(2, States.AddingTextToObject)
+                            .Change(3, States.ObjectPicker)
+                            .Change(4, States.MapWordLayer)
+                            .Change(5, States.SelectMapRegion)
+                            .AddOnEnter(() =>
+                            {
+                                mapStack.PopTo(mapEditor);
+                                mapStack.Pop();
+                                mapEditor = new();
+                                mapStack.Add(mapEditor);
+                            })
+                    );
 
-                CoreEventChannels.TextInput.Subscribe(ev =>
-                {
-                    if (ev.Character == 8) return;
-                    if (ev.Character == 10) return;
-                    if (ev.Character == 13) return;
-                    buffer.Add(ev.Character);
-                    t.SetText(pre + string.Join("", buffer));
-                });
+                s.Initialize(States.Initial);
+                CoreEventChannels.TextInput.Subscribe(ev => s.SendAction(ev));
+                CoreEventChannels.KeyEvent.Subscribe(ev => s.SendAction(ev));
 
-                AddChild(t, true);
             }
+        }
+
+        private enum States
+        {
+            None,
+            Initial,
+            WorldEditor,  // editor for laying out maps in the world
+            MapEditor, // editor for a section of the world; a single screen
+
+            // In the Map Editor:
+            ChangeObjectColor, // bring up a modal to select a color for a specific object
+            AddingTextToObject, // bring up a modal for adding text to a specific object
+            ObjectPicker, // modal for selecting a new object
+            MapWordLayer, // the word layer for this specific map
+            SelectMapRegion, // view the map's current region, and select/add/edit a region
+
+            // Region Editor
+            AddOrEditRegion, // add a new region, or edit an existing one
+            EditRegionName,
+            EditRegionWordLayer,
+            SelectRegionTheme,
+
+            // World Editor
+            WorldEditorPickMap,
         }
     }
 }

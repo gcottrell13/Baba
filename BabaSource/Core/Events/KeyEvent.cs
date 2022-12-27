@@ -2,7 +2,7 @@
 
 namespace Core.Events
 {
-    public class KeyEvent
+    public struct KeyEvent
     {
         public Keys ChangedKey;
         public bool Up;

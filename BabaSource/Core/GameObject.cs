@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Core
 {
-    [DebuggerDisplay("GameObject {Name}")]
+    [DebuggerDisplay("GameObject Name={Name}")]
     public abstract class GameObject
     {
         protected MouseState MouseState => CoreMouse.mouseState;
@@ -67,7 +67,15 @@ namespace Core
             OnAfterChildrenUpdate(gameTime);
         }
 
-        public void RemoveChild(GameObject gameObject, bool graphics = false)
+        public void RemoveAllChildren(bool graphics = true)
+        {
+            foreach (var child in Children)
+            {
+                RemoveChild(child, graphics);
+            }
+        }
+
+        public void RemoveChild(GameObject gameObject, bool graphics = true)
         {
             if (Children.Contains(gameObject))
             {
@@ -80,14 +88,14 @@ namespace Core
             }
         }
 
-        public void AddChild(GameObject gameObject, bool addGraphics = false)
+        public void AddChild(GameObject gameObject, bool addGraphics = true)
         {
             if (Children.Contains(gameObject)) return;
             Children.Add(gameObject);
             gameObject.SetParent(this, addGraphics);
         }
 
-        public void SetParent(GameObject newParent, bool addGraphics = false)
+        public void SetParent(GameObject newParent, bool addGraphics = true)
         {
             if (Parent == null || Parent == newParent)
             {

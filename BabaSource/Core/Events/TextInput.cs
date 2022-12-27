@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.Events
 {
-    public class TextInput
+    public struct TextInput
     {
         public char Character;
     }

@@ -7,22 +7,10 @@ namespace Core.Bootstrap
 {
     public abstract class GameEntryPoint : GameObject
     {
-        public SpriteContainer RootSprite { get; }
-
         public GameEntryPoint()
         {
             Name = "ROOT";
-            RootSprite = new SpriteContainer() { Name = "ROOT" };
-
-        }
-
-        new public void AddChild(GameObject gameObject, bool addGraphics = false)
-        {
-            base.AddChild(gameObject, addGraphics);
-            if (addGraphics)
-            {
-                RootSprite.AddChild(gameObject.Graphics);
-            }
+            Graphics.Name = "ROOT";
         }
 
         public virtual void EntryTick(GameTime gameTime)

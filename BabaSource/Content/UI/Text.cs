@@ -2,14 +2,15 @@
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
+using System.Diagnostics.Metrics;
 using System.Reflection;
 
 namespace Content.UI
 {
     public class Text : GameObject
     {
-        private Dictionary<char, AnimatedWobblerSprite>? _currentLetters;
-        private Dictionary<char, AnimatedWobblerSprite> _cache = new();
+        private Dictionary<string, AnimatedWobblerSprite> _currentLetters;
+        private Dictionary<string, AnimatedWobblerSprite> _cache = new();
 
         public Text(string text = "", Color? color = null, int padding = 0, int lineHeight = 24)
         {
@@ -26,7 +27,7 @@ namespace Content.UI
             }
         }
 
-        private bool _tryGetLetter(char letter, out AnimatedWobblerSprite sprite)
+        private bool _tryGetLetter(string letter, out AnimatedWobblerSprite sprite)
         {
             sprite = null;
             if (ContentLoader.LoadedContent == null) return false;
@@ -35,10 +36,10 @@ namespace Content.UI
             {
                 var name = letter switch
                 {
-                    '?' => "what",
-                    '/' => "text_fwslash",
-                    '-' => "text_hyphen",
-                    _ => $"text_{letter}",
+                    "?" => "what",
+                    "/" => "text_fwslash",
+                    "-" => "text_hyphen",
+                    _ => letter.Length == 1 ? $"text_{letter}" : letter,
                 };
 
                 if (ContentLoader.LoadedContent.SpriteValues.TryGetValue(name, out var textSprite))
@@ -55,7 +56,7 @@ namespace Content.UI
             return true;
         }
 
-        private Color _getColor(string str)
+        private Color? _getColor(string str)
         {
             str = str.ToLower();
             var namedColorProps = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static).ToList();
@@ -65,13 +66,13 @@ namespace Content.UI
                 return c;
             }
 
-            var rgb = str.Split(',').Select(c => float.TryParse(c, out var r) ? r : -1).ToArray();
+            var rgb = str.Split(',').Select(c => float.TryParse(c.Trim(), out var r) ? r : -1).ToArray();
             if (rgb.Length == 3 && rgb.All(x => x > 0f)) 
             {
                 return new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);
             }
 
-            throw new ArgumentException($"Invalid color string: \"{str}\". Must be a named color, or a triplet of numbers 0 to 255");
+            return null;
         }
 
         public void SetText(string text, Color? color = null, int padding = 0, int lineHeight = 24)
@@ -82,23 +83,50 @@ namespace Content.UI
 
             _currentLetters = new();
 
-            string? parsingColor = null;
-            
+            string? parsingItem = null;
 
             var x = 0;
             var y = 0;
+            AnimatedWobblerSprite letter;
+
+            void addCharacter(string character)
+            {
+                _currentLetters[character] = letter;
+                var sprite = new SpriteContainer()
+                {
+                    x = x,
+                    y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
+                    Name = character + "-textcontainer",
+                };
+                sprite.SetColor(color);
+                sprite.AddChild(letter);
+                Graphics.AddChild(sprite);
+                x += letter.CurrentWobbler.Size.X + padding;
+            }
+
             foreach (var c in text) {
-                if (parsingColor != null)
+                var character = c.ToString().ToLower();
+
+                if (parsingItem != null)
                 {
                     if (c == ']')
                     {
-                        color = _getColor(parsingColor);
-                        parsingColor = null;
+                        if (_getColor(parsingItem) is Color _color)
+                        {
+                            color = _color;
+                        }
+                        else if (_tryGetLetter(parsingItem, out letter))
+                        {
+                            addCharacter(character);
+                        }
+                        parsingItem = null;
                         continue;
                     }
-
-                    parsingColor += c;
-                    continue;
+                    else
+                    {
+                        parsingItem += c;
+                        continue;
+                    }
                 }
 
                 if (c == '\n')
@@ -110,23 +138,13 @@ namespace Content.UI
 
                 if (c == '[')
                 {
-                    parsingColor = "";
+                    parsingItem = "";
                     continue;
                 }
 
-                if (_tryGetLetter(c, out var letter))
+                if (_tryGetLetter(character, out letter))
                 {
-                    _currentLetters[c] = letter;
-                    var sprite = new SpriteContainer()
-                    {
-                        x = x,
-                        y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
-                        Name = c.ToString() + "-container",
-                    };
-                    sprite.SetColor(color);
-                    sprite.AddChild(letter);
-                    Graphics.AddChild(sprite);
-                    x += letter.CurrentWobbler.Size.X + padding;
+                    addCharacter(character);
                     continue;
                 }
 

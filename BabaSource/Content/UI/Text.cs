@@ -54,6 +54,7 @@ namespace Content.UI
                 "[" => "text_lsqbr",
                 "]" => "text_rsqbr",
                 "," => "text_comma",
+                "+" => "text_plus",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}.{state}";

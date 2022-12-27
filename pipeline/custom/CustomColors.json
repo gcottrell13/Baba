@@ -61,5 +61,26 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_comma"
+  },
+  "text_escape": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_escape"
+  },
+  "text_ctrl": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_ctrl"
+  },
+  "text_plus": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_plus"
   }
 }

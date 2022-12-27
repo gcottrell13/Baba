@@ -72,6 +72,7 @@ namespace Core.Bootstrap
 
             _graphics.PreferredBackBufferWidth = x;
             _graphics.PreferredBackBufferHeight = y;
+            GameObject.SetScreenSize(x, y);
             _graphics.ApplyChanges();
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             Scene.Initialize(_spriteBatch, x, y);

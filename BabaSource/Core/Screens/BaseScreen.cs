@@ -14,8 +14,10 @@ namespace Core.Screens
 
         public bool Transparent { get; protected set; } = false;
 
-        public void SetCommands(int width, Dictionary<string, string> commands)
+        public void SetCommands(Dictionary<string, string> commands, float scale = 1f)
         {
+            var width = (int)((ScreenWidth / scale) / (Text.DEFAULT_BLOCK_WIDTH + Text.DEFAULT_PADDING)) - 2;
+
             this.commands = commands;
 
             var @long = $"[line:{Joinable.LR}]".Repeat(width);
@@ -26,7 +28,7 @@ namespace Core.Screens
 
             foreach (var (disp, expl) in commands)
             {
-                var str = Text.ParseText($"{disp} - {expl}");
+                var str = Text.ParseText($"{disp}-{expl}");
                 var last = lines.Last();
                 if (last.TextCharLength() + str.TextCharLength() > width)
                 {
@@ -35,7 +37,7 @@ namespace Core.Screens
                 else
                 {
                     if (last.Count > 0)
-                        last.Add(new ObjectSelect(" "));
+                        last.AddRange(new[] { new ObjectSelect(" ") }.Repeat(2));
                     last.AddRange(str);
                 }
             }
@@ -54,7 +56,7 @@ namespace Core.Screens
             AddChild(display);
             display.SetText(string.Join("\n", getLines()));
             display.Graphics.x = 0;
-            display.Graphics.y = 100;
+            display.Graphics.y = ScreenHeight - (lines.Count + 2) * display.CurrentLineHeight;
         }
 
     }

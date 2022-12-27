@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Bootstrap;
+using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,8 +16,14 @@ namespace Core
         protected MouseState MouseState => CoreMouse.mouseState;
         protected KeyboardState KeyboardState => CoreKeyboard.keyboardState;
 
-        protected int ScreenWidth => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-        protected int ScreenHeight => GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+        public static int ScreenWidth { get; private set; }
+        public static int ScreenHeight { get; private set; }
+
+        public static void SetScreenSize(int width, int height)
+        {
+            ScreenWidth = width;
+            ScreenHeight = height;
+        }
 
         public GameObject? Parent { get; private set; }
         public List<GameObject> Children { get; private set; } = new List<GameObject>();

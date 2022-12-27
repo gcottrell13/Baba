@@ -17,6 +17,14 @@ namespace Core.UI
         private Dictionary<string, AnimatedWobblerSprite> _currentLetters;
         private Dictionary<string, AnimatedWobblerSprite> _cache = new();
 
+        public const int DEFAULT_BLOCK_WIDTH = 24;
+        public const int DEFAULT_LINE_HEIGHT = 24;
+        public const int DEFAULT_PADDING = 0;
+
+        public int CurrentLineHeight { get; private set; }
+        public int CurrentBlockWidth { get; private set; }
+        public int CurrentPadding { get; private set; }
+
         public Text(string text = "", int padding = 0, int lineHeight = 24)
         {
             SetText(text, padding, lineHeight);
@@ -185,7 +193,7 @@ namespace Core.UI
             return alist;
         }
 
-        public void SetText(ListOfTextChar text, int padding = 0, int lineHeight = 24)
+        public void SetText(ListOfTextChar text, int padding = DEFAULT_PADDING, int lineHeight = DEFAULT_LINE_HEIGHT, int blockWidth = DEFAULT_BLOCK_WIDTH)
         {
             Graphics.RemoveAllChildren();
 
@@ -203,14 +211,14 @@ namespace Core.UI
                 _currentLetters[compoundName] = letter;
                 var sprite = new SpriteContainer()
                 {
-                    x = x,
+                    x = x - (letter.CurrentWobbler.Size.X - blockWidth) / 2,
                     y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
                     Name = compoundName + "-textcontainer",
                 };
                 sprite.SetColor(color);
                 sprite.AddChild(letter);
                 Graphics.AddChild(sprite);
-                x += letter.CurrentWobbler.Size.X + padding;
+                x += blockWidth + padding;
             }
 
             foreach (var t in text)
@@ -228,7 +236,7 @@ namespace Core.UI
                     }
                     else
                     {
-                        x += 24;
+                        x += blockWidth;
                     }
                 }
                 else if (t is NewlineSelect)
@@ -238,13 +246,16 @@ namespace Core.UI
                 }
             }
 
-            Name = $"Text: {string.Join("", name)}";
+            Name = $"Text: {text}";
             Graphics.Name = Name;
+            CurrentLineHeight = lineHeight;
+            CurrentBlockWidth = blockWidth;
+            CurrentPadding = padding;
         }
 
-        public void SetText(string str, int padding = 0, int lineHeight = 24)
+        public void SetText(string str, int padding = DEFAULT_PADDING, int lineHeight = DEFAULT_LINE_HEIGHT, int blockWidth = DEFAULT_BLOCK_WIDTH)
         {
-            SetText(ParseText(str), padding, lineHeight);
+            SetText(ParseText(str), padding, lineHeight, blockWidth);
         }
 
         public abstract class TextChar

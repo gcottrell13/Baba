@@ -14,7 +14,7 @@ namespace Editor.Screens
         public MapEditorScreen()
         {
             AddChild(new Text("Map editor, [text_escape] to go back, [text_ctrl]+s to save"));
-            SetCommands(20, new()
+            SetCommands(new()
             {
                 { "[text_escape]", "to go back" },
                 { "[text_ctrl]+s", "to save" },

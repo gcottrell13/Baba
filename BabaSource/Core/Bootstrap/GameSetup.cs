@@ -29,10 +29,16 @@ namespace Core.Bootstrap
         protected override void Initialize()
         {
             SetScreenSize(MAX_WIDTH, MAX_HEIGHT);
-            EntryPoint.Initialize();
             Window.KeyDown += _window_KeyDown;
             Window.KeyUp += _window_KeyUp;
             Window.TextInput += _window_TextInput;
+
+            var whiteRectangle = new Texture2D(GraphicsDevice, 1, 1);
+            whiteRectangle.SetData(new[] { Color.White });
+
+            RectangleSprite.WhiteRectangle = whiteRectangle;
+
+            EntryPoint.Initialize();
             base.Initialize();
         }
 

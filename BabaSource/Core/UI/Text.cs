@@ -14,20 +14,18 @@ namespace Core.UI
 {
     public class Text : GameObject
     {
-        private Dictionary<string, AnimatedWobblerSprite> _currentLetters;
+        private Dictionary<string, AnimatedWobblerSprite> _currentLetters = new();
         private Dictionary<string, AnimatedWobblerSprite> _cache = new();
 
         public const int DEFAULT_BLOCK_WIDTH = 24;
         public const int DEFAULT_LINE_HEIGHT = 24;
         public const int DEFAULT_PADDING = 0;
 
-        public int CurrentLineHeight { get; private set; }
-        public int CurrentBlockWidth { get; private set; }
-        public int CurrentPadding { get; private set; }
+        public TextOptions? CurrentOptions { get; private set; }
 
-        public Text(string text = "", int padding = 0, int lineHeight = 24)
+        public Text(string text = "", TextOptions? options = null)
         {
-            SetText(text, padding, lineHeight);
+            SetText(text, options);
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -112,6 +110,11 @@ namespace Core.UI
             return null;
         }
 
+        /// <summary>
+        /// Parse the text into objects
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static ListOfTextChar ParseText(string str)
         {
             string compoundName;
@@ -193,8 +196,17 @@ namespace Core.UI
             return alist;
         }
 
-        public void SetText(ListOfTextChar text, int padding = DEFAULT_PADDING, int lineHeight = DEFAULT_LINE_HEIGHT, int blockWidth = DEFAULT_BLOCK_WIDTH)
+        /// <summary>
+        /// Using the result from <see cref="ParseText"/>, set the text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="padding"></param>
+        /// <param name="lineHeight"></param>
+        /// <param name="blockWidth"></param>
+        public void SetText(ListOfTextChar text, TextOptions? options = null)
         {
+            options ??= new();
+
             Graphics.RemoveAllChildren();
 
             _currentLetters = new();
@@ -211,14 +223,14 @@ namespace Core.UI
                 _currentLetters[compoundName] = letter;
                 var sprite = new SpriteContainer()
                 {
-                    x = x - (letter.CurrentWobbler.Size.X - blockWidth) / 2,
-                    y = y - (letter.CurrentWobbler.Size.Y - lineHeight) / 2,
+                    x = x - (letter.CurrentWobbler.Size.X - options.blockWidth) / 2,
+                    y = y - (letter.CurrentWobbler.Size.Y - options.lineHeight) / 2,
                     Name = compoundName + "-textcontainer",
                 };
                 sprite.SetColor(color);
                 sprite.AddChild(letter);
                 Graphics.AddChild(sprite);
-                x += blockWidth + padding;
+                x += options.blockWidth + options.padding;
             }
 
             foreach (var t in text)
@@ -236,26 +248,50 @@ namespace Core.UI
                     }
                     else
                     {
-                        x += blockWidth;
+                        x += options.blockWidth;
                     }
                 }
                 else if (t is NewlineSelect)
                 {
                     x = 0;
-                    y += lineHeight;
+                    y += options.lineHeight;
                 }
+            }
+
+            if (options.background != null)
+            {
+                var rect = new RectangleSprite()
+                {
+                    xscale = Graphics.children.Select(x => x.x + options.blockWidth).Max(),
+                    yscale = Graphics.children.Select(x => x.y + options.lineHeight).Max(),
+                };
+                rect.SetColor(options.background);
+                Graphics.children.Insert(0, rect);
             }
 
             Name = $"Text: {text}";
             Graphics.Name = Name;
-            CurrentLineHeight = lineHeight;
-            CurrentBlockWidth = blockWidth;
-            CurrentPadding = padding;
+            CurrentOptions = options;
         }
 
-        public void SetText(string str, int padding = DEFAULT_PADDING, int lineHeight = DEFAULT_LINE_HEIGHT, int blockWidth = DEFAULT_BLOCK_WIDTH)
+        /// <summary>
+        /// Set the text based on a string value
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="padding"></param>
+        /// <param name="lineHeight"></param>
+        /// <param name="blockWidth"></param>
+        public void SetText(string str, TextOptions? options = null)
         {
-            SetText(ParseText(str), padding, lineHeight, blockWidth);
+            SetText(ParseText(str), options);
+        }
+
+        public class TextOptions
+        {
+            public int padding = DEFAULT_PADDING;
+            public int lineHeight = DEFAULT_LINE_HEIGHT;
+            public int blockWidth = DEFAULT_BLOCK_WIDTH;
+            public Color? background = null;
         }
 
         public abstract class TextChar

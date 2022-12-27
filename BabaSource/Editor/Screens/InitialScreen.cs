@@ -14,6 +14,12 @@ namespace Editor.Screens
         {
             Name = "Initial Screen";
             AddChild(new Text("Welcome to the Editor"));
+
+            SetCommands(new()
+            {
+                { "w", "World Editor" },
+                { "m", "Map Editor" },
+            });
         }
     }
 }

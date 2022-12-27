@@ -1,5 +1,6 @@
 ﻿using Core.UI;
 using Core.Utils;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Core.Screens
 
         public bool Transparent { get; protected set; } = false;
 
-        public void SetCommands(Dictionary<string, string> commands, float scale = 1f)
+        public void SetCommands(Dictionary<string, string> commands, float scale = 0.75f, Color? background = null)
         {
             var width = (int)((ScreenWidth / scale) / (Text.DEFAULT_BLOCK_WIDTH + Text.DEFAULT_PADDING)) - 2;
 
@@ -28,7 +29,7 @@ namespace Core.Screens
 
             foreach (var (disp, expl) in commands)
             {
-                var str = Text.ParseText($"{disp}-{expl}");
+                var str = Text.ParseText($"{disp}: {expl}");
                 var last = lines.Last();
                 if (last.TextCharLength() + str.TextCharLength() > width)
                 {
@@ -54,9 +55,11 @@ namespace Core.Screens
             }
 
             AddChild(display);
-            display.SetText(string.Join("\n", getLines()));
+            display.SetText(string.Join("\n", getLines()), new() { background=background });
+            display.Graphics.xscale = scale;
+            display.Graphics.yscale = scale;
             display.Graphics.x = 0;
-            display.Graphics.y = ScreenHeight - (lines.Count + 2) * display.CurrentLineHeight;
+            display.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;
         }
 
     }

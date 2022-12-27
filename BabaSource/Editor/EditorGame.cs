@@ -38,37 +38,21 @@ namespace Editor
 
                 var s = new StateMachine<States, int>()
                     .State(
-                        States.Initial, 
-                        c => c switch
-                        {
-                            TextInput { Character: 'w' } => 1,
-                            TextInput { Character: 'm' } => 2,
-                            _ => 0,
-                        },
-                        def => def
-                            .Change(1, States.WorldEditor)
-                            .Change(2, States.MapEditor)
-                            .AddOnEnter(() =>
-                            {
-                                mapStack.PopTo(null);
-                                mapStack.Add(new InitialScreen());
-                            })
-                    ).State(
                         States.WorldEditor,
                         c => c switch
                         {
-                            KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            // KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            TextInput { Character: 'm' } => 1,
                             _ => 0,
                         },
                         def => def
+                            .Change(1, States.MapPicker)
                             .AddOnEnter(() =>
                             {
                                 mapStack.PopTo(worldEditor);
                                 mapStack.Pop();
-                                worldEditor = new();
                                 mapStack.Add(worldEditor);
                             })
-                            .Change(-1, States.Initial)
                     ).State(
                         States.MapEditor,
                         c => c switch
@@ -80,11 +64,10 @@ namespace Editor
                             TextInput { Character: 'r' } => 5,
                             KeyEvent { ChangedKey: Keys.S, Up: false } => mapEditor.TrySavingMap(),
                             TextInput { Character: char f } => 0,
-                            KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            // KeyEvent { ChangedKey: Keys.Escape } => -1,
                             _ => 0,
                         },
                         def => def
-                            .Change(-1, States.Initial)
                             .Change(1, States.ChangeObjectColor)
                             .Change(2, States.AddingTextToObject)
                             .Change(3, States.ObjectPicker)
@@ -94,12 +77,19 @@ namespace Editor
                             {
                                 mapStack.PopTo(mapEditor);
                                 mapStack.Pop();
-                                mapEditor = new();
                                 mapStack.Add(mapEditor);
                             })
+                    ).State(
+                        States.MapPicker,
+                        c => c switch
+                        {
+
+                        },
+                        def => def
+                            .Change(1, States.MapEditor)
                     );
 
-                s.Initialize(States.Initial);
+                s.Initialize(States.WorldEditor);
                 CoreEventChannels.TextInput.Subscribe(ev => s.SendAction(ev));
                 CoreEventChannels.KeyEvent.Subscribe(ev => s.SendAction(ev));
 
@@ -109,7 +99,6 @@ namespace Editor
         private enum States
         {
             None,
-            Initial,
             WorldEditor,  // editor for laying out maps in the world
             MapEditor, // editor for a section of the world; a single screen
 
@@ -119,6 +108,7 @@ namespace Editor
             ObjectPicker, // modal for selecting a new object
             MapWordLayer, // the word layer for this specific map
             SelectMapRegion, // view the map's current region, and select/add/edit a region
+            MapPicker, // select which map we are editing
 
             // Region Editor
             AddOrEditRegion, // add a new region, or edit an existing one
@@ -127,7 +117,7 @@ namespace Editor
             SelectRegionTheme,
 
             // World Editor
-            WorldEditorPickMap,
+            WorldEditorPickMap, // Choose which map to place in the world
         }
     }
 }

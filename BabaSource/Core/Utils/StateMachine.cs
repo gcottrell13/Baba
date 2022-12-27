@@ -11,6 +11,8 @@ namespace Core.Utils
         private readonly Dictionary<TState, StateDefinition<TState, Transition>> states = new();
         private StateDefinition<TState, Transition>? currentState;
 
+        public TState CurrentState => currentState == null ? default : currentState.State;
+
         public StateMachine()
         {
         }
@@ -25,7 +27,9 @@ namespace Core.Utils
 
         public void SendAction(object action)
         {
-            if (currentState != null && states.TryGetValue(currentState.OnAction(action), out var newState))
+            if (currentState == null) throw new Exception("State machine was not initialized");
+
+            if (states.TryGetValue(currentState.OnAction(action), out var newState) && !Equals(newState, currentState))
             {
                 newState.OnEnter(currentState.State);
                 currentState.OnLeave(newState.State);

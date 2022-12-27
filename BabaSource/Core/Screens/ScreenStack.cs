@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Screens
 {
@@ -26,6 +27,22 @@ namespace Core.Screens
             {
                 container.AddChild(item);
             }
+        }
+
+        /// <summary>
+        /// Makes sure that this screen is on the top of the stack
+        /// </summary>
+        /// <param name="screen"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void EnsureTop(BaseScreen? screen)
+        {
+            if (screen == null)
+            {
+                throw new ArgumentNullException("Screen cannot be null");
+            }
+            PopTo(screen);
+            Pop();
+            Add(screen);
         }
 
         public void Pop()

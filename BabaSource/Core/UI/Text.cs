@@ -23,6 +23,8 @@ namespace Core.UI
 
         public TextOptions? CurrentOptions { get; private set; }
 
+        public RectangleSprite? background { get; private set; }
+
         public Text(string text = "", TextOptions? options = null)
         {
             SetText(text, options);
@@ -260,13 +262,13 @@ namespace Core.UI
 
             if (options.background != null)
             {
-                var rect = new RectangleSprite()
+                background = new RectangleSprite()
                 {
                     xscale = Graphics.children.Select(x => x.x + options.blockWidth).Max(),
                     yscale = Graphics.children.Select(x => x.y + options.lineHeight).Max(),
                 };
-                rect.SetColor(options.background);
-                Graphics.children.Insert(0, rect);
+                background.SetColor(options.background);
+                Graphics.children.Insert(0, background);
             }
 
             Name = $"Text: {text}";

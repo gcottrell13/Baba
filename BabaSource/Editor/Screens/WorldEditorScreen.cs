@@ -21,6 +21,10 @@ namespace Editor.Screens
             SetCommands(new()
             {
                 { "[text_escape]", "go back" },
+                { "q", "zoom out" },
+                { "e", "zoom in" },
+                { "[arrow:1][arrow:2][arrow:4][arrow:8]", "move cursor" },
+                { "m", "Map Picker" },
             });
 
             var rect = new RectangleSprite()

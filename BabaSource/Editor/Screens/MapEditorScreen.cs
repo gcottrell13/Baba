@@ -13,10 +13,10 @@ namespace Editor.Screens
     {
         public MapEditorScreen()
         {
-            AddChild(new Text("Map editor, [text_escape] to go back, [text_ctrl]+s to save"));
+            AddChild(new Text("Map editor"));
             SetCommands(new()
             {
-                { "[text_escape]", "go back" },
+                { "[text_escape]", "go back to world" },
                 { "[text_ctrl]+s", "to save" },
             });
         }

@@ -11,7 +11,13 @@ namespace Core.Screens
     public abstract class BaseScreen : GameObject
     {
         private Dictionary<string, string> commands = new();
-        private readonly Text display = new();
+        private readonly Text commandDisplay = new();
+
+        protected void SetOffsetX(int x)
+        {
+            Graphics.x = x;
+            commandDisplay.Graphics.x = -x;
+        }
 
         public bool Transparent { get; protected set; } = false;
 
@@ -54,12 +60,11 @@ namespace Core.Screens
                 yield return bottom;
             }
 
-            AddChild(display);
-            display.SetText(string.Join("\n", getLines()), new() { background=background });
-            display.Graphics.xscale = scale;
-            display.Graphics.yscale = scale;
-            display.Graphics.x = 0;
-            display.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;
+            AddChild(commandDisplay);
+            commandDisplay.SetText(string.Join("\n", getLines()), new() { background=background });
+            commandDisplay.Graphics.xscale = scale;
+            commandDisplay.Graphics.yscale = scale;
+            commandDisplay.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;
         }
 
     }

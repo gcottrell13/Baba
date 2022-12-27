@@ -34,6 +34,18 @@ namespace Editor
             {
                 MapEditorScreen mapEditor = new();
                 WorldEditorScreen worldEditor = new();
+                MapPickerScreen mapPickerScreen = new(new() { 
+                    "one", 
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "eight",
+                    "nine",
+                    "ten",
+                });
                 var mapStack = new ScreenStack(this);
 
                 var s = new StateMachine<States, int>()
@@ -47,12 +59,7 @@ namespace Editor
                         },
                         def => def
                             .Change(1, States.MapPicker)
-                            .AddOnEnter(() =>
-                            {
-                                mapStack.PopTo(worldEditor);
-                                mapStack.Pop();
-                                mapStack.Add(worldEditor);
-                            })
+                            .AddOnEnter(() => mapStack.EnsureTop(worldEditor))
                     ).State(
                         States.MapEditor,
                         c => c switch
@@ -64,29 +71,34 @@ namespace Editor
                             TextInput { Character: 'r' } => 5,
                             KeyEvent { ChangedKey: Keys.S, Up: false } => mapEditor.TrySavingMap(),
                             TextInput { Character: char f } => 0,
-                            // KeyEvent { ChangedKey: Keys.Escape } => -1,
+                            KeyEvent { ChangedKey: Keys.Escape } => -1,
                             _ => 0,
                         },
                         def => def
+                            .Change(-1, States.WorldEditor)
                             .Change(1, States.ChangeObjectColor)
                             .Change(2, States.AddingTextToObject)
                             .Change(3, States.ObjectPicker)
                             .Change(4, States.MapWordLayer)
                             .Change(5, States.SelectMapRegion)
-                            .AddOnEnter(() =>
-                            {
-                                mapStack.PopTo(mapEditor);
-                                mapStack.Pop();
-                                mapStack.Add(mapEditor);
-                            })
+                            .AddOnEnter(() => mapStack.EnsureTop(mapEditor))
                     ).State(
                         States.MapPicker,
                         c => c switch
                         {
-
+                            TextInput { Character: char f} => mapPickerScreen.RecieveText(f),
+                            KeyEvent { ChangedKey: Keys k, Up: false} => mapPickerScreen.RecieveKey(k),
+                            _ => 0,
                         },
                         def => def
+                            .Change(-1, States.WorldEditor)
                             .Change(1, States.MapEditor)
+                            .AddOnEnter(() => mapStack.EnsureTop(mapPickerScreen))
+                            .AddOnEnter(() => mapPickerScreen.SetFilter(""))
+                            .AddOnLeave(() =>
+                            {
+
+                            })
                     );
 
                 s.Initialize(States.WorldEditor);

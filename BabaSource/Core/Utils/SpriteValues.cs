@@ -53,6 +53,20 @@ namespace Core.Utils
         public const int Left = 0b100;
         public const int Right = 0b1;
 
+        public const int LR = Left + Right;
+        public const int UD = Up + Down;
+        public const int UR = Up + Right;
+        public const int UL = Up + Left;
+        public const int DR = Down + Right;
+        public const int DL = Down + Left;
+
+        public const int URL = Up + LR;
+        public const int UDL = Up + DL;
+        public const int UDR = Up + DR;
+        public const int DRL = Down + LR;
+
+        public const int UDRL = LR + UD;
+
         public Joinable(string name, Wobbler[] wobblers) : base(name)
         {
             Wobblers = wobblers;

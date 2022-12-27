@@ -9,6 +9,7 @@ from modules.utils import output_directory_structure
 from modules.vars import OUTPUT_DIRECTORY, VISUAL_OUTPUT_DIRECTORY
 from modules.load_object_information import load_information, all_palettes
 
+NAMESPACE = "Core.Content"
 
 def save_object_info():
     info, colors = load_information()
@@ -38,7 +39,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Content.Content {{
+namespace {NAMESPACE} {{
     public struct ObjectInfoItem {{
         public int color;
         public int color_active;
@@ -83,7 +84,7 @@ def save_palette_info():
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
 
-namespace Content.Content {{
+namespace {NAMESPACE} {{
     public static class PaletteInfo {{
         private const int shift = {(7).bit_length()};
 {items}
@@ -194,7 +195,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Content.Content {{
+namespace {NAMESPACE} {{
     public static class Sheets {{
         public static Dictionary<string, Texture2D> GetSheets(GraphicsDevice graphics) => new Dictionary<string, Texture2D>() {{
 {sheet_text}
@@ -206,8 +207,9 @@ namespace Content.Content {{
 using Core.Utils; 
 using Microsoft.Xna.Framework.Graphics; 
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
-namespace Content.Content {{
+namespace {NAMESPACE} {{
     public static class SheetMap {{
         public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {{
             return new Dictionary<string, SpriteValues>() {{

@@ -20,7 +20,7 @@ CUSTOM_SPRITES_PATH = CUSTOM_FILES_PATH / 'images'
 CUSTOM_VALUES_FILE_PATH = CUSTOM_FILES_PATH / 'CustomColors.json'
 
 VISUAL_OUTPUT_DIRECTORY = PIPELINE_PATH / 'baba_analysis'
-OUTPUT_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'Content'
+OUTPUT_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'Core'
 
 MAPS_DIRECTORY = PIPELINE_PATH.parent / 'BabaSource' / 'Content' / 'Maps'
 

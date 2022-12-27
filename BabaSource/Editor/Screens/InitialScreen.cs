@@ -1,5 +1,5 @@
-﻿using Content.UI;
-using Core.Screens;
+﻿using Core.Screens;
+using Core.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Editor.Screens
         public InitialScreen()
         {
             Name = "Initial Screen";
-            AddChild(new Text("initial screen, press w or m"));
+            AddChild(new Text("Welcome to the Editor"));
         }
     }
 }

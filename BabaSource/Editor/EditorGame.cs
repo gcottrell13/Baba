@@ -1,5 +1,5 @@
-﻿using Content;
-using Content.UI;
+﻿using Core;
+using Core.UI;
 using Core.Bootstrap;
 using Core.Events;
 using Core.Screens;
@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Core.Content;
 
 namespace Editor
 {

@@ -25,19 +25,19 @@ namespace Core.Utils
     {
         public Wobbler(string name, Point[] positions, Point size, Texture2D tex) : base(name)
         {
-            Positions = positions;
+            Rectangles = positions.Select(p => new Rectangle(p * size, size)).ToArray();
             Size = size;
             Texture = tex;
         }
 
-        public Point[] Positions { get; }
+        public Rectangle[] Rectangles { get; }
         public Point Size { get; }
         public Texture2D Texture { get; }
 
-        public Point GetPosition(ref int step)
+        public Rectangle GetPosition(ref int step)
         {
-            step %= Positions.Length;
-            return Positions[step];
+            step %= Rectangles.Length;
+            return Rectangles[step];
         }
 
         public override Wobbler GetInitial(int d) => this;

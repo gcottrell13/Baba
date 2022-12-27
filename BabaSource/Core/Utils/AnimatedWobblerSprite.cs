@@ -14,20 +14,20 @@ namespace Core.Utils
 
         private double? _lastWobble = null;
 
-        private Wobbler currentWobbler;
+        public Wobbler CurrentWobbler { get; private set; }
 
         public AnimatedWobblerSprite(SpriteValues? sprite, int initialState) : base(new ResourceHandle<Texture2D>(sprite?.Name))
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));
 
             this.sprite = sprite;
-            currentWobbler = sprite.GetInitial(initialState) ?? throw new NullReferenceException("sprite returned a null initial state");
-            _setWobbler(currentWobbler);
+            CurrentWobbler = sprite.GetInitial(initialState) ?? throw new NullReferenceException("sprite returned a null initial state");
+            _setWobbler(CurrentWobbler);
         }
 
         private void _setWobbler(Wobbler wobbler)
         {
-            currentWobbler = wobbler;
+            CurrentWobbler = wobbler;
             graphicsResource.SetValue(wobbler.Texture);
         }
 
@@ -57,9 +57,7 @@ namespace Core.Utils
 
         public override void Draw()
         {
-            var xy = currentWobbler.GetPosition(ref currentWobbleFrame);
-            var sourceRectangle = new Rectangle(xy * currentWobbler.Size, currentWobbler.Size);
-            draw(sourceRectangle);
+            draw(CurrentWobbler.GetPosition(ref currentWobbleFrame));
         }
     }
 }

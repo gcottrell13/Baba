@@ -22,6 +22,8 @@ namespace Editor.Screens
         private WorldPickerScreen? worldPicker;
         private MapPickerScreen? mapPicker;
 
+        private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
+
         public WorldEditorScreen(ScreenStack stack, List<SaveFormat> saves)
         {
             stateMachine = new StateMachine<EditorStates, KeyPress>("world editor")
@@ -49,10 +51,11 @@ namespace Editor.Screens
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.SelectingWorld,
+                        KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
-                        .AddOnEnter(() => commands())
+                        .AddOnEnter(() => editorCommands())
                 ).State(
                     EditorStates.WorldEditorPickMap,
                     c => mapPicker!.Handle(c) switch
@@ -70,17 +73,38 @@ namespace Editor.Screens
                             stack.Add(mapPicker);
                         })
                         .AddOnLeave(() => stack.Pop())
+                ).State(
+                    EditorStates.RenamingWorld,
+                    c =>
+                    {
+                        if (c.KeyPressed == Keys.Enter)
+                        {
+                            if (editor != null)
+                            {
+                                editor.save.worldName = titleText.Text;
+                                return EditorStates.WorldEditor;
+                            }
+                        }
+                        if (c.KeyPressed == Keys.Escape)
+                        {
+                            return EditorStates.WorldEditor;
+                        }
+                        titleText.HandleInput(c);
+                        return EditorStates.RenamingWorld;
+                    },
+                    def => def
+                        .AddOnEnter(() => renameCommands())
                 );
         }
 
         public void init()
         {
             stateMachine.Initialize(EditorStates.SelectingWorld);
-            commands();
-            AddChild(new Text("World editor") { Name = "editortitle" });
+            editorCommands();
+            AddChild(titleText);
         }
 
-        private void commands()
+        private void editorCommands()
         {
             var d = new Dictionary<string, string>();
 
@@ -103,6 +127,16 @@ namespace Editor.Screens
             SetCommands(d);
         }
 
+        private void renameCommands()
+        {
+            SetCommands(new()
+            {
+                { CommonStrings.ESCAPE, "cancel" },
+                { CommonStrings.ENTER, "save" },
+                { CommonStrings.NAME_CHARS, "type a name" },
+            });
+        }
+
         public override EditorStates Handle(KeyPress key) => stateMachine.SendAction(key) switch
         {
             _ => EditorStates.WorldEditor,
@@ -111,7 +145,7 @@ namespace Editor.Screens
         public void SetEditor(WorldEditor editor)
         {
             this.editor = editor;
-            (ChildByName("editortitle") as Text)?.SetText($"[blue]World: {editor.save.worldName}");
+            titleText.SetText(editor.save.worldName);
         }
 
         public EditorStates LoadWorld(SaveFormat save)
@@ -128,7 +162,7 @@ namespace Editor.Screens
 
         public EditorStates SetPickedMap(MapData d)
         {
-            (ChildByName("editortitle") as Text)?.SetText($"World editor, picked [green]{d.name}[white] to place");
+            titleText.SetText($"World editor, picked [green]{d.name}[white] to place");
             return EditorStates.WorldEditor;
         }
 

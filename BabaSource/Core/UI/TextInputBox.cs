@@ -13,10 +13,11 @@ namespace Core.UI
         public string Text { get; private set; } = string.Empty;
         public readonly Text.TextOptions TextOptions = new();
 
-        public string Format = "{0}";
+        private string Format;
 
-        public TextInputBox()
+        public TextInputBox(string format = "{}")
         {
+            Format = format.Replace("{}", "{0}");
             AddChild(new Text(Text) { Name = "text" });
         }
 
@@ -39,13 +40,17 @@ namespace Core.UI
         {
             if (format != Format)
             {
-                Format = format;
+                Format = format.Replace("{}", "{0}");
                 SetText(Text);
             }
         }
 
         public void SetText(string text)
         {
+            foreach (var d in DisallowedCharacters)
+            {
+                text = text.Replace(d.ToString(), "");
+            }
             Text = text;
             (ChildByName("text") as Text)?.SetText(string.Format(Format, text), TextOptions);
         }

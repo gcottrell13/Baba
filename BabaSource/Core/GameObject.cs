@@ -31,11 +31,16 @@ namespace Core
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnAfterChildrenUpdate(GameTime gameTime) { }
         protected virtual void OnAfterInitialize() { }
+
+        public GameObject? ChildByName(string name)
+        {
+            return Children.First(x => x.Name == name);
+        }
 
         protected virtual void OnDestroy() { }
 

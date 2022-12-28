@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace Core.Utils
@@ -35,6 +36,11 @@ namespace Core.Utils
         public void RemoveAllChildren()
         {
             OnDestroy();
+        }
+
+        public BaseSprite? ChildByName(string name)
+        {
+            return children.First(x => x.Name == name);
         }
 
         public void RemoveChild(BaseSprite child)

@@ -21,7 +21,7 @@ namespace Core.Utils
         private float _xanchor;
         private float _yanchor;
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         public float alpha { get; set; } = 1;
 

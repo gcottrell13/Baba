@@ -155,20 +155,13 @@ namespace Core
         {
             void _processKeyEvent(KeyEvent ev)
             {
-                if (ev.Up) return;
+                if (ev.Up) 
+                    return;
                 var pressed = KeyboardState.GetPressedKeys();
                 var mod = (pressed.Contains(Keys.LeftShift) || pressed.Contains(Keys.RightShift) ? ModifierKeys.Shift : 0) |
                     (pressed.Contains(Keys.LeftControl) || pressed.Contains(Keys.RightControl) ? ModifierKeys.Ctrl : 0) |
                     (pressed.Contains(Keys.LeftAlt) || pressed.Contains(Keys.RightAlt) ? ModifierKeys.Alt : 0);
-                if (ev.ChangedKey >= Keys.A && ev.ChangedKey <= Keys.Z)
-                {
-                    var txt = ((char)ev.ChangedKey).ToString();
-                    cb(new() { ModifierKeys = mod, KeyPressed = ev.ChangedKey, Text = (mod & ModifierKeys.Shift) != 0 ? txt.ToUpper()[0] : txt.ToLower()[0] });
-                }
-                else
-                {
-                    cb(new() { ModifierKeys = mod, KeyPressed = ev.ChangedKey });
-                }
+                cb(new() { ModifierKeys = mod, KeyPressed = ev.ChangedKey, Text = ev.ChangedKey.ToChar((mod & ModifierKeys.Shift) != 0) });
             }
             CoreEventChannels.KeyEvent.Subscribe(_processKeyEvent);
             return () => CoreEventChannels.KeyEvent.Unsubscribe(_processKeyEvent);

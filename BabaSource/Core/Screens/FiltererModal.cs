@@ -33,7 +33,7 @@ namespace Core.Screens
         private List<T> filteredChildren = new();
         public Color HighlightColor = Color.Brown;
 
-        protected string displayTypeName = string.Empty; // for display purposes
+        private string displayTypeName = string.Empty; // for display purposes
         private const string baseFilterDisplayText = "select";
         private readonly Text filterDisplay = new(baseFilterDisplayText);
 
@@ -217,15 +217,9 @@ namespace Core.Screens
 
         private PickerState addCharToFilter(char c)
         {
-            if (c == '[' || c == ']')
-            {
-                
-            }
-            else if (!string.IsNullOrWhiteSpace(c.ToString().Trim()))
-            {
-                // should filter out newlines
-                SetFilter(filter + c);
-            }
+            if (c == 0 || c == 10 || c == '[' || c == ']') return PickerState.Filtering;
+
+            SetFilter(filter + c);
 
             return PickerState.Filtering;
         }
@@ -246,6 +240,12 @@ namespace Core.Screens
             filterDisplay.SetText($"{pre}: {filter} :\n", new() { background = Color.Black });
             filteredChildren = items.Where(x => filterBy(x).Contains(filter)).ToList();
             _setSelected(0);
+        }
+
+        protected void SetDisplayTypeName(string typeName)
+        {
+            displayTypeName = typeName;
+            SetFilter(filter);
         }
     }
 

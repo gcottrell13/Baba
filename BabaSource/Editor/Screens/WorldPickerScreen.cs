@@ -15,6 +15,7 @@ namespace Editor.Screens
             Name = "WorldPicker";
             Add = true;
             maxDisplay = 15;
+            SetDisplayTypeName("world");
         }
     }
 }

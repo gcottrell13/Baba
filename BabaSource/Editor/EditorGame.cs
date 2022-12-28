@@ -66,11 +66,7 @@ namespace Editor
                     );
 
                 s.Initialize(EditorStates.WorldEditor);
-                onKeyPress(ev =>
-                {
-                    Debug.WriteLine(ev.KeyPressed.ToString());
-                    s.SendAction(ev);
-                });
+                onKeyPress(ev => s.SendAction(ev));
 
                 AddChild(mapStack);
             }

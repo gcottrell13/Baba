@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Screens
 {
@@ -20,13 +21,15 @@ namespace Core.Screens
             var visibleScreens = new List<BaseScreen>();
             foreach (var item in stack)
             {
-                visibleScreens.Add(item);
+                visibleScreens.Insert(0, item);
                 if (!item.Transparent) break;
             }
             foreach (var item in visibleScreens)
             {
+                item.HideCommands();
                 container.AddChild(item);
             }
+            screen.ShowCommands();
         }
 
         /// <summary>
@@ -50,6 +53,8 @@ namespace Core.Screens
             var popped = stack.TryPop(out var poppedItem);
             if (popped)
                 container.RemoveChild(poppedItem);
+            if (stack.TryPeek(out var top))
+                top.ShowCommands();
         }
 
         public void PopTo(BaseScreen? screen)
@@ -57,6 +62,7 @@ namespace Core.Screens
             while (stack.TryPeek(out var top) && top != screen) { 
                 Pop(); 
             }
+            screen?.ShowCommands();
         }
     }
 }

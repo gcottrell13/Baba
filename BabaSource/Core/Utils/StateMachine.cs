@@ -31,8 +31,8 @@ namespace Core.Utils
 
             if (states.TryGetValue(currentState.OnAction(action, out var trans), out var newState) && !Equals(newState, currentState))
             {
-                newState.OnEnter(currentState.State, trans);
                 currentState.OnLeave(newState.State, trans);
+                newState.OnEnter(currentState.State, trans);
                 currentState = newState;
                 return newState.State;
             }

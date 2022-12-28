@@ -21,6 +21,16 @@ namespace Core.Screens
 
         public bool Transparent { get; protected set; } = false;
 
+        public void HideCommands()
+        {
+            commandDisplay.Graphics.alpha = 0f;
+        }
+
+        public void ShowCommands()
+        {
+            commandDisplay.Graphics.alpha = 1f;
+        }
+
         public void SetCommands(Dictionary<string, string> commands, float scale = 0.75f, Color? background = null)
         {
             var width = (int)((ScreenWidth / scale) / (Text.DEFAULT_BLOCK_WIDTH + Text.DEFAULT_PADDING)) - 2;

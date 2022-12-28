@@ -1,4 +1,4 @@
-﻿using Core.Events;
+using Core.Events;
 using Core.UI;
 using Core.Utils;
 using Microsoft.Xna.Framework;
@@ -20,31 +20,26 @@ namespace Core.Screens
         private readonly List<T> items;
         private readonly Func<T, string> filterBy;
         private readonly Func<T, string> display;
-        private readonly int maxDisplay;
-        private readonly bool add;
-        private readonly bool edit;
+        protected int maxDisplay;
+        protected bool add;
+        protected bool edit;
         private readonly List<Text> texts = new();
         private readonly SpriteContainer itemDisplay = new();
         private List<T> filteredChildren = new();
         public Color HighlightColor = Color.Brown;
 
-        private const string baseFilterDisplayText = "filter:\n";
+        private const string baseFilterDisplayText = "filter:             :\n";
         private readonly Text filterDisplay = new(baseFilterDisplayText);
 
         public FiltererModal(
             List<T> items, 
             Func<T, string> filterBy, 
-            Func<T, string>? display = null,
-            int maxDisplay = 5, 
-            bool add = false, bool edit = false)
+            Func<T, string>? display = null)
         {
             this.display = display ?? filterBy;
             filter = string.Empty;
             this.items = items;
             this.filterBy = filterBy;
-            this.maxDisplay = maxDisplay;
-            this.add = add;
-            this.edit = edit;
 
             statemachine = new StateMachine<PickerState, int>()
                 .State(
@@ -125,7 +120,7 @@ namespace Core.Screens
             return filteredChildren.IndexOf(Selected);
         }
 
-        private void selectingCommands()
+        protected void selectingCommands()
         {
             var d = new Dictionary<string, string>()
             {
@@ -139,7 +134,7 @@ namespace Core.Screens
             SetCommands(d);
         }
 
-        private void filteringCommands()
+        protected void filteringCommands()
         {
             SetCommands(new()
             {
@@ -180,7 +175,7 @@ namespace Core.Screens
                 child.SetText(display(t), new() { background = color });
                 child.Graphics.y = y;
                 child.Graphics.alpha = 1f;
-                y += 25;
+                y += 24;
             }
         }
 

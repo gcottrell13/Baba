@@ -96,11 +96,12 @@ namespace Editor
                             .Change(1, States.WorldEditor)
                             .Change(2, States.MapEditor)
                             .Change(3, States.MapEditor)
-                            .AddOnEnter(() => mapStack.EnsureTop(mapPickerScreen))
+                            .AddOnEnter(() => mapStack.Add(mapPickerScreen))
                             .AddOnEnter(() => mapPickerScreen.SetFilter(""))
                             .AddOnEnter(() => mapPickerScreen.RecieveKey(Keys.None))
                             .AddOnLeave((state, trans) =>
                             {
+                                mapStack.Pop();
                                 switch (trans)
                                 {
                                     case 1: { worldEditor.SetPickedMap(mapPickerScreen.Selected); break; }

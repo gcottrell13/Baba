@@ -32,14 +32,17 @@ namespace Core.Screens
         private readonly Text filterDisplay = new(baseFilterDisplayText);
 
         public FiltererModal(
-            List<T> items, 
-            Func<T, string> filterBy, 
+            List<T> items,
+            int maxDisplay,
+            Func<T, string> filterBy,
             Func<T, string>? display = null)
         {
             this.display = display ?? filterBy;
             filter = string.Empty;
             this.items = items;
             this.filterBy = filterBy;
+            filteredChildren = items.ToList();
+            this.maxDisplay = maxDisplay;
 
             statemachine = new StateMachine<PickerState, int>()
                 .State(
@@ -98,11 +101,10 @@ namespace Core.Screens
                 );
             statemachine.Initialize(PickerState.Selecting);
 
-            foreach (var item in items)
+            for (var i = 0; i < maxDisplay; i++)
             {
-                var t = new Text(this.display(item), new() { background = Color.Black });
+                var t = new Text("", new() { background = Color.Black });
                 texts.Add(t);
-                filteredChildren.Add(item);
                 AddChild(t, false);
                 itemDisplay.AddChild(t.Graphics);
             }
@@ -169,7 +171,7 @@ namespace Core.Screens
             var startIndex = Math.Max(0, Math.Min(sid - maxDisplay / 2, filteredChildren.Count - maxDisplay));
 
             var y = 0;
-            foreach (var (t, child) in filteredChildren.Skip(startIndex).Take(maxDisplay).Zip(texts.Take(maxDisplay)))
+            foreach (var (t, child) in filteredChildren.Skip(startIndex).Take(maxDisplay).Zip(texts))
             {
                 var color = object.Equals(t, Selected) ? HighlightColor : Color.Black;
                 child.SetText(display(t), new() { background = color });

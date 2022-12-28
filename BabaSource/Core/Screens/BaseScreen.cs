@@ -77,5 +77,14 @@ namespace Core.Screens
             commandDisplay.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;
         }
 
+        public static class CommonStrings
+        {
+            public const string ALL_ARROW = "[arrow:1][arrow:2][arrow:4][arrow:8]";
+            public const string UD_ARROW = "[arrow:2][arrow:8]";
+            public const string LR_ARROW = "[arrow:4][arrow:1]";
+            public const string ESCAPE = "[text_escape]";
+            public const string CTRL_PLUS = "[text_ctrl]+";
+            public const string NAME_CHARS = "a-z0-9_";
+        }
     }
 }

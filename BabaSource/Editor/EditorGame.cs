@@ -59,7 +59,7 @@ namespace Editor
                             _ => 0,
                         },
                         def => def
-                            .Change(1, States.MapPicker)
+                            .Change(1, States.WorldEditorPickMap)
                             .AddOnEnter(() => mapStack.EnsureTop(worldEditor))
                     ).State(
                         States.MapEditor,
@@ -84,7 +84,7 @@ namespace Editor
                             .Change(5, States.SelectMapRegion)
                             .AddOnEnter(() => mapStack.EnsureTop(mapEditor))
                     ).State(
-                        States.MapPicker,
+                        States.WorldEditorPickMap,
                         c => c switch
                         {
                             TextInput { Character: char f } => mapPickerScreen.RecieveText(f),
@@ -130,7 +130,7 @@ namespace Editor
             ObjectPicker, // modal for selecting a new object
             MapWordLayer, // the word layer for this specific map
             SelectMapRegion, // view the map's current region, and select/add/edit a region
-            MapPicker, // select which map we are editing
+            // MapPicker, // select which map we are editing // just go back to the world map and pick another map
 
             // Region Editor
             AddOrEditRegion, // add a new region, or edit an existing one
@@ -140,6 +140,13 @@ namespace Editor
 
             // World Editor
             WorldEditorPickMap, // Choose which map to place in the world
+            WorldEditorWarp, // edit warp points
+
+            // New Map
+            NewMap,
+
+            // New Region
+            NewRegion,
         }
     }
 }

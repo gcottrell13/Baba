@@ -20,8 +20,13 @@ namespace Editor.Screens
             AddChild(t);
             SetCommands(new()
             {
-                { "[text_escape]", "go back to world" },
-                { "[text_ctrl]+s", "to save" },
+                { CommonStrings.ESCAPE, "go back to world" },
+                { "c", "obj color" },
+                { "t", "obj text" },
+                { "p", "obj picker" },
+                { "l", "map layer 2" },
+                { "r", "map region" },
+                { CommonStrings.CTRL_PLUS + "s", "to save" },
             });
         }
 

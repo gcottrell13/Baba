@@ -124,10 +124,10 @@ namespace Core.Screens
         {
             var d = new Dictionary<string, string>()
             {
-                { "[arrow:2][arrow:8]", "move cursor" },
+                { CommonStrings.UD_ARROW, "move cursor" },
                 { "f", "filter" },
                 { "p", "pick" },
-                { "[text_escape]", "go back" },
+                { CommonStrings.ESCAPE, "go back" },
             };
             if (edit) d.Add("e", "edit");
             if (add) d.Add("a", "add");
@@ -138,8 +138,8 @@ namespace Core.Screens
         {
             SetCommands(new()
             {
-                { "a-z0-9_", "type a name" },
-                { "[text_escape]", "stop filtering" },
+                { CommonStrings.NAME_CHARS, "type a name" },
+                { CommonStrings.ESCAPE, "stop filtering" },
             });
         }
 

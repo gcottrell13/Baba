@@ -1,10 +1,12 @@
 ﻿using Core.Bootstrap;
+using Core.Events;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -31,7 +33,14 @@ namespace Core
 
         public SpriteContainer Graphics { get; protected set; } = new SpriteContainer();
 
-        public string Name { get; set; } = string.Empty;
+        private string? _name = null;
+        public string Name { get
+            {
+                if (_name == null) 
+                    _name = GetType().Name;
+                return _name;
+            }
+            set { _name = value; } }
 
         protected virtual void OnUpdate(GameTime gameTime) { }
         protected virtual void OnAfterChildrenUpdate(GameTime gameTime) { }
@@ -123,6 +132,46 @@ namespace Core
             {
                 throw new Exception("GameObject already has a parent");
             }
+        }
+
+
+        public struct KeyPress
+        {
+            public Keys KeyPressed;
+            public ModifierKeys ModifierKeys;
+            public char Text;
+        }
+
+        public enum ModifierKeys
+        {
+            Shift = 0b1,
+            Ctrl = 0b10,
+            Alt = 0b100,
+        }
+
+        public delegate void OnGameKeyPressEvent(KeyPress ev);
+        public delegate void Unsubscribe();
+        public Unsubscribe onKeyPress(OnGameKeyPressEvent cb)
+        {
+            void _processKeyEvent(KeyEvent ev)
+            {
+                if (ev.Up) return;
+                var pressed = KeyboardState.GetPressedKeys();
+                var mod = (pressed.Contains(Keys.LeftShift) || pressed.Contains(Keys.RightShift) ? ModifierKeys.Shift : 0) |
+                    (pressed.Contains(Keys.LeftControl) || pressed.Contains(Keys.RightControl) ? ModifierKeys.Ctrl : 0) |
+                    (pressed.Contains(Keys.LeftAlt) || pressed.Contains(Keys.RightAlt) ? ModifierKeys.Alt : 0);
+                if (ev.ChangedKey >= Keys.A && ev.ChangedKey <= Keys.Z)
+                {
+                    var txt = ((char)ev.ChangedKey).ToString();
+                    cb(new() { ModifierKeys = mod, KeyPressed = ev.ChangedKey, Text = (mod & ModifierKeys.Shift) != 0 ? txt.ToUpper()[0] : txt.ToLower()[0] });
+                }
+                else
+                {
+                    cb(new() { ModifierKeys = mod, KeyPressed = ev.ChangedKey });
+                }
+            }
+            CoreEventChannels.KeyEvent.Subscribe(_processKeyEvent);
+            return () => CoreEventChannels.KeyEvent.Unsubscribe(_processKeyEvent);
         }
     }
 }

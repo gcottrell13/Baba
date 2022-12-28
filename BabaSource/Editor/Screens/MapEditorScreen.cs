@@ -6,10 +6,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Editor.SaveFormats;
 
 namespace Editor.Screens
 {
-    internal class MapEditorScreen : BaseScreen
+    internal class MapEditorScreen : BaseScreen<EditorStates>
     {
         private string? loadedMapName = null;
         private Text t;
@@ -30,10 +31,15 @@ namespace Editor.Screens
             });
         }
 
-        public void LoadMap(string? name)
+        public override EditorStates Handle(KeyPress ev)
         {
-            loadedMapName = name;
-            t.SetText($"Map Editor: {name}");
+            throw new NotImplementedException();
+        }
+
+        public void LoadMap(MapData? d)
+        {
+            loadedMapName = d.name;
+            t.SetText($"Map Editor: {d.name}");
         }
 
         public void NewMap()

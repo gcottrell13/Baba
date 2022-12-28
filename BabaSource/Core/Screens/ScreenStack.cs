@@ -1,35 +1,23 @@
-﻿using System;
+﻿using MonoGame.Extended.Screens;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Core.Screens
 {
-    public class ScreenStack
+    public class ScreenStack : GameObject
     {
         private readonly Stack<BaseScreen> stack = new();
-        private readonly GameObject container;
 
-        public ScreenStack(GameObject container)
+        public ScreenStack()
         {
-            this.container = container;
         }
 
         public void Add(BaseScreen screen)
         {
-            container.RemoveAllChildren();
-            stack.Push(screen);
-            var visibleScreens = new List<BaseScreen>();
-            foreach (var item in stack)
-            {
-                visibleScreens.Insert(0, item);
-                if (!item.Transparent) break;
-            }
-            foreach (var item in visibleScreens)
-            {
-                item.HideCommands();
-                container.AddChild(item);
-            }
-            screen.ShowCommands();
+            add(screen);
+            ensureVisibility();
         }
 
         /// <summary>
@@ -43,26 +31,59 @@ namespace Core.Screens
             {
                 throw new ArgumentNullException("Screen cannot be null");
             }
-            PopTo(screen);
-            Pop();
-            Add(screen);
+            popTo(screen);
+            pop();
+            add(screen);
+            ensureVisibility();
         }
 
         public void Pop()
         {
-            var popped = stack.TryPop(out var poppedItem);
-            if (popped)
-                container.RemoveChild(poppedItem);
-            if (stack.TryPeek(out var top))
-                top.ShowCommands();
+            pop();
+            ensureVisibility();
         }
 
         public void PopTo(BaseScreen? screen)
         {
-            while (stack.TryPeek(out var top) && top != screen) { 
-                Pop(); 
+            popTo(screen);
+            ensureVisibility();
+        }
+
+        private void add(BaseScreen screen)
+        {
+            RemoveAllChildren();
+            stack.Push(screen);
+        }
+
+        private void pop()
+        {
+            var popped = stack.TryPop(out var poppedItem);
+            if (popped)
+                RemoveChild(poppedItem);
+        }
+
+        private void popTo(BaseScreen? screen)
+        {
+            while (stack.TryPeek(out var top) && top != screen)
+            {
+                pop();
             }
-            screen?.ShowCommands();
+        }
+
+        private void ensureVisibility()
+        {
+            var visibleScreens = new List<BaseScreen>();
+            foreach (var item in stack)
+            {
+                visibleScreens.Insert(0, item);
+                if (!item.Transparent) break;
+            }
+            foreach (var item in visibleScreens)
+            {
+                item.HideCommands();
+                AddChild(item);
+            }
+            if (stack.TryPeek(out var top)) top.ShowCommands();
         }
     }
 }

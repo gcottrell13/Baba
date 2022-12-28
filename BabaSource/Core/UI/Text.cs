@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,7 @@ using System.Security.AccessControl;
 
 namespace Core.UI
 {
+    [DebuggerDisplay("Text: {EffectiveName,nq}")]
     public class Text : GameObject
     {
         private Dictionary<string, AnimatedWobblerSprite> _currentLetters = new();
@@ -24,6 +26,9 @@ namespace Core.UI
         public TextOptions? CurrentOptions { get; private set; }
 
         public RectangleSprite? background { get; private set; }
+
+        public string CurrentText { get; private set; }
+        public string EffectiveName => Name ?? CurrentText;
 
         public Text(string text = "", TextOptions? options = null)
         {
@@ -261,7 +266,7 @@ namespace Core.UI
                 }
             }
 
-            if (options.background != null)
+            if (options.background != null && Graphics.children.Count > 0)
             {
                 background = new RectangleSprite()
                 {
@@ -272,8 +277,8 @@ namespace Core.UI
                 Graphics.children.Insert(0, background);
             }
 
-            Name = $"Text: {text}";
-            Graphics.Name = Name;
+            CurrentText = text.ToString();
+            Graphics.Name = "text display";
             CurrentOptions = options;
         }
 

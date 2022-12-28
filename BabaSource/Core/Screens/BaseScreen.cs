@@ -10,6 +10,14 @@ namespace Core.Screens
 {
     public abstract class BaseScreen : GameObject
     {
+        public bool Transparent { get; protected set; }
+        public abstract void HideCommands();
+        public abstract void ShowCommands();
+        public abstract void SetCommands(Dictionary<string, string> commands, float scale = 0.75f, Color? background = null, Color? legendColor = null);
+    }
+
+    public abstract class BaseScreen<THandleResult> : BaseScreen
+    {
         private Dictionary<string, string> commands = new();
         private readonly Text commandDisplay = new();
 
@@ -21,19 +29,23 @@ namespace Core.Screens
 
         public bool Transparent { get; protected set; } = false;
 
-        public void HideCommands()
+        public abstract THandleResult Handle(KeyPress ev);
+
+        public override void HideCommands()
         {
             commandDisplay.Graphics.alpha = 0f;
         }
 
-        public void ShowCommands()
+        public override void ShowCommands()
         {
             commandDisplay.Graphics.alpha = 1f;
         }
 
-        public void SetCommands(Dictionary<string, string> commands, float scale = 0.75f, Color? background = null)
+        public override void SetCommands(Dictionary<string, string> commands, float scale = 0.75f, Color? background = null, Color? legendColor = null)
         {
             var width = (int)((ScreenWidth / scale) / (Text.DEFAULT_BLOCK_WIDTH + Text.DEFAULT_PADDING)) - 2;
+
+            var legend = (legendColor ?? Color.Brown).ToHexTriple();
 
             this.commands = commands;
 
@@ -45,7 +57,7 @@ namespace Core.Screens
 
             foreach (var (disp, expl) in commands)
             {
-                var str = Text.ParseText($"{disp}: {expl}");
+                var str = Text.ParseText($"{legend}{disp}[white]: {expl}");
                 var last = lines.Last();
                 if (last.TextCharLength() + str.TextCharLength() > width)
                 {
@@ -85,6 +97,7 @@ namespace Core.Screens
             public const string ESCAPE = "[text_escape]";
             public const string CTRL_PLUS = "[text_ctrl]+";
             public const string NAME_CHARS = "a-z0-9_";
+            public const string ENTER = "enter";
         }
     }
 }

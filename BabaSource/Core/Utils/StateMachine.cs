@@ -1,139 +1,135 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Core.Utils
 {
-    public class StateMachine<TState, Transition>
+    public class StateMachine<TState, TAction>
         where TState : notnull
-        where Transition : notnull
+        where TAction : notnull, new()
     {
-        private readonly Dictionary<TState, StateDefinition<TState, Transition>> states = new();
-        private StateDefinition<TState, Transition>? currentState;
+        private readonly Dictionary<TState, StateDefinition<TState, TAction>> states = new();
+        private readonly string name;
+        private StateDefinition<TState, TAction>? currentState;
 
         public TState CurrentState => currentState == null ? default : currentState.State;
 
-        public StateMachine()
+        public StateMachine(string name)
         {
+            this.name = name;
         }
 
-        public StateMachine<TState, Transition> State(TState state, Func<object, Transition> theSwitch, Action<StateDefinition<TState, Transition>>? stateConfig = null)
+        public StateMachine<TState, TAction> State(TState state, Func<TAction, TState> theSwitch, Action<StateDefinition<TState, TAction>>? stateConfig = null)
         {
-            var stateDef = new StateDefinition<TState, Transition>(state, theSwitch);
+            var stateDef = new StateDefinition<TState, TAction>(state, theSwitch);
             states.Add(state, stateDef);
             stateConfig?.Invoke(stateDef);
             return this;
         }
 
-        public TState SendAction(object action)
+        public TState SendAction(TAction action)
         {
             if (currentState == null) throw new Exception("State machine was not initialized");
 
-            if (states.TryGetValue(currentState.OnAction(action, out var trans), out var newState) && !Equals(newState, currentState))
+            var resultState = currentState.OnAction(action);
+
+            if (states.TryGetValue(resultState, out var newState) && !Equals(newState, currentState))
             {
-                currentState.OnLeave(newState.State, trans);
-                newState.OnEnter(currentState.State, trans);
+                currentState.OnLeave(newState.State);
+                newState.OnEnter(currentState.State);
                 currentState = newState;
-                return newState.State;
             }
 
-            return default;
+            return resultState;
         }
 
         public void Initialize(TState state)
         {
             currentState ??= states.TryGetValue(state, out var newState) ? newState : throw new ArgumentException($"State {state} does not exist");
-            currentState?.OnEnter(default, default);
+            currentState?.OnEnter(default);
         }
     }
 
 
-    public class StateDefinition<TState, Transition>
+    public class StateDefinition<TState, TAction>
         where TState : notnull
-        where Transition : notnull
+        where TAction : notnull, new()
     {
         public TState State { get; }
-        public Func<object, Transition> TheSwitch { get; }
+        public Func<TAction, TState> TheSwitch { get; }
 
-        public delegate void EventHandler(object sender, TState state, Transition trans);
+        public delegate void EventHandler(object sender, TState state);
         private event EventHandler? OnEnterEvent;
         private event EventHandler? OnLeaveEvent;
-        private readonly Dictionary<Transition, TState> transitions = new();
 
-        public StateDefinition(TState state, Func<object, Transition> theSwitch)
+        public StateDefinition(TState state, Func<TAction, TState> theSwitch)
         {
             State = state;
             TheSwitch = theSwitch;
         }
 
-        public StateDefinition<TState, Transition> AddOnEnter<T>(Func<TState, Transition, T> action)
+        public StateDefinition<TState, TAction> AddOnEnter<T>(Func<TState, T> action)
         {
-            OnEnterEvent += (o, c, trans) => action(c, trans);
+            OnEnterEvent += (o, c) => action(c);
             return this;
         }
 
-        public StateDefinition<TState, Transition> AddOnEnter<T>(Func<T> action)
+        public StateDefinition<TState, TAction> AddOnEnter<T>(Func<T> action)
         {
-            OnEnterEvent += (o, c, trans) => action();
+            OnEnterEvent += (o, c) => action();
             return this;
         }
 
-        public StateDefinition<TState, Transition> AddOnEnter(Action<TState, Transition> action)
+        public StateDefinition<TState, TAction> AddOnEnter(Action<TState> action)
         {
-            OnEnterEvent += (o, c, trans) => action(c, trans);
+            OnEnterEvent += (o, c) => action(c);
             return this;
         }
 
-        public StateDefinition<TState, Transition> AddOnEnter(Action action)
+        public StateDefinition<TState, TAction> AddOnEnter(Action action)
         {
-            OnEnterEvent += (o, c, trans) => action();
+            OnEnterEvent += (o, c) => action();
             return this;
         }
 
-        public StateDefinition<TState, Transition> AddOnLeave<T>(Func<TState, Transition, T> action)
+        public StateDefinition<TState, TAction> AddOnLeave<T>(Func<TState, T> action)
         {
-            OnLeaveEvent += (o, c, trans) => action(c, trans);
+            OnLeaveEvent += (o, c) => action(c);
             return this;
         }
 
-        public StateDefinition<TState, Transition> AddOnLeave<T>(Func<T> action)
+        public StateDefinition<TState, TAction> AddOnLeave<T>(Func<T> action)
         {
-            OnLeaveEvent += (o, c, trans) => action();
+            OnLeaveEvent += (o, c) => action();
             return this;
         }
-        public StateDefinition<TState, Transition> AddOnLeave(Action<TState, Transition> action)
+        public StateDefinition<TState, TAction> AddOnLeave(Action<TState> action)
         {
-            OnLeaveEvent += (o, c, trans) => action(c, trans);
-            return this;
-        }
-
-        public StateDefinition<TState, Transition> AddOnLeave(Action action)
-        {
-            OnLeaveEvent += (o, c, trans) => action();
+            OnLeaveEvent += (o, c) => action(c);
             return this;
         }
 
-        public void OnEnter(TState previous, Transition t)
+        public StateDefinition<TState, TAction> AddOnLeave(Action action)
         {
-            OnEnterEvent?.Invoke(this, previous, t);
-        }
-
-        public void OnLeave(TState nextState, Transition t)
-        {
-            OnLeaveEvent?.Invoke(this, nextState, t);
-        }
-
-        public StateDefinition<TState, Transition> Change(Transition transition, TState newState)
-        {
-            transitions.Add(transition, newState);
+            OnLeaveEvent += (o, c) => action();
             return this;
         }
 
-        public TState OnAction(object value, out Transition transition)
+        public void OnEnter(TState previous)
         {
-            transition = TheSwitch(value);
-            if (transition == null) return State;
-            return transitions.TryGetValue(transition, out var newState) ? newState : State;
+            OnEnterEvent?.Invoke(this, previous);
+        }
+
+        public void OnLeave(TState nextState)
+        {
+            OnLeaveEvent?.Invoke(this, nextState);
+        }
+
+        public TState OnAction(TAction value)
+        {
+            var newState = TheSwitch(value);
+            return newState ?? State;
         }
     }
 }

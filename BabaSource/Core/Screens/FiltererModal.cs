@@ -15,12 +15,14 @@ namespace Core.Screens
         where T : class
     {
         public StateMachine<PickerState, KeyPress> statemachine { get; }
-        private string filter;
+
         public T? Selected { get; private set; }
         private readonly List<T> items;
         private readonly Func<T, string> filterBy;
         private readonly Func<T, string> display;
         protected int maxDisplay;
+
+        public string Filter => filterDisplay.Text;
 
         private bool _add;
         private bool _edit;
@@ -33,9 +35,8 @@ namespace Core.Screens
         private List<T> filteredChildren = new();
         public Color HighlightColor = Color.Brown;
 
-        private string displayTypeName = string.Empty; // for display purposes
         private const string baseFilterDisplayText = "select";
-        private readonly Text filterDisplay = new(baseFilterDisplayText);
+        private readonly TextInputBox filterDisplay = new() { DisallowedCharacters = "\n[]\t" };
 
         public FiltererModal(
             List<T> items,
@@ -44,7 +45,6 @@ namespace Core.Screens
             Func<T, string>? display = null)
         {
             this.display = display ?? filterBy;
-            filter = string.Empty;
             this.items = items;
             this.filterBy = filterBy;
             filteredChildren = items.ToList();
@@ -71,8 +71,7 @@ namespace Core.Screens
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => PickerState.Selecting,
-                        KeyPress { KeyPressed: Keys.Back } => backspace(),
-                        KeyPress { Text: char f } => addCharToFilter(f),
+                        KeyPress k => addCharToFilter(k),
                     },
                     def => def
                         .AddOnEnter(filteringCommands)
@@ -102,8 +101,8 @@ namespace Core.Screens
             itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 2;
             Graphics.AddChild(itemDisplay);
             AddChild(filterDisplay);
+            SetDisplayTypeName("");
             SetFilter("");
-            _drawChildren();
         }
 
         private int? getSelectedItemIndex()
@@ -215,37 +214,32 @@ namespace Core.Screens
 
         public override PickerState Handle(KeyPress ev) => statemachine.SendAction(ev);
 
-        private PickerState addCharToFilter(char c)
+        private PickerState addCharToFilter(KeyPress c)
         {
-            if (c == 0 || c == 10 || c == '[' || c == ']') return PickerState.Filtering;
-
-            SetFilter(filter + c);
-
-            return PickerState.Filtering;
-        }
-
-        private PickerState backspace()
-        {
-            if (filter.Length > 1)
-                SetFilter(filter[..^1]);
-            else
-                SetFilter("");
+            filterDisplay.HandleInput(c);
+            _setSelected(0);
+            _afterSetFilter();
             return PickerState.Filtering;
         }
 
         public void SetFilter(string f)
         {
-            filter = f;
-            var pre = $"{baseFilterDisplayText} {displayTypeName}".Trim();
-            filterDisplay.SetText($"{pre}: {filter} :\n", new() { background = Color.Black });
-            filteredChildren = items.Where(x => filterBy(x).Contains(filter)).ToList();
+            filterDisplay.SetText(f);
             _setSelected(0);
+            _afterSetFilter();
+        }
+
+        private void _afterSetFilter()
+        {
+            filteredChildren = items.Where(x => filterBy(x).Contains(Filter)).ToList();
+            _drawChildren();
         }
 
         protected void SetDisplayTypeName(string typeName)
         {
-            displayTypeName = typeName;
-            SetFilter(filter);
+            var pre = $"{baseFilterDisplayText} {typeName}: {{0}} :\n".Trim();
+            filterDisplay.SetFormat(pre);
+            _afterSetFilter();
         }
     }
 

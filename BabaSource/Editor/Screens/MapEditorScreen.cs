@@ -11,7 +11,7 @@ namespace Editor.Screens
 {
     internal class MapEditorScreen : BaseScreen
     {
-        private string loadedMapName = string.Empty;
+        private string? loadedMapName = null;
         private Text t;
 
         public MapEditorScreen()
@@ -25,10 +25,15 @@ namespace Editor.Screens
             });
         }
 
-        public void LoadMap(string name)
+        public void LoadMap(string? name)
         {
             loadedMapName = name;
             t.SetText($"Map Editor: {name}");
+        }
+
+        public void NewMap()
+        {
+
         }
 
         public int TrySavingMap()

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Core.Content;
+using Autofac.Core;
 
 namespace Editor
 {
@@ -86,21 +87,26 @@ namespace Editor
                         States.MapPicker,
                         c => c switch
                         {
-                            TextInput { Character: char f} => mapPickerScreen.RecieveText(f),
-                            KeyEvent { ChangedKey: Keys k, Up: false} => mapPickerScreen.RecieveKey(k),
+                            TextInput { Character: char f } => mapPickerScreen.RecieveText(f),
+                            KeyEvent { ChangedKey: Keys k, Up: false } => mapPickerScreen.RecieveKey(k),
                             _ => 0,
                         },
                         def => def
                             .Change(-1, States.WorldEditor)
-                            .Change(1, States.MapEditor)
+                            .Change(1, States.WorldEditor)
+                            .Change(2, States.MapEditor)
+                            .Change(3, States.MapEditor)
                             .AddOnEnter(() => mapStack.EnsureTop(mapPickerScreen))
                             .AddOnEnter(() => mapPickerScreen.SetFilter(""))
-                            .AddOnLeave(state =>
+                            .AddOnEnter(() => mapPickerScreen.RecieveKey(Keys.None))
+                            .AddOnLeave((state, trans) =>
                             {
-                                if (state == States.MapEditor && mapPickerScreen.Selected != null)
+                                switch (trans)
                                 {
-                                    mapEditor.LoadMap(mapPickerScreen.Selected);
-                                }
+                                    case 1: { worldEditor.SetPickedMap(mapPickerScreen.Selected); break; }
+                                    case 2: { mapEditor.LoadMap(mapPickerScreen.Selected); break; }
+                                    case 3: { mapEditor.NewMap(); break; }
+                                };
                             })
                     );
 

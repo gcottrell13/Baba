@@ -7,5 +7,7 @@ namespace Core.Events
     public struct TextInput
     {
         public char Character;
+
+        public void Deconstruct(out char c) => c = Character;
     }
 }

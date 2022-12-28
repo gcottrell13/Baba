@@ -67,6 +67,7 @@ namespace Core.UI
                 "]" => "text_rsqbr",
                 "," => "text_comma",
                 "+" => "text_plus",
+                "_" => "text_underscore",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}:{state}";

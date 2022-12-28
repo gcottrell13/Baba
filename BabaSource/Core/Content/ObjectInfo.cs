@@ -458,6 +458,7 @@ namespace Core.Content {
 			{"text_turtle", new ObjectInfoItem() { color = (5 << shift) + 2, color_active = (5 << shift) + 4, sprite = "text_turtle", layer = 20, unittype = "text" } },
 			{"text_u", new ObjectInfoItem() { color = (0 << shift) + 1, color_active = (0 << shift) + 3, sprite = "text_u", layer = 20, unittype = "text" } },
 			{"text_ufo", new ObjectInfoItem() { color = (4 << shift) + 0, color_active = (4 << shift) + 1, sprite = "text_ufo", layer = 20, unittype = "text" } },
+			{"text_underscore", new ObjectInfoItem() { color = (1 << shift) + 3, color_active = (1 << shift) + 4, sprite = "text_underscore", layer = 10, unittype = "text" } },
 			{"text_up", new ObjectInfoItem() { color = (1 << shift) + 3, color_active = (1 << shift) + 4, sprite = "text_up", layer = 20, unittype = "text" } },
 			{"text_v", new ObjectInfoItem() { color = (0 << shift) + 1, color_active = (0 << shift) + 3, sprite = "text_v", layer = 20, unittype = "text" } },
 			{"text_vase", new ObjectInfoItem() { color = (0 << shift) + 1, color_active = (0 << shift) + 1, sprite = "text_vase", layer = 20, unittype = "text" } },

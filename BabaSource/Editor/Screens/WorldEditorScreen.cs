@@ -13,10 +13,13 @@ namespace Editor.Screens
     internal class WorldEditorScreen : BaseScreen
     {
         SpriteContainer r = new() { xscale = 100, yscale = 200, x =100, y = 100 };
+        string pickedMap = string.Empty;
+        private Text t;
 
         public WorldEditorScreen()
         {
-            AddChild(new Text("[blue]World editor"));
+            t = new Text("[blue]World editor");
+            AddChild(t);
 
             SetCommands(new()
             {
@@ -35,6 +38,11 @@ namespace Editor.Screens
             r.AddChild(rect);
             Graphics.AddChild(r);
 
+        }
+
+        public void SetPickedMap(string? name)
+        {
+            t.SetText($"World editor, picked [green]{name}[white] to place");
         }
 
         protected override void OnUpdate(GameTime gameTime)

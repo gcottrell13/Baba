@@ -82,5 +82,12 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_plus"
+  },
+  "text_underscore": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_underscore"
   }
 }

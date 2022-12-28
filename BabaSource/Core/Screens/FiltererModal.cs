@@ -1,4 +1,5 @@
-﻿using Core.UI;
+﻿using Core.Events;
+using Core.UI;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,7 @@ namespace Core.Screens
     public class FiltererModal<T> : BaseScreen
         where T : class
     {
-        private StateMachine<PickerState, int> smachine;
+        public StateMachine<PickerState, int> statemachine { get; }
         private string filter;
         public T? Selected { get; private set; }
         private readonly List<T> items;
@@ -39,31 +40,68 @@ namespace Core.Screens
         {
             this.display = display ?? filterBy;
             filter = string.Empty;
+            this.items = items;
+            this.filterBy = filterBy;
+            this.maxDisplay = maxDisplay;
+            this.add = add;
+            this.edit = edit;
 
-            selectingCommands();
-            smachine = new StateMachine<PickerState, int>()
+            statemachine = new StateMachine<PickerState, int>()
                 .State(
                     PickerState.Selecting,
                     c => c switch
                     {
                         Keys.F => 1,
+                        Keys.Up => Up(),
+                        Keys.Down => Down(),
+                        Keys.Escape => Escape(),
+                        Keys.P => Pick(),
+                        Keys.E => Edit(),
+                        Keys.A => Add(),
                         _ => 0,
                     },
                     def => def
-                        .Change(1, PickerState.Filtering)
+                        // we have to go here first because the events give us KeyEvent and then an equivalent TextInput right after
+                        .Change(1, PickerState.StartFilter) 
+                        .Change(-1, PickerState.CloseCancel)
+                        .Change(2, PickerState.ClosePick)
+                        .Change(3, PickerState.CloseEdit)
+                        .Change(4, PickerState.CloseAdd)
                         .AddOnEnter(selectingCommands)
                 ).State(
                     PickerState.Filtering,
                     c => c switch
                     {
                         Keys.Escape => -1,
+                        (char)8 => backspace(),
+                        char f => addCharToFilter(f),
                         _ => 0,
                     },
                     def => def
                         .Change(-1, PickerState.Selecting)
                         .AddOnEnter(filteringCommands)
+                ).State(
+                    PickerState.CloseCancel,
+                    c => 1,
+                    def => def.Change(1, PickerState.Selecting)
+                ).State(
+                    PickerState.ClosePick,
+                    c => 1,
+                    def => def.Change(1, PickerState.Selecting)
+                ).State(
+                    PickerState.CloseEdit,
+                    c => 1,
+                    def => def.Change(1, PickerState.Selecting)
+                ).State(
+                    PickerState.CloseAdd,
+                    c => 1,
+                    def => def.Change(1, PickerState.Selecting)
+                ).State(
+                    PickerState.StartFilter,
+                    c => 1,
+                    def => def.Change(1, PickerState.Filtering)
                 );
-            smachine.Initialize(PickerState.Selecting);
+            statemachine.Initialize(PickerState.Selecting);
 
             foreach (var item in items)
             {
@@ -74,11 +112,6 @@ namespace Core.Screens
                 itemDisplay.AddChild(t.Graphics);
             }
 
-            this.items = items;
-            this.filterBy = filterBy;
-            this.maxDisplay = maxDisplay;
-            this.add = add;
-            this.edit = edit;
             itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 2;
             Graphics.AddChild(itemDisplay);
             AddChild(filterDisplay);
@@ -110,36 +143,9 @@ namespace Core.Screens
         {
             SetCommands(new()
             {
-                { "a-z0-9", "type a name" },
+                { "a-z0-9_", "type a name" },
                 { "[text_escape]", "stop filtering" },
             });
-        }
-
-        public int RecieveText(char c)
-        {
-            if (smachine.CurrentState == PickerState.Selecting)
-            {
-                if (c == 'f') {
-                    smachine.SendAction(Keys.F);
-                }
-                return 0;
-            }
-
-            if (c == 8)
-            {
-                SetFilter(filter[..^1]);
-            }
-            else if (c == '[' || c == ']')
-            {
-                return 0;
-            }
-            else if (!string.IsNullOrWhiteSpace(c.ToString().Trim()))
-            {
-                // should filter out newlines
-                SetFilter(filter + c);
-            }
-
-            return 0;
         }
 
         private void _setSelected(int newSelected)
@@ -178,43 +184,85 @@ namespace Core.Screens
             }
         }
 
-        public int RecieveKey(Keys key)
+        private int Up()
         {
-            switch (key)
+            var sid = getSelectedItemIndex() ?? 0;
+            _setSelected(Math.Max(sid - 1, 0));
+            return 0;
+        }
+
+        private int Down()
+        {
+            var sid = getSelectedItemIndex() ?? 0;
+            _setSelected(Math.Min(sid + 1, filteredChildren.Count - 1));
+            return 0;
+        }
+
+        private int Escape()
+        {
+            return -1;
+        }
+
+        private int Pick()
+        {
+            if (Selected != null)
+                return 2;
+            return 0;
+        }
+
+        private int Edit()
+        {
+            if (Selected == null)
+                return 0;
+            return edit ? 3 : 0;
+        }
+
+        private int Add()
+        {
+            return add ? 4 : 0;
+        }
+
+        public int RecieveKey(Keys key) => statemachine.SendAction(key) switch
+        {
+            PickerState.CloseCancel => -1,
+            PickerState.ClosePick => 1,
+            PickerState.CloseEdit => 2,
+            PickerState.CloseAdd => 3,
+            _ => 0,
+        };
+
+        public int RecieveText(char c)
+        {
+            if (statemachine.CurrentState == PickerState.Selecting)
             {
-                case Keys.Up:
-                    {
-                        var sid = getSelectedItemIndex() ?? 0;
-                        _setSelected(Math.Max(sid - 1, 0));
-                        return 0;
-                    }
-                case Keys.Down:
-                    {
-                        var sid = getSelectedItemIndex() ?? 0;
-                        _setSelected(Math.Min(sid + 1, filteredChildren.Count - 1));
-                        return 0;
-                    }
-                case Keys.Escape:
-                    {
-                        var r = smachine.CurrentState == PickerState.Filtering ? 0 : -1;
-                        smachine.SendAction(key);
-                        return r;
-                    }
-                case Keys.P:
-                    {
-                        // pick
-                        if (Selected != null) 
-                            return 1;
-                        return 0;
-                    }
-                case Keys.E:
-                    {
-                        // edit
-                        if (Selected == null)
-                            return 0;
-                        return edit ? 2 : 0;
-                    }
+                if (c == 'f')
+                {
+                    statemachine.SendAction(Keys.F);
+                }
+                return 0;
             }
+            statemachine.SendAction(c);
+            return 0;
+        }
+
+        private int addCharToFilter(char c)
+        {
+            if (c == '[' || c == ']')
+            {
+                
+            }
+            else if (!string.IsNullOrWhiteSpace(c.ToString().Trim()))
+            {
+                // should filter out newlines
+                SetFilter(filter + c);
+            }
+
+            return 0;
+        }
+
+        private int backspace()
+        {
+            SetFilter(filter[..^1]);
             return 0;
         }
 
@@ -226,10 +274,16 @@ namespace Core.Screens
             _setSelected(0);
         }
 
-        private enum PickerState
+        public enum PickerState
         {
+            None = 0,
             Selecting,
-            Filtering
+            StartFilter,
+            Filtering,
+            CloseCancel,
+            ClosePick,
+            CloseEdit,
+            CloseAdd,
         }
     }
 }

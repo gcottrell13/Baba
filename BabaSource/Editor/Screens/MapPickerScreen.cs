@@ -13,7 +13,7 @@ namespace Editor.Screens
 {
     internal class MapPickerScreen : FiltererModal<string>
     {
-        public MapPickerScreen(List<string> items) : base(items, x => x, x => $"map: {x}", maxDisplay: 8)
+        public MapPickerScreen(List<string> items) : base(items, x => x, x => $"map: {x}", maxDisplay: 8, edit: true)
         {
             Transparent = true;
             SetOffsetX(100);

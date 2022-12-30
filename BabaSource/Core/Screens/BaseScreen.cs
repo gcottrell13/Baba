@@ -19,7 +19,7 @@ namespace Core.Screens
     public abstract class BaseScreen<THandleResult> : BaseScreen
     {
         private Dictionary<string, string> commands = new();
-        private readonly Text commandDisplay = new();
+        private readonly TextWithBoxOutline commandDisplay = new();
 
         protected void SetOffsetX(int x)
         {
@@ -49,15 +49,12 @@ namespace Core.Screens
 
             this.commands = commands;
 
-            var @long = $"[line:{Joinable.LR}]".Repeat(width);
-            var top = $"[line:{Joinable.DR}]" + @long + $"[line:{Joinable.DL}]";
-            var bottom = $"[line:{Joinable.UR}]" + @long + $"[line:{Joinable.UL}]";
-            var upDownLine = $"[line:{Joinable.UD}]";
-            var lines = new List<ListOfTextChar>() { new() }; 
+            var lines = new List<ListOfTextChar>() { new() };
+            var space = new[] { new ObjectSelect(" ") };
 
             foreach (var (disp, expl) in commands)
             {
-                var str = Text.ParseText($"{legend}{disp}[white]: {expl}");
+                var str = ParseText($"{legend}{disp}[white]: {expl}");
                 var last = lines.Last();
                 if (last.TextCharLength() + str.TextCharLength() > width)
                 {
@@ -66,24 +63,15 @@ namespace Core.Screens
                 else
                 {
                     if (last.Count > 0)
-                        last.AddRange(new[] { new ObjectSelect(" ") }.Repeat(2));
+                        last.AddRange(space.Repeat(2));
                     last.AddRange(str);
                 }
             }
 
-            IEnumerable<string> getLines()
-            {
-                yield return top;
-                foreach (var line in lines)
-                {
-                    var padding = " ".Repeat(width - line.TextCharLength());
-                    yield return $"{upDownLine}{line}{padding}{upDownLine}";
-                }
-                yield return bottom;
-            }
+            lines.Last().AddRange(space.Repeat(width - lines.Last().TextCharLength()));
 
             AddChild(commandDisplay);
-            commandDisplay.SetText(string.Join("\n", getLines()), new() { background=background });
+            commandDisplay.SetText(lines, new() { backgroundColor=background });
             commandDisplay.Graphics.xscale = scale;
             commandDisplay.Graphics.yscale = scale;
             commandDisplay.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;

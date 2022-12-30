@@ -348,6 +348,16 @@ namespace Core.UI
             {
                 return string.Join("", this);
             }
+
+            private readonly static ListOfTextChar space = new() { new ObjectSelect(" ") };
+
+            public ListOfTextChar PadRight(int count)
+            {
+                var newlist = new ListOfTextChar();
+                newlist.AddRange(this);
+                newlist.AddRange(space.Repeat(count - TextCharLength()));
+                return newlist;
+            }
         }
     }
 }

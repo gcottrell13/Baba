@@ -27,8 +27,6 @@ namespace Core.Screens
             commandDisplay.Graphics.x = -x;
         }
 
-        public bool Transparent { get; protected set; } = false;
-
         public abstract THandleResult Handle(KeyPress ev);
 
         public override void HideCommands()

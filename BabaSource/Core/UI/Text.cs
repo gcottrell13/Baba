@@ -27,7 +27,7 @@ namespace Core.UI
 
         public RectangleSprite? background { get; private set; }
 
-        public string CurrentText { get; private set; }
+        public string CurrentText { get; private set; } = string.Empty;
         public string EffectiveName => Name ?? CurrentText;
 
         public Text(string text = "", TextOptions? options = null)
@@ -91,7 +91,7 @@ namespace Core.UI
             }
             else
             {
-                sprite = null;
+                sprite = null!;
                 return false;
             }
 

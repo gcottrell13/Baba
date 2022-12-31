@@ -34,7 +34,7 @@ namespace Editor
         {
             public override void Initialize()
             {
-                var saveFiles = LoadSaveFiles.LoadAllWorlds().ToList();
+                var saveFiles = LoadSaveFiles.LoadAllWorlds();
 
                 MapEditorScreen? mapEditorScreen = null;
                 WorldEditorScreen? worldEditorScreen = null;

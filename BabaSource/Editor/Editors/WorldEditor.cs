@@ -22,5 +22,10 @@ namespace Editor.Editors
         {
 
         }
+
+        public void saveWorld()
+        {
+            LoadSaveFiles.SaveAll(save);
+        }
     }
 }

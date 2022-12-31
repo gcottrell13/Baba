@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,41 +11,92 @@ namespace Editor.SaveFormats
 {
     internal static class LoadSaveFiles
     {
-        private static string _getSaveDirectory()
+        private static string editorFilesDirectiory =
+#if DEBUG
+            "../../../../../editorSaves/";
+#else
+            "./editorSaves/";
+#endif
+
+        private static ReadonlySavesList files = new();
+
+        public static void AddNewSave(SaveFormat saveFormat)
         {
-            var a = Directory.GetParent(Directory.GetCurrentDirectory());
-            while (a.Name != "Baba")
-            {
-                a = a.Parent;
-            }
-            var b = a.ToString() + $"/editorSaves/";
-            return b;
+            files.Add(saveFormat);
         }
 
         public static IEnumerable<string> GetSaveFiles()
         {
-            foreach (var file in Directory.EnumerateFiles(_getSaveDirectory()))
+            foreach (var file in Directory.EnumerateFiles(editorFilesDirectiory))
             {
                 var n = Path.GetFileName(file);
                 yield return n[..n.IndexOf('.')];
             }
         }
 
-        public static SaveFormat[] LoadAllWorlds()
+        public static ReadonlySavesList LoadAllWorlds()
         {
-            return GetSaveFiles().Select(LoadWorld).ToArray();
+            var alist = new List<SaveFormat>();
+            foreach (var f in GetSaveFiles().Select(LoadWorld))
+            {
+                if (f != null) alist.Add(f);
+            }
+            files.AddRange(alist);
+            return files;
         }
 
-        public static SaveFormat LoadWorld(string worldName)
+        public static SaveFormat? LoadWorld(string saveFileName)
         {
-            var text = File.ReadAllText(_getSaveDirectory() + $"{worldName}.json");
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormat>(text) ?? throw new NullReferenceException("could not load");
+            try
+            {
+                var text = File.ReadAllText(editorFilesDirectiory + $"{saveFileName}.json");
+                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormat>(text) ?? throw new NullReferenceException("could not load");
+                d.fileName = saveFileName;
+                return d;
+            }
+            catch 
+            {
+                return null;
+            }
         }
 
-        public static void SaveAll(string worldName, SaveFormat save)
+        public static void SaveAll(SaveFormat save)
         {
-            var text = Newtonsoft.Json.JsonConvert.SerializeObject(save);
-            File.WriteAllText(_getSaveDirectory() + $"{worldName}.json", text);
+            save.fileName ??= save.worldName;
+            var text = save.Serialize();
+            File.WriteAllText(editorFilesDirectiory + $"{save.fileName}.json", text);
+        }
+
+        public class ReadonlySavesList : IEnumerable<SaveFormat>
+        {
+            private readonly List<SaveFormat> saves = new();
+
+            public void Add(SaveFormat save)
+            {
+                saves.Add(save);
+            }
+
+            public void AddRange(IEnumerable<SaveFormat> saves)
+            {
+                this.saves.AddRange(saves);
+            }
+
+            public IEnumerator GetEnumerator()
+            {
+                return saves.GetEnumerator();
+            }
+
+            IEnumerator<SaveFormat> IEnumerable<SaveFormat>.GetEnumerator()
+            {
+                return saves.GetEnumerator();
+            }
+
+            public int Count => saves.Count;
+
+            public ReadOnlyCollection<SaveFormat> ToList()
+            {
+                return new ReadOnlyCollection<SaveFormat>(saves);
+            }
         }
     }
 }

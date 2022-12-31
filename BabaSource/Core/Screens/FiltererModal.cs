@@ -39,13 +39,13 @@ namespace Core.Screens
         private readonly TextInputBox filterDisplay = new() { DisallowedCharacters = "\n[]\t" };
 
         public FiltererModal(
-            List<T> items,
+            IEnumerable<T> items,
             int maxDisplay,
             Func<T, string> filterBy,
             Func<T, string>? display = null)
         {
             this.display = display ?? filterBy;
-            this.items = items;
+            this.items = items.ToList();
             this.filterBy = filterBy;
             filteredChildren = items.ToList();
             this.maxDisplay = maxDisplay;
@@ -59,7 +59,7 @@ namespace Core.Screens
                         Keys.Up => Up(),
                         Keys.Down => Down(),
                         Keys.Escape => PickerState.CloseCancel,
-                        Keys.P => Pick(),
+                        Keys.Enter => Pick(),
                         Keys.E => OnEdit(),
                         Keys.A => OnAdd(),
                         _ => 0,
@@ -127,7 +127,7 @@ namespace Core.Screens
             {
                 { CommonStrings.UD_ARROW, "move cursor" },
                 { "f", "filter" },
-                { "p", "pick" },
+                { CommonStrings.ENTER, "pick" },
                 { CommonStrings.ESCAPE, "go back" },
             };
             if (_edit) d.Add("e", "edit");

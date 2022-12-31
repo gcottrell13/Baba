@@ -11,6 +11,7 @@ using Editor.SaveFormats;
 using Editor.Editors;
 using Microsoft.Xna.Framework.Input;
 using System.Runtime.CompilerServices;
+using static Editor.SaveFormats.LoadSaveFiles;
 
 namespace Editor.Screens
 {
@@ -24,7 +25,7 @@ namespace Editor.Screens
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
 
-        public WorldEditorScreen(ScreenStack stack, List<SaveFormat> saves)
+        public WorldEditorScreen(ScreenStack stack, ReadonlySavesList saves)
         {
             stateMachine = new StateMachine<EditorStates, KeyPress>("world editor")
                 .State(
@@ -77,17 +78,18 @@ namespace Editor.Screens
                     EditorStates.RenamingWorld,
                     c =>
                     {
-                        if (c.KeyPressed == Keys.Enter)
+                        if (editor != null)
                         {
-                            if (editor != null)
+                            if (c.KeyPressed == Keys.Enter)
                             {
                                 editor.save.worldName = titleText.Text;
                                 return EditorStates.WorldEditor;
                             }
-                        }
-                        if (c.KeyPressed == Keys.Escape)
-                        {
-                            return EditorStates.WorldEditor;
+                            if (c.KeyPressed == Keys.Escape)
+                            {
+                                titleText.SetText(editor.save.worldName);
+                                return EditorStates.WorldEditor;
+                            }
                         }
                         titleText.HandleInput(c);
                         return EditorStates.RenamingWorld;
@@ -156,7 +158,9 @@ namespace Editor.Screens
 
         public EditorStates NewWorld(string name)
         {
-            SetEditor(new WorldEditor(new() { worldName = name }));
+            var newWorld = new SaveFormat() { worldName = name };
+            LoadSaveFiles.AddNewSave(newWorld);
+            SetEditor(new WorldEditor(newWorld));
             return EditorStates.WorldEditor;
         }
 
@@ -168,6 +172,7 @@ namespace Editor.Screens
 
         public EditorStates SaveWorld()
         {
+            editor?.saveWorld();
             return EditorStates.WorldEditor;
         }
 

@@ -49,19 +49,21 @@ namespace Core.Screens
 
             var lines = new List<ListOfTextChar>() { new() };
             var space = new[] { new ObjectSelect(" ") };
+            var pad = space.Repeat(2).ToList();
 
             foreach (var (disp, expl) in commands)
             {
                 var str = ParseText($"{legend}{disp}[white]: {expl}");
                 var last = lines.Last();
-                if (last.TextCharLength() + str.TextCharLength() > width)
+                var shouldPad = Math.Min(last.Count, pad.Count);
+                if (last.TextCharLength() + str.TextCharLength() + shouldPad > width)
                 {
                     lines.Add(str);
                 }
                 else
                 {
-                    if (last.Count > 0)
-                        last.AddRange(space.Repeat(2));
+                    if (shouldPad > 0)
+                        last.AddRange(pad);
                     last.AddRange(str);
                 }
             }

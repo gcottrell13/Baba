@@ -341,6 +341,7 @@ namespace Core.UI
             public override int width => 0;
         }
 
+        [DebuggerDisplay("ListOfTextChar {ToString()} {TextCharLength()}")]
         public class ListOfTextChar : List<TextChar>
         {
             public int TextCharLength() => this.Sum(t => t.width);

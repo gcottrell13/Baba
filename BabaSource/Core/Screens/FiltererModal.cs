@@ -71,6 +71,7 @@ namespace Core.Screens
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => PickerState.Selecting,
+                        KeyPress { KeyPressed: Keys.Enter } => Pick(),
                         KeyPress k => addCharToFilter(k),
                     },
                     def => def
@@ -140,6 +141,7 @@ namespace Core.Screens
             {
                 { CommonStrings.NAME_CHARS, "type a name" },
                 { CommonStrings.ESCAPE, "stop filtering" },
+                { CommonStrings.ENTER, "pick first" },
             });
         }
 

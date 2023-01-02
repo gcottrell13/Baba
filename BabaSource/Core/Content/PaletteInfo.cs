@@ -653,5 +653,23 @@ namespace Core.Content {
 			{ "variant", palette_variant },
 			{ "volcano", palette_volcano },        
         };
+        
+        public static readonly Dictionary<string, int> ColorNameMap = new() {
+            { "red", (2 << shift) + 1 },
+			{ "blue", (3 << shift) + 3 },
+			{ "yellow", (2 << shift) + 5 },
+			{ "orange", (2 << shift) + 2 },
+			{ "green", (5 << shift) + 1 },
+			{ "cyan", (1 << shift) + 4 },
+			{ "lime", (5 << shift) + 3 },
+			{ "purple", (3 << shift) + 0 },
+			{ "pink", (4 << shift) + 1 },
+			{ "rosy", (4 << shift) + 2 },
+			{ "grey", (0 << shift) + 1 },
+			{ "black", (0 << shift) + 0 },
+			{ "silver", (0 << shift) + 2 },
+			{ "white", (0 << shift) + 3 },
+			{ "brown", (7 << shift) + 1 }
+        };
     }
 }

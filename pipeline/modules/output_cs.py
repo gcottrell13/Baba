@@ -62,9 +62,12 @@ namespace {NAMESPACE} {{
 def save_palette_info():
     palettes = all_palettes()
 
+    def coord_to_intrep(coord: tuple[int, int]):
+        return f'({coord[0]} << shift) + {coord[1]}'
+
     def map_palette(name: str, data: dict[tuple[int, int], tuple[int, int, int]]):
         colors = ','.join([
-            f'\n\t\t\t{{ ({coord[0]} << shift) + {coord[1]}, new Color({", ".join(map(str, color))}) }}'
+            f'\n\t\t\t{{ {coord_to_intrep(coord)}, new Color({", ".join(map(str, color))}) }}'
             for coord, color in data.items()
         ])
         return f'\t\tprivate static readonly Dictionary<int, Color> palette_{name} = new Dictionary<int, Color>() {{ {colors}\n\t\t}};'
@@ -79,6 +82,28 @@ def save_palette_info():
         for name in palettes
     ])
 
+    color_name_map_items = {
+        'red': coord_to_intrep((2, 1)),
+        'blue': coord_to_intrep((3, 3)),
+        'yellow': coord_to_intrep((2, 5)),
+        'orange': coord_to_intrep((2, 2)),
+        'green': coord_to_intrep((5, 1)),
+        'cyan': coord_to_intrep((1, 4)),
+        'lime': coord_to_intrep((5, 3)),
+        'purple': coord_to_intrep((3, 0)),
+        'pink': coord_to_intrep((4, 1)),
+        'rosy': coord_to_intrep((4, 2)),
+        'grey': coord_to_intrep((0, 1)),
+        'black': coord_to_intrep((0, 0)),
+        'silver': coord_to_intrep((0, 2)),
+        'white': coord_to_intrep((0, 3)),
+        'brown': coord_to_intrep((7, 1)),
+    }
+    color_name_map = ',\n\t\t\t'.join(
+        f'{{ "{name}", {v} }}'
+        for name, v in color_name_map_items.items()
+    )
+
     output_directory_structure(OUTPUT_DIRECTORY, {
         'Content/PaletteInfo.cs': f"""
 using Microsoft.Xna.Framework; 
@@ -90,6 +115,10 @@ namespace {NAMESPACE} {{
 {items}
         public static Dictionary<string, Dictionary<int, Color>> Palettes = new Dictionary<string, Dictionary<int, Color>>() {{
 {palette_dir}        
+        }};
+        
+        public static readonly Dictionary<string, int> ColorNameMap = new() {{
+            {color_name_map}
         }};
     }}
 }}

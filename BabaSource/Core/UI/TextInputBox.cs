@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Core.UI
 {
@@ -11,7 +12,7 @@ namespace Core.UI
     {
         public string DisallowedCharacters = string.Empty;
         public string Text { get; private set; } = string.Empty;
-        public readonly Text.TextOptions TextOptions = new();
+        private Text.TextOptions TextOptions = new();
 
         private string Format;
 
@@ -43,6 +44,12 @@ namespace Core.UI
                 Format = format.Replace("{}", "{0}");
                 SetText(Text);
             }
+        }
+
+        public void SetOptions(Text.TextOptions options)
+        {
+            TextOptions = options;
+            (ChildByName("text") as Text)?.SetText(string.Format(Format, Text), TextOptions);
         }
 
         public void SetText(string text)

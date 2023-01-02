@@ -60,7 +60,7 @@ namespace Editor
                             .AddOnLeave(() => mapStack.Pop())
                             .AddOnEnter(() =>
                             {
-                                mapEditorScreen = new();
+                                mapEditorScreen = new(mapStack);
                                 mapStack.Add(mapEditorScreen);
                             })
                     );

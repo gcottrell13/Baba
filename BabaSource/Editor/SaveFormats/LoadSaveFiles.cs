@@ -39,7 +39,9 @@ namespace Editor.SaveFormats
             var alist = new List<SaveFormat>();
             foreach (var f in GetSaveFiles().Select(LoadWorld))
             {
-                if (f != null) alist.Add(f);
+                if (f == null) continue;
+                if (alist.Any(s => s.fileName == f.fileName)) continue;
+                alist.Add(f);
             }
             files.AddRange(alist);
             return files;
@@ -63,40 +65,40 @@ namespace Editor.SaveFormats
         public static void SaveAll(SaveFormat save)
         {
             save.fileName ??= save.worldName;
-            var text = save.Serialize();
+            var text = SaveFormatSerializer.Serialize(save);
             File.WriteAllText(editorFilesDirectiory + $"{save.fileName}.json", text);
         }
+    }
 
-        public class ReadonlySavesList : IEnumerable<SaveFormat>
+    internal class ReadonlySavesList : IEnumerable<SaveFormat>
+    {
+        private readonly List<SaveFormat> saves = new();
+
+        public void Add(SaveFormat save)
         {
-            private readonly List<SaveFormat> saves = new();
+            saves.Add(save);
+        }
 
-            public void Add(SaveFormat save)
-            {
-                saves.Add(save);
-            }
+        public void AddRange(IEnumerable<SaveFormat> saves)
+        {
+            this.saves.AddRange(saves);
+        }
 
-            public void AddRange(IEnumerable<SaveFormat> saves)
-            {
-                this.saves.AddRange(saves);
-            }
+        public IEnumerator GetEnumerator()
+        {
+            return saves.GetEnumerator();
+        }
 
-            public IEnumerator GetEnumerator()
-            {
-                return saves.GetEnumerator();
-            }
+        IEnumerator<SaveFormat> IEnumerable<SaveFormat>.GetEnumerator()
+        {
+            return saves.GetEnumerator();
+        }
 
-            IEnumerator<SaveFormat> IEnumerable<SaveFormat>.GetEnumerator()
-            {
-                return saves.GetEnumerator();
-            }
+        public int Count => saves.Count;
 
-            public int Count => saves.Count;
-
-            public ReadOnlyCollection<SaveFormat> ToList()
-            {
-                return new ReadOnlyCollection<SaveFormat>(saves);
-            }
+        public ReadOnlyCollection<SaveFormat> ToList()
+        {
+            return new ReadOnlyCollection<SaveFormat>(saves);
         }
     }
 }

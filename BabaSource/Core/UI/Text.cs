@@ -6,6 +6,7 @@ using MonoGame.Extended.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -27,8 +28,8 @@ namespace Core.UI
 
         public RectangleSprite? background { get; private set; }
 
-        public string CurrentText { get; private set; } = string.Empty;
-        public string EffectiveName => Name ?? CurrentText;
+        public ListOfTextChar CurrentText { get; private set; } = new();
+        public string EffectiveName => Name ?? CurrentText.ToString();
 
         public Text(string text = "", TextOptions? options = null)
         {
@@ -215,6 +216,12 @@ namespace Core.UI
         {
             options ??= new();
 
+            if (text.ToString() == CurrentText.ToString())
+            {
+                ApplyOptions(options);
+                return;
+            }
+
             Graphics.RemoveAllChildren();
 
             _currentLetters = new();
@@ -229,16 +236,18 @@ namespace Core.UI
             void addCharacter()
             {
                 _currentLetters[compoundName] = letter;
-                var sprite = new SpriteContainer()
+                var sprite = new TextCharacterHolder()
                 {
-                    x = x - (letter.CurrentWobbler.Size.X - options.blockWidth) / 2,
-                    y = y - (letter.CurrentWobbler.Size.Y - options.lineHeight) / 2,
+                    TX = x,
+                    TY = y,
+                    SX = letter.CurrentWobbler.Size.X,
+                    SY = letter.CurrentWobbler.Size.Y,
                     Name = compoundName + "-textcontainer",
                 };
                 sprite.SetColor(color);
                 sprite.AddChild(letter);
                 Graphics.AddChild(sprite);
-                x += options.blockWidth + options.padding;
+                x++;
             }
 
             foreach (var t in text)
@@ -256,30 +265,20 @@ namespace Core.UI
                     }
                     else
                     {
-                        x += options.blockWidth;
+                        x++;
                     }
                 }
                 else if (t is NewlineSelect)
                 {
                     x = 0;
-                    y += options.lineHeight;
+                    y++;
                 }
             }
 
-            if (options.background != null && Graphics.children.Count > 0)
-            {
-                background = new RectangleSprite()
-                {
-                    xscale = Graphics.children.Select(x => x.x + options.blockWidth).Max(),
-                    yscale = Graphics.children.Select(x => x.y + options.lineHeight).Max(),
-                };
-                background.SetColor(options.background);
-                Graphics.children.Insert(0, background);
-            }
-
-            CurrentText = text.ToString();
+            CurrentText = text;
             Graphics.Name = "text display";
-            CurrentOptions = options;
+
+            ApplyOptions(options);
         }
 
         /// <summary>
@@ -294,12 +293,51 @@ namespace Core.UI
             SetText(ParseText(str), options);
         }
 
+        public void ApplyOptions(TextOptions? options)
+        {
+            options ??= new();
+            var bgRectName = "background-rect";
+
+            foreach (var child in Graphics.children)
+            {
+                if (child is TextCharacterHolder tx)
+                {
+                    tx.x = (tx.TX * (options.blockWidth + options.padding)) - (tx.SX - options.blockWidth) / 2;
+                    tx.y = (tx.TY * (options.lineHeight)) - (tx.SY - options.lineHeight) / 2;
+                }
+            }
+
+            Graphics.RemoveChild(Graphics.ChildByName(bgRectName));
+            if (options.background != null && Graphics.children.Count > 0)
+            {
+                background = new RectangleSprite()
+                {
+                    xscale = Graphics.children.Select(x => x.x).Max() + options.blockWidth,
+                    yscale = Graphics.children.Select(x => x.y).Max() + options.lineHeight,
+                    Name = bgRectName,
+                };
+                background.SetColor(options.background);
+                Graphics.children.Insert(0, background);
+            }
+
+            CurrentOptions = options;
+        }
+
         public class TextOptions
         {
             public int padding = DEFAULT_PADDING;
             public int lineHeight = DEFAULT_LINE_HEIGHT;
             public int blockWidth = DEFAULT_BLOCK_WIDTH;
             public Color? background = null;
+        }
+
+        [DebuggerDisplay("{Name} TX:{TX}, TY:{TY}, x:{x}, y:{y}")]
+        private class TextCharacterHolder : SpriteContainer
+        {
+            public int TX = 0;
+            public int TY = 0;
+            public int SX = 0;
+            public int SY = 0;
         }
 
         public abstract class TextChar

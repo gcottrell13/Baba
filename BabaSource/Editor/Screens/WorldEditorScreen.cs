@@ -1,17 +1,12 @@
-﻿using Core.UI;
+using Core.UI;
 using Core.Screens;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using Editor.SaveFormats;
-using Editor.Editors;
 using Microsoft.Xna.Framework.Input;
-using System.Runtime.CompilerServices;
-using static Editor.SaveFormats.LoadSaveFiles;
+using Editor.Editors;
 
 namespace Editor.Screens
 {
@@ -34,7 +29,7 @@ namespace Editor.Screens
                     {
                         PickerState.CloseCancel => EditorStates.WorldEditor,
                         PickerState.ClosePick => LoadWorld(worldPicker.Selected!),
-                        PickerState.CloseAdd => NewWorld($"new world {saves.Count + 1}"),
+                        PickerState.CloseAdd => NewWorld(),
                         _ => EditorStates.SelectingWorld,
                     },
                     def => def
@@ -48,7 +43,7 @@ namespace Editor.Screens
                     EditorStates.WorldEditor,
                     c => c switch
                     {
-                        KeyPress { KeyPressed: Keys.Enter } => editor == null ? EditorStates.SelectingWorld : EditorStates.WorldEditor,
+                        KeyPress { KeyPressed: Keys.Enter } => Editor.EDITOR.HasWorldLoaded() ? EditorStates.WorldEditor : EditorStates.SelectingWorld,
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.SelectingWorld,
@@ -62,15 +57,15 @@ namespace Editor.Screens
                     c => mapPicker!.Handle(c) switch
                     {
                         PickerState.CloseCancel => EditorStates.WorldEditor,
-                        PickerState.ClosePick => EditorStates.WorldEditor,
-                        PickerState.CloseEdit => EditorStates.MapEditor,
-                        PickerState.CloseAdd => EditorStates.MapEditor,
+                        PickerState.ClosePick => SetPickedMap(mapPicker!.Selected),
+                        PickerState.CloseEdit => EditMap(),
+                        PickerState.CloseAdd => NewMap(),
                         _ => EditorStates.WorldEditorPickMap,
                     },
                     def => def
                         .AddOnEnter(() =>
                         {
-                            mapPicker = new(editor!.save.MapDatas);
+                            mapPicker = new(Editor.EDITOR.mapDatas);
                             stack.Add(mapPicker);
                         })
                         .AddOnLeave(() => stack.Pop())
@@ -141,6 +136,7 @@ namespace Editor.Screens
 
         public override EditorStates Handle(KeyPress key) => stateMachine.SendAction(key) switch
         {
+            EditorStates.MapEditor => EditorStates.MapEditor,
             _ => EditorStates.WorldEditor,
         };
 
@@ -152,21 +148,22 @@ namespace Editor.Screens
 
         public EditorStates LoadWorld(SaveFormat save)
         {
+            Editor.EDITOR.LoadWorld(save);
             SetEditor(new WorldEditor(save));
             return EditorStates.WorldEditor;
         }
 
-        public EditorStates NewWorld(string name)
+        public EditorStates NewWorld()
         {
-            var newWorld = new SaveFormat() { worldName = name };
-            LoadSaveFiles.AddNewSave(newWorld);
-            SetEditor(new WorldEditor(newWorld));
+            Editor.EDITOR.NewWorld();
             return EditorStates.WorldEditor;
         }
 
-        public EditorStates SetPickedMap(MapData d)
+        public EditorStates SetPickedMap(MapData? pickedMap)
         {
-            titleText.SetText($"World editor, picked [green]{d.name}[white] to place");
+            if (pickedMap == null) throw new ArgumentNullException(nameof(pickedMap));
+            editor?.setPickedMap(pickedMap);
+            titleText.SetText($"picked [green]{pickedMap.name}[white] to place");
             return EditorStates.WorldEditor;
         }
 
@@ -182,8 +179,21 @@ namespace Editor.Screens
             return EditorStates.WorldEditor;
         }
 
+        private EditorStates NewMap()
+        {
+            Editor.EDITOR.LoadMap(Editor.EDITOR.NewMap());
+            return EditorStates.MapEditor;
+        }
+
+        private EditorStates EditMap()
+        {
+            Editor.EDITOR.LoadMap(mapPicker!.Selected);
+            return EditorStates.MapEditor;
+        }
+
         protected override void OnUpdate(GameTime gameTime)
         {
+            // titleText.SetText(editor?.save.worldName ?? "none");
         }
     }
 }

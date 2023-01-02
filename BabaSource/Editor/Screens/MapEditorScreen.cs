@@ -7,18 +7,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Editor.SaveFormats;
+using Editor.Editors;
+using Core.Utils;
+using Microsoft.Xna.Framework.Input;
 
 namespace Editor.Screens
 {
     internal class MapEditorScreen : BaseScreen<EditorStates>
     {
-        private string? loadedMapName = null;
-        private Text t;
+        private StateMachine<EditorStates, KeyPress> stateMachine;
+        private MapLayerEditor mapEditor;
 
-        public MapEditorScreen()
+        private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: {}") { Name = "editortitle" };
+
+        public MapEditorScreen(ScreenStack stack)
         {
-            t = new Text("Map editor");
-            AddChild(t);
+            mapEditor = new(ScreenWidth, ScreenHeight);
+            stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
+                .State(
+                    EditorStates.MapEditor,
+                    c => c switch
+                    {
+                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.WorldEditor,
+                    }
+                );
+        }
+
+        public void init()
+        {
+            stateMachine.Initialize(EditorStates.MapEditor);
+            editorCommands();
+            AddChild(titleText);
+        }
+
+        private void editorCommands()
+        {
             SetCommands(new()
             {
                 { CommonStrings.ESCAPE, "go back to world" },
@@ -38,8 +61,9 @@ namespace Editor.Screens
 
         public void LoadMap(MapData? d)
         {
-            loadedMapName = d.name;
-            t.SetText($"Map Editor: {d.name}");
+            if (d == null) throw new ArgumentNullException(nameof(d));
+            mapEditor.LoadMap(d.layer1);
+            titleText.SetText(d.name);
         }
 
         public void NewMap()
@@ -49,7 +73,7 @@ namespace Editor.Screens
 
         public int TrySavingMap()
         {
-            if (KeyboardState.GetPressedKeys().Contains(Microsoft.Xna.Framework.Input.Keys.LeftControl))
+            if (KeyboardState.GetPressedKeys().Contains(Keys.LeftControl))
             {
                 // save
                 Debug.WriteLine("saving!");

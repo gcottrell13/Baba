@@ -8,7 +8,7 @@ using System.Text;
 namespace Core.Utils
 {
     [DebuggerDisplay("SpriteContainer: {Name}")]
-    public sealed class SpriteContainer : BaseSprite
+    public class SpriteContainer : BaseSprite
     {
         public readonly List<BaseSprite> children = new List<BaseSprite>();
 
@@ -40,12 +40,12 @@ namespace Core.Utils
 
         public BaseSprite? ChildByName(string name)
         {
-            return children.First(x => x.Name == name);
+            return children.FirstOrDefault(x => x.Name == name);
         }
 
-        public void RemoveChild(BaseSprite child)
+        public void RemoveChild(BaseSprite? child)
         {
-            if (children.Contains(child))
+            if (child != null && children.Contains(child))
             {
                 children.Remove(child);
                 child.parent = null;

@@ -11,6 +11,7 @@ namespace Editor.Editors
     internal class WorldEditor
     {
         public SaveFormat save { get; private set; }
+        private MapData? pickedMap;
 
         public WorldEditor(SaveFormat save) 
         {
@@ -26,6 +27,11 @@ namespace Editor.Editors
         public void saveWorld()
         {
             LoadSaveFiles.SaveAll(save);
+        }
+
+        public void setPickedMap(MapData? map)
+        {
+            pickedMap = map;
         }
     }
 }

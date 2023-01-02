@@ -18,6 +18,7 @@ namespace Editor.Screens
         {
             Name = "MapPickerScreen";
             Edit = true;
+            Add = true;
             Transparent = true;
             SetOffsetX(100);
             HighlightColor = Color.Blue;

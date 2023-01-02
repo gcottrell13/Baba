@@ -49,6 +49,7 @@ namespace Core.Screens
             this.filterBy = filterBy;
             filteredChildren = items.ToList();
             this.maxDisplay = maxDisplay;
+            filterDisplay.SetOptions(new() { background = Color.Black });
 
             statemachine = new StateMachine<PickerState, KeyPress>("filter modal")
                 .State(

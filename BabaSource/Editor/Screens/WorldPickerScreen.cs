@@ -1,11 +1,5 @@
 ﻿using Core.Screens;
 using Editor.SaveFormats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Editor.SaveFormats.LoadSaveFiles;
 
 namespace Editor.Screens
 {

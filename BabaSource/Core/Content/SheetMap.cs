@@ -539,6 +539,7 @@ namespace Core.Content {
 	new Wobbler("ear.right.0", new[] { new Point(1, 2), new Point(2, 2), new Point(3, 2) }, new Point(24, 24), sheets["ear"]) }), 
 				sleep_right: null
 ) },
+			{ "editorsquare", new Wobbler("editorsquare", new[] { new Point(0, 0) }, new Point(24, 24), sheets["editorsquare"]) },
 			{ "egg", new FacingOnMove(
                 name: "egg", 
 				up: new AnimateOnMove("egg", new Wobbler[] {

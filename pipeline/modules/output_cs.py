@@ -120,6 +120,11 @@ namespace {NAMESPACE} {{
         public static readonly Dictionary<string, int> ColorNameMap = new() {{
             {color_name_map}
         }};
+
+        public static Color GetColorByName(string theme, string name)
+        {{
+            return Palettes[theme][ColorNameMap[name]];
+        }}
     }}
 }}
 """,

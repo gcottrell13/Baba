@@ -671,5 +671,10 @@ namespace Core.Content {
 			{ "white", (0 << shift) + 3 },
 			{ "brown", (7 << shift) + 1 }
         };
+
+        public static Color GetColorByName(string theme, string name)
+        {
+            return Palettes[theme][ColorNameMap[name]];
+        }
     }
 }

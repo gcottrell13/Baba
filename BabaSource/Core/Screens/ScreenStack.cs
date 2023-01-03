@@ -1,6 +1,7 @@
 ﻿using MonoGame.Extended.Screens;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -14,8 +15,9 @@ namespace Core.Screens
         {
         }
 
-        public void Add(BaseScreen screen)
+        public void Add(BaseScreen? screen)
         {
+            if (screen == null) return;
             add(screen);
             ensureVisibility();
         }
@@ -37,10 +39,11 @@ namespace Core.Screens
             ensureVisibility();
         }
 
-        public void Pop()
+        public BaseScreen Pop()
         {
-            pop();
+            var p = pop();
             ensureVisibility();
+            return p;
         }
 
         public void PopTo(BaseScreen? screen)
@@ -55,11 +58,15 @@ namespace Core.Screens
             stack.Push(screen);
         }
 
-        private void pop()
+        private BaseScreen pop()
         {
             var popped = stack.TryPop(out var poppedItem);
-            if (popped)
+            if (popped && poppedItem != null)
+            {
                 RemoveChild(poppedItem);
+                return poppedItem;
+            }
+            throw new Exception("stack is empty");
         }
 
         private void popTo(BaseScreen? screen)

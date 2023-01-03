@@ -244,6 +244,10 @@ namespace Core.Screens
             filterDisplay.SetFormat(pre);
             _afterSetFilter();
         }
+
+        protected override void OnDispose()
+        {
+        }
     }
 
     public enum PickerState

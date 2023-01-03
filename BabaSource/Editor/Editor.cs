@@ -62,7 +62,7 @@ namespace Editor
 
         public List<MapData> mapDatas => currentWorld?.MapDatas ?? new List<MapData>();
 
-        public static ObjectData? ObjectAtPosition(int x, int y, MapLayer? map)
+        public static ObjectData? ObjectAtPosition(uint x, uint y, MapLayer? map)
         {
             if (map == null) return null;
 

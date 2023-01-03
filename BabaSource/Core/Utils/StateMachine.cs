@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Core.Utils
 {
-    public class StateMachine<TState, TAction>
+    public class StateMachine<TState, TAction> : IDisposable
         where TState : notnull
         where TAction : notnull, new()
     {
@@ -13,7 +13,7 @@ namespace Core.Utils
         private readonly string name;
         private StateDefinition<TState, TAction>? currentState;
 
-        public TState CurrentState => currentState == null ? default : currentState.State;
+        public TState CurrentState => currentState == null ? default! : currentState.State;
 
         public StateMachine(string name)
         {
@@ -47,7 +47,12 @@ namespace Core.Utils
         public void Initialize(TState state)
         {
             currentState ??= states.TryGetValue(state, out var newState) ? newState : throw new ArgumentException($"State {state} does not exist");
-            currentState?.OnEnter(default);
+            currentState?.OnEnter(default!);
+        }
+
+        public void Dispose()
+        {
+            currentState?.OnLeave(default!);
         }
     }
 

@@ -31,11 +31,11 @@ namespace Editor.SaveFormats
         {
             IEnumerable<string> lines()
             {
-                yield return $"\"WorldLayout\": {slist(save.WorldLayout, 1)}";
-                yield return $"\"Warps\": {slist(save.Warps, 1)}";
-                yield return $"\"Regions\": {slist(save.Regions, 1)}";
-                yield return $"\"MapDatas\": {slist(save.MapDatas, 1)}";
-                yield return $"\"globalObjectLayer\": {serialize(save.globalObjectLayer, 1)}";
+                yield return $"\"WorldLayout\": {slist(save.WorldLayout, 0)}";
+                yield return $"\"Warps\": {slist(save.Warps, 0)}";
+                yield return $"\"Regions\": {slist(save.Regions, 0)}";
+                yield return $"\"MapDatas\": {slist(save.MapDatas, 0)}";
+                yield return $"\"globalObjectLayer\": {serialize(save.globalObjectLayer, 0)}";
                 yield return $"\"startMapX\": {save.startMapX}";
                 yield return $"\"startMapY\": {save.startMapY}";
                 yield return $"\"worldName\": \"{save.worldName}\"";
@@ -55,40 +55,40 @@ namespace Editor.SaveFormats
 
         public static string Serialize(Region region, int indent)
         {
-            var t = "\t".Repeat(indent);
+            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
                 yield return $"\"name\": \"{region.name}\"";
                 yield return $"\"theme\": \"{region.theme}\"";
                 yield return $"\"regionObjectLayer\": {serialize(region.regionObjectLayer, indent)}";
             }
-            return "{\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + "\t".Repeat(indent - 1) + "}";
+            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
         }
 
         public static string Serialize(MapLayer map, int indent)
         {
-            var t = "\t".Repeat(indent);
+            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
-                yield return $"\"layer1\": {slist(map.objects, indent)}";
+                yield return $"\"objects\": {slist(map.objects, indent)}";
                 yield return $"\"width\": {map.width}";
                 yield return $"\"height\": {map.height}";
             }
-            return "{\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + "\t".Repeat(indent - 1) + "}";
+            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
         }
 
         public static string Serialize(MapData map, int indent)
         {
-            var t = "\t".Repeat(indent);
+            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
                 yield return $"\"name\": \"{map.name}\"";
                 yield return $"\"regionName\": \"{map.regionName}\"";
-                yield return $"\"resetWhenInactive\": {map.resetWhenInactive}";
+                yield return $"\"resetWhenInactive\": {map.resetWhenInactive.ToString().ToLower()}";
                 yield return $"\"layer1\": {serialize(map.layer1, indent)}";
                 yield return $"\"layer2\": {serialize(map.layer2, indent)}";
             }
-            return "{\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + "\t".Repeat(indent - 1) + "}";
+            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
         }
 
         public static string Serialize(ObjectData obj, int indent)
@@ -100,7 +100,8 @@ namespace Editor.SaveFormats
             where T : notnull
         {
             if (alist.Count == 0) return "[]";
-            return "[\n" + "\t".Repeat(indent) + string.Join(",\n", alist.Select(x => serialize(x, indent + 1))) + "\n" + "\t".Repeat(indent - 1) + "]";
+            var t = "\t".Repeat(indent + 1);
+            return "[\n" + t + string.Join(",\n", alist.Select(x => serialize(x, indent + 1))) + "\n" + t + "]";
         }
     }
 
@@ -116,8 +117,8 @@ namespace Editor.SaveFormats
 
         public MapLayer globalObjectLayer { get; set; } = new();
 
-        public int startMapX = 0;
-        public int startMapY = 0;
+        public uint startMapX = 0;
+        public uint startMapY = 0;
 
         public string worldName = string.Empty;
 
@@ -127,18 +128,18 @@ namespace Editor.SaveFormats
 
     internal class MapInstance
     {
-        public int x = 0;
-        public int y = 0;
+        public uint x = 0;
+        public uint y = 0;
         public string mapDataName = string.Empty;
 
     }
 
     internal class Warp
     {
-        public int x1 = 0;
-        public int y1 = 0;
-        public int x2 = 0;
-        public int y2 = 0;
+        public uint x1 = 0;
+        public uint y1 = 0;
+        public uint x2 = 0;
+        public uint y2 = 0;
     }
 
     internal class Region
@@ -162,17 +163,17 @@ namespace Editor.SaveFormats
     internal class MapLayer
     {
         public List<ObjectData> objects { get; set; } = new();
-        public int width = 18;
-        public int height = 18;
+        public uint width = 18;
+        public uint height = 18;
     }
 
     internal class ObjectData
     {
-        public int x = 0;
-        public int y = 0;
+        public uint x = 0;
+        public uint y = 0;
         public string name = string.Empty;
-        public int state = 0;
-        public string color = string.Empty;
+        public uint state = 0;
+        public string color = string.Empty; // a color name like "blue"
         public string text = string.Empty;
         public string? original = null;
     }

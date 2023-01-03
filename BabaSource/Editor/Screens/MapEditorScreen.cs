@@ -16,20 +16,61 @@ namespace Editor.Screens
     internal class MapEditorScreen : BaseScreen<EditorStates>
     {
         private StateMachine<EditorStates, KeyPress> stateMachine;
-        private MapLayerEditor mapEditor;
+        private MapEditor editor;
+        private MapLayerEditorScreen layerEditorScreen;
+        private RenameScreen? renameScreen;
 
         private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: {}") { Name = "editortitle" };
 
-        public MapEditorScreen(ScreenStack stack)
+        public MapEditorScreen(ScreenStack stack, MapData mapData)
         {
-            mapEditor = new(ScreenWidth, ScreenHeight);
+            editor = new(mapData);
+            layerEditorScreen = new(stack, mapData.layer1);
+            AddChild(new MapLayerDisplay(mapData.layer1, null));
+
             stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
                 .State(
                     EditorStates.MapEditor,
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.WorldEditor,
+                        KeyPress { Text: '1' } => editLayer1(stack),
+                        KeyPress { Text: '2' } => editLayer2(stack),
+                        KeyPress { Text: 'r' } => selectMapRegion(),
+                        KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveMap(),
+                        _ => EditorStates.MapEditor,
                     }
+                ).State(
+                    EditorStates.EditMapLayer,
+                    c => layerEditorScreen!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            // the edit functions make a new screen object
+                            stack.Add(layerEditorScreen);
+                            layerEditorScreen.init();
+                        })
+                ).State(
+                    EditorStates.RenamingMap,
+                    c => renameScreen!.Handle(c) switch
+                    {
+                        RenameScreen.RenameStates.Cancel => EditorStates.MapEditor,
+                        RenameScreen.RenameStates.Save => EditorStates.MapEditor,
+                        _ => EditorStates.RenamingMap,
+                    },
+                    def => def
+                        .AddOnLeave(() =>
+                        {
+                            editor.mapData.name = renameScreen!.Text;
+                            titleText.SetText(renameScreen!.Text);
+                            stack.Pop().Dispose();
+                        })
+                        .AddOnEnter(() =>
+                        {
+                            renameScreen = new(editor.mapData.name, "name map: {}");
+                            stack.Add(renameScreen);
+                        })
                 );
         }
 
@@ -44,34 +85,42 @@ namespace Editor.Screens
         {
             SetCommands(new()
             {
-                { CommonStrings.ESCAPE, "go back to world" },
-                { "c", "obj color" },
-                { "t", "obj text" },
-                { "p", "obj picker" },
-                { "l", "map layer 2" },
+                { "1", "edit layer 1" },
+                { "2", "edit layer 2" },
                 { "r", "map region" },
+                { "n", "rename" },
+                { CommonStrings.ESCAPE, "go back to world" },
                 { CommonStrings.CTRL_PLUS + "s", "to save" },
             });
         }
 
-        public override EditorStates Handle(KeyPress ev)
+        public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
-            throw new NotImplementedException();
+            _ => EditorStates.MapEditor,
+        };
+
+        private EditorStates editLayer1(ScreenStack stack)
+        {
+            RemoveChild(layerEditorScreen);
+            layerEditorScreen.Dispose();
+            layerEditorScreen = new(stack, Editor.EDITOR.currentMap!.layer1);
+            return EditorStates.EditMapLayer;
         }
 
-        public void LoadMap(MapData? d)
+        private EditorStates editLayer2(ScreenStack stack)
         {
-            if (d == null) throw new ArgumentNullException(nameof(d));
-            mapEditor.LoadMap(d.layer1);
-            titleText.SetText(d.name);
+            RemoveChild(layerEditorScreen);
+            layerEditorScreen.Dispose();
+            layerEditorScreen = new(stack, Editor.EDITOR.currentMap!.layer2);
+            return EditorStates.EditMapLayer;
         }
 
-        public void NewMap()
+        private EditorStates selectMapRegion()
         {
-
+            return EditorStates.SelectMapRegion;
         }
 
-        public int TrySavingMap()
+        public EditorStates SaveMap()
         {
             if (KeyboardState.GetPressedKeys().Contains(Keys.LeftControl))
             {
@@ -82,7 +131,12 @@ namespace Editor.Screens
             {
                 Debug.WriteLine("not saving =(");
             }
-            return 0;
+            return EditorStates.MapEditor;
+        }
+
+        protected override void OnDispose()
+        {
+            stateMachine.Dispose();
         }
     }
 }

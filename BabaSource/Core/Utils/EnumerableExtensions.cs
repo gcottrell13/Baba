@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,6 +15,10 @@ namespace Core.Utils
         public static string Repeat(this string str, int count)
         {
             return string.Join("", Repeat<char>(str, count));
+        }
+        public static string Repeat(this string str, uint count)
+        {
+            return string.Join("", Repeat<char>(str, (int)count));
         }
 
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> c, int count)
@@ -35,14 +41,32 @@ namespace Core.Utils
             return true;
         }
 
+        public static string ToColString(uint c)
+        {
+            var col = ((char)('A' + (c % 26))).ToString();
+            if (c > 25)
+            {
+                col = ((char)('A' + (c / 26) - 1)).ToString() + col;
+            }
+            return col;
+        }
         public static string ToRowColString(this Vector2 dims)
         {
-            var col = "";
-            for (var x = 1; x < dims.X; x *= 26) 
+            return $"{ToColString((uint)dims.X)}{dims.Y}";
+        }
+
+        public static IEnumerable<string> ZipMany(this IEnumerable<string> sequences)
+        {
+            return ZipMany<char>(sequences).Select(c => string.Join("", c));
+        }
+
+        public static IEnumerable<ICollection<T>> ZipMany<T>(this IEnumerable<IEnumerable<T>> sequences)
+        {
+            var enumerators = sequences.Select(x => x.GetEnumerator()).ToList();
+            while (enumerators.Select(e => e.MoveNext()).ToList().All(x => x))
             {
-                col += 'A' - 1 + ((dims.X / x) % 26);
+                yield return enumerators.Select(e => e.Current).ToList();
             }
-            return $"{col}{dims.Y}";
         }
     }
 }

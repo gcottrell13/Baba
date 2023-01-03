@@ -17,6 +17,7 @@ namespace Editor.Screens
         private WorldEditor? editor;
         private WorldPickerScreen? worldPicker;
         private MapPickerScreen? mapPicker;
+        private RenameScreen? renameScreen;
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
 
@@ -71,26 +72,27 @@ namespace Editor.Screens
                         .AddOnLeave(() => stack.Pop())
                 ).State(
                     EditorStates.RenamingWorld,
-                    c =>
+                    c => renameScreen!.Handle(c) switch
                     {
-                        if (editor != null)
-                        {
-                            if (c.KeyPressed == Keys.Enter)
-                            {
-                                editor.save.worldName = titleText.Text;
-                                return EditorStates.WorldEditor;
-                            }
-                            if (c.KeyPressed == Keys.Escape)
-                            {
-                                titleText.SetText(editor.save.worldName);
-                                return EditorStates.WorldEditor;
-                            }
-                        }
-                        titleText.HandleInput(c);
-                        return EditorStates.RenamingWorld;
+                        RenameScreen.RenameStates.Cancel => EditorStates.WorldEditor,
+                        RenameScreen.RenameStates.Save => EditorStates.WorldEditor,
+                        _ => EditorStates.RenamingWorld,
                     },
                     def => def
-                        .AddOnEnter(() => renameCommands())
+                        .AddOnLeave(() =>
+                        {
+                            if (editor != null)
+                            {
+                                editor.save.worldName = renameScreen!.Text;
+                                titleText.SetText(renameScreen!.Text);
+                            }
+                            stack.Pop().Dispose();
+                        })
+                        .AddOnEnter(() =>
+                        {
+                            renameScreen = new(editor!.save.worldName, "name world: {}");
+                            stack.Add(renameScreen);
+                        })
                 );
         }
 
@@ -122,16 +124,6 @@ namespace Editor.Screens
             }
 
             SetCommands(d);
-        }
-
-        private void renameCommands()
-        {
-            SetCommands(new()
-            {
-                { CommonStrings.ESCAPE, "cancel" },
-                { CommonStrings.ENTER, "save" },
-                { CommonStrings.NAME_CHARS, "type a name" },
-            });
         }
 
         public override EditorStates Handle(KeyPress key) => stateMachine.SendAction(key) switch
@@ -194,6 +186,12 @@ namespace Editor.Screens
         protected override void OnUpdate(GameTime gameTime)
         {
             // titleText.SetText(editor?.save.worldName ?? "none");
+        }
+
+
+        protected override void OnDispose()
+        {
+            stateMachine.Dispose();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Editor
                         EditorStates.WorldEditor,
                         c => worldEditorScreen!.Handle(c),
                         def => def
-                            .AddOnLeave(() => mapStack.Pop())
+                            .AddOnLeave(() => mapStack.Pop()?.Dispose())
                             .AddOnEnter(() =>
                             {
                                 worldEditorScreen = new(mapStack, saveFiles);
@@ -57,11 +57,12 @@ namespace Editor
                         EditorStates.MapEditor,
                         c => mapEditorScreen!.Handle(c),
                         def => def
-                            .AddOnLeave(() => mapStack.Pop())
+                            .AddOnLeave(() => mapStack.Pop()?.Dispose())
                             .AddOnEnter(() =>
                             {
-                                mapEditorScreen = new(mapStack);
+                                mapEditorScreen = new(mapStack, Editor.EDITOR.currentMap!);
                                 mapStack.Add(mapEditorScreen);
+                                mapEditorScreen.init();
                             })
                     );
 

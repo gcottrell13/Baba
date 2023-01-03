@@ -10,13 +10,14 @@ namespace Editor.Screens
     {
         None,
         WorldEditor,  // editor for laying out maps in the world 
-        MapEditor, // editor for a section of the world; a single screen 
 
         // In the Map Editor: 
+        MapEditor, // editor for a section of the world; a single screen 
         ChangeObjectColor, // bring up a modal to select a color for a specific object 
         AddingTextToObject, // bring up a modal for adding text to a specific object 
         ObjectPicker, // modal for selecting a new object 
-        MapWordLayer, // the word layer for this specific map 
+        EditMapLayer,
+        RenamingMap,
         SelectMapRegion, // view the map's current region, and select/add/edit a region 
                          // MapPicker, // select which map we are editing // just go back to the world map and pick another map 
 

@@ -20,8 +20,8 @@ namespace Editor.Editors
         private readonly int pxWidth;
         private readonly int pxHeight;
 
-        private int cursorX = 0;
-        private int cursorY = 0;
+        private uint cursorX = 0;
+        private uint cursorY = 0;
 
         private string? currentObject;
 
@@ -41,6 +41,7 @@ namespace Editor.Editors
         public void LoadMap(MapLayer? map)
         {
             layer = map;
+            undoActions.Clear();
         }
 
         public void Save()
@@ -73,6 +74,14 @@ namespace Editor.Editors
             currentObject = name;
         }
 
+        public bool TrySetObjectColor(string colorName)
+        {
+            var obj = Editor.ObjectAtPosition(cursorX, cursorY, layer);
+            if (obj == null) return false;
+            obj.color = colorName;
+            return true;
+        }
+
         public bool TryPlaceObject()
         {
             var obj = Editor.ObjectAtPosition(cursorX, cursorY, layer);
@@ -88,8 +97,8 @@ namespace Editor.Editors
             if (layer == null) return false;
             if (!size.TryRowColToInt(out var dims)) return false;
 
-            layer.width = (int)dims.X;
-            layer.height = (int)dims.Y;
+            layer.width = (uint)dims.X;
+            layer.height = (uint)dims.Y;
             return true;
         }
     }

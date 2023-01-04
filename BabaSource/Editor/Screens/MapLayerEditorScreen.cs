@@ -43,11 +43,11 @@ namespace Editor.Screens
                         {
                             stack.Pop();
                             if (colorPicker?.Selected == null) return;
-                            mapLayerEditor?.TrySetObjectColor(colorPicker.Selected.name);
+                            mapLayerEditor?.TrySetObjectColor(colorPicker.Selected.value);
                         })
                         .AddOnEnter(() =>
                         {
-                            colorPicker = new(mapLayerEditor.ObjectAtCursor()?.color);
+                            colorPicker = new(mapLayerEditor.ObjectAtCursor()?.color ?? 0);
                             stack.Add(colorPicker);
                         })
                 )
@@ -58,7 +58,7 @@ namespace Editor.Screens
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
                         KeyPress { Text: 'c' } => changeObjectColor(),
                         KeyPress { Text: 'p' } => pickObject(),
-                        _ => mapLayerEditor.handleInput(c.KeyPressed),
+                        _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
                     }
                 )
                 .State(

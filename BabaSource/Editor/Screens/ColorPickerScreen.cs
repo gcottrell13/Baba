@@ -28,14 +28,14 @@ namespace Editor.Screens
             "silver",
             "white",
             "brown"
-        }.Select(k => new COLOR() { name = k, value = PaletteInfo.GetColorByName("default", k) }).ToList();
+        }.Select(k => new COLOR() { name = k, value = PaletteInfo.ColorNameMap[k] }).ToList();
 
-        public ColorPickerScreen(string? currentColor = null) : base(
+        public ColorPickerScreen(int currentColor = 0) : base(
             items: COLORS, 
             maxDisplay: COLORS.Count, 
             filterBy: x => x.name, 
-            display: x => $"{x.value.ToHexTriple()}{x.name}", 
-            currentValue: COLORS.FirstOrDefault(x => x.name == currentColor))
+            display: x => $"{PaletteInfo.Palettes["default"][x.value].ToHexTriple()}{x.name}", 
+            currentValue: COLORS.FirstOrDefault(x => x.value == currentColor))
         {
             Name = "ColorPickerScreen";
         }
@@ -44,6 +44,6 @@ namespace Editor.Screens
     public class COLOR
     {
         public string name = string.Empty;
-        public Color value;
+        public int value;
     }
 }

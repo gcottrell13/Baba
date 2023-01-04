@@ -1,12 +1,7 @@
 ﻿using Core.Utils;
-using g3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Editor.SaveFormats
 {
@@ -40,7 +35,7 @@ namespace Editor.SaveFormats
                 yield return $"\"startMapY\": {save.startMapY}";
                 yield return $"\"worldName\": \"{save.worldName}\"";
             }
-            return "{\n" + string.Join(",\n", lines().Select(x => "\t" + x)) + "\n}";
+            return formatLines(lines(), 0, "{", "}");
         }
 
         public static string Serialize(MapInstance mapInstance, int indent)
@@ -55,31 +50,28 @@ namespace Editor.SaveFormats
 
         public static string Serialize(Region region, int indent)
         {
-            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
                 yield return $"\"name\": \"{region.name}\"";
                 yield return $"\"theme\": \"{region.theme}\"";
                 yield return $"\"regionObjectLayer\": {serialize(region.regionObjectLayer, indent)}";
             }
-            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
+            return formatLines(lines(), indent, "{", "}");
         }
 
         public static string Serialize(MapLayer map, int indent)
         {
-            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
                 yield return $"\"objects\": {slist(map.objects, indent)}";
                 yield return $"\"width\": {map.width}";
                 yield return $"\"height\": {map.height}";
             }
-            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
+            return formatLines(lines(), indent, "{", "}");
         }
 
         public static string Serialize(MapData map, int indent)
         {
-            var t = "\t".Repeat(indent + 1);
             IEnumerable<string> lines()
             {
                 yield return $"\"name\": \"{map.name}\"";
@@ -88,12 +80,12 @@ namespace Editor.SaveFormats
                 yield return $"\"layer1\": {serialize(map.layer1, indent)}";
                 yield return $"\"layer2\": {serialize(map.layer2, indent)}";
             }
-            return "{" + t[..^1] + "\n" + string.Join(",\n", lines().Select(x => t + x)) + "\n" + t[..^1] + "}";
+            return formatLines(lines(), indent, "{", "}");
         }
 
         public static string Serialize(ObjectData obj, int indent)
         {
-            return "\t".Repeat(indent) + Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }
 
         public static string slist<T>(List<T> alist, int indent)
@@ -101,7 +93,13 @@ namespace Editor.SaveFormats
         {
             if (alist.Count == 0) return "[]";
             var t = "\t".Repeat(indent + 1);
-            return "[\n" + t + string.Join(",\n", alist.Select(x => serialize(x, indent + 1))) + "\n" + t + "]";
+            return formatLines(alist.Select(x => serialize(x, indent + 1)), indent + 1, "[", "]");
+        }
+
+        private static string formatLines(IEnumerable<string> lines, int indent, string open, string close)
+        {
+            var t = "\t".Repeat(indent + 1);
+            return open + "\n" + t + string.Join(",\n" + t, lines) + "\n" + t[..^1] + close;
         }
     }
 
@@ -130,7 +128,7 @@ namespace Editor.SaveFormats
     {
         public uint x = 0;
         public uint y = 0;
-        public string mapDataName = string.Empty;
+        public int mapDataId = 0;
 
     }
 
@@ -151,6 +149,7 @@ namespace Editor.SaveFormats
 
     internal class MapData
     {
+        public int id = 0;
         public string name = string.Empty;
         public string regionName = string.Empty;
         public MapLayer layer1 { get; set; } = new();
@@ -173,7 +172,7 @@ namespace Editor.SaveFormats
         public uint y = 0;
         public string name = string.Empty;
         public uint state = 0;
-        public string color = string.Empty; // a color name like "blue"
+        public int color;
         public string text = string.Empty;
         public string? original = null;
     }

@@ -1,17 +1,11 @@
 ﻿using Core;
+using Core.Content;
 using Core.Utils;
 using Editor.SaveFormats;
 using Editor.Screens;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static Core.GameObject;
 
 namespace Editor.Editors
 {
@@ -19,7 +13,7 @@ namespace Editor.Editors
     {
 
         private Stack<Action> undoActions = new(capacity: 20);
-        public readonly ObjectData cursor = new() { name = "cursor", color = "pink" };
+        public readonly ObjectData cursor = new() { name = "cursor", color = PaletteInfo.ColorNameMap["pink"] };
 
         private string? currentObject;
 
@@ -40,40 +34,44 @@ namespace Editor.Editors
             Editor.EDITOR.SaveAll();
         }
 
-        public EditorStates handleInput(Keys key) => key switch
+        public EditorStates handleInput(Keys key, bool isSpaceDown) => key switch
         {
-            Keys.Up => cursorUp(),
-            Keys.Down => cursorDown(),
-            Keys.Left => cursorLeft(),
-            Keys.Right => cursorRight(),
+            Keys.Up => cursorUp(isSpaceDown),
+            Keys.Down => cursorDown(isSpaceDown),
+            Keys.Left => cursorLeft(isSpaceDown),
+            Keys.Right => cursorRight(isSpaceDown),
             Keys.Space => TryPlaceObject() ? EditorStates.None : EditorStates.None,
             _ => EditorStates.None,
         };
 
-        private EditorStates cursorUp()
+        private EditorStates cursorUp(bool isSpaceDown)
         {
             cursor.y = (uint)MathExtra.MathMod((int)cursor.y - 1, (int)mapLayer.height);
+            if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
-        private EditorStates cursorDown()
+        private EditorStates cursorDown(bool isSpaceDown)
         {
             cursor.y = (uint)MathExtra.MathMod((int)cursor.y + 1, (int)mapLayer.height);
+            if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
-        private EditorStates cursorLeft()
+        private EditorStates cursorLeft(bool isSpaceDown)
         {
             cursor.x = (uint)MathExtra.MathMod((int)cursor.x - 1, (int)mapLayer.width);
+            if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
-        private EditorStates cursorRight()
+        private EditorStates cursorRight(bool isSpaceDown)
         {
             cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)mapLayer.width);
+            if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
 
         public ObjectData? ObjectAtCursor()
         {
-            return Editor.ObjectAtPosition(cursor.y, cursor.y, mapLayer);
+            return Editor.ObjectAtPosition(cursor.x, cursor.y, mapLayer);
         }
 
         public void SetSelectedObject(string name, bool withUndo = true)
@@ -87,21 +85,36 @@ namespace Editor.Editors
             currentObject = name;
         }
 
-        public bool TrySetObjectColor(string colorName)
+        public bool TrySetObjectColor(int color)
         {
             var obj = ObjectAtCursor();
             if (obj == null) return false;
-            obj.color = colorName;
+            obj.color = color;
             return true;
         }
 
         public bool TryPlaceObject()
         {
-            var obj = ObjectAtCursor();
-            if (currentObject == null || obj == null) return false;
+            if (currentObject == null) return false;
 
-            obj.original = obj.name;
-            obj.name = currentObject;
+            var obj = ObjectAtCursor();
+
+            if (obj == null)
+            {
+                obj = new ObjectData() { 
+                    name = currentObject,
+                    x = cursor.x, 
+                    y = cursor.y, 
+                    color = ObjectInfo.Info[currentObject].color_active,
+                };
+                mapLayer.objects.Add(obj);
+            }
+            else
+            {
+                obj.original = obj.name;
+                obj.name = currentObject;
+                obj.color = ObjectInfo.Info[currentObject].color_active;
+            }
             return true;
         }
 

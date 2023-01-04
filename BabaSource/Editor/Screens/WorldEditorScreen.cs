@@ -18,6 +18,7 @@ namespace Editor.Screens
         private WorldPickerScreen? worldPicker;
         private MapPickerScreen? mapPicker;
         private RenameScreen? renameScreen;
+        private MapEditorScreen? mapEditorScreen;
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
 
@@ -40,7 +41,8 @@ namespace Editor.Screens
                             worldPicker = new(saves);
                             stack.Add(worldPicker);
                         })
-                ).State(
+                )
+                .State(
                     EditorStates.WorldEditor,
                     c => c switch
                     {
@@ -53,7 +55,8 @@ namespace Editor.Screens
                     },
                     def => def
                         .AddOnEnter(() => editorCommands())
-                ).State(
+                )
+                .State(
                     EditorStates.WorldEditorPickMap,
                     c => mapPicker!.Handle(c) switch
                     {
@@ -70,7 +73,8 @@ namespace Editor.Screens
                             stack.Add(mapPicker);
                         })
                         .AddOnLeave(() => stack.Pop())
-                ).State(
+                )
+                .State(
                     EditorStates.RenamingWorld,
                     c => renameScreen!.Handle(c) switch
                     {
@@ -92,6 +96,18 @@ namespace Editor.Screens
                         {
                             renameScreen = new(editor!.save.worldName, "name world: {}");
                             stack.Add(renameScreen);
+                        })
+                )
+                .State(
+                    EditorStates.MapEditor,
+                    c => mapEditorScreen!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop()?.Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            mapEditorScreen = new(stack, Editor.EDITOR.currentMap!);
+                            stack.Add(mapEditorScreen);
+                            mapEditorScreen.init();
                         })
                 );
         }

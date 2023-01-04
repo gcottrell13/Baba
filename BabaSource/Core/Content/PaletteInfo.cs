@@ -1,6 +1,7 @@
 
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Content {
     public static class PaletteInfo {
@@ -659,7 +660,7 @@ namespace Core.Content {
 			{ "blue", (3 << shift) + 3 },
 			{ "yellow", (2 << shift) + 4 },
 			{ "orange", (2 << shift) + 2 },
-			{ "green", (5 << shift) + 1 },
+			{ "green", (5 << shift) + 2 },
 			{ "cyan", (1 << shift) + 4 },
 			{ "lime", (5 << shift) + 3 },
 			{ "purple", (3 << shift) + 0 },
@@ -675,6 +676,16 @@ namespace Core.Content {
         public static Color GetColorByName(string theme, string name)
         {
             return Palettes[theme][ColorNameMap[name]];
+        }
+
+        public static Color GetColorById(string theme, int c)
+        {
+            return Palettes[theme][c];
+        }
+
+        public static Color GetObjectColor(string theme, string name)
+        {
+            return Palettes[theme][ObjectInfo.Info[name].color_active];
         }
     }
 }

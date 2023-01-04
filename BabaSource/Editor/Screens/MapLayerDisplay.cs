@@ -45,7 +45,7 @@ namespace Editor.Screens
 
             foreach (var obj in mapLayer.objects)
             {
-                var c = PaletteInfo.GetColorByName("default", obj.color);
+                var c = PaletteInfo.GetColorById("default", obj.color);
                 objects.ConstructDefaultValue(obj.x)[obj.y] = $"{c.ToHexTriple()}[{obj.name}:{obj.state}]";
             }
 

@@ -26,7 +26,11 @@ namespace Editor.Screens
         {
             editor = new(mapData);
             layerEditorScreen = new("layer 1", stack, mapData.layer1);
-            AddChild(new MapLayerDisplay("layer 1", mapData.layer1, null));
+            var layerDisplay = new MapLayerDisplay("layer 1", mapData.layer1, null);
+            layerDisplay.Graphics.y = 25;
+            AddChild(layerDisplay);
+            titleText.SetText(mapData.name);
+            AddChild(titleText);
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
                 .State(
@@ -37,10 +41,12 @@ namespace Editor.Screens
                         KeyPress { Text: '1' } => editLayer1(stack),
                         KeyPress { Text: '2' } => editLayer2(stack),
                         KeyPress { Text: 'r' } => selectMapRegion(),
+                        KeyPress { Text: 'n' } => EditorStates.RenamingMap,
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveMap(),
                         _ => EditorStates.MapEditor,
                     }
-                ).State(
+                )
+                .State(
                     EditorStates.EditMapLayer,
                     c => layerEditorScreen!.Handle(c),
                     def => def
@@ -51,7 +57,8 @@ namespace Editor.Screens
                             stack.Add(layerEditorScreen);
                             layerEditorScreen.init();
                         })
-                ).State(
+                )
+                .State(
                     EditorStates.RenamingMap,
                     c => renameScreen!.Handle(c) switch
                     {
@@ -78,7 +85,6 @@ namespace Editor.Screens
         {
             stateMachine.Initialize(EditorStates.MapEditor);
             editorCommands();
-            AddChild(titleText);
         }
 
         private void editorCommands()
@@ -96,6 +102,7 @@ namespace Editor.Screens
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
+            EditorStates.WorldEditor => EditorStates.WorldEditor,
             _ => EditorStates.MapEditor,
         };
 

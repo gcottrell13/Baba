@@ -87,7 +87,7 @@ def save_palette_info():
         'blue': coord_to_intrep((3, 3)),
         'yellow': coord_to_intrep((2, 4)),
         'orange': coord_to_intrep((2, 2)),
-        'green': coord_to_intrep((5, 1)),
+        'green': coord_to_intrep((5, 2)),
         'cyan': coord_to_intrep((1, 4)),
         'lime': coord_to_intrep((5, 3)),
         'purple': coord_to_intrep((3, 0)),
@@ -108,6 +108,7 @@ def save_palette_info():
         'Content/PaletteInfo.cs': f"""
 using Microsoft.Xna.Framework; 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace {NAMESPACE} {{
     public static class PaletteInfo {{
@@ -124,6 +125,11 @@ namespace {NAMESPACE} {{
         public static Color GetColorByName(string theme, string name)
         {{
             return Palettes[theme][ColorNameMap[name]];
+        }}
+
+        public static Color GetObjectColor(string theme, string name)
+        {{
+            return Palettes[theme][ObjectInfo.Info[name].color_active];
         }}
     }}
 }}

@@ -40,7 +40,8 @@ namespace Editor
 
         public MapData NewMap()
         {
-            var newMap = new MapData() { name = $"new map {mapDatas.Count + 1}" };
+            var maxId = mapDatas.Max(x => x.id);
+            var newMap = new MapData() { name = $"new map {mapDatas.Count + 1}", id = maxId + 1 };
             currentWorld!.MapDatas.Add(newMap);
             LoadSaveFiles.SaveAll(currentWorld);
             return newMap;

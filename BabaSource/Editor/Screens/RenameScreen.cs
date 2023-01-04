@@ -21,6 +21,8 @@ namespace Editor.Screens
             Text = startText;
             this.startText = startText;
             inputBox = new(format);
+            inputBox.SetText(startText);
+            AddChild(inputBox);
             renameCommands();
         }
 
@@ -38,6 +40,7 @@ namespace Editor.Screens
         {
             if (ev.KeyPressed == Keys.Enter)
             {
+                Text = inputBox.Text;
                 return RenameStates.Save;
             }
             if (ev.KeyPressed == Keys.Escape)

@@ -42,7 +42,8 @@ namespace Core.Screens
             IEnumerable<T> items,
             int maxDisplay,
             Func<T, string> filterBy,
-            Func<T, string>? display = null)
+            Func<T, string>? display = null,
+            T? currentValue = null)
         {
             this.display = display ?? filterBy;
             this.items = items.ToList();
@@ -59,7 +60,7 @@ namespace Core.Screens
                         Keys.F => PickerState.Filtering,
                         Keys.Up => Up(),
                         Keys.Down => Down(),
-                        Keys.Escape => PickerState.CloseCancel,
+                        Keys.Escape => Cancel(),
                         Keys.Enter => Pick(),
                         Keys.E => OnEdit(),
                         Keys.A => OnAdd(),
@@ -105,6 +106,7 @@ namespace Core.Screens
             AddChild(filterDisplay);
             SetDisplayTypeName("");
             SetFilter("");
+            _setSelected(Math.Max(0, filteredChildren.IndexOf(currentValue)));
         }
 
         private int? getSelectedItemIndex()
@@ -180,6 +182,12 @@ namespace Core.Screens
                 child.Graphics.alpha = 1f;
                 y += 24;
             }
+        }
+
+        private PickerState Cancel()
+        {
+            Selected = null;
+            return PickerState.CloseCancel;
         }
 
         private PickerState Up()

@@ -1,6 +1,7 @@
 ﻿using Core.Content;
 using Core.Screens;
 using Core.Utils;
+using Editor.Editors;
 using Editor.SaveFormats;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -16,45 +17,53 @@ namespace Editor.Screens
     {
         private StateMachine<EditorStates, KeyPress> stateMachine { get; set; }
 
-        ColorPickerScreen? colorPicker;
+        private ColorPickerScreen? colorPicker;
         private readonly MapLayer mapLayer;
-        private readonly ObjectData cursor = new();
+        private readonly MapLayerEditor mapLayerEditor;
 
-        public MapLayerEditorScreen(ScreenStack stack, MapLayer mapLayer)
+        public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer)
         {
+            mapLayerEditor = new(mapLayer);
+            this.mapLayer = mapLayer;
+            Name = name;
+
             stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor")
                 .State(
                     EditorStates.ChangeObjectColor,
+                    c => colorPicker?.Handle(c) switch
+                    {
+                        PickerState.CloseCancel => EditorStates.EditMapLayer,
+                        PickerState.ClosePick => EditorStates.EditMapLayer,
+                        _ => EditorStates.None,
+                    },
+                    def => def
+                        .AddOnLeave(() =>
+                        {
+                            stack.Pop();
+                            if (colorPicker?.Selected == null) return;
+                            mapLayerEditor?.TrySetObjectColor(colorPicker.Selected.name);
+                        })
+                        .AddOnEnter(() =>
+                        {
+                            colorPicker = new(mapLayerEditor.ObjectAtCursor()?.color);
+                            stack.Add(colorPicker);
+                        })
+                )
+                .State(
+                    EditorStates.EditMapLayer,
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
-                        _ => EditorStates.ChangeObjectColor,
-                    },
-                    def => def
-                        .AddOnLeave(() => stack.Pop())
-                        .AddOnEnter(() =>
-                        {
-                            colorPicker = new();
-                            stack.Add(colorPicker);
-                        })
-                ).State(
-                    EditorStates.MapEditor,
-                    c => c switch
-                    {
-                        KeyPress { KeyPressed: Keys.Up } => cursorUp(),
-                        KeyPress { KeyPressed: Keys.Down } => cursorDown(),
-                        KeyPress { KeyPressed: Keys.Left } => cursorLeft(),
-                        KeyPress { KeyPressed: Keys.Right } => cursorRight(),
-                        _ => EditorStates.MapEditor,
+                        KeyPress { Text: 'c' } => changeObjectColor(),
+                        _ => mapLayerEditor.handleInput(c.KeyPressed),
                     }
                 );
-            AddChild(new MapLayerDisplay(mapLayer, cursor));
-            this.mapLayer = mapLayer;
+            AddChild(new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor));
         }
 
         public void init()
         {
-            stateMachine.Initialize(EditorStates.MapEditor);
+            stateMachine.Initialize(EditorStates.EditMapLayer);
             editorCommands();
         }
 
@@ -68,34 +77,22 @@ namespace Editor.Screens
                 { "r", "rotate" },
                 { "p", "pick new object" },
                 { "s", "change layer size" },
-                { CommonStrings.CTRL_PLUS + "s", "to save" },
                 { CommonStrings.ESCAPE, "stop editing objects" },
             });
         }
 
-        private EditorStates cursorUp()
+        private EditorStates changeObjectColor()
         {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y - 1, (int)mapLayer.height);
-            return EditorStates.MapEditor;
-        }
-        private EditorStates cursorDown()
-        {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y + 1, (int)mapLayer.height);
-            return EditorStates.MapEditor;
-        }
-        private EditorStates cursorLeft()
-        {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x - 1, (int)mapLayer.width);
-            return EditorStates.MapEditor;
-        }
-        private EditorStates cursorRight()
-        {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)mapLayer.width);
-            return EditorStates.MapEditor;
+            if (mapLayerEditor.ObjectAtCursor() == null)
+            {
+                return EditorStates.None;
+            }
+            return EditorStates.ChangeObjectColor;
         }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
+            EditorStates.MapEditor => EditorStates.MapEditor,
             _ => EditorStates.None,
         };
 

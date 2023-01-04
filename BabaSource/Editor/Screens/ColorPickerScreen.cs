@@ -30,7 +30,12 @@ namespace Editor.Screens
             "brown"
         }.Select(k => new COLOR() { name = k, value = PaletteInfo.GetColorByName("default", k) }).ToList();
 
-        public ColorPickerScreen() : base(COLORS, 10, x => x.name, x => $"{x.value.ToHexTriple()}{x.name}")
+        public ColorPickerScreen(string? currentColor = null) : base(
+            items: COLORS, 
+            maxDisplay: COLORS.Count, 
+            filterBy: x => x.name, 
+            display: x => $"{x.value.ToHexTriple()}{x.name}", 
+            currentValue: COLORS.FirstOrDefault(x => x.name == currentColor))
         {
             Name = "ColorPickerScreen";
         }

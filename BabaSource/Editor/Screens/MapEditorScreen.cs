@@ -25,8 +25,8 @@ namespace Editor.Screens
         public MapEditorScreen(ScreenStack stack, MapData mapData)
         {
             editor = new(mapData);
-            layerEditorScreen = new(stack, mapData.layer1);
-            AddChild(new MapLayerDisplay(mapData.layer1, null));
+            layerEditorScreen = new("layer 1", stack, mapData.layer1);
+            AddChild(new MapLayerDisplay("layer 1", mapData.layer1, null));
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
                 .State(
@@ -101,17 +101,23 @@ namespace Editor.Screens
 
         private EditorStates editLayer1(ScreenStack stack)
         {
-            RemoveChild(layerEditorScreen);
-            layerEditorScreen.Dispose();
-            layerEditorScreen = new(stack, Editor.EDITOR.currentMap!.layer1);
+            if (layerEditorScreen.Name == "layer 2")
+            {
+                RemoveChild(layerEditorScreen);
+                layerEditorScreen.Dispose();
+                layerEditorScreen = new("layer 1", stack, Editor.EDITOR.currentMap!.layer1);
+            }
             return EditorStates.EditMapLayer;
         }
 
         private EditorStates editLayer2(ScreenStack stack)
         {
-            RemoveChild(layerEditorScreen);
-            layerEditorScreen.Dispose();
-            layerEditorScreen = new(stack, Editor.EDITOR.currentMap!.layer2);
+            if (layerEditorScreen.Name == "layer 1")
+            {
+                RemoveChild(layerEditorScreen);
+                layerEditorScreen.Dispose();
+                layerEditorScreen = new("layer 2", stack, Editor.EDITOR.currentMap!.layer2);
+            }
             return EditorStates.EditMapLayer;
         }
 

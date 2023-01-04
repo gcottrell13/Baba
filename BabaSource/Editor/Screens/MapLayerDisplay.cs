@@ -20,10 +20,14 @@ namespace Editor.Screens
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
 
-        public MapLayerDisplay(MapLayer mapLayer, ObjectData? cursor)
+        public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor)
         {
             this.mapLayer = mapLayer;
             this.cursor = cursor;
+            Name = name;
+            AddChild(new Text(name));
+
+            gridDisplay.Graphics.y = 25;
             AddChild(gridDisplay);
             AddChild(objectsDisplay);
             AddChild(cursorDisplay);
@@ -72,7 +76,7 @@ namespace Editor.Screens
             objectsDisplay.SetText(string.Join("\n", lines));
 
             objectsDisplay.Graphics.x = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.blockWidth) * (maxYMagnitude + 1);
-            objectsDisplay.Graphics.y = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1);
+            objectsDisplay.Graphics.y = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1) + gridDisplay.Graphics.y;
 
             if (cursor != null && cursor.x < mapLayer.width && cursor.y < mapLayer.height)
             {

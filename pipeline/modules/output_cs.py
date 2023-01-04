@@ -85,7 +85,7 @@ def save_palette_info():
     color_name_map_items = {
         'red': coord_to_intrep((2, 1)),
         'blue': coord_to_intrep((3, 3)),
-        'yellow': coord_to_intrep((2, 5)),
+        'yellow': coord_to_intrep((2, 4)),
         'orange': coord_to_intrep((2, 2)),
         'green': coord_to_intrep((5, 1)),
         'cyan': coord_to_intrep((1, 4)),
@@ -97,7 +97,7 @@ def save_palette_info():
         'black': coord_to_intrep((0, 0)),
         'silver': coord_to_intrep((0, 2)),
         'white': coord_to_intrep((0, 3)),
-        'brown': coord_to_intrep((7, 1)),
+        'brown': coord_to_intrep((6, 1)),
     }
     color_name_map = ',\n\t\t\t'.join(
         f'{{ "{name}", {v} }}'

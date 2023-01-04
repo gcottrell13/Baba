@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.Utils;
 using Editor.SaveFormats;
+using Editor.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
@@ -10,27 +11,23 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Core.GameObject;
 
 namespace Editor.Editors
 {
-    internal class MapLayerEditor : GameObject
+    internal class MapLayerEditor
     {
 
         private Stack<Action> undoActions = new(capacity: 20);
-        private readonly int pxWidth;
-        private readonly int pxHeight;
-
-        private uint cursorX = 0;
-        private uint cursorY = 0;
+        public readonly ObjectData cursor = new() { name = "cursor", color = "pink" };
 
         private string? currentObject;
 
-        private MapLayer? layer;
+        private MapLayer mapLayer;
 
-        public MapLayerEditor(int maxPxWidth, int maxPxHeight)
+        public MapLayerEditor(MapLayer map)
         {
-            pxWidth = maxPxWidth;
-            pxHeight = maxPxHeight;
+            mapLayer = map;
         }
 
         public void Undo()
@@ -38,29 +35,44 @@ namespace Editor.Editors
 
         }
 
-        public void LoadMap(MapLayer? map)
-        {
-            layer = map;
-            undoActions.Clear();
-        }
-
         public void Save()
         {
             Editor.EDITOR.SaveAll();
         }
 
-        public void handleInput(Keys key)
+        public EditorStates handleInput(Keys key) => key switch
         {
+            Keys.Up => cursorUp(),
+            Keys.Down => cursorDown(),
+            Keys.Left => cursorLeft(),
+            Keys.Right => cursorRight(),
+            _ => EditorStates.None,
+        };
 
+        private EditorStates cursorUp()
+        {
+            cursor.y = (uint)MathExtra.MathMod((int)cursor.y - 1, (int)mapLayer.height);
+            return EditorStates.None;
+        }
+        private EditorStates cursorDown()
+        {
+            cursor.y = (uint)MathExtra.MathMod((int)cursor.y + 1, (int)mapLayer.height);
+            return EditorStates.None;
+        }
+        private EditorStates cursorLeft()
+        {
+            cursor.x = (uint)MathExtra.MathMod((int)cursor.x - 1, (int)mapLayer.width);
+            return EditorStates.None;
+        }
+        private EditorStates cursorRight()
+        {
+            cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)mapLayer.width);
+            return EditorStates.None;
         }
 
-        protected override void OnUpdate(GameTime gameTime)
+        public ObjectData? ObjectAtCursor()
         {
-            var scale = 1f;
-            Graphics.xscale = scale;
-            Graphics.yscale = scale;
-
-
+            return Editor.ObjectAtPosition(cursor.y, cursor.y, mapLayer);
         }
 
         public void SetSelectedObject(string name, bool withUndo = true)
@@ -76,7 +88,7 @@ namespace Editor.Editors
 
         public bool TrySetObjectColor(string colorName)
         {
-            var obj = Editor.ObjectAtPosition(cursorX, cursorY, layer);
+            var obj = ObjectAtCursor();
             if (obj == null) return false;
             obj.color = colorName;
             return true;
@@ -84,7 +96,7 @@ namespace Editor.Editors
 
         public bool TryPlaceObject()
         {
-            var obj = Editor.ObjectAtPosition(cursorX, cursorY, layer);
+            var obj = ObjectAtCursor();
             if (currentObject == null || obj == null) return false;
 
             obj.original = obj.name;
@@ -94,11 +106,10 @@ namespace Editor.Editors
 
         public bool TrySetCurrentLayerDimensions(string size)
         {
-            if (layer == null) return false;
             if (!size.TryRowColToInt(out var dims)) return false;
 
-            layer.width = (uint)dims.X;
-            layer.height = (uint)dims.Y;
+            mapLayer.width = (uint)dims.X;
+            mapLayer.height = (uint)dims.Y;
             return true;
         }
     }

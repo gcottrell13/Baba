@@ -194,6 +194,8 @@ def output_spritesheets(data: dict[str, ObjectSprites]):
     lines: list[str] = []
     sheets: list[str] = []
 
+    longest_name_size = max(map(len, data.keys()))
+
     for name, info in data.items():
         sheet, mapping = create_sheet(list(info))
 
@@ -218,7 +220,8 @@ new FacingOnMove(
         sheet[0].save(VISUAL_OUTPUT_DIRECTORY / f'{name}.sheet.png')
         with open(str(VISUAL_OUTPUT_DIRECTORY / f'{name}.sheet.png'), 'rb') as f:
             b64 = base64.b64encode(f.read()).decode('utf-8')
-            sheets.append(f'\t\t\t{{ "{name}", Texture2D.FromStream(graphics, '
+            n = f"\"{name}\"".ljust(longest_name_size + 2)
+            sheets.append(f'\t\t\t{{ {n}, Texture2D.FromStream(graphics, '
                           f'new MemoryStream(System.Convert.FromBase64String("{b64}"))) }}')
 
     sheet_text = ',\n'.join(sheets)

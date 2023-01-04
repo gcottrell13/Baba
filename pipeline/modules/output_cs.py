@@ -21,7 +21,7 @@ def save_object_info():
         fields = [
             f'color = ({colorx} << shift) + {colory}',
             f'color_active = ({coloractx} << shift) + {coloracty}',
-            f'sprite = "{item["sprite"]}"',
+            f'sprite = "{name}"',
             f'layer = {item["layer"]}',
             f'unittype = "{item["unittype"]}"',
         ]

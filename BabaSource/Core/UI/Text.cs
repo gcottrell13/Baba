@@ -244,6 +244,8 @@ namespace Core.UI
                     SY = letter.CurrentWobbler.Size.Y,
                     Name = compoundName + "-textcontainer",
                 };
+                letter.x = (options.blockWidth - sprite.SX) / 2;
+                letter.y = (options.lineHeight - sprite.SY) / 2;
                 sprite.SetColor(color);
                 sprite.AddChild(letter);
                 Graphics.AddChild(sprite);
@@ -302,8 +304,8 @@ namespace Core.UI
             {
                 if (child is TextCharacterHolder tx)
                 {
-                    tx.x = (tx.TX * (options.blockWidth + options.padding)) - (tx.SX - options.blockWidth) / 2;
-                    tx.y = (tx.TY * (options.lineHeight)) - (tx.SY - options.lineHeight) / 2;
+                    tx.x = tx.TX * (options.blockWidth + options.padding);
+                    tx.y = tx.TY * (options.lineHeight);
                 }
             }
 

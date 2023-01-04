@@ -19,6 +19,7 @@ namespace Editor.Screens
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
+        private string itemAtCursor = string.Empty;
 
         public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor)
         {
@@ -31,6 +32,11 @@ namespace Editor.Screens
             AddChild(gridDisplay);
             AddChild(objectsDisplay);
             AddChild(cursorDisplay);
+        }
+
+        public void SetSelectedObject(string displayItem)
+        {
+            itemAtCursor = displayItem;
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -83,6 +89,24 @@ namespace Editor.Screens
                 cursorDisplay.SetText("\n".Repeat(cursor.y) + " ".Repeat(cursor.x) + "[pink][cursor]");
                 cursorDisplay.Graphics.x = objectsDisplay.Graphics.x;
                 cursorDisplay.Graphics.y = objectsDisplay.Graphics.y;
+            }
+
+            if (!string.IsNullOrWhiteSpace(itemAtCursor) && cursorDisplay.Graphics.children.FirstOrDefault() is SpriteContainer cursorSprite)
+            {
+                Text? disp = (Text?)ChildByName("currentItemDisplay");
+                if (disp == null)
+                {
+                    disp = new Text(itemAtCursor) { Name = "currentItemDisplay" };
+                    disp.Graphics.alpha = 0.5f;
+                    AddChild(disp);
+                }
+                disp.SetText(itemAtCursor);
+                disp.Graphics.x = cursorSprite.x + cursorDisplay.Graphics.x;
+                disp.Graphics.y = cursorSprite.y + cursorDisplay.Graphics.y;
+            }
+            else
+            {
+                RemoveChild(ChildByName("currentItemDisplay"));
             }
             
             var yscale = 26f / (mapLayer.height + 3);

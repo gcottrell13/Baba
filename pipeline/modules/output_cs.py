@@ -40,12 +40,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace {NAMESPACE} {{
-    public struct ObjectInfoItem {{
+    public class ObjectInfoItem {{
         public int color;
         public int color_active;
-        public string sprite;
+        public string sprite = string.Empty;
         public int layer;
-        public string unittype;
+        public string unittype = string.Empty;
     }}
 
     public static class ObjectInfo {{

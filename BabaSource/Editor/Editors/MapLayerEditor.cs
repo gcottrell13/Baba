@@ -46,6 +46,7 @@ namespace Editor.Editors
             Keys.Down => cursorDown(),
             Keys.Left => cursorLeft(),
             Keys.Right => cursorRight(),
+            Keys.Space => TryPlaceObject() ? EditorStates.None : EditorStates.None,
             _ => EditorStates.None,
         };
 

@@ -18,6 +18,7 @@ namespace Editor.Screens
         private StateMachine<EditorStates, KeyPress> stateMachine { get; set; }
 
         private ColorPickerScreen? colorPicker;
+        private ObjectPickerScreen? objectPicker;
         private readonly MapLayer mapLayer;
         private readonly MapLayerEditor mapLayerEditor;
 
@@ -26,6 +27,7 @@ namespace Editor.Screens
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;
             Name = name;
+            var display = new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor);
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor")
                 .State(
@@ -55,10 +57,33 @@ namespace Editor.Screens
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
                         KeyPress { Text: 'c' } => changeObjectColor(),
+                        KeyPress { Text: 'p' } => pickObject(),
                         _ => mapLayerEditor.handleInput(c.KeyPressed),
                     }
+                )
+                .State(
+                    EditorStates.ObjectPicker,
+                    c => objectPicker?.Handle(c) switch
+                    {
+                        PickerState.CloseCancel => EditorStates.EditMapLayer,
+                        PickerState.ClosePick => EditorStates.EditMapLayer,
+                        _ => EditorStates.None
+                    },
+                    def => def
+                        .AddOnEnter(() =>
+                        {
+                            objectPicker = new(mapLayerEditor.ObjectAtCursor()?.name);
+                            stack.Add(objectPicker);
+                        })
+                        .AddOnLeave(() =>
+                        {
+                            stack.Pop();
+                            if (objectPicker?.Selected == null) return;
+                            mapLayerEditor.SetSelectedObject(objectPicker.Selected.sprite);
+                            display.SetSelectedObject(ObjectPickerScreen.ObjectDefaultSprite(objectPicker.Selected.sprite));
+                        })
                 );
-            AddChild(new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor));
+            AddChild(display);
         }
 
         public void init()
@@ -88,6 +113,11 @@ namespace Editor.Screens
                 return EditorStates.None;
             }
             return EditorStates.ChangeObjectColor;
+        }
+
+        private EditorStates pickObject()
+        {
+            return EditorStates.ObjectPicker;
         }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch

@@ -48,7 +48,7 @@ namespace Core
 
         public GameObject? ChildByName(string name)
         {
-            return Children.First(x => x.Name == name);
+            return Children.FirstOrDefault(x => x.Name == name);
         }
 
         protected virtual void OnDestroy() { }
@@ -97,8 +97,10 @@ namespace Core
             }
         }
 
-        public void RemoveChild(GameObject gameObject, bool graphics = true)
+        public void RemoveChild(GameObject? gameObject, bool graphics = true)
         {
+            if (gameObject == null) return;
+
             if (Children.Contains(gameObject))
             {
                 Children.Remove(gameObject);

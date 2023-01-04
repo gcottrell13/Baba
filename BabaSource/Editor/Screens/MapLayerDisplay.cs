@@ -19,7 +19,7 @@ namespace Editor.Screens
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
-        private string itemAtCursor = string.Empty;
+        private ObjectData? itemAtCursor;
 
         public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor)
         {
@@ -34,7 +34,7 @@ namespace Editor.Screens
             AddChild(cursorDisplay);
         }
 
-        public void SetSelectedObject(string displayItem)
+        public void SetSelectedObject(ObjectData? displayItem)
         {
             itemAtCursor = displayItem;
         }
@@ -91,16 +91,17 @@ namespace Editor.Screens
                 cursorDisplay.Graphics.y = objectsDisplay.Graphics.y;
             }
 
-            if (!string.IsNullOrWhiteSpace(itemAtCursor) && cursorDisplay.Graphics.children.FirstOrDefault() is SpriteContainer cursorSprite)
+            if (itemAtCursor != null && cursorDisplay.Graphics.children.FirstOrDefault() is SpriteContainer cursorSprite)
             {
                 Text? disp = (Text?)ChildByName("currentItemDisplay");
                 if (disp == null)
                 {
-                    disp = new Text(itemAtCursor) { Name = "currentItemDisplay" };
+                    disp = new Text() { Name = "currentItemDisplay" };
                     disp.Graphics.alpha = 0.5f;
                     AddChild(disp);
                 }
-                disp.SetText(itemAtCursor);
+                var color = PaletteInfo.Palettes["default"][itemAtCursor.color].ToHexTriple();
+                disp.SetText($"{color}[{itemAtCursor.name}:{itemAtCursor.state}]");
                 disp.Graphics.x = cursorSprite.x + cursorDisplay.Graphics.x;
                 disp.Graphics.y = cursorSprite.y + cursorDisplay.Graphics.y;
             }

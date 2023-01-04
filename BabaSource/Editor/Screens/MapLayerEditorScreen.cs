@@ -21,13 +21,14 @@ namespace Editor.Screens
         private ObjectPickerScreen? objectPicker;
         private readonly MapLayer mapLayer;
         private readonly MapLayerEditor mapLayerEditor;
+        private readonly MapLayerDisplay layerDisplay;
 
         public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer)
         {
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;
             Name = name;
-            var display = new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor);
+            layerDisplay = new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor);
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor")
                 .State(
@@ -56,6 +57,7 @@ namespace Editor.Screens
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
+                        KeyPress { KeyPressed: Keys.C, ModifierKeys: ModifierKeys.Ctrl } => copyObject(),
                         KeyPress { Text: 'c' } => changeObjectColor(),
                         KeyPress { Text: 'p' } => pickObject(),
                         _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
@@ -79,11 +81,11 @@ namespace Editor.Screens
                         {
                             stack.Pop();
                             if (objectPicker?.Selected == null) return;
-                            mapLayerEditor.SetSelectedObject(objectPicker.Selected.sprite);
-                            display.SetSelectedObject(ObjectPickerScreen.ObjectDefaultSprite(objectPicker.Selected.sprite));
+                            var d = mapLayerEditor.SetSelectedObject(objectPicker.Selected.sprite);
+                            layerDisplay.SetSelectedObject(d);
                         })
                 );
-            AddChild(display);
+            AddChild(layerDisplay);
         }
 
         public void init()
@@ -118,6 +120,13 @@ namespace Editor.Screens
         private EditorStates pickObject()
         {
             return EditorStates.ObjectPicker;
+        }
+
+        private EditorStates copyObject()
+        {
+            mapLayerEditor.TryCopyObjectAtCursor();
+            layerDisplay.SetSelectedObject(mapLayerEditor.currentObject);
+            return EditorStates.None;
         }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch

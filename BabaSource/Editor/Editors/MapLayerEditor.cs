@@ -15,7 +15,7 @@ namespace Editor.Editors
         private Stack<Action> undoActions = new(capacity: 20);
         public readonly ObjectData cursor = new() { name = "cursor", color = PaletteInfo.ColorNameMap["pink"] };
 
-        private string? currentObject;
+        public ObjectData? currentObject { get; private set; }
 
         private MapLayer mapLayer;
 
@@ -41,6 +41,7 @@ namespace Editor.Editors
             Keys.Left => cursorLeft(isSpaceDown),
             Keys.Right => cursorRight(isSpaceDown),
             Keys.Space => TryPlaceObject() ? EditorStates.None : EditorStates.None,
+            Keys.Delete => TryDeleteObjectAtCursor() ? EditorStates.None : EditorStates.None,
             _ => EditorStates.None,
         };
 
@@ -74,15 +75,52 @@ namespace Editor.Editors
             return Editor.ObjectAtPosition(cursor.x, cursor.y, mapLayer);
         }
 
-        public void SetSelectedObject(string name, bool withUndo = true)
+        public ObjectData SetSelectedObject(string name, bool withUndo = true)
         {
             if (withUndo && currentObject != null)
             {
                 var oldSelectedObject = currentObject;
-                undoActions.Push(() => SetSelectedObject(oldSelectedObject, withUndo: false));
+                undoActions.Push(() => SetSelectedObject(oldSelectedObject));
             }
+            var d = new ObjectData() { name = name, color = ObjectInfo.Info[name].color_active };
+            SetSelectedObject(d);
+            return d;
+        }
 
-            currentObject = name;
+        private void SetSelectedObject(ObjectData? selectedObject)
+        {
+            currentObject = selectedObject;
+        }
+
+        public bool TryCopyObjectAtCursor(bool withUndo = true)
+        {
+            var atCursor = ObjectAtCursor();
+            if (atCursor == null) return false;
+            if (withUndo && currentObject != null)
+            {
+                var oldSelectedObject = currentObject;
+                undoActions.Push(() => SetSelectedObject(oldSelectedObject));
+            }
+            SetSelectedObject(new ObjectData() { 
+                name = atCursor.name, 
+                color = atCursor.color,
+                state = atCursor.state,
+                original = atCursor.original,
+            });
+            return true;
+        }
+
+        public bool TryDeleteObjectAtCursor(bool withUndo = true)
+        {
+            var atCursor = ObjectAtCursor();
+            if (atCursor == null) return false;
+            if (withUndo)
+            {
+                var oldObject = atCursor;
+                undoActions.Push(() => TryPlaceObjectAtPosition(oldObject, oldObject.x, oldObject.y));
+            }
+            var removed = mapLayer.objects.RemoveAll(x => x.x == atCursor.x && x.y == atCursor.y);
+            return removed > 0;
         }
 
         public bool TrySetObjectColor(int color)
@@ -101,20 +139,30 @@ namespace Editor.Editors
 
             if (obj == null)
             {
-                obj = new ObjectData() { 
-                    name = currentObject,
-                    x = cursor.x, 
-                    y = cursor.y, 
-                    color = ObjectInfo.Info[currentObject].color_active,
-                };
-                mapLayer.objects.Add(obj);
+                return TryPlaceObjectAtPosition(currentObject, cursor.x, cursor.y);
             }
-            else
+
+            obj.original = obj.name;
+            obj.name = currentObject.name;
+            obj.color = currentObject.color;
+            obj.state = currentObject.state;
+            return true;
+        }
+
+        private bool TryPlaceObjectAtPosition(ObjectData d, uint x, uint y)
+        {
+            var obj = ObjectAtCursor();
+            if (obj != null) return false;
+
+            obj = new ObjectData()
             {
-                obj.original = obj.name;
-                obj.name = currentObject;
-                obj.color = ObjectInfo.Info[currentObject].color_active;
-            }
+                name = d.name,
+                x = cursor.x,
+                y = cursor.y,
+                color = d.color,
+                state = d.state,
+            };
+            mapLayer.objects.Add(obj);
             return true;
         }
 

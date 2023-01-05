@@ -40,7 +40,6 @@ namespace Editor.Screens
         {
             if (ev.KeyPressed == Keys.Enter)
             {
-                Text = inputBox.Text;
                 return RenameStates.Save;
             }
             if (ev.KeyPressed == Keys.Escape)
@@ -50,6 +49,7 @@ namespace Editor.Screens
             }
 
             inputBox.HandleInput(ev);
+            Text = inputBox.Text;
             return RenameStates.None;
         }
 

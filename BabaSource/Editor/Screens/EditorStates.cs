@@ -18,11 +18,12 @@ namespace Editor.Screens
         ObjectPicker, // modal for selecting a new object 
         EditMapLayer,
         RenamingMap,
+        ResizeMapLayer,
         SelectMapRegion, // view the map's current region, and select/add/edit a region 
                          // MapPicker, // select which map we are editing // just go back to the world map and pick another map 
 
         // Region Editor 
-        AddOrEditRegion, // add a new region, or edit an existing one 
+        RegionEditor, // add a new region, or edit an existing one 
         EditRegionName,
         EditRegionWordLayer,
         SelectRegionTheme,
@@ -33,10 +34,5 @@ namespace Editor.Screens
         SelectingWorld,
         RenamingWorld,
 
-        // New Map 
-        NewMap,
-
-        // New Region 
-        NewRegion,
     }
 }

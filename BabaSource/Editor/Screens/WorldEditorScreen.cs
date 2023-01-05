@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Editor.SaveFormats;
 using Microsoft.Xna.Framework.Input;
 using Editor.Editors;
+using System.Linq;
 
 namespace Editor.Screens
 {
@@ -19,6 +20,8 @@ namespace Editor.Screens
         private MapPickerScreen? mapPicker;
         private RenameScreen? renameScreen;
         private MapEditorScreen? mapEditorScreen;
+        private RegionEditorScreen? regionEditorScreen;
+        private RegionPickerScreen? regionPicker;
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
 
@@ -51,6 +54,7 @@ namespace Editor.Screens
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.SelectingWorld,
                         KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
+                        KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
@@ -96,6 +100,36 @@ namespace Editor.Screens
                         {
                             renameScreen = new(editor!.save.worldName, "name world: {}");
                             stack.Add(renameScreen);
+                        })
+                )
+                .State(
+                    EditorStates.SelectMapRegion,
+                    c => regionPicker!.Handle(c) switch {
+                        PickerState.CloseCancel => EditorStates.WorldEditor,
+                        PickerState.ClosePick => editRegion(),
+                        PickerState.CloseAdd => addRegion(),
+                        PickerState.CloseEdit => editRegion(),
+                        _ => EditorStates.None,
+                    },
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            var regions = Editor.EDITOR.regions;
+                            regionPicker = new(regions, null);
+                            stack.Add(regionPicker);
+                        })
+                )
+                .State(
+                    EditorStates.RegionEditor,
+                    c => regionEditorScreen!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            regionEditorScreen = new(stack, Editor.EDITOR.currentRegion!);
+                            stack.Add(regionEditorScreen);
+                            regionEditorScreen.init();
                         })
                 )
                 .State(
@@ -165,6 +199,18 @@ namespace Editor.Screens
         {
             Editor.EDITOR.NewWorld();
             return EditorStates.WorldEditor;
+        }
+
+        private EditorStates addRegion()
+        {
+            Editor.EDITOR.LoadRegion(Editor.EDITOR.NewRegion());
+            return EditorStates.RegionEditor;
+        }
+
+        private EditorStates editRegion()
+        {
+            Editor.EDITOR.LoadRegion(regionPicker?.Selected);
+            return EditorStates.RegionEditor;
         }
 
         public EditorStates SetPickedMap(MapData? pickedMap)

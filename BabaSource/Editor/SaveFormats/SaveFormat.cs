@@ -52,6 +52,7 @@ namespace Editor.SaveFormats
         {
             IEnumerable<string> lines()
             {
+                yield return $"\"id\": {region.id}";
                 yield return $"\"name\": \"{region.name}\"";
                 yield return $"\"theme\": \"{region.theme}\"";
                 yield return $"\"regionObjectLayer\": {serialize(region.regionObjectLayer, indent)}";
@@ -75,7 +76,7 @@ namespace Editor.SaveFormats
             IEnumerable<string> lines()
             {
                 yield return $"\"name\": \"{map.name}\"";
-                yield return $"\"regionName\": \"{map.regionName}\"";
+                yield return $"\"regionId\": \"{map.regionId}\"";
                 yield return $"\"resetWhenInactive\": {map.resetWhenInactive.ToString().ToLower()}";
                 yield return $"\"layer1\": {serialize(map.layer1, indent)}";
                 yield return $"\"layer2\": {serialize(map.layer2, indent)}";
@@ -142,8 +143,9 @@ namespace Editor.SaveFormats
 
     internal class Region
     {
+        public int id = 0;
         public string name = string.Empty;
-        public string theme = string.Empty;
+        public string theme = "default";
         public MapLayer regionObjectLayer { get; set; } = new();
     }
 
@@ -151,7 +153,7 @@ namespace Editor.SaveFormats
     {
         public int id = 0;
         public string name = string.Empty;
-        public string regionName = string.Empty;
+        public int regionId = 0;
         public MapLayer layer1 { get; set; } = new();
         public MapLayer layer2 { get; set; } = new();
 

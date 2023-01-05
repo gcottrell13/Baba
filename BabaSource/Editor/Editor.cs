@@ -15,6 +15,7 @@ namespace Editor
         public SaveFormat? currentWorld { get; private set; }
         public MapData? currentMap { get; private set; }
         public MapLayer? currentMapLayer { get; private set; }
+        public Region? currentRegion { get; private set; }
         
         public Editor(ReadonlySavesList savesList)
         {
@@ -40,11 +41,20 @@ namespace Editor
 
         public MapData NewMap()
         {
-            var maxId = mapDatas.Max(x => x.id);
+            var maxId = mapDatas.Count > 0 ? mapDatas.Max(x => x.id) : 0;
             var newMap = new MapData() { name = $"new map {mapDatas.Count + 1}", id = maxId + 1 };
             currentWorld!.MapDatas.Add(newMap);
             LoadSaveFiles.SaveAll(currentWorld);
             return newMap;
+        }
+
+        public Region NewRegion()
+        {
+            var maxId = regions.Count > 0 ? regions.Max(x => x.id) : 0;
+            var newRegion = new Region() { name = $"new region {maxId + 1}", id = maxId + 1 };
+            currentWorld!.Regions.Add(newRegion);
+            LoadSaveFiles.SaveAll(currentWorld);
+            return newRegion;
         }
 
         public void LoadWorld(SaveFormat? world)
@@ -61,7 +71,16 @@ namespace Editor
             currentMap = map;
         }
 
+        public void LoadRegion(Region? region)
+        {
+            if (region == null) throw new ArgumentNullException(nameof(region));
+            if (regions.Contains(region) != true) throw new Exception("region does not exist in the current list");
+            currentRegion = region;
+        }
+
         public List<MapData> mapDatas => currentWorld?.MapDatas ?? new List<MapData>();
+
+        public List<Region> regions => currentWorld?.Regions ?? new List<Region>();
 
         public static ObjectData? ObjectAtPosition(uint x, uint y, MapLayer? map)
         {

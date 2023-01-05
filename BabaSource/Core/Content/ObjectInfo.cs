@@ -47,6 +47,7 @@ namespace Core.Content {
 			{"cash", new ObjectInfoItem() { color = (5 << shift) + 2, color_active = (5 << shift) + 2, sprite = "cash", layer = 12, unittype = "object" } },
 			{"cat", new ObjectInfoItem() { color = (6 << shift) + 2, color_active = (6 << shift) + 2, sprite = "cat", layer = 18, unittype = "object" } },
 			{"chair", new ObjectInfoItem() { color = (6 << shift) + 2, color_active = (6 << shift) + 2, sprite = "chair", layer = 16, unittype = "object" } },
+			{"check", new ObjectInfoItem() { color = (1 << shift) + 2, color_active = (1 << shift) + 3, sprite = "check", layer = 10, unittype = "text" } },
 			{"cheese", new ObjectInfoItem() { color = (2 << shift) + 4, color_active = (2 << shift) + 4, sprite = "cheese", layer = 16, unittype = "object" } },
 			{"circle", new ObjectInfoItem() { color = (5 << shift) + 3, color_active = (5 << shift) + 3, sprite = "circle", layer = 17, unittype = "object" } },
 			{"cliff", new ObjectInfoItem() { color = (6 << shift) + 1, color_active = (6 << shift) + 1, sprite = "cliff", layer = 14, unittype = "object" } },

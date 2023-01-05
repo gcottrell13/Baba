@@ -678,11 +678,6 @@ namespace Core.Content {
             return Palettes[theme][ColorNameMap[name]];
         }
 
-        public static Color GetColorById(string theme, int c)
-        {
-            return Palettes[theme][c];
-        }
-
         public static Color GetObjectColor(string theme, string name)
         {
             return Palettes[theme][ObjectInfo.Info[name].color_active];

@@ -409,6 +409,7 @@ namespace Core.Content {
 	new Wobbler("chair.right.0", new[] { new Point(1, 2), new Point(2, 2), new Point(3, 2) }, new Point(24, 24), sheets["chair"]) }), 
 				sleep_right: null
 ) },
+			{ "check", new Wobbler("check", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["check"]) },
 			{ "cheese", new Wobbler("cheese", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["cheese"]) },
 			{ "circle", new Wobbler("circle", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["circle"]) },
 			{ "cliff", new Joinable("cliff", new Wobbler[] {

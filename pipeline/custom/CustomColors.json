@@ -96,5 +96,12 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "editorsquare"
+  },
+  "check": {
+    "color": [ 1, 2 ],
+    "color_active": [ 1, 3 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "check"
   }
 }

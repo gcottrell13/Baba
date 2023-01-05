@@ -112,25 +112,11 @@ using System.Linq;
 
 namespace {NAMESPACE} {{
     public static class PaletteInfo {{
-        private const int shift = {(7).bit_length()};
+        public const int shift = {(7).bit_length()};
 {items}
         public static Dictionary<string, Dictionary<int, Color>> Palettes = new Dictionary<string, Dictionary<int, Color>>() {{
 {palette_dir}        
         }};
-        
-        public static readonly Dictionary<string, int> ColorNameMap = new() {{
-            {color_name_map}
-        }};
-
-        public static Color GetColorByName(string theme, string name)
-        {{
-            return Palettes[theme][ColorNameMap[name]];
-        }}
-
-        public static Color GetObjectColor(string theme, string name)
-        {{
-            return Palettes[theme][ObjectInfo.Info[name].color_active];
-        }}
     }}
 }}
 """,

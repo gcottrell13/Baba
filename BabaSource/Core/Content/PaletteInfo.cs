@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Core.Content {
     public static class PaletteInfo {
-        private const int shift = 3;
+        public const int shift = 3;
 		private static readonly Dictionary<int, Color> palette_abstract = new Dictionary<int, Color>() { 
 			{ (0 << shift) + 0, new Color(70, 87, 56) },
 			{ (0 << shift) + 1, new Color(111, 139, 91) },
@@ -654,33 +654,5 @@ namespace Core.Content {
 			{ "variant", palette_variant },
 			{ "volcano", palette_volcano },        
         };
-        
-        public static readonly Dictionary<string, int> ColorNameMap = new() {
-            { "red", (2 << shift) + 1 },
-			{ "blue", (3 << shift) + 3 },
-			{ "yellow", (2 << shift) + 4 },
-			{ "orange", (2 << shift) + 2 },
-			{ "green", (5 << shift) + 2 },
-			{ "cyan", (1 << shift) + 4 },
-			{ "lime", (5 << shift) + 3 },
-			{ "purple", (3 << shift) + 0 },
-			{ "pink", (4 << shift) + 1 },
-			{ "rosy", (4 << shift) + 2 },
-			{ "grey", (0 << shift) + 1 },
-			{ "black", (0 << shift) + 0 },
-			{ "silver", (0 << shift) + 2 },
-			{ "white", (0 << shift) + 3 },
-			{ "brown", (6 << shift) + 1 }
-        };
-
-        public static Color GetColorByName(string theme, string name)
-        {
-            return Palettes[theme][ColorNameMap[name]];
-        }
-
-        public static Color GetObjectColor(string theme, string name)
-        {
-            return Palettes[theme][ObjectInfo.Info[name].color_active];
-        }
     }
 }

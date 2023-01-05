@@ -28,7 +28,7 @@ namespace Editor.Screens
             "silver",
             "white",
             "brown"
-        }.Select(k => new COLOR() { name = k, value = PaletteInfo.ColorNameMap[k] }).ToList();
+        }.Select(k => new COLOR() { name = k, value = ThemeInfo.ColorNameMap[k] }).ToList();
 
         public ColorPickerScreen(int currentColor = 0) : base(
             items: COLORS, 

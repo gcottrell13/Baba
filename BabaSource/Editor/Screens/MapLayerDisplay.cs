@@ -16,15 +16,17 @@ namespace Editor.Screens
     {
         private readonly MapLayer mapLayer;
         private readonly ObjectData? cursor;
+        private readonly string theme;
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
         private ObjectData? itemAtCursor;
 
-        public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor)
+        public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor, string? theme)
         {
             this.mapLayer = mapLayer;
             this.cursor = cursor;
+            this.theme = theme ?? "default";
             Name = name;
             AddChild(new Text(name));
 
@@ -45,7 +47,7 @@ namespace Editor.Screens
 
             foreach (var obj in mapLayer.objects)
             {
-                var c = PaletteInfo.GetColorById("default", obj.color);
+                var c = PaletteInfo.Palettes[theme][obj.color];
                 objects.ConstructDefaultValue(obj.x)[obj.y] = $"{c.ToHexTriple()}[{obj.name}:{obj.state}]";
             }
 

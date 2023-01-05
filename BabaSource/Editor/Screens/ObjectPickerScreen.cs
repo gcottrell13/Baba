@@ -16,6 +16,6 @@ namespace Editor.Screens
 
         }
 
-        public static string ObjectDefaultSprite(string name) => $"{PaletteInfo.GetObjectColor("default", name).ToHexTriple()}[{name}]";
+        public static string ObjectDefaultSprite(string name) => $"{ThemeInfo.GetObjectColor("default", name).ToHexTriple()}[{name}]";
     }
 }

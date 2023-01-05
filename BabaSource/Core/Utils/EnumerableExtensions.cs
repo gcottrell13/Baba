@@ -50,10 +50,6 @@ namespace Core.Utils
             }
             return col;
         }
-        public static string ToRowColString(this Vector2 dims)
-        {
-            return $"{ToColString((uint)dims.X)}{dims.Y}";
-        }
 
         public static IEnumerable<string> ZipMany(this IEnumerable<string> sequences)
         {

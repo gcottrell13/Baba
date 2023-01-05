@@ -33,7 +33,7 @@ namespace Core.Screens
         private readonly List<Text> texts = new();
         private readonly SpriteContainer itemDisplay = new();
         private List<T> filteredChildren = new();
-        public Color HighlightColor = Color.Brown;
+        public virtual Color HighlightColor => Color.Brown;
 
         private const string baseFilterDisplayText = "select";
         private readonly TextInputBox filterDisplay = new() { DisallowedCharacters = "\n[]\t" };
@@ -176,8 +176,10 @@ namespace Core.Screens
             var y = 0;
             foreach (var (t, child) in filteredChildren.Skip(startIndex).Take(maxDisplay).Zip(texts))
             {
-                var color = object.Equals(t, Selected) ? HighlightColor : Color.Black;
-                child.SetText(display(t), new() { background = color });
+                var isSelectedItem = object.Equals(t, Selected);
+                var color = isSelectedItem ? HighlightColor : Color.Black;
+                var pre = isSelectedItem ? "[arrow] " : "  ";
+                child.SetText(pre + display(t), new() { background = color });
                 child.Graphics.y = y;
                 child.Graphics.alpha = 1f;
                 y += 24;

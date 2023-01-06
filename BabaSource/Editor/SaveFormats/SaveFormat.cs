@@ -174,7 +174,7 @@ namespace Editor.SaveFormats
         public uint x = 0;
         public uint y = 0;
         public string name = string.Empty;
-        public uint state = 0;
+        public uint state = 1;
         public int color;
         public string text = string.Empty;
         public OriginalObjectData? original = null;

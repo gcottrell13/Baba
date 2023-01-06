@@ -62,6 +62,7 @@ namespace Editor.Screens
                         KeyPress { KeyPressed: Keys.C, ModifierKeys: ModifierKeys.Ctrl } => copyObject(),
                         KeyPress { Text: 'c' } => changeObjectColor(),
                         KeyPress { Text: 'p' } => pickObject(),
+                        KeyPress { Text: 'r' } => rotateObject(),
                         KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
                         KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
                         KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
@@ -208,6 +209,12 @@ namespace Editor.Screens
         {
             mapLayerEditor.TryCopyObjectAtCursor();
             layerDisplay.SetSelectedObject(mapLayerEditor.currentObject);
+            return EditorStates.None;
+        }
+
+        private EditorStates rotateObject()
+        {
+            mapLayerEditor.RotateObjectAtCursor();
             return EditorStates.None;
         }
 

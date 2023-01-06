@@ -174,5 +174,25 @@ namespace Editor.Editors
             mapLayer.height = (uint)dims.Y;
             return true;
         }
+
+        public bool RotateObjectAtCursor()
+        {
+            var obj = ObjectAtCursor();
+            if (obj == null) return false;
+
+            if (ContentLoader.LoadedContent?.SpriteValues[obj.name] is FacingOnMove)
+            {
+                obj.state = (Direction)obj.state switch
+                {
+                    Direction.Up => (uint)Direction.Right,
+                    Direction.Right => (uint)Direction.Down,
+                    Direction.Down => (uint)Direction.Left,
+                    Direction.Left => (uint)Direction.Up,
+                    _ => (uint)Direction.Down,
+                };
+            }
+
+            return true;
+        }
     }
 }

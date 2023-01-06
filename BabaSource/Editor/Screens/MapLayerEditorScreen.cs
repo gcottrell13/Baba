@@ -66,6 +66,7 @@ namespace Editor.Screens
                         KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
                         KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
                         KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
+                        KeyPress { KeyPressed: Keys.Z, ModifierKeys: ModifierKeys.Ctrl } => undo(),
                         _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
                     }
                 )
@@ -214,7 +215,13 @@ namespace Editor.Screens
 
         private EditorStates rotateObject()
         {
-            mapLayerEditor.RotateObjectAtCursor();
+            mapLayerEditor.TryRotateObjectAtCursor();
+            return EditorStates.None;
+        }
+
+        private EditorStates undo()
+        {
+            mapLayerEditor.Undo();
             return EditorStates.None;
         }
 

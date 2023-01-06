@@ -26,7 +26,8 @@ namespace Editor.Editors
 
         public void Undo()
         {
-
+            if (undoActions.Count > 0)
+                undoActions.Pop()();
         }
 
         public void Save()
@@ -70,10 +71,9 @@ namespace Editor.Editors
             return EditorStates.None;
         }
 
-        public ObjectData? ObjectAtCursor()
-        {
-            return Editor.ObjectAtPosition(cursor.x, cursor.y, mapLayer);
-        }
+        public ObjectData? ObjectAtCursor() => ObjectAtPosition(cursor.x, cursor.y);
+
+        public ObjectData? ObjectAtPosition(uint x, uint y) => Editor.ObjectAtPosition(x, y, mapLayer);
 
         public ObjectData SetSelectedObject(string name, bool withUndo = true)
         {
@@ -117,52 +117,94 @@ namespace Editor.Editors
             if (withUndo)
             {
                 var oldObject = atCursor;
-                undoActions.Push(() => TryPlaceObjectAtPosition(oldObject, oldObject.x, oldObject.y));
+                undoActions.Push(() => trySetObjectAtPosition(oldObject, oldObject.x, oldObject.y, false));
             }
-            var removed = mapLayer.objects.RemoveAll(x => x.x == atCursor.x && x.y == atCursor.y);
+            return tryDeleteObjectAtPosition(cursor.x, cursor.y);
+        }
+
+        private bool tryDeleteObjectAtPosition(uint x, uint y)
+        {
+            var removed = mapLayer.objects.RemoveAll(item => item.x == x && item.y == y);
             return removed > 0;
         }
 
-        public bool TrySetObjectColor(int color)
+        public bool TrySetObjectColor(int color, bool withUndo = true)
         {
             var obj = ObjectAtCursor();
+            if (obj == null) return false;
+
+            if (withUndo)
+            {
+                var oldColor = obj.color;
+                undoActions.Push(() => trySetColorAtPosition(oldColor, obj.x, obj.y));
+            }
+            return trySetColorAtPosition(color, obj.x, obj.y);
+        }
+
+        private bool trySetColorAtPosition(int color, uint x, uint y)
+        {
+            var obj = ObjectAtPosition(x, y);
             if (obj == null) return false;
             obj.color = color;
             return true;
         }
 
-        public bool TryPlaceObject()
+        public bool TryPlaceObject(bool withUndo = true)
         {
             if (currentObject == null) return false;
 
             var obj = ObjectAtCursor();
 
-            if (obj == null)
+            if (withUndo)
             {
-                return TryPlaceObjectAtPosition(currentObject, cursor.x, cursor.y);
+                if (obj != null)
+                {
+                    var oldObject = obj.copy();
+                    undoActions.Push(() => trySetObjectAtPosition(oldObject, oldObject.x, oldObject.y, false));
+                }
+                else
+                {
+                    var x = cursor.x;
+                    var y = cursor.y;
+                    undoActions.Push(() => tryDeleteObjectAtPosition(x, y));
+                }
             }
 
-            obj.original = new() { name = obj.name, color = obj.color, state = obj.state };
-            obj.name = currentObject.name;
-            obj.color = currentObject.color;
-            obj.state = currentObject.state;
-            return true;
+            return trySetObjectAtPosition(currentObject, cursor.x, cursor.y);
         }
 
-        private bool TryPlaceObjectAtPosition(ObjectData d, uint x, uint y)
+        private bool trySetObjectAtPosition(ObjectData d, uint x, uint y, bool keepOriginal = true)
         {
-            var obj = ObjectAtCursor();
-            if (obj != null) return false;
+            var obj = ObjectAtPosition(x, y);
 
-            obj = new ObjectData()
+            if (obj == null)
             {
-                name = d.name,
-                x = cursor.x,
-                y = cursor.y,
-                color = d.color,
-                state = d.state,
-            };
-            mapLayer.objects.Add(obj);
+                obj = new ObjectData()
+                {
+                    name = d.name,
+                    x = x,
+                    y = y,
+                    color = d.color,
+                    state = d.state,
+                };
+                mapLayer.objects.Add(obj);
+            }
+            else
+            {
+                if (keepOriginal)
+                {
+                    obj.original = new() { name = obj.name, color = obj.color, state = obj.state };
+                }
+                else
+                {
+                    obj.original = d.original;
+                }
+
+                obj.name = d.name;
+                obj.color = d.color;
+                obj.state = d.state;
+            }
+
             return true;
         }
 
@@ -175,21 +217,47 @@ namespace Editor.Editors
             return true;
         }
 
-        public bool RotateObjectAtCursor()
+        public bool TryRotateObjectAtCursor(bool ccw = true, bool withUndo = true)
         {
             var obj = ObjectAtCursor();
             if (obj == null) return false;
 
+            if (withUndo)
+            {
+                undoActions.Push(() => tryRotateObjectAtPosition(obj.x, obj.y, !ccw));
+            }
+            return tryRotateObjectAtPosition(obj.x, obj.y, ccw);
+        }
+
+        public bool tryRotateObjectAtPosition(uint x, uint y, bool ccw = true)
+        {
+            var obj = ObjectAtPosition(x, y);
+            if (obj == null) return false;
+
             if (ContentLoader.LoadedContent?.SpriteValues[obj.name] is FacingOnMove)
             {
-                obj.state = (Direction)obj.state switch
+                if (ccw)
                 {
-                    Direction.Up => (uint)Direction.Right,
-                    Direction.Right => (uint)Direction.Down,
-                    Direction.Down => (uint)Direction.Left,
-                    Direction.Left => (uint)Direction.Up,
-                    _ => (uint)Direction.Down,
-                };
+                    obj.state = (Direction)obj.state switch
+                    {
+                        Direction.Up => (uint)Direction.Right,
+                        Direction.Right => (uint)Direction.Down,
+                        Direction.Down => (uint)Direction.Left,
+                        Direction.Left => (uint)Direction.Up,
+                        _ => (uint)Direction.Down,
+                    };
+                }
+                else
+                {
+                    obj.state = (Direction)obj.state switch
+                    {
+                        Direction.Up => (uint)Direction.Left,
+                        Direction.Right => (uint)Direction.Up,
+                        Direction.Down => (uint)Direction.Right,
+                        Direction.Left => (uint)Direction.Down,
+                        _ => (uint)Direction.Up,
+                    };
+                }
             }
 
             return true;

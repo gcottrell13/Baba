@@ -178,6 +178,11 @@ namespace Editor.SaveFormats
         public int color;
         public string text = string.Empty;
         public OriginalObjectData? original = null;
+
+        public ObjectData copy()
+        {
+            return new ObjectData { x = x, y = y, color = color, state = state, name = name, original = original, text = text };
+        }
     }
 
     internal class OriginalObjectData

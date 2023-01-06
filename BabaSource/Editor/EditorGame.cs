@@ -31,12 +31,12 @@ namespace Editor
 
                 var mapStack = new ScreenStack();
 
-                WorldEditorScreen? worldEditorScreen = new(mapStack, saveFiles);
+                WorldEditorScreen worldEditorScreen = new(mapStack, saveFiles);
 
-                var s = new StateMachine<EditorStates, KeyPress>("game")
+                var s = new StateMachine<EditorStates, KeyPress>("game", EditorStates.None)
                     .State(
                         EditorStates.WorldEditor,
-                        c => worldEditorScreen!.Handle(c),
+                        c => worldEditorScreen.Handle(c),
                         def => def
                             .AddOnLeave(() => mapStack.Pop()?.Dispose())
                             .AddOnEnter(() =>

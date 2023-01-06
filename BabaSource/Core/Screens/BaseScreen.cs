@@ -104,8 +104,9 @@ namespace Core.Screens
 
             lines.Last().AddRange(space.Repeat(width - lines.Last().TextCharLength()));
 
+            RemoveChild(commandDisplay);
             AddChild(commandDisplay);
-            commandDisplay.SetText(lines, new() { backgroundColor=background });
+            commandDisplay.SetText(lines, new() { backgroundColor=background ?? Color.Black });
             commandDisplay.Graphics.xscale = scale;
             commandDisplay.Graphics.yscale = scale;
             commandDisplay.Graphics.y = ScreenHeight - (lines.Count + 2) * Text.DEFAULT_LINE_HEIGHT * scale;

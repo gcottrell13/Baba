@@ -17,21 +17,19 @@ namespace Editor.Screens
         private StateMachine<EditorStates, KeyPress> stateMachine;
         private RenameScreen? renameScreen;
         private ThemePickerScreen? themePickerScreen;
-        private RectangleSprite bg;
+        private RectangleSprite bg = new RectangleSprite();
         private readonly Region region;
-        private MapLayerDisplay layerDisplay;
+        private MapLayerDisplay? layerDisplay;
         private Text titleText = new();
 
         public RegionEditorScreen(ScreenStack stack, Region region)
         {
             this.region = region;
-            bg = new RectangleSprite();
-
             bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
             bg.xscale = ScreenWidth;
             bg.yscale = ScreenHeight;
 
-            stateMachine = new StateMachine<EditorStates, KeyPress>("region editor")
+            stateMachine = new StateMachine<EditorStates, KeyPress>("region editor", EditorStates.None)
                 .State(
                     EditorStates.RegionEditor,
                     c => c switch
@@ -49,7 +47,7 @@ namespace Editor.Screens
                     {
                         RenameScreen.RenameStates.Cancel => EditorStates.RegionEditor,
                         RenameScreen.RenameStates.Save => EditorStates.RegionEditor,
-                        _ => EditorStates.RenamingWorld,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnLeave(() =>
@@ -77,7 +75,7 @@ namespace Editor.Screens
                     {
                         PickerState.CloseCancel => EditorStates.RegionEditor,
                         PickerState.ClosePick => EditorStates.RegionEditor,
-                        _ => EditorStates.SelectRegionTheme,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
@@ -99,13 +97,6 @@ namespace Editor.Screens
 
         public void init()
         {
-            SetCommands(new()
-            {
-                { "n", "rename region" },
-                { "t", "set theme" },
-                { "c", "edit region layer" },
-                { CommonStrings.ESCAPE, "go back" },
-            });
             stateMachine.Initialize(EditorStates.RegionEditor);
         }
 
@@ -125,6 +116,14 @@ namespace Editor.Screens
             layerDisplay = new MapLayerDisplay("region", region.regionObjectLayer, null, region.theme);
             layerDisplay.Graphics.y = 75;
             AddChild(layerDisplay);
+
+            SetCommands(new()
+            {
+                { "n", "rename region" },
+                { "t", "set theme" },
+                { "c", "edit region layer" },
+                { CommonStrings.ESCAPE, "go back" },
+            });
         }
 
         private void pickTheme(string theme)

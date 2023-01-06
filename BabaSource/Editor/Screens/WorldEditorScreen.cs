@@ -27,14 +27,14 @@ namespace Editor.Screens
 
         public WorldEditorScreen(ScreenStack stack, ReadonlySavesList saves)
         {
-            stateMachine = new StateMachine<EditorStates, KeyPress>("world editor")
+            stateMachine = new StateMachine<EditorStates, KeyPress>("world editor", EditorStates.None)
                 .State(
                     EditorStates.SelectingWorld,
                     c => worldPicker!.Handle(c) switch
                     {
                         PickerState.ClosePick => EditorStates.WorldEditor,
                         PickerState.CloseAdd => EditorStates.WorldEditor,
-                        _ => EditorStates.SelectingWorld,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop())
@@ -42,8 +42,8 @@ namespace Editor.Screens
                         {
                             worldPicker = new(saves)
                             {
-                                OnSelect=(obj) => LoadWorld(obj),
-                                OnAdd=() => NewWorld(),
+                                OnSelect = LoadWorld,
+                                OnAdd = NewWorld,
                             };
                             stack.Add(worldPicker);
                         })
@@ -67,10 +67,10 @@ namespace Editor.Screens
                     c => mapPicker!.Handle(c) switch
                     {
                         PickerState.CloseCancel => EditorStates.WorldEditor,
-                        PickerState.ClosePick => EditorStates.MapEditor,
+                        PickerState.ClosePick => EditorStates.WorldEditor,
                         PickerState.CloseEdit => EditorStates.MapEditor,
                         PickerState.CloseAdd => EditorStates.MapEditor,
-                        _ => EditorStates.WorldEditorPickMap,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnEnter(() =>
@@ -91,7 +91,7 @@ namespace Editor.Screens
                     {
                         RenameScreen.RenameStates.Cancel => EditorStates.WorldEditor,
                         RenameScreen.RenameStates.Save => EditorStates.WorldEditor,
-                        _ => EditorStates.RenamingWorld,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
@@ -174,7 +174,6 @@ namespace Editor.Screens
                 d.Add("m", "pick map");
                 d.Add("r", "edit regions");
                 d.Add("n", "rename world");
-                d.Add(CommonStrings.ESCAPE, "select world");
                 d.Add(CommonStrings.CTRL_PLUS + "s", "save world");
             }
 
@@ -183,8 +182,7 @@ namespace Editor.Screens
 
         public override EditorStates Handle(KeyPress key) => stateMachine.SendAction(key) switch
         {
-            EditorStates.MapEditor => EditorStates.MapEditor,
-            _ => EditorStates.WorldEditor,
+            _ => EditorStates.None,
         };
 
         public void SetEditor(WorldEditor editor)
@@ -199,17 +197,15 @@ namespace Editor.Screens
             titleText.SetText(name);
         }
 
-        public EditorStates LoadWorld(SaveFormat save)
+        public void LoadWorld(SaveFormat save)
         {
             Editor.EDITOR.LoadWorld(save);
             SetEditor(new WorldEditor(save));
-            return EditorStates.WorldEditor;
         }
 
-        public EditorStates NewWorld()
+        public void NewWorld()
         {
             Editor.EDITOR.NewWorld();
-            return EditorStates.WorldEditor;
         }
 
         private void addRegion()

@@ -20,7 +20,7 @@ namespace Editor.Screens
 
         private ColorPickerScreen? colorPicker;
         private ObjectPickerScreen? objectPicker;
-        private RenameScreen? resizeScreen;
+        private NumberPickerScreen? resizeScreen;
         private readonly MapLayer mapLayer;
         private readonly MapLayerEditor mapLayerEditor;
         private readonly MapLayerDisplay layerDisplay;
@@ -32,13 +32,13 @@ namespace Editor.Screens
             Name = name;
             layerDisplay = new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor, theme);
 
-            stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor")
+            stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor", EditorStates.None)
                 .State(
                     EditorStates.ChangeObjectColor,
                     c => colorPicker?.Handle(c) switch
                     {
-                        PickerState.CloseCancel => EditorStates.EditMapLayer,
-                        PickerState.ClosePick => EditorStates.EditMapLayer,
+                        PickerState.CloseCancel => EditorStates.EditMapLayer1,
+                        PickerState.ClosePick => EditorStates.EditMapLayer1,
                         _ => EditorStates.None,
                     },
                     def => def
@@ -53,13 +53,15 @@ namespace Editor.Screens
                         })
                 )
                 .State(
-                    EditorStates.EditMapLayer,
+                    EditorStates.EditMapLayer1,
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
                         KeyPress { KeyPressed: Keys.C, ModifierKeys: ModifierKeys.Ctrl } => copyObject(),
                         KeyPress { Text: 'c' } => changeObjectColor(),
                         KeyPress { Text: 'p' } => pickObject(),
+                        KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
+                        KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
                         //KeyPress { Text: 's' } => resize(),
                         _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
                     }
@@ -68,8 +70,8 @@ namespace Editor.Screens
                     EditorStates.ObjectPicker,
                     c => objectPicker?.Handle(c) switch
                     {
-                        PickerState.CloseCancel => EditorStates.EditMapLayer,
-                        PickerState.ClosePick => EditorStates.EditMapLayer,
+                        PickerState.CloseCancel => EditorStates.EditMapLayer1,
+                        PickerState.ClosePick => EditorStates.EditMapLayer1,
                         _ => EditorStates.None
                     },
                     def => def
@@ -88,26 +90,46 @@ namespace Editor.Screens
                         .AddOnLeave(() => stack.Pop().Dispose())
                 )
                 .State(
-                    EditorStates.ResizeMapLayer,
+                    EditorStates.ResizeMapLayerWidth,
                     c => resizeScreen!.Handle(c) switch
                     {
-                        RenameScreen.RenameStates.Cancel => EditorStates.EditMapLayer,
-                        RenameScreen.RenameStates.Save => EditorStates.EditMapLayer,
-                        _ => EditorStates.RenamingMap,
+                        PickerState.CloseCancel => EditorStates.EditMapLayer1,
+                        PickerState.ClosePick => EditorStates.EditMapLayer1,
+                        _ => EditorStates.None,
                     },
                     def => def
-                        .AddOnLeave(() =>
-                        {
-                            if (resizeScreen?.Text != null && EnumerableExtensions.TryRowColToInt(resizeScreen.Text, out var dims))
-                            {
-                                mapLayer.width = (uint)dims.X;
-                                mapLayer.height = (uint)dims.Y;
-                            }
-                            stack.Pop().Dispose();
-                        })
+                        .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            resizeScreen = new(new Vector2(mapLayer.width, mapLayer.height).ToRowColString());
+                            resizeScreen = new(10, 25, mapLayer.width)
+                            {
+                                OnSelect = (obj) =>
+                                {
+                                    mapLayer.width = uint.Parse(obj);
+                                },
+                            };
+                            stack.Add(resizeScreen);
+                        })
+                )
+                .State(
+                    EditorStates.ResizeMapLayerHeight,
+                    c => resizeScreen!.Handle(c) switch
+                    {
+                        PickerState.CloseCancel => EditorStates.EditMapLayer1,
+                        PickerState.ClosePick => EditorStates.EditMapLayer1,
+                        _ => EditorStates.None,
+                    },
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            resizeScreen = new(10, 25, mapLayer.height)
+                            {
+                                OnSelect = (obj) =>
+                                {
+                                    mapLayer.height = uint.Parse(obj);
+                                },
+                            };
                             stack.Add(resizeScreen);
                         })
                 );
@@ -116,7 +138,7 @@ namespace Editor.Screens
 
         public void init()
         {
-            stateMachine.Initialize(EditorStates.EditMapLayer);
+            stateMachine.Initialize(EditorStates.EditMapLayer1);
             editorCommands();
         }
 
@@ -129,7 +151,8 @@ namespace Editor.Screens
                 { "t", "text" },
                 { "r", "rotate" },
                 { "p", "pick new object" },
-                { "s", "change layer size" },
+                { "x", "width" },
+                { "y", "height" },
                 { CommonStrings.ESCAPE, "stop editing objects" },
             });
         }
@@ -153,11 +176,6 @@ namespace Editor.Screens
             mapLayerEditor.TryCopyObjectAtCursor();
             layerDisplay.SetSelectedObject(mapLayerEditor.currentObject);
             return EditorStates.None;
-        }
-
-        private EditorStates resize()
-        {
-            return EditorStates.ResizeMapLayer;
         }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch

@@ -11,13 +11,15 @@ namespace Core.Utils
     {
         private readonly Dictionary<TState, StateDefinition<TState, TAction>> states = new();
         private readonly string name;
+        private readonly TState noOpState;
         private StateDefinition<TState, TAction>? currentState;
 
         public TState CurrentState => currentState == null ? default! : currentState.State;
 
-        public StateMachine(string name)
+        public StateMachine(string name, TState noOpState)
         {
             this.name = name;
+            this.noOpState = noOpState;
         }
 
         public StateMachine<TState, TAction> State(TState state, Func<TAction, TState> theSwitch, Action<StateDefinition<TState, TAction>>? stateConfig = null)
@@ -34,11 +36,23 @@ namespace Core.Utils
 
             var resultState = currentState.OnAction(action);
 
-            if (states.TryGetValue(resultState, out var newState) && !Equals(newState, currentState))
+            if (Equals(resultState, noOpState))
+                return resultState;
+
+            var isDifferent = !Equals(resultState, currentState.State);
+            if (isDifferent)
             {
-                currentState.OnLeave(newState.State);
-                newState.OnEnter(currentState.State);
-                currentState = newState;
+                currentState.OnLeave(resultState);
+
+                if (states.TryGetValue(resultState, out var newState))
+                {
+                    newState.OnEnter(currentState.State);
+                    currentState = newState;
+                }
+                else
+                {
+                    currentState = null;
+                }
             }
 
             return resultState;

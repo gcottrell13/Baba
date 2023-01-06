@@ -56,7 +56,7 @@ namespace Core.Screens
             this.maxDisplay = maxDisplay;
             filterDisplay.SetOptions(new() { background = Color.Black });
 
-            statemachine = new StateMachine<PickerState, KeyPress>("filter modal")
+            statemachine = new StateMachine<PickerState, KeyPress>("filter modal", PickerState.None)
                 .State(
                     PickerState.Selecting,
                     c => c.KeyPressed switch

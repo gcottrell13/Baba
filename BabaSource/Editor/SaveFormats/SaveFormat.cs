@@ -75,8 +75,9 @@ namespace Editor.SaveFormats
         {
             IEnumerable<string> lines()
             {
+                yield return $"\"id\": {map.id}";
                 yield return $"\"name\": \"{map.name}\"";
-                yield return $"\"regionId\": \"{map.regionId}\"";
+                yield return $"\"regionId\": {map.regionId}";
                 yield return $"\"resetWhenInactive\": {map.resetWhenInactive.ToString().ToLower()}";
                 yield return $"\"layer1\": {serialize(map.layer1, indent)}";
                 yield return $"\"layer2\": {serialize(map.layer2, indent)}";

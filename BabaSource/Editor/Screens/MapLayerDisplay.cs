@@ -16,11 +16,12 @@ namespace Editor.Screens
     {
         private readonly MapLayer mapLayer;
         private readonly ObjectData? cursor;
-        private readonly string theme;
+        public string theme;
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
         private ObjectData? itemAtCursor;
+        private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
         public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor, string? theme)
         {
@@ -28,12 +29,17 @@ namespace Editor.Screens
             this.cursor = cursor;
             this.theme = theme ?? "default";
             Name = name;
+
+            Graphics.AddChild(background);
+            background.SetColor(ThemeInfo.GetThemeBackgroundColor(theme ?? "default"));
+
             AddChild(new Text(name));
 
             gridDisplay.Graphics.y = 25;
             AddChild(gridDisplay);
             AddChild(objectsDisplay);
             AddChild(cursorDisplay);
+
         }
 
         public void SetSelectedObject(ObjectData? displayItem)
@@ -111,8 +117,13 @@ namespace Editor.Screens
             {
                 RemoveChild(ChildByName("currentItemDisplay"));
             }
+
+            if (ThemeInfo.GetThemeBackgroundColor(theme) is Color bgColor)
+            {
+                background.SetColor(bgColor);
+            }
             
-            var yscale = 26f / (mapLayer.height + 3);
+            var yscale = 20f / (mapLayer.height + 3);
             var xscale = 36f / (mapLayer.width + 3);
             var scale = Math.Min(xscale, yscale);
             Graphics.xscale = scale;

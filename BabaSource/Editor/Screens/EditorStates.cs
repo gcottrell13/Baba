@@ -16,9 +16,11 @@ namespace Editor.Screens
         ChangeObjectColor, // bring up a modal to select a color for a specific object 
         AddingTextToObject, // bring up a modal for adding text to a specific object 
         ObjectPicker, // modal for selecting a new object 
-        EditMapLayer,
+        EditMapLayer1,
+        EditMapLayer2,
         RenamingMap,
-        ResizeMapLayer,
+        ResizeMapLayerWidth,
+        ResizeMapLayerHeight,
         SelectMapRegion, // view the map's current region, and select/add/edit a region 
                          // MapPicker, // select which map we are editing // just go back to the world map and pick another map 
 

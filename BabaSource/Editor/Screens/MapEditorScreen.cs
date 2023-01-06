@@ -29,6 +29,9 @@ namespace Editor.Screens
             layerEditorScreen = new("layer 1", stack, mapData.layer1, theme);
             var layerDisplay = new MapLayerDisplay("layer 1", mapData.layer1, null, theme);
             layerDisplay.Graphics.y = 25;
+            layerDisplay.Graphics.xscale = 0.95f;
+            layerDisplay.Graphics.yscale = 0.95f;
+
             AddChild(layerDisplay);
             titleText.SetText(mapData.name);
             AddChild(titleText);
@@ -37,28 +40,44 @@ namespace Editor.Screens
             RenameScreen? renameScreen = null;
             RegionPickerScreen? regionPicker = null;
 
-            stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
+            stateMachine = new StateMachine<EditorStates, KeyPress>("map editor", EditorStates.None)
                 .State(
                     EditorStates.MapEditor,
                     c => c switch
                     {
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.WorldEditor,
-                        KeyPress { Text: '1' } => editLayer1(stack),
-                        KeyPress { Text: '2' } => editLayer2(stack),
+                        KeyPress { Text: '1' } => EditorStates.EditMapLayer1,
+                        KeyPress { Text: '2' } => EditorStates.EditMapLayer2,
                         KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
                         KeyPress { Text: 'n' } => EditorStates.RenamingMap,
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveMap(),
-                        _ => EditorStates.MapEditor,
+                        _ => EditorStates.None,
                     }
                 )
                 .State(
-                    EditorStates.EditMapLayer,
+                    EditorStates.EditMapLayer1,
                     c => layerEditorScreen!.Handle(c),
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
                             // the edit functions make a new screen object
+                            var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
+                            layerEditorScreen = new("layer 1", stack, Editor.EDITOR.currentMap!.layer1, theme);
+                            stack.Add(layerEditorScreen);
+                            layerEditorScreen.init();
+                        })
+                )
+                .State(
+                    EditorStates.EditMapLayer2,
+                    c => layerEditorScreen!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            // the edit functions make a new screen object
+                            var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
+                            layerEditorScreen = new("layer 2", stack, Editor.EDITOR.currentMap!.layer2, theme);
                             stack.Add(layerEditorScreen);
                             layerEditorScreen.init();
                         })
@@ -77,11 +96,15 @@ namespace Editor.Screens
                         .AddOnEnter(() =>
                         {
                             var regions = Editor.EDITOR.regions;
-                            regionPicker = new(regions, regions.FirstOrDefault(x => x.id == mapData.id))
+                            regionPicker = new(regions, regions.FirstOrDefault(x => x.id == mapData.regionId))
                             {
                                 OnEdit = editRegion,
                                 OnAdd = addRegion,
-                                OnSelect = selectMapRegion,
+                                OnSelect = (Region region) =>
+                                {
+                                    Editor.EDITOR.currentMap!.regionId = region.id;
+                                    layerDisplay.theme = region.theme;
+                                },
                             };
                             stack.Add(regionPicker);
                         })
@@ -92,7 +115,7 @@ namespace Editor.Screens
                     {
                         RenameScreen.RenameStates.Cancel => EditorStates.MapEditor,
                         RenameScreen.RenameStates.Save => EditorStates.MapEditor,
-                        _ => EditorStates.RenamingMap,
+                        _ => EditorStates.None,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
@@ -133,34 +156,6 @@ namespace Editor.Screens
             EditorStates.RegionEditor => EditorStates.RegionEditor,
             _ => EditorStates.MapEditor,
         };
-
-        private EditorStates editLayer1(ScreenStack stack)
-        {
-            if (layerEditorScreen.Name == "layer 2")
-            {
-                RemoveChild(layerEditorScreen);
-                layerEditorScreen.Dispose();
-                var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
-                layerEditorScreen = new("layer 1", stack, Editor.EDITOR.currentMap!.layer1, theme);
-            }
-            return EditorStates.EditMapLayer;
-        }
-
-        private EditorStates editLayer2(ScreenStack stack)
-        {
-            if (layerEditorScreen.Name == "layer 1")
-            {
-                RemoveChild(layerEditorScreen);
-                layerEditorScreen.Dispose();
-                var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
-                layerEditorScreen = new("layer 2", stack, Editor.EDITOR.currentMap!.layer2, theme);
-            }
-            return EditorStates.EditMapLayer;
-        }
-
-        private void selectMapRegion(Region region)
-        {
-        }
 
         private void addRegion()
         {

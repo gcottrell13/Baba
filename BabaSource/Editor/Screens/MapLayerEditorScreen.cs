@@ -11,6 +11,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static Editor.Screens.AddTextToObjectScreen;
 
 namespace Editor.Screens
 {
@@ -21,6 +22,7 @@ namespace Editor.Screens
         private ColorPickerScreen? colorPicker;
         private ObjectPickerScreen? objectPicker;
         private NumberPickerScreen? resizeScreen;
+        private AddTextToObjectScreen? addTextToObjectScreen;
         private readonly MapLayer mapLayer;
         private readonly MapLayerEditor mapLayerEditor;
         private readonly MapLayerDisplay layerDisplay;
@@ -62,7 +64,7 @@ namespace Editor.Screens
                         KeyPress { Text: 'p' } => pickObject(),
                         KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
                         KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
-                        //KeyPress { Text: 's' } => resize(),
+                        KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
                         _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
                     }
                 )
@@ -88,6 +90,26 @@ namespace Editor.Screens
                             stack.Add(objectPicker);
                         })
                         .AddOnLeave(() => stack.Pop().Dispose())
+                )
+                .State(
+                    EditorStates.AddingTextToObject,
+                    c => addTextToObjectScreen!.Handle(c) switch
+                    {
+                        TextObjectStates.Save => EditorStates.EditMapLayer1,
+                        TextObjectStates.Cancel => EditorStates.EditMapLayer1,
+                        _ => EditorStates.None,
+                    },
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            var obj = mapLayerEditor.ObjectAtCursor();
+                            addTextToObjectScreen = new AddTextToObjectScreen(obj!.text)
+                            {
+                                OnSave = setObjectText,
+                            };
+                            stack.Add(addTextToObjectScreen);
+                        })
                 )
                 .State(
                     EditorStates.ResizeMapLayerWidth,
@@ -169,6 +191,17 @@ namespace Editor.Screens
         private EditorStates pickObject()
         {
             return EditorStates.ObjectPicker;
+        }
+
+        private EditorStates textToObject()
+        {
+            if (mapLayerEditor.ObjectAtCursor() == null) return EditorStates.None;
+            return EditorStates.AddingTextToObject;
+        }
+
+        private void setObjectText(string text)
+        {
+            mapLayerEditor.ObjectAtCursor()!.text = text;
         }
 
         private EditorStates copyObject()

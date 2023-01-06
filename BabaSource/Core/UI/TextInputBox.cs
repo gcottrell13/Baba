@@ -28,6 +28,13 @@ namespace Core.UI
                     SetText("");
                 return;
             }
+
+            if (ev.KeyPressed == Keys.Enter)
+            {
+                SetText(Text + "\n");
+                return;
+            }
+
             if (ev.Text == 0) return;
             SetText(Text + ev.Text);
         }

@@ -268,7 +268,6 @@ namespace Core.Screens
         private PickerState addCharToFilter(KeyPress c)
         {
             filterDisplay.HandleInput(c);
-            _setSelected(0);
             _afterSetFilter();
             return PickerState.Filtering;
         }
@@ -276,13 +275,13 @@ namespace Core.Screens
         public void SetFilter(string f)
         {
             filterDisplay.SetText(f);
-            _setSelected(0);
             _afterSetFilter();
         }
 
         private void _afterSetFilter()
         {
             filteredChildren = items.Where(x => filterBy(x).Contains(Filter)).ToList();
+            _setSelected(0);
             _drawChildren();
         }
 

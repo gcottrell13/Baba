@@ -16,6 +16,8 @@ namespace Editor.Screens
         private TextInputBox inputBox;
         private readonly string startText;
 
+        public Action<string>? OnSave;
+
         public RenameScreen(string startText, string format = "{}")
         {
             Text = startText;
@@ -40,6 +42,7 @@ namespace Editor.Screens
         {
             if (ev.KeyPressed == Keys.Enter)
             {
+                OnSave?.Invoke(Text);
                 return RenameStates.Save;
             }
             if (ev.KeyPressed == Keys.Escape)

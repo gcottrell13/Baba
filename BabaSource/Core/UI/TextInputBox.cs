@@ -1,16 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace Core.UI
 {
     public class TextInputBox : GameObject
     {
-        public string DisallowedCharacters = string.Empty;
+        public Regex? TextFilterRegex;
+
         public string Text { get; private set; } = string.Empty;
         private Text.TextOptions TextOptions = new();
 
@@ -33,7 +29,6 @@ namespace Core.UI
                 return;
             }
             if (ev.Text == 0) return;
-            if (DisallowedCharacters.Contains(ev.Text)) return;
             SetText(Text + ev.Text);
         }
 
@@ -54,10 +49,11 @@ namespace Core.UI
 
         public void SetText(string text)
         {
-            foreach (var d in DisallowedCharacters)
+            if (TextFilterRegex != null && !TextFilterRegex.IsMatch(text))
             {
-                text = text.Replace(d.ToString(), "");
+                return;
             }
+
             Text = text;
             (ChildByName("text") as Text)?.SetText(string.Format(Format, text), TextOptions);
         }

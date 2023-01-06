@@ -32,16 +32,19 @@ namespace Editor.Screens
                     EditorStates.SelectingWorld,
                     c => worldPicker!.Handle(c) switch
                     {
-                        PickerState.CloseCancel => EditorStates.WorldEditor,
-                        PickerState.ClosePick => LoadWorld(worldPicker.Selected!),
-                        PickerState.CloseAdd => NewWorld(),
+                        PickerState.ClosePick => EditorStates.WorldEditor,
+                        PickerState.CloseAdd => EditorStates.WorldEditor,
                         _ => EditorStates.SelectingWorld,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop())
                         .AddOnEnter(() =>
                         {
-                            worldPicker = new(saves);
+                            worldPicker = new(saves)
+                            {
+                                OnSelect=(obj) => LoadWorld(obj),
+                                OnAdd=() => NewWorld(),
+                            };
                             stack.Add(worldPicker);
                         })
                 )
@@ -52,7 +55,6 @@ namespace Editor.Screens
                         KeyPress { KeyPressed: Keys.Enter } => Editor.EDITOR.HasWorldLoaded() ? EditorStates.WorldEditor : EditorStates.SelectingWorld,
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
-                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.SelectingWorld,
                         KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
                         KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
@@ -65,15 +67,20 @@ namespace Editor.Screens
                     c => mapPicker!.Handle(c) switch
                     {
                         PickerState.CloseCancel => EditorStates.WorldEditor,
-                        PickerState.ClosePick => SetPickedMap(mapPicker!.Selected),
-                        PickerState.CloseEdit => EditMap(),
-                        PickerState.CloseAdd => NewMap(),
+                        PickerState.ClosePick => EditorStates.MapEditor,
+                        PickerState.CloseEdit => EditorStates.MapEditor,
+                        PickerState.CloseAdd => EditorStates.MapEditor,
                         _ => EditorStates.WorldEditorPickMap,
                     },
                     def => def
                         .AddOnEnter(() =>
                         {
-                            mapPicker = new(Editor.EDITOR.mapDatas);
+                            mapPicker = new(Editor.EDITOR.mapDatas)
+                            {
+                                OnAdd=() => NewMap(),
+                                OnSelect=(obj) => SetPickedMap(obj),
+                                OnEdit=(obj) => EditMap(obj),
+                            };
                             stack.Add(mapPicker);
                         })
                         .AddOnLeave(() => stack.Pop())
@@ -87,18 +94,13 @@ namespace Editor.Screens
                         _ => EditorStates.RenamingWorld,
                     },
                     def => def
-                        .AddOnLeave(() =>
-                        {
-                            if (editor != null)
-                            {
-                                editor.save.worldName = renameScreen!.Text;
-                                titleText.SetText(renameScreen!.Text);
-                            }
-                            stack.Pop().Dispose();
-                        })
+                        .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            renameScreen = new(editor!.save.worldName, "name world: {}");
+                            renameScreen = new(editor!.save.worldName, "name world: {}")
+                            {
+                                OnSave=onRenameWorld,
+                            };
                             stack.Add(renameScreen);
                         })
                 )
@@ -106,9 +108,8 @@ namespace Editor.Screens
                     EditorStates.SelectMapRegion,
                     c => regionPicker!.Handle(c) switch {
                         PickerState.CloseCancel => EditorStates.WorldEditor,
-                        PickerState.ClosePick => editRegion(),
-                        PickerState.CloseAdd => addRegion(),
-                        PickerState.CloseEdit => editRegion(),
+                        PickerState.ClosePick => EditorStates.RegionEditor,
+                        PickerState.CloseAdd => EditorStates.RegionEditor,
                         _ => EditorStates.None,
                     },
                     def => def
@@ -116,7 +117,11 @@ namespace Editor.Screens
                         .AddOnEnter(() =>
                         {
                             var regions = Editor.EDITOR.regions;
-                            regionPicker = new(regions, null);
+                            regionPicker = new(regions, null)
+                            {
+                                OnSelect=editRegion,
+                                OnAdd=addRegion,
+                            };
                             stack.Add(regionPicker);
                         })
                 )
@@ -188,6 +193,12 @@ namespace Editor.Screens
             titleText.SetText(editor.save.worldName);
         }
 
+        private void onRenameWorld(string name)
+        {
+            editor!.save.worldName = name;
+            titleText.SetText(name);
+        }
+
         public EditorStates LoadWorld(SaveFormat save)
         {
             Editor.EDITOR.LoadWorld(save);
@@ -201,16 +212,14 @@ namespace Editor.Screens
             return EditorStates.WorldEditor;
         }
 
-        private EditorStates addRegion()
+        private void addRegion()
         {
             Editor.EDITOR.LoadRegion(Editor.EDITOR.NewRegion());
-            return EditorStates.RegionEditor;
         }
 
-        private EditorStates editRegion()
+        private void editRegion(Region region)
         {
-            Editor.EDITOR.LoadRegion(regionPicker?.Selected);
-            return EditorStates.RegionEditor;
+            Editor.EDITOR.LoadRegion(region);
         }
 
         public EditorStates SetPickedMap(MapData? pickedMap)
@@ -233,16 +242,14 @@ namespace Editor.Screens
             return EditorStates.WorldEditor;
         }
 
-        private EditorStates NewMap()
+        private void NewMap()
         {
             Editor.EDITOR.LoadMap(Editor.EDITOR.NewMap());
-            return EditorStates.MapEditor;
         }
 
-        private EditorStates EditMap()
+        private void EditMap(MapData selected)
         {
-            Editor.EDITOR.LoadMap(mapPicker!.Selected);
-            return EditorStates.MapEditor;
+            Editor.EDITOR.LoadMap(selected);
         }
 
         protected override void OnUpdate(GameTime gameTime)

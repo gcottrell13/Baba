@@ -17,13 +17,15 @@ namespace Editor.Screens
         private StateMachine<EditorStates, KeyPress> stateMachine;
         private RenameScreen? renameScreen;
         private ThemePickerScreen? themePickerScreen;
+        private RectangleSprite bg;
         private readonly Region region;
+        private MapLayerDisplay layerDisplay;
         private Text titleText = new();
 
         public RegionEditorScreen(ScreenStack stack, Region region)
         {
             this.region = region;
-            var bg = new RectangleSprite();
+            bg = new RectangleSprite();
 
             bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
             bg.xscale = ScreenWidth;
@@ -74,14 +76,17 @@ namespace Editor.Screens
                     c => themePickerScreen!.Handle(c) switch
                     {
                         PickerState.CloseCancel => EditorStates.RegionEditor,
-                        PickerState.ClosePick => pickTheme(bg),
+                        PickerState.ClosePick => EditorStates.RegionEditor,
                         _ => EditorStates.SelectRegionTheme,
                     },
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            themePickerScreen = new(region.theme);
+                            themePickerScreen = new(region.theme)
+                            {
+                                OnSelect=pickTheme,
+                            };
                             stack.Add(themePickerScreen);
                         })
                 );
@@ -112,18 +117,20 @@ namespace Editor.Screens
                 $"Theme: {region.theme}",
                 $"Id: {region.id}",
             };
-            titleText.SetText(string.Join("\n\n", lines));
+            titleText.SetText(string.Join("\n", lines));
+
+            bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
+
+            RemoveChild(layerDisplay);
+            layerDisplay = new MapLayerDisplay("region", region.regionObjectLayer, null, region.theme);
+            layerDisplay.Graphics.y = 75;
+            AddChild(layerDisplay);
         }
 
-        private EditorStates pickTheme(RectangleSprite r)
+        private void pickTheme(string theme)
         {
-            if (themePickerScreen?.Selected != null)
-            {
-                region.theme = themePickerScreen.Selected;
-                r.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
-                refreshText();
-            }
-            return EditorStates.RegionEditor;
+            region.theme = theme;
+            refreshText();
         }
 
 

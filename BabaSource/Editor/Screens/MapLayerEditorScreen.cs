@@ -42,15 +42,13 @@ namespace Editor.Screens
                         _ => EditorStates.None,
                     },
                     def => def
-                        .AddOnLeave(() =>
-                        {
-                            stack.Pop();
-                            if (colorPicker?.Selected == null) return;
-                            mapLayerEditor?.TrySetObjectColor(colorPicker.Selected.value);
-                        })
+                        .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            colorPicker = new(mapLayerEditor.ObjectAtCursor()?.color ?? 0);
+                            colorPicker = new(mapLayerEditor.ObjectAtCursor()?.color ?? 0)
+                            {
+                                OnSelect=(color) => mapLayerEditor?.TrySetObjectColor(color.value),
+                            };
                             stack.Add(colorPicker);
                         })
                 )
@@ -77,16 +75,17 @@ namespace Editor.Screens
                     def => def
                         .AddOnEnter(() =>
                         {
-                            objectPicker = new(mapLayerEditor.ObjectAtCursor()?.name);
+                            objectPicker = new(mapLayerEditor.ObjectAtCursor()?.name)
+                            {
+                                OnSelect=(obj) =>
+                                {
+                                    var d = mapLayerEditor.SetSelectedObject(obj.sprite);
+                                    layerDisplay.SetSelectedObject(d);
+                                },
+                            };
                             stack.Add(objectPicker);
                         })
-                        .AddOnLeave(() =>
-                        {
-                            stack.Pop();
-                            if (objectPicker?.Selected == null) return;
-                            var d = mapLayerEditor.SetSelectedObject(objectPicker.Selected.sprite);
-                            layerDisplay.SetSelectedObject(d);
-                        })
+                        .AddOnLeave(() => stack.Pop().Dispose())
                 )
                 .State(
                     EditorStates.ResizeMapLayer,

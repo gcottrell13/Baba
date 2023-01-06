@@ -24,11 +24,15 @@ namespace Core.Screens
 
         public string Filter => filterDisplay.Text;
 
-        private bool _add;
-        private bool _edit;
+        private Action<T>? _onEdit;
+        private Action? _onAdd;
+        private Action<T>? _onRemove;
+        private Action<T>? _onSelect;
 
-        protected bool Add { get => _add; set { _add = value; refreshCommands(); } }
-        protected bool Edit { get => _edit; set { _edit = value; refreshCommands(); } }
+        public Action<T>? OnEdit { get => _onEdit; set { _onEdit = value; refreshCommands(); } }
+        public Action? OnAdd { get => _onAdd; set { _onAdd = value; refreshCommands(); } }
+        public Action<T>? OnRemove { get => _onRemove; set { _onRemove = value; refreshCommands(); } }
+        public Action<T>? OnSelect { get => _onSelect; set { _onSelect = value; refreshCommands(); } }
 
         private readonly List<Text> texts = new();
         private readonly SpriteContainer itemDisplay = new();
@@ -36,7 +40,7 @@ namespace Core.Screens
         public virtual Color HighlightColor => Color.Brown;
 
         private const string baseFilterDisplayText = "select";
-        private readonly TextInputBox filterDisplay = new() { DisallowedCharacters = "\n[]\t" };
+        private readonly TextInputBox filterDisplay = new() { TextFilterRegex = new System.Text.RegularExpressions.Regex(@"^[^\n\[\]\t]*$") };
 
         public FiltererModal(
             IEnumerable<T> items,
@@ -62,8 +66,9 @@ namespace Core.Screens
                         Keys.Down => Down(),
                         Keys.Escape => Cancel(),
                         Keys.Enter => Pick(),
-                        Keys.E => OnEdit(),
-                        Keys.A => OnAdd(),
+                        Keys.E => Edit(),
+                        Keys.A => Add(),
+                        Keys.D => Remove(),
                         _ => 0,
                     },
                     def => def
@@ -80,16 +85,19 @@ namespace Core.Screens
                         .AddOnEnter(filteringCommands)
                 ).State(
                     PickerState.CloseCancel,
-                    c => PickerState.Selecting
+                    c => throwClosedError()
                 ).State(
                     PickerState.ClosePick,
-                    c => PickerState.Selecting
+                    c => throwClosedError()
                 ).State(
                     PickerState.CloseEdit,
-                    c => PickerState.Selecting
+                    c => throwClosedError()
                 ).State(
                     PickerState.CloseAdd,
-                    c => PickerState.Selecting
+                    c => throwClosedError()
+                ).State(
+                    PickerState.CloseRemove,
+                    c => throwClosedError()
                 );
             statemachine.Initialize(PickerState.Selecting);
 
@@ -108,6 +116,8 @@ namespace Core.Screens
             SetFilter("");
             _setSelected(Math.Max(0, filteredChildren.IndexOf(currentValue)));
         }
+
+        private PickerState throwClosedError() => throw new InvalidOperationException("Must create a new filter modal. This one is closed");
 
         private int? getSelectedItemIndex()
         {
@@ -130,22 +140,24 @@ namespace Core.Screens
             {
                 { CommonStrings.UD_ARROW, "move cursor" },
                 { "f", "filter" },
-                { CommonStrings.ENTER, "pick" },
                 { CommonStrings.ESCAPE, "go back" },
             };
-            if (_edit) d.Add("e", "edit");
-            if (_add) d.Add("a", "add");
+            if (OnSelect != null) d.Add(CommonStrings.ENTER, "select");
+            if (OnEdit != null) d.Add("e", "edit");
+            if (OnAdd != null) d.Add("a", "add");
+            if (OnRemove != null) d.Add("d", "remove");
             SetCommands(d);
         }
 
         protected void filteringCommands()
         {
-            SetCommands(new()
+            var d = new Dictionary<string, string>()
             {
-                { CommonStrings.NAME_CHARS, "type a name" },
+                { CommonStrings.NAME_CHARS, "type a filter" },
                 { CommonStrings.ESCAPE, "stop filtering" },
-                { CommonStrings.ENTER, "pick first" },
-            });
+            };
+            if (OnSelect != null) d.Add(CommonStrings.ENTER, "select first");
+            SetCommands(d);
         }
 
         private void _setSelected(int newSelected)
@@ -208,21 +220,47 @@ namespace Core.Screens
 
         private PickerState Pick()
         {
-            if (Selected != null)
-                return PickerState.ClosePick;
-            return PickerState.Selecting;
+            if (Selected == null)
+                return PickerState.None;
+            if (OnSelect != null)
+                OnSelect(Selected);
+            return PickerState.ClosePick;
         }
 
-        private PickerState OnEdit()
+        private PickerState Edit()
         {
             if (Selected == null)
-                return PickerState.Selecting;
-            return _edit ? PickerState.CloseEdit : PickerState.Selecting;
+                return PickerState.None;
+            if (OnEdit != null)
+            {
+                OnEdit(Selected);
+                return PickerState.CloseEdit;
+            }
+            return PickerState.None;
         }
 
-        private PickerState OnAdd()
+        private PickerState Add()
         {
-            return _add ? PickerState.CloseAdd : PickerState.Selecting;
+            if (Selected == null)
+                return PickerState.None;
+            if (OnAdd != null)
+            {
+                OnAdd();
+                return PickerState.CloseAdd;
+            }
+            return PickerState.None;
+        }
+
+        private PickerState Remove()
+        {
+            if (Selected == null)
+                return PickerState.None;
+            if (OnRemove != null)
+            {
+                OnRemove(Selected);
+                return PickerState.CloseRemove;
+            }
+            return PickerState.None;
         }
 
         public override PickerState Handle(KeyPress ev) => statemachine.SendAction(ev);
@@ -262,11 +300,13 @@ namespace Core.Screens
 
     public enum PickerState
     {
+        None,
         Selecting,
         Filtering,
         CloseAdd,
         ClosePick,
         CloseCancel,
         CloseEdit,
+        CloseRemove,
     }
 }

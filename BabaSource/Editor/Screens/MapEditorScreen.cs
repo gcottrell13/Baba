@@ -18,8 +18,6 @@ namespace Editor.Screens
         private StateMachine<EditorStates, KeyPress> stateMachine;
         private MapEditor editor;
         private MapLayerEditorScreen layerEditorScreen;
-        private RenameScreen? renameScreen;
-        private RegionPickerScreen? regionPicker;
 
         private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: {}") { Name = "editortitle" };
         private readonly MapData mapData;
@@ -35,6 +33,10 @@ namespace Editor.Screens
             titleText.SetText(mapData.name);
             AddChild(titleText);
 
+
+            RenameScreen? renameScreen = null;
+            RegionPickerScreen? regionPicker = null;
+
             stateMachine = new StateMachine<EditorStates, KeyPress>("map editor")
                 .State(
                     EditorStates.MapEditor,
@@ -43,7 +45,7 @@ namespace Editor.Screens
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.WorldEditor,
                         KeyPress { Text: '1' } => editLayer1(stack),
                         KeyPress { Text: '2' } => editLayer2(stack),
-                        KeyPress { Text: 'r' } => selectMapRegion(),
+                        KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
                         KeyPress { Text: 'n' } => EditorStates.RenamingMap,
                         KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveMap(),
                         _ => EditorStates.MapEditor,
@@ -66,8 +68,8 @@ namespace Editor.Screens
                     c => regionPicker!.Handle(c) switch {
                         PickerState.CloseCancel => EditorStates.MapEditor,
                         PickerState.ClosePick => EditorStates.MapEditor,
-                        PickerState.CloseAdd => addRegion(),
-                        PickerState.CloseEdit => editRegion(),
+                        PickerState.CloseEdit => EditorStates.RegionEditor,
+                        PickerState.CloseAdd => EditorStates.RegionEditor,
                         _ => EditorStates.None,
                     },
                     def => def
@@ -75,7 +77,12 @@ namespace Editor.Screens
                         .AddOnEnter(() =>
                         {
                             var regions = Editor.EDITOR.regions;
-                            regionPicker = new(regions, regions.FirstOrDefault(x => x.id == mapData.id));
+                            regionPicker = new(regions, regions.FirstOrDefault(x => x.id == mapData.id))
+                            {
+                                OnEdit = editRegion,
+                                OnAdd = addRegion,
+                                OnSelect = selectMapRegion,
+                            };
                             stack.Add(regionPicker);
                         })
                 )
@@ -88,15 +95,13 @@ namespace Editor.Screens
                         _ => EditorStates.RenamingMap,
                     },
                     def => def
-                        .AddOnLeave(() =>
-                        {
-                            editor.mapData.name = renameScreen!.Text;
-                            titleText.SetText(renameScreen!.Text);
-                            stack.Pop().Dispose();
-                        })
+                        .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            renameScreen = new(editor.mapData.name, "name map: {}");
+                            renameScreen = new(editor.mapData.name, "name map: {}")
+                            {
+                                OnSave = renameMap,
+                            };
                             stack.Add(renameScreen);
                         })
                 );
@@ -153,21 +158,24 @@ namespace Editor.Screens
             return EditorStates.EditMapLayer;
         }
 
-        private EditorStates selectMapRegion()
+        private void selectMapRegion(Region region)
         {
-            return EditorStates.SelectMapRegion;
         }
 
-        private EditorStates addRegion()
+        private void addRegion()
         {
             Editor.EDITOR.LoadRegion(Editor.EDITOR.NewRegion());
-            return EditorStates.RegionEditor;
         }
 
-        private EditorStates editRegion()
+        private void editRegion(Region? r)
         {
-            Editor.EDITOR.LoadRegion(regionPicker?.Selected);
-            return EditorStates.RegionEditor;
+            Editor.EDITOR.LoadRegion(r);
+        }
+
+        private void renameMap(string name)
+        {
+            editor.mapData.name = name;
+            titleText.SetText(name);
         }
 
         public EditorStates SaveMap()

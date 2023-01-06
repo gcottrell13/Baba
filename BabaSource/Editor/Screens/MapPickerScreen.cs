@@ -19,8 +19,6 @@ namespace Editor.Screens
         public MapPickerScreen(List<MapData> items) : base(items, 15, x => x.name, x => $"map: {x.name}")
         {
             Name = "MapPickerScreen";
-            Edit = true;
-            Add = true;
             Transparent = true;
             SetOffsetX(100);
         }

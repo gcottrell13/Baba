@@ -142,7 +142,7 @@ namespace Editor.Editors
                 return TryPlaceObjectAtPosition(currentObject, cursor.x, cursor.y);
             }
 
-            obj.original = obj.name;
+            obj.original = new() { name = obj.name, color = obj.color, state = obj.state };
             obj.name = currentObject.name;
             obj.color = currentObject.color;
             obj.state = currentObject.state;

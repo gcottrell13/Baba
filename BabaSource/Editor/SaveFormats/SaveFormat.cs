@@ -177,6 +177,13 @@ namespace Editor.SaveFormats
         public uint state = 0;
         public int color;
         public string text = string.Empty;
-        public string? original = null;
+        public OriginalObjectData? original = null;
+    }
+
+    internal class OriginalObjectData
+    {
+        public string name = string.Empty;
+        public uint state = 0;
+        public int color;
     }
 }

@@ -165,8 +165,8 @@ namespace Editor.SaveFormats
     internal class MapLayer
     {
         public List<ObjectData> objects { get; set; } = new();
-        public uint width = 18;
-        public uint height = 18;
+        public uint width = 15;
+        public uint height = 15;
     }
 
     internal class ObjectData

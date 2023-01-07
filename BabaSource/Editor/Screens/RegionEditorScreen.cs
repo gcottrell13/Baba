@@ -21,6 +21,7 @@ namespace Editor.Screens
         private readonly Region region;
         private MapLayerEditorDisplay? layerDisplay;
         private Text titleText = new();
+        private MapLayerEditorScreen? layerEditor;
 
         public RegionEditorScreen(ScreenStack stack, Region region)
         {
@@ -67,7 +68,17 @@ namespace Editor.Screens
                 )
                 .State(
                     EditorStates.EditRegionWordLayer,
-                    c => EditorStates.None
+                    c => layerEditor!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            // the edit functions make a new screen object
+                            var theme = region.theme;
+                            layerEditor = new("layer 1", stack, region.regionObjectLayer, EditorStates.RegionEditor, theme);
+                            stack.Add(layerEditor);
+                            layerEditor.init();
+                        })
                 )
                 .State(
                     EditorStates.SelectRegionTheme,
@@ -136,7 +147,7 @@ namespace Editor.Screens
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
             EditorStates.WorldEditor => EditorStates.WorldEditor,
-            _ => EditorStates.RegionEditor,
+            _ => EditorStates.None,
         };
 
         protected override void OnDispose()

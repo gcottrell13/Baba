@@ -27,7 +27,7 @@ namespace Editor.Screens
         {
             editor = new(mapData);
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
-            layerEditorScreen = new("layer 1", stack, mapData.layer1, theme);
+            layerEditorScreen = new("layer 1", stack, mapData.layer1, EditorStates.MapEditor, theme);
 
             var layer1Display = new MapLayerDisplay("layer 1", mapData.layer1, theme);
             layer1Display.Graphics.y = 25;
@@ -66,7 +66,7 @@ namespace Editor.Screens
                         {
                             // the edit functions make a new screen object
                             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
-                            layerEditorScreen = new("layer 1", stack, Editor.EDITOR.currentMap!.layer1, theme);
+                            layerEditorScreen = new("layer 1", stack, Editor.EDITOR.currentMap!.layer1, EditorStates.MapEditor, theme);
                             stack.Add(layerEditorScreen);
                             layerEditorScreen.init();
                         })
@@ -80,7 +80,7 @@ namespace Editor.Screens
                         {
                             // the edit functions make a new screen object
                             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
-                            layerEditorScreen = new("layer 2", stack, Editor.EDITOR.currentMap!.layer2, theme);
+                            layerEditorScreen = new("layer 2", stack, Editor.EDITOR.currentMap!.layer2, EditorStates.MapEditor, theme);
                             stack.Add(layerEditorScreen);
                             layerEditorScreen.init();
                         })

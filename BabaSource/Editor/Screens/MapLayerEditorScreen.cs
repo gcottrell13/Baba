@@ -27,7 +27,7 @@ namespace Editor.Screens
         private readonly MapLayerEditor mapLayerEditor;
         private readonly MapLayerEditorDisplay layerDisplay;
 
-        public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer, string? theme)
+        public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer, EditorStates parentState, string? theme)
         {
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;
@@ -35,6 +35,22 @@ namespace Editor.Screens
             layerDisplay = new MapLayerEditorDisplay(name, mapLayer, mapLayerEditor.cursor, theme);
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor", EditorStates.None)
+                .State(
+                    EditorStates.EditMapLayer1,
+                    c => c switch
+                    {
+                        KeyPress { KeyPressed: Keys.Escape } => parentState,
+                        KeyPress { KeyPressed: Keys.C, ModifierKeys: ModifierKeys.Ctrl } => copyObject(),
+                        KeyPress { Text: 'c' } => changeObjectColor(),
+                        KeyPress { Text: 'p' } => pickObject(),
+                        KeyPress { Text: 'r' } => rotateObject(),
+                        KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
+                        KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
+                        KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
+                        KeyPress { KeyPressed: Keys.Z, ModifierKeys: ModifierKeys.Ctrl } => undo(),
+                        _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
+                    }
+                )
                 .State(
                     EditorStates.ChangeObjectColor,
                     c => colorPicker?.Handle(c) switch
@@ -53,22 +69,6 @@ namespace Editor.Screens
                             };
                             stack.Add(colorPicker);
                         })
-                )
-                .State(
-                    EditorStates.EditMapLayer1,
-                    c => c switch
-                    {
-                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.MapEditor,
-                        KeyPress { KeyPressed: Keys.C, ModifierKeys: ModifierKeys.Ctrl } => copyObject(),
-                        KeyPress { Text: 'c' } => changeObjectColor(),
-                        KeyPress { Text: 'p' } => pickObject(),
-                        KeyPress { Text: 'r' } => rotateObject(),
-                        KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
-                        KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
-                        KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
-                        KeyPress { KeyPressed: Keys.Z, ModifierKeys: ModifierKeys.Ctrl } => undo(),
-                        _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
-                    }
                 )
                 .State(
                     EditorStates.ObjectPicker,

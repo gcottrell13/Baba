@@ -28,7 +28,7 @@ namespace Core.Utils
         public Color color { get; private set; } = Color.White;
         public void SetColor(Color? color)
         {
-            this.color = color ?? Color.White;
+            this.color = color ?? Color.Transparent;
         }
 
 

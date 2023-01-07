@@ -10,6 +10,7 @@ using Editor.SaveFormats;
 using Editor.Editors;
 using Core.Utils;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace Editor.Screens
 {
@@ -27,12 +28,14 @@ namespace Editor.Screens
             editor = new(mapData);
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
             layerEditorScreen = new("layer 1", stack, mapData.layer1, theme);
-            var layerDisplay = new MapLayerEditorDisplay("layer 1", mapData.layer1, null, theme);
-            layerDisplay.Graphics.y = 25;
-            layerDisplay.Graphics.xscale = 0.95f;
-            layerDisplay.Graphics.yscale = 0.95f;
 
-            AddChild(layerDisplay);
+            var layer1Display = new MapLayerDisplay("layer 1", mapData.layer1, theme);
+            layer1Display.Graphics.y = 25;
+            var layer2Display = new MapLayerDisplay("layer 2", mapData.layer2, theme);
+            layer2Display.Graphics.y = 25;
+
+            AddChild(layer1Display);
+            AddChild(layer2Display);
             titleText.SetText(mapData.name);
             AddChild(titleText);
 
@@ -103,7 +106,8 @@ namespace Editor.Screens
                                 OnSelect = (Region region) =>
                                 {
                                     Editor.EDITOR.currentMap!.regionId = region.id;
-                                    layerDisplay.theme = region.theme;
+                                    layer1Display.theme = region.theme;
+                                    layer2Display.theme = region.theme;
                                 },
                             };
                             stack.Add(regionPicker);
@@ -171,6 +175,20 @@ namespace Editor.Screens
         {
             editor.mapData.name = name;
             titleText.SetText(name);
+        }
+
+        protected override void OnUpdate(GameTime gameTime)
+        {
+            var layer1Display = ChildByName("layer 1")!;
+            var layer2Display = ChildByName("layer 2")!;
+            layer2Display.Graphics.x = ScreenWidth / 2 / Graphics.xscale;
+            layer2Display.Graphics.xscale = (ScreenWidth / 2f) / (mapData.layer2.width * 25);
+            layer2Display.Graphics.yscale = layer2Display.Graphics.xscale;
+
+            layer1Display.Graphics.xscale = (ScreenWidth / 2f) / (mapData.layer1.width * 25);
+            layer1Display.Graphics.yscale = layer1Display.Graphics.xscale;
+
+            base.OnUpdate(gameTime);
         }
 
         public EditorStates SaveMap()

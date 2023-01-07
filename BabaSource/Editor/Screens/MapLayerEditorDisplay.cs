@@ -65,32 +65,21 @@ namespace Editor.Screens
             var maxXMagnitude = (int)Math.Log(mapLayer.width, 26) + 1;
 
             var lines = new List<string>();
-            var gridLines = new List<string>();
             var columnHeaderLines = GridHelpers.GetColumnHeaders(0, mapLayer.width);
             var rowHeaderLines = GridHelpers.GetRowHeaders(0, mapLayer.height);
 
             for (uint y = 0; y < mapLayer.height; y++)
             {
                 var line = new List<string>();
-                var gridLine = new List<string>();
 
                 for (uint x = 0; x < mapLayer.width; x++)
                 {
-                    if (objects.ConstructDefaultValue(x).TryGetValue(y, out var obj))
-                    {
-                        line.Add(obj);
-                    }
-                    else
-                    {
-                        line.Add(" ");
-                    }
-                    gridLine.Add("[editorsquare]");
+                    line.Add(objects.ConstructDefaultValue(x).TryGetValue(y, out var obj) ? obj : " ");
                 }
-                gridLines.Add(string.Join("", gridLine));
                 lines.Add(string.Join("", line));
             }
 
-            gridDisplay.SetText(string.Join("\n", gridLines));
+            gridDisplay.SetText(string.Join("\n", new[] { "[editorsquare]".Repeat((int)mapLayer.width) }.Repeat((int)mapLayer.height)));
             objectsDisplay.SetText(string.Join("\n", lines));
             columnNumberDisplay.SetText(string.Join("\n", columnHeaderLines));
             rowNumberDisplay.SetText(string.Join("\n", rowHeaderLines));

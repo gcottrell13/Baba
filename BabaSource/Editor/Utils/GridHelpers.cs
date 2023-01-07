@@ -18,14 +18,19 @@ namespace Editor.Utils
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static List<string> GetColumnHeaders(uint min, uint max)
+        public static List<string> GetColumnHeaders(uint min, uint max, uint forceLength = 0)
         {
             var magnitude = (int)Math.Log(max, 26) + 1;
             var lines = " ".Repeat(max - min)
-                .Select((c, i) => EnumerableExtensions.ToColString((uint)i + min).PadLeft(magnitude) + " ")
-                .ZipMany();
+                .Select((c, i) => EnumerableExtensions.ToColString((uint)i + min).PadLeft(magnitude))
+                .ZipMany().ToList();
 
-            return lines.ToList();
+            if (forceLength > 0)
+            {
+                lines = new[] { "" }.Repeat((int)forceLength - lines.Count).Concat(lines).ToList();
+            }
+
+            return lines;
         }
 
         /// <summary>
@@ -35,11 +40,11 @@ namespace Editor.Utils
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static List<string> GetRowHeaders(uint min, uint max)
+        public static List<string> GetRowHeaders(uint min, uint max, uint forceLength = 0)
         {
             var magnitude = (int)Math.Log(max, 10) + 1;
             var lines = " ".Repeat(max - min)
-                .Select((c, i) => (i + min + 1).ToString().PadLeft(magnitude) + " ");
+                .Select((c, i) => (i + min + 1).ToString().PadLeft((int)Math.Max(magnitude, forceLength)) + " ");
 
             return lines.ToList();
         }

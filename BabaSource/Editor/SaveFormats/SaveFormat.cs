@@ -120,6 +120,9 @@ namespace Editor.SaveFormats
         public uint startMapX = 0;
         public uint startMapY = 0;
 
+        public uint width = 30;
+        public uint height = 30;
+
         public string worldName = string.Empty;
 
         public string? fileName = null;
@@ -140,6 +143,7 @@ namespace Editor.SaveFormats
         public uint y1 = 0;
         public uint x2 = 0;
         public uint y2 = 0;
+        public string name = string.Empty;
     }
 
     internal class Region

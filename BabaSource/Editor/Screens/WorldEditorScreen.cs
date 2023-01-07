@@ -23,6 +23,8 @@ namespace Editor.Screens
         private RegionEditorScreen? regionEditorScreen;
         private RegionPickerScreen? regionPicker;
 
+        private WorldEditorDisplay? worldEditorDisplay;
+
         private TextInputBox titleText = new(format: "[90,90,ff]World: [white]{}") { Name = "editortitle" };
 
         public WorldEditorScreen(ScreenStack stack, ReadonlySavesList saves)
@@ -57,6 +59,8 @@ namespace Editor.Screens
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
                         KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
+                        KeyPress { Text: 'q' } => ZoomOut(),
+                        KeyPress { Text: 'e' } => ZoomIn(),
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
@@ -201,6 +205,10 @@ namespace Editor.Screens
         {
             Editor.EDITOR.LoadWorld(save);
             SetEditor(new WorldEditor(save));
+
+            worldEditorDisplay = new(save, editor!.cursor, ScreenWidth * 2 / 3);
+            worldEditorDisplay.Graphics.y = 25;
+            AddChild(worldEditorDisplay);
         }
 
         public void NewWorld()
@@ -235,7 +243,7 @@ namespace Editor.Screens
         private EditorStates editorhandle(Keys k)
         {
             editor?.handleInput(k);
-            return EditorStates.WorldEditor;
+            return EditorStates.None;
         }
 
         private void NewMap()
@@ -246,6 +254,18 @@ namespace Editor.Screens
         private void EditMap(MapData selected)
         {
             Editor.EDITOR.LoadMap(selected);
+        }
+
+        private EditorStates ZoomOut()
+        {
+            worldEditorDisplay?.ZoomOut();
+            return EditorStates.None;
+        }
+
+        private EditorStates ZoomIn()
+        {
+            worldEditorDisplay?.ZoomIn();
+            return EditorStates.None;
         }
 
         protected override void OnUpdate(GameTime gameTime)

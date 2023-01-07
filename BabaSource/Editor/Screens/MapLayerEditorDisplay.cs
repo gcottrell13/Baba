@@ -3,6 +3,7 @@ using Core.Content;
 using Core.UI;
 using Core.Utils;
 using Editor.SaveFormats;
+using Editor.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace Editor.Screens
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
+        private Text columnNumberDisplay = new();
+        private Text rowNumberDisplay = new();
         private ObjectData? itemAtCursor;
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
@@ -35,10 +38,11 @@ namespace Editor.Screens
 
             AddChild(new Text(name));
 
-            gridDisplay.Graphics.y = 25;
             AddChild(gridDisplay);
             AddChild(objectsDisplay);
             AddChild(cursorDisplay);
+            AddChild(columnNumberDisplay);
+            AddChild(rowNumberDisplay);
 
         }
 
@@ -61,14 +65,14 @@ namespace Editor.Screens
             var maxXMagnitude = (int)Math.Log(mapLayer.width, 26) + 1;
 
             var lines = new List<string>();
-            var gridLines = " ".Repeat(mapLayer.width)
-                .Select((c, i) => EnumerableExtensions.ToColString((uint)i).PadLeft(maxXMagnitude) + " ")
-                .ZipMany().Select(line => " ".Repeat(maxYMagnitude + 1) + line).ToList();
+            var gridLines = new List<string>();
+            var columnHeaderLines = GridHelpers.GetColumnHeaders(0, mapLayer.width);
+            var rowHeaderLines = GridHelpers.GetRowHeaders(0, mapLayer.height);
 
             for (uint y = 0; y < mapLayer.height; y++)
             {
                 var line = new List<string>();
-                var gridLine = new List<string>() { (y + 1).ToString().PadLeft(maxYMagnitude) + " " };
+                var gridLine = new List<string>();
 
                 for (uint x = 0; x < mapLayer.width; x++)
                 {
@@ -88,13 +92,23 @@ namespace Editor.Screens
 
             gridDisplay.SetText(string.Join("\n", gridLines));
             objectsDisplay.SetText(string.Join("\n", lines));
+            columnNumberDisplay.SetText(string.Join("\n", columnHeaderLines));
+            rowNumberDisplay.SetText(string.Join("\n", rowHeaderLines));
 
             objectsDisplay.Graphics.x = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.blockWidth) * (maxYMagnitude + 1);
-            objectsDisplay.Graphics.y = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1) + gridDisplay.Graphics.y;
+            objectsDisplay.Graphics.y = (objectsDisplay.CurrentOptions!.padding + objectsDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1) + 25;
+
+            columnNumberDisplay.Graphics.x = objectsDisplay.Graphics.x;
+            columnNumberDisplay.Graphics.y = 25;
+            rowNumberDisplay.Graphics.y = objectsDisplay.Graphics.y;
+            rowNumberDisplay.Graphics.x = 0;
+
+            gridDisplay.Graphics.x = objectsDisplay.Graphics.x;
+            gridDisplay.Graphics.y = objectsDisplay.Graphics.y;
 
             if (cursor != null && cursor.x < mapLayer.width && cursor.y < mapLayer.height)
             {
-                cursorDisplay.SetText("\n".Repeat(cursor.y) + " ".Repeat(cursor.x) + "[pink][cursor]");
+                cursorDisplay.SetText("\n".Repeat(cursor.y) + " ".Repeat(cursor.x) + ThemeInfo.MakeObjectString("default", cursor.name, cursor.color));
                 cursorDisplay.Graphics.x = objectsDisplay.Graphics.x;
                 cursorDisplay.Graphics.y = objectsDisplay.Graphics.y;
             }

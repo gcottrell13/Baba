@@ -1,4 +1,5 @@
-﻿using Editor.SaveFormats;
+﻿using Core.Content;
+using Editor.SaveFormats;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Editor.Editors
     {
         public SaveFormat save { get; private set; }
         private MapData? pickedMap;
+        public ObjectData cursor { get; private set; } = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
 
         public WorldEditor(SaveFormat save) 
         {

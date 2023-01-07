@@ -19,7 +19,7 @@ namespace Editor.Screens
         private Text objectsDisplay = new();
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
-        public MapLayerDisplay(string name, MapLayer mapLayer, string? theme)
+        public MapLayerDisplay(string name, MapLayer mapLayer, string? theme, bool showName = true)
         {
             this.mapLayer = mapLayer;
             this.theme = theme ?? "default";
@@ -30,12 +30,15 @@ namespace Editor.Screens
             background.xscale = (mapLayer.width * 24);
             background.yscale = (mapLayer.height * 24);
 
-            AddChild(new Text(name));
+            if (showName)
+            {
+                AddChild(new Text(name));
+                background.y = 25;
+                objectsDisplay.Graphics.y = 25;
+            }
 
             AddChild(objectsDisplay);
 
-            background.y = 25;
-            objectsDisplay.Graphics.y = 25;
         }
 
         protected override void OnUpdate(GameTime gameTime)

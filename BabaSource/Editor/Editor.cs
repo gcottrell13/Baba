@@ -92,5 +92,10 @@ namespace Editor
             return map.objects.FirstOrDefault(item => item.x == x && item.y == y);
         }
 
+        public string? GetRegionTheme(int regionId)
+        {
+            return regions.FirstOrDefault(x => x.id == regionId)?.theme;
+        }
+
     }
 }

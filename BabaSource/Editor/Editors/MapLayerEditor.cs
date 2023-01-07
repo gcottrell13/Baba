@@ -13,7 +13,7 @@ namespace Editor.Editors
     {
 
         private Stack<Action> undoActions = new(capacity: 20);
-        public readonly ObjectData cursor = new() { name = "cursor", color = ThemeInfo.ColorNameMap["pink"] };
+        public readonly ObjectData cursor = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
 
         public ObjectData? currentObject { get; private set; }
 

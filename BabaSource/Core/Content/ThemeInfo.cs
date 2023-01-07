@@ -1,4 +1,5 @@
-﻿using g3;
+﻿using Core.Utils;
+using g3;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -50,5 +51,9 @@ namespace Core.Content
             return PaletteInfo.Palettes[theme][(6 << shift) + 4];
         }
 
+        public static string MakeObjectString(string theme, string name, int color)
+        {
+            return $"{PaletteInfo.Palettes[theme][color].ToHexTriple()}[{name}]";
+        }
     }
 }

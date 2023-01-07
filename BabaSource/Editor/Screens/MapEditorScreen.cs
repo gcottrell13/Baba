@@ -20,7 +20,7 @@ namespace Editor.Screens
         private MapEditor editor;
         private MapLayerEditorScreen layerEditorScreen;
 
-        private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: {}") { Name = "editortitle" };
+        private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: [white]{}") { Name = "editortitle" };
         private readonly MapData mapData;
 
         public MapEditorScreen(ScreenStack stack, MapData mapData)

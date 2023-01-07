@@ -151,8 +151,6 @@ namespace Core.UI
             {
                 foreach (var c in text)
                 {
-                    var character = c.ToString().ToLower();
-
                     if (parsingItem != null)
                     {
                         if (c == ']')
@@ -198,7 +196,7 @@ namespace Core.UI
                         continue;
                     }
 
-                    yield return character;
+                    yield return c;
                 }
             }
 
@@ -350,6 +348,7 @@ namespace Core.UI
             public abstract int width { get; }
             public static implicit operator TextChar(Color color) { return new ColorSelect(color); }
             public static implicit operator TextChar(string name) { return new ObjectSelect(name); }
+            public static implicit operator TextChar(char name) { return new ObjectSelect(name.ToString().ToLower()); }
         }
         public class ColorSelect : TextChar
         {

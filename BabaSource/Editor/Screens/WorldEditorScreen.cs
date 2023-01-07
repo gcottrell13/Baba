@@ -23,7 +23,7 @@ namespace Editor.Screens
         private RegionEditorScreen? regionEditorScreen;
         private RegionPickerScreen? regionPicker;
 
-        private TextInputBox titleText = new(format: "[90,90,ff]World: {}") { Name = "editortitle" };
+        private TextInputBox titleText = new(format: "[90,90,ff]World: [white]{}") { Name = "editortitle" };
 
         public WorldEditorScreen(ScreenStack stack, ReadonlySavesList saves)
         {

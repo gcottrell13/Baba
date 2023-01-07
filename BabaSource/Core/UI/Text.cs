@@ -136,7 +136,10 @@ namespace Core.UI
                 if (parsingItem == null) yield break;
 
                 yield return "[";
-                var t = parsingItem;
+                foreach (var c in parsingItem)
+                {
+                    yield return c.ToString();
+                }
                 parsingItem = null;
                 if (closeBracket)
                 {

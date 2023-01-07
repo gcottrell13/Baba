@@ -19,7 +19,7 @@ namespace Editor.Screens
         private ThemePickerScreen? themePickerScreen;
         private RectangleSprite bg = new RectangleSprite();
         private readonly Region region;
-        private MapLayerDisplay? layerDisplay;
+        private MapLayerEditorDisplay? layerDisplay;
         private Text titleText = new();
 
         public RegionEditorScreen(ScreenStack stack, Region region)
@@ -113,7 +113,7 @@ namespace Editor.Screens
             bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
 
             RemoveChild(layerDisplay);
-            layerDisplay = new MapLayerDisplay("region", region.regionObjectLayer, null, region.theme);
+            layerDisplay = new MapLayerEditorDisplay("region", region.regionObjectLayer, null, region.theme);
             layerDisplay.Graphics.y = 75;
             AddChild(layerDisplay);
 

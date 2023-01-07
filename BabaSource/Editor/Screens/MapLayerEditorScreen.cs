@@ -25,14 +25,14 @@ namespace Editor.Screens
         private AddTextToObjectScreen? addTextToObjectScreen;
         private readonly MapLayer mapLayer;
         private readonly MapLayerEditor mapLayerEditor;
-        private readonly MapLayerDisplay layerDisplay;
+        private readonly MapLayerEditorDisplay layerDisplay;
 
         public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer, string? theme)
         {
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;
             Name = name;
-            layerDisplay = new MapLayerDisplay(name, mapLayer, mapLayerEditor.cursor, theme);
+            layerDisplay = new MapLayerEditorDisplay(name, mapLayer, mapLayerEditor.cursor, theme);
 
             stateMachine = new StateMachine<EditorStates, KeyPress>("map layer editor", EditorStates.None)
                 .State(

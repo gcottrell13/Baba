@@ -27,7 +27,7 @@ namespace Editor.Screens
             editor = new(mapData);
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
             layerEditorScreen = new("layer 1", stack, mapData.layer1, theme);
-            var layerDisplay = new MapLayerDisplay("layer 1", mapData.layer1, null, theme);
+            var layerDisplay = new MapLayerEditorDisplay("layer 1", mapData.layer1, null, theme);
             layerDisplay.Graphics.y = 25;
             layerDisplay.Graphics.xscale = 0.95f;
             layerDisplay.Graphics.yscale = 0.95f;

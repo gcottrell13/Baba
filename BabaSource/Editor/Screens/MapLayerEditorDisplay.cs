@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Editor.Screens
 {
-    internal class MapLayerDisplay : GameObject
+    internal class MapLayerEditorDisplay : GameObject
     {
         private readonly MapLayer mapLayer;
         private readonly ObjectData? cursor;
@@ -23,7 +23,7 @@ namespace Editor.Screens
         private ObjectData? itemAtCursor;
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
-        public MapLayerDisplay(string name, MapLayer mapLayer, ObjectData? cursor, string? theme)
+        public MapLayerEditorDisplay(string name, MapLayer mapLayer, ObjectData? cursor, string? theme)
         {
             this.mapLayer = mapLayer;
             this.cursor = cursor;

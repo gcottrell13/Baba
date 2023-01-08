@@ -112,14 +112,21 @@ namespace Core
             }
         }
 
-        public void AddChild(GameObject gameObject, bool addGraphics = true)
+        public void AddChild(GameObject gameObject, bool addGraphics = true, int index = -1)
         {
             if (Children.Contains(gameObject)) return;
-            Children.Add(gameObject);
-            gameObject.SetParent(this, addGraphics);
+            if (index < 0)
+            {
+                Children.Add(gameObject);
+            }
+            else
+            {
+                Children.Insert(index, gameObject);
+            }
+            gameObject.SetParent(this, addGraphics, index);
         }
 
-        public void SetParent(GameObject newParent, bool addGraphics = true)
+        public void SetParent(GameObject newParent, bool addGraphics = true, int index = -1)
         {
             if (Parent == null || Parent == newParent)
             {
@@ -127,7 +134,7 @@ namespace Core
 
                 if (addGraphics)
                 {
-                    Parent.Graphics.AddChild(Graphics);
+                    Parent.Graphics.AddChild(Graphics, index);
                 }
             }
             else

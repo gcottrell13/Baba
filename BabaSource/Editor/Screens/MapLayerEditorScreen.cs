@@ -49,7 +49,7 @@ namespace Editor.Screens
                         KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
                         KeyPress { KeyPressed: Keys.Delete } => deleteObject(),
                         KeyPress { KeyPressed: Keys.Z, ModifierKeys: ModifierKeys.Ctrl } => undo(),
-                        _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
+                        _ => editorHandle(c),
                     }
                 )
                 .State(
@@ -169,17 +169,22 @@ namespace Editor.Screens
 
         private void editorCommands()
         {
+            var colorForObject = mapLayerEditor.ObjectAtCursor() == null ? "[gray]" : "";
+            var colorForPlacing = mapLayerEditor.currentObject == null ? "[gray]" : "";
+
             SetCommands(new()
             {
-                { CommonStrings.ALL_ARROW, "move cursor" },
-                { "c", "color" },
-                { "t", "text" },
-                { "r", "rotate" },
+                { colorForObject + "c", "color" },
+                { colorForObject + "t", "text" },
+                { colorForObject + "r", "rotate" },
+                { colorForObject + "del", "remove" },
+                { colorForObject + CommonStrings.CTRL_PLUS + "c", "copy" },
                 { "p", "pick new object" },
+                { colorForPlacing + "space", "place" },
+                { CommonStrings.ALL_ARROW, "move cursor" },
+                { CommonStrings.ESCAPE, "back" },
                 { "x", "width" },
                 { "y", "height" },
-                { "del", "remove" },
-                { CommonStrings.ESCAPE, "stop editing objects" },
             });
         }
 
@@ -231,6 +236,13 @@ namespace Editor.Screens
         {
             mapLayerEditor.Undo();
             return EditorStates.None;
+        }
+
+        private EditorStates editorHandle(KeyPress c)
+        {
+            var r = mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space));
+            editorCommands();
+            return r;
         }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch

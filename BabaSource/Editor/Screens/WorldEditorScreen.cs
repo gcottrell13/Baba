@@ -59,8 +59,9 @@ namespace Editor.Screens
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
                         KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
-                        KeyPress { Text: 'q' } => ZoomOut(),
-                        KeyPress { Text: 'e' } => ZoomIn(),
+                        KeyPress { Text: 'z' } => ZoomOut(),
+                        KeyPress { Text: 'x' } => ZoomIn(),
+                        KeyPress { Text: 'e' } => editAtCursor(),
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
@@ -172,8 +173,8 @@ namespace Editor.Screens
             }
             else
             {
-                d.Add("q", "zoom out");
-                d.Add("e", "zoom in");
+                d.Add("z", "zoom out");
+                d.Add("x", "zoom in");
                 d.Add(CommonStrings.ALL_ARROW, "move cursor");
                 d.Add("m", "pick map");
                 d.Add("r", "edit regions");
@@ -226,6 +227,15 @@ namespace Editor.Screens
             Editor.EDITOR.LoadRegion(region);
         }
 
+        private EditorStates editAtCursor()
+        {
+            var id = editor?.MapAtCursor()?.mapDataId;
+            var map = Editor.EDITOR.mapDatas.FirstOrDefault(x => x.id == id);
+            if (map == null) return EditorStates.None;
+            EditMap(map);
+            return EditorStates.MapEditor;
+        }
+
         public EditorStates SetPickedMap(MapData? pickedMap)
         {
             if (pickedMap == null) throw new ArgumentNullException(nameof(pickedMap));
@@ -237,7 +247,7 @@ namespace Editor.Screens
         public EditorStates SaveWorld()
         {
             editor?.saveWorld();
-            return EditorStates.WorldEditor;
+            return EditorStates.None;
         }
 
         private EditorStates editorhandle(Keys k)

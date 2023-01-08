@@ -40,12 +40,12 @@ namespace Editor.SaveFormats
 
         public static string Serialize(MapInstance mapInstance, int indent)
         {
-            return "\t".Repeat(indent) + Newtonsoft.Json.JsonConvert.SerializeObject(mapInstance);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(mapInstance);
         }
 
         public static string Serialize(Warp warp, int indent)
         {
-            return "\t".Repeat(indent) + Newtonsoft.Json.JsonConvert.SerializeObject(warp);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(warp);
         }
 
         public static string Serialize(Region region, int indent)
@@ -144,6 +144,10 @@ namespace Editor.SaveFormats
         public uint x2 = 0;
         public uint y2 = 0;
         public string name = string.Empty;
+
+        public int r;
+        public int g;
+        public int b;
     }
 
     internal class Region

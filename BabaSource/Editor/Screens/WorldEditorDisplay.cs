@@ -7,7 +7,9 @@ using Editor.Utils;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +27,7 @@ namespace Editor.Screens
         private Text gridDisplay = new();
         private Text columnNumberDisplay = new();
         private Text rowNumberDisplay = new();
+        private SpriteContainer warpsContainer = new();
 
         public WorldEditorDisplay(SaveFormat world, ObjectData cursor, float gridWidth)
         {
@@ -36,6 +39,7 @@ namespace Editor.Screens
             AddChild(cursorContainer);
             AddChild(columnNumberDisplay);
             AddChild(rowNumberDisplay);
+            Graphics.AddChild(warpsContainer);
 
             cursorContainer.AddChild(new Text(ThemeInfo.MakeObjectString("default", cursor.name, cursor.color)));
         }
@@ -58,12 +62,17 @@ namespace Editor.Screens
             var topX = (int)Math.Clamp(cursor.x - (int)(zoom / 2), 0, world.width - zoom);
             var topY = (int)Math.Clamp(cursor.y - (int)(zoom / 2), 0, world.height - zoom);
 
+            bool isOutOfBounds(uint x, uint y)
+            {
+                return x < topX || x >= topX + zoom || y < topY || y >= topY + zoom;
+            }
+
             foreach (var instance in world.WorldLayout)
             {
                 var name = $"map {instance.x} {instance.y}";
                 var c = mapsContainer.ChildByName(name);
 
-                if (instance.x < topX || instance.x >= topX + zoom || instance.y < topY || instance.y >= topY + zoom)
+                if (isOutOfBounds(instance.x, instance.y))
                 {
                     mapsContainer.RemoveChild(c);
                     continue;
@@ -107,8 +116,8 @@ namespace Editor.Screens
             gridDisplay.Graphics.xscale = mapPxWidth / 24;
             gridDisplay.Graphics.yscale = mapPxHeight / 24;
 
-            gridDisplay.Graphics.x = (gridDisplay.CurrentOptions!.padding + gridDisplay.CurrentOptions.blockWidth) * (maxYMagnitude + 1);
-            gridDisplay.Graphics.y = (gridDisplay.CurrentOptions!.padding + gridDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1);
+            gridDisplay.Graphics.x = (rowNumberDisplay.CurrentOptions!.padding + rowNumberDisplay.CurrentOptions.blockWidth) * (maxYMagnitude + 1);
+            gridDisplay.Graphics.y = (columnNumberDisplay.CurrentOptions!.padding + columnNumberDisplay.CurrentOptions.lineHeight) * (maxXMagnitude + 1);
 
             columnNumberDisplay.Graphics.x = gridDisplay.Graphics.x;
             rowNumberDisplay.Graphics.y = gridDisplay.Graphics.y;
@@ -126,6 +135,62 @@ namespace Editor.Screens
 
             mapsContainer.Graphics.x = gridDisplay.Graphics.x;
             mapsContainer.Graphics.y = gridDisplay.Graphics.y;
+
+            // update warps
+
+            var allWarpChildren = warpsContainer.children.ToDictionary(x => x.Name);
+            var topVec = new Vector2(topX, topY);
+            var scaleVec = new Vector2(mapPxWidth, mapPxHeight);
+            var half = new Vector2(0.5f, 0.5f);
+            foreach (var warp in world.Warps)
+            {
+                var one = new Vector2(warp.x1, warp.y1);
+                var two = new Vector2(warp.x2, warp.y2);
+                var name = $"warp {one.ToRowColString()}-{two.ToRowColString()}";
+
+                if (isOutOfBounds(warp.x1, warp.y1) && isOutOfBounds(warp.x2, warp.y2)) continue;
+
+                var child = warpsContainer.ChildByName(name);
+
+                if (child is not RectangleSprite rect)
+                {
+                    warpsContainer.RemoveChild(child);
+                    rect = new() {
+                        Name = name,
+                        yscale = 10,
+                    };
+
+                    if (warp.r == 0)
+                    {
+                        var random = new Random((int)gameTime.TotalGameTime.TotalMilliseconds * 1000);
+                        warp.r = random.Next(100) + 155;
+                        warp.g = random.Next(100) + 155;
+                        warp.b = random.Next(100) + 155;
+                    }
+                    rect.SetColor(new Color(warp.r, warp.g, warp.b));
+                    warpsContainer.AddChild(rect);
+                }
+
+                {
+                    one = (one - topVec + half) * scaleVec;
+                    two = (two - topVec + half) * scaleVec;
+                    var sub = two - one;
+                    var angle = Math.Atan2(sub.Y, sub.X);
+                    rect.x = one.X;
+                    rect.y = one.Y;
+                    rect.rotation = (float)angle;
+                    rect.xscale = sub.Length();
+                }
+
+                allWarpChildren.Remove(name);
+            }
+            warpsContainer.x = gridDisplay.Graphics.x;
+            warpsContainer.y = gridDisplay.Graphics.y;
+
+            foreach (var orphanedWarpChild in allWarpChildren.Values)
+            {
+                warpsContainer.RemoveChild(orphanedWarpChild);
+            }
         }
 
         private class Container : GameObject { }

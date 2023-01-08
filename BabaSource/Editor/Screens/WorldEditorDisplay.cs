@@ -77,20 +77,20 @@ namespace Editor.Screens
                     continue;
                 }
 
-                if (c == null)
+                var mld = c as MapLayerDisplay;
+
+                if (mld == null || mld.mapLayer != mapData.layer1)
                 {
-                    c = new MapLayerDisplay(mapData.name, mapData.layer1, Editor.EDITOR.GetRegionTheme(mapData.regionId), false) { Name = name };
-                    mapsContainer.AddChild(c);
+                    mapsContainer.RemoveChild(c);
+                    mld = new MapLayerDisplay(mapData.name, mapData.layer1, Editor.EDITOR.GetRegionTheme(mapData.regionId), false) { Name = name };
+                    mapsContainer.AddChild(mld);
                 }
 
-                if (c is MapLayerDisplay m) 
-                {
-                    m.theme = Editor.EDITOR.GetRegionTheme(mapData.regionId) ?? "default";
-                    m.Graphics.x = (instance.x - topX) * mapPxWidth;
-                    m.Graphics.y = (instance.y - topY) * mapPxHeight;
-                    m.Graphics.xscale = mapPxWidth / (mapData.layer1.width * 24);
-                    m.Graphics.yscale = mapPxHeight / (mapData.layer1.height * 24);
-                }
+                mld.theme = Editor.EDITOR.GetRegionTheme(mapData.regionId) ?? "default";
+                mld.Graphics.x = (instance.x - topX) * mapPxWidth;
+                mld.Graphics.y = (instance.y - topY) * mapPxHeight;
+                mld.Graphics.xscale = mapPxWidth / (float)(mapData.layer1.width * 24);
+                mld.Graphics.yscale = mapPxHeight / (float)(mapData.layer1.height * 24);
             }
 
             var maxYMagnitude = (int)Math.Log10(world.height + 1) + 1;

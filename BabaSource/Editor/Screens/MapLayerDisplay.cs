@@ -14,7 +14,7 @@ namespace Editor.Screens
 {
     internal class MapLayerDisplay : GameObject
     {
-        private readonly MapLayer mapLayer;
+        public readonly MapLayer mapLayer;
         public string theme;
         private Text objectsDisplay = new();
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };

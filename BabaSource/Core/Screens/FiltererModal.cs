@@ -40,7 +40,7 @@ namespace Core.Screens
         public virtual Color HighlightColor => Color.Brown;
 
         private const string baseFilterDisplayText = "select";
-        private readonly TextInputBox filterDisplay = new() { TextFilterRegex = new System.Text.RegularExpressions.Regex(@"^[^\n\[\]\t]*$") };
+        private readonly TextInputBox filterDisplay = new() { TextFilterRegex = new System.Text.RegularExpressions.Regex(@"^[^\n\[\]\t]{0,10}$") };
 
         public FiltererModal(
             IEnumerable<T> items,
@@ -288,6 +288,33 @@ namespace Core.Screens
         protected void SetDisplayTypeName(string typeName)
         {
             var pre = $"{baseFilterDisplayText} {typeName}: {{0}} :\n".Trim();
+
+
+            if (Transparent)
+            {
+                var name = "textboxoutline";
+                var c = ChildByName(name);
+                if (c is not TextWithBoxOutline outline)
+                {
+                    RemoveChild(c);
+                    outline = new TextWithBoxOutline() { Name = name };
+                    var longestDisplay = items.Count > 0 ? items.Select(x => display(x)).MaxBy(s => s.Length) ?? "" : "";
+
+                    var maxSize = Text.ParseText(longestDisplay).TextCharLength() + 2;
+                    outline.SetText(" ".Repeat(maxSize) + "\n".Repeat(maxDisplay + 2), new() { backgroundColor = Color.Black });
+                    outline.Graphics.x = -Text.DEFAULT_LINE_HEIGHT;
+                    AddChild(outline, index: 0);
+                    itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 3;
+                    filterDisplay.Graphics.y = Text.DEFAULT_LINE_HEIGHT;
+                }
+            }
+            else
+            {
+                itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 2;
+                filterDisplay.Graphics.y = 0;
+            }
+
+
             filterDisplay.SetFormat(pre);
             _afterSetFilter();
         }

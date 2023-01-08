@@ -13,6 +13,7 @@ namespace Editor.Screens
         public RegionPickerScreen(IEnumerable<Region> regions, Region? current) : base(regions, 10, x => x.name, x => x.name, current)
         {
             Name = "Region Picker Screen";
+            SetDisplayTypeName("region");
         }
     }
 }

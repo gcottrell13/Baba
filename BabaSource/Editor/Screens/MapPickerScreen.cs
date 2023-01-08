@@ -21,6 +21,7 @@ namespace Editor.Screens
             Name = "MapPickerScreen";
             Transparent = true;
             SetOffsetX(100);
+            SetDisplayTypeName("map");
         }
     }
 }

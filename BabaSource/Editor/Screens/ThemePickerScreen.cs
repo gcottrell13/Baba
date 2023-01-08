@@ -16,6 +16,7 @@ namespace Editor.Screens
         public ThemePickerScreen(string? currentTheme = null) : base(ThemeInfo.ThemeNames(), 15, x => x, currentValue: currentTheme)
         {
             Name = "ThemePickerScreen";
+            SetDisplayTypeName("theme");
         }
     }
 }

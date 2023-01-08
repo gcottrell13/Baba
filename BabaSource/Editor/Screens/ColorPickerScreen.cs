@@ -38,6 +38,7 @@ namespace Editor.Screens
             currentValue: COLORS.FirstOrDefault(x => x.value == currentColor))
         {
             Name = "ColorPickerScreen";
+            SetDisplayTypeName("color");
         }
     }
 

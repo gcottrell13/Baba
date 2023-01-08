@@ -13,7 +13,7 @@ namespace Editor.Screens
             filterBy: o => o.sprite, 
             display: o => $"{ObjectDefaultSprite(o.sprite)} {o.sprite}")
         {
-
+            SetDisplayTypeName("object");
         }
 
         public static string ObjectDefaultSprite(string name) => $"{ThemeInfo.GetObjectColor("default", name).ToHexTriple()}[{name}]";

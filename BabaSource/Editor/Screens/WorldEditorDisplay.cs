@@ -89,7 +89,7 @@ namespace Editor.Screens
                     m.Graphics.x = (instance.x - topX) * mapPxWidth;
                     m.Graphics.y = (instance.y - topY) * mapPxHeight;
                     m.Graphics.xscale = mapPxWidth / (mapData.layer1.width * 24);
-                    m.Graphics.yscale = mapPxHeight / (mapData.layer1.height * 18);
+                    m.Graphics.yscale = mapPxHeight / (mapData.layer1.height * 24);
                 }
             }
 

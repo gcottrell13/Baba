@@ -29,7 +29,7 @@ namespace Editor.Editors
             Keys.Down => cursorDown(isSpaceDown),
             Keys.Left => cursorLeft(isSpaceDown),
             Keys.Right => cursorRight(isSpaceDown),
-            //Keys.Space => TryPlaceObject() ? EditorStates.None : EditorStates.None,
+            Keys.Space => TryPlaceMapAtCursor() ? EditorStates.None : EditorStates.None,
             //Keys.Delete => TryDeleteObjectAtCursor() ? EditorStates.None : EditorStates.None,
             _ => EditorStates.None,
         };
@@ -58,6 +58,21 @@ namespace Editor.Editors
             cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)save.width);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
+        }
+
+        public MapInstance? MapAtCursor() => save.WorldLayout.FirstOrDefault(x => x.x == cursor.x && x.y == cursor.y);
+
+        public bool TryPlaceMapAtCursor()
+        {
+            if (pickedMap == null) return false;
+            var m = MapAtCursor();
+            if (m == null)
+            {
+                m = new MapInstance { x = cursor.x, y = cursor.y };
+                save.WorldLayout.Add(m);
+            }
+            m.mapDataId = pickedMap.id;
+            return true;
         }
 
         public void saveWorld()

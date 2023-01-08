@@ -47,6 +47,7 @@ namespace Editor.Screens
                         KeyPress { Text: 'x' } => EditorStates.ResizeMapLayerWidth,
                         KeyPress { Text: 'y' } => EditorStates.ResizeMapLayerHeight,
                         KeyPress { Text: 't' } => EditorStates.AddingTextToObject,
+                        KeyPress { KeyPressed: Keys.Delete } => deleteObject(),
                         KeyPress { KeyPressed: Keys.Z, ModifierKeys: ModifierKeys.Ctrl } => undo(),
                         _ => mapLayerEditor.handleInput(c.KeyPressed, KeyboardState.IsKeyDown(Keys.Space)),
                     }
@@ -177,6 +178,7 @@ namespace Editor.Screens
                 { "p", "pick new object" },
                 { "x", "width" },
                 { "y", "height" },
+                { "del", "remove" },
                 { CommonStrings.ESCAPE, "stop editing objects" },
             });
         }
@@ -216,6 +218,12 @@ namespace Editor.Screens
         private EditorStates rotateObject()
         {
             mapLayerEditor.TryRotateObjectAtCursor();
+            return EditorStates.None;
+        }
+
+        private EditorStates deleteObject()
+        {
+            mapLayerEditor.TryDeleteObjectAtCursor();
             return EditorStates.None;
         }
 

@@ -34,8 +34,8 @@ namespace Editor.Screens
                     EditorStates.SelectingWorld,
                     c => worldPicker!.Handle(c) switch
                     {
-                        PickerState.ClosePick => EditorStates.WorldEditor,
-                        PickerState.CloseAdd => EditorStates.WorldEditor,
+                        PickerState.ClosePick => EditorStates.ViewingWorld,
+                        PickerState.CloseAdd => EditorStates.ViewingWorld,
                         _ => EditorStates.None,
                     },
                     def => def
@@ -51,21 +51,33 @@ namespace Editor.Screens
                         })
                 )
                 .State(
+                    EditorStates.ViewingWorld,
+                    c => c switch
+                    {
+                        KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
+                        KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
+                        KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
+                        KeyPress { Text: 'z' } => ZoomOut(),
+                        KeyPress { Text: 'x' } => ZoomIn(),
+                        KeyPress { Text: 'e' } => EditorStates.WorldEditor,
+                        KeyPress { KeyPressed: Keys k } => editorhandle(k),
+                    },
+                    def => def
+                        .AddOnEnter(() => editorCommands(EditorStates.ViewingWorld))
+                )
+                .State(
                     EditorStates.WorldEditor,
                     c => c switch
                     {
-                        KeyPress { KeyPressed: Keys.Enter } => Editor.EDITOR.HasWorldLoaded() ? EditorStates.WorldEditor : EditorStates.SelectingWorld,
-                        KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
+                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.ViewingWorld,
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
-                        KeyPress { Text: 'n' } => EditorStates.RenamingWorld,
-                        KeyPress { Text: 'r' } => EditorStates.SelectMapRegion,
                         KeyPress { Text: 'z' } => ZoomOut(),
                         KeyPress { Text: 'x' } => ZoomIn(),
                         KeyPress { Text: 'e' } => editAtCursor(),
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
-                        .AddOnEnter(() => editorCommands())
+                        .AddOnEnter(() => editorCommands(EditorStates.WorldEditor))
                 )
                 .State(
                     EditorStates.WorldEditorPickMap,
@@ -94,8 +106,8 @@ namespace Editor.Screens
                     EditorStates.RenamingWorld,
                     c => renameScreen!.Handle(c) switch
                     {
-                        RenameScreen.RenameStates.Cancel => EditorStates.WorldEditor,
-                        RenameScreen.RenameStates.Save => EditorStates.WorldEditor,
+                        RenameScreen.RenameStates.Cancel => EditorStates.ViewingWorld,
+                        RenameScreen.RenameStates.Save => EditorStates.ViewingWorld,
                         _ => EditorStates.None,
                     },
                     def => def
@@ -112,7 +124,7 @@ namespace Editor.Screens
                 .State(
                     EditorStates.SelectMapRegion,
                     c => regionPicker!.Handle(c) switch {
-                        PickerState.CloseCancel => EditorStates.WorldEditor,
+                        PickerState.CloseCancel => EditorStates.ViewingWorld,
                         PickerState.ClosePick => EditorStates.RegionEditor,
                         PickerState.CloseAdd => EditorStates.RegionEditor,
                         _ => EditorStates.None,
@@ -159,11 +171,11 @@ namespace Editor.Screens
         public void init()
         {
             stateMachine.Initialize(EditorStates.SelectingWorld);
-            editorCommands();
+            editorCommands(EditorStates.SelectingWorld);
             AddChild(titleText);
         }
 
-        private void editorCommands()
+        private void editorCommands(EditorStates state)
         {
             var d = new Dictionary<string, string>();
 
@@ -171,12 +183,22 @@ namespace Editor.Screens
             {
                 d.Add(CommonStrings.ENTER, "select world");
             }
-            else
+            else if (state == EditorStates.WorldEditor)
             {
                 d.Add("z", "zoom out");
                 d.Add("x", "zoom in");
                 d.Add(CommonStrings.ALL_ARROW, "move cursor");
                 d.Add("m", "pick map");
+                d.Add("del", "remove map");
+                d.Add("w", "edit warps");
+                d.Add("esc", "back");
+            }
+            else if (state == EditorStates.ViewingWorld)
+            {
+                d.Add("z", "zoom out");
+                d.Add("x", "zoom in");
+                d.Add(CommonStrings.ALL_ARROW, "move cursor");
+                d.Add("e", "edit map");
                 d.Add("r", "edit regions");
                 d.Add("n", "rename world");
                 d.Add(CommonStrings.CTRL_PLUS + "s", "save world");

@@ -35,6 +35,7 @@ namespace Editor.Screens
         WorldEditorWarp, // edit warp points 
         SelectingWorld,
         RenamingWorld,
+        ViewingWorld,
 
     }
 }

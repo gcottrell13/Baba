@@ -21,7 +21,7 @@ namespace Editor
         {
             ContentLoader.LoadContent(GraphicsDevice);
             base.Initialize();
-            PlaySound.PlaySoundFile("crystal", true);
+            PlaySound.PlayMusic("crystal");
         }
 
         private class EditorGameEntryPoint : GameEntryPoint

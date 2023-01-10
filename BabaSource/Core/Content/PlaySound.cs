@@ -110,4 +110,17 @@ public static class PlaySound
         instance.Play();
         return instance;
     }
+
+
+    private static SoundEffectInstance? currentMusic = null;
+    public static void PlayMusic(string name)
+    {
+        if (currentMusic != null)
+        {
+            currentMusic.Stop();
+            currentMusic.Dispose();
+        }
+
+        currentMusic = PlaySoundFile(name, true);
+    }
 }

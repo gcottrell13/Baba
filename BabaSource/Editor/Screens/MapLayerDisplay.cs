@@ -19,6 +19,8 @@ namespace Editor.Screens
         private Text objectsDisplay = new();
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
+        public bool showObjects = true;
+
         public MapLayerDisplay(string name, MapLayer mapLayer, string? theme, bool showName = true)
         {
             this.mapLayer = mapLayer;
@@ -43,35 +45,42 @@ namespace Editor.Screens
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            var objects = new Dictionary<uint, Dictionary<uint, string>>();
-
-            foreach (var obj in mapLayer.objects)
+            if (showObjects)
             {
-                var c = PaletteInfo.Palettes[theme][obj.color];
-                objects.ConstructDefaultValue(obj.x)[obj.y] = $"{c.ToHexTriple()}[{obj.name}:{obj.state}]";
-            }
+                var objects = new Dictionary<uint, Dictionary<uint, string>>();
 
-            var lines = new List<string>();
-
-            for (uint y = 0; y < mapLayer.height; y++)
-            {
-                var line = new List<string>();
-
-                for (uint x = 0; x < mapLayer.width; x++)
+                foreach (var obj in mapLayer.objects)
                 {
-                    if (objects.ConstructDefaultValue(x).TryGetValue(y, out var obj))
-                    {
-                        line.Add(obj);
-                    }
-                    else
-                    {
-                        line.Add(" ");
-                    }
+                    var c = PaletteInfo.Palettes[theme][obj.color];
+                    objects.ConstructDefaultValue(obj.x)[obj.y] = $"{c.ToHexTriple()}[{obj.name}:{obj.state}]";
                 }
-                lines.Add(string.Join("", line));
-            }
 
-            objectsDisplay.SetText(string.Join("\n", lines));
+                var lines = new List<string>();
+
+                for (uint y = 0; y < mapLayer.height; y++)
+                {
+                    var line = new List<string>();
+
+                    for (uint x = 0; x < mapLayer.width; x++)
+                    {
+                        if (objects.ConstructDefaultValue(x).TryGetValue(y, out var obj))
+                        {
+                            line.Add(obj);
+                        }
+                        else
+                        {
+                            line.Add(" ");
+                        }
+                    }
+                    lines.Add(string.Join("", line));
+                }
+
+                objectsDisplay.SetText(string.Join("\n", lines));
+            }
+            else
+            {
+                objectsDisplay.SetText("");
+            }
 
             if (ThemeInfo.GetThemeBackgroundColor(theme) is Color bgColor)
             {

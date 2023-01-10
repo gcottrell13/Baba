@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Core.Content;
 using Core.UI;
 using Core.Utils;
@@ -51,7 +51,7 @@ namespace Editor.Screens
 
         public void ZoomOut()
         {
-            zoom = Math.Min(7, zoom + 1);
+            zoom = Math.Min(15, zoom + 1);
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -95,6 +95,7 @@ namespace Editor.Screens
                     mapsContainer.AddChild(mld);
                 }
 
+                mld.showObjects = zoom <= 7;
                 mld.theme = Editor.EDITOR.GetRegionTheme(mapData.regionId) ?? "default";
                 mld.Graphics.x = (instance.x - topX) * mapPxWidth;
                 mld.Graphics.y = (instance.y - topY) * mapPxHeight;

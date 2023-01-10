@@ -74,10 +74,38 @@ namespace Editor.Screens
                         KeyPress { Text: 'z' } => ZoomOut(),
                         KeyPress { Text: 'x' } => ZoomIn(),
                         KeyPress { Text: 'e' } => editAtCursor(),
+                        KeyPress { Text: 'w' } => EditorStates.WorldEditorWarps,
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
                         .AddOnEnter(() => editorCommands(EditorStates.WorldEditor))
+                )
+                .State(
+                    EditorStates.WorldEditorWarps,
+                    c => c switch
+                    {
+                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.ViewingWorld,
+                        KeyPress { Text: 'z' } => ZoomOut(),
+                        KeyPress { Text: 'x' } => ZoomIn(),
+                        KeyPress { KeyPressed: Keys.Delete } => editWarpAtCursor(),
+                        KeyPress { Text: ' ' } => startWarp(),
+                        KeyPress { KeyPressed: Keys k } => editorhandle(k),
+                    },
+                    def => def
+                        .AddOnEnter(() => editorCommands(EditorStates.WorldEditorWarps))
+                )
+                .State(
+                    EditorStates.WorldEditorWarpPlacingPoint2,
+                    c => c switch
+                    {
+                        KeyPress { KeyPressed: Keys.Escape } => EditorStates.WorldEditorWarps,
+                        KeyPress { Text: 'z' } => ZoomOut(),
+                        KeyPress { Text: 'x' } => ZoomIn(),
+                        KeyPress { Text: ' ' } => endWarp(),
+                        KeyPress { KeyPressed: Keys k } => editorhandle(k),
+                    },
+                    def => def
+                        .AddOnEnter(() => editorCommands(EditorStates.WorldEditorWarpPlacingPoint2))
                 )
                 .State(
                     EditorStates.WorldEditorPickMap,
@@ -203,6 +231,22 @@ namespace Editor.Screens
                 d.Add("n", "rename world");
                 d.Add(CommonStrings.CTRL_PLUS + "s", "save world");
             }
+            else if (state == EditorStates.WorldEditorWarps)
+            {
+                d.Add("z", "zoom out");
+                d.Add("x", "zoom in");
+                d.Add(CommonStrings.ALL_ARROW, "move cursor");
+                d.Add("space", "create new warp");
+                d.Add("esc", "back");
+            }
+            else if (state == EditorStates.WorldEditorWarpPlacingPoint2)
+            {
+                d.Add("space", "set end of warp");
+                d.Add("z", "zoom out");
+                d.Add("x", "zoom in");
+                d.Add(CommonStrings.ALL_ARROW, "move cursor");
+                d.Add("esc", "back");
+            }
 
             SetCommands(d);
         }
@@ -247,6 +291,24 @@ namespace Editor.Screens
         private void editRegion(Region region)
         {
             Editor.EDITOR.LoadRegion(region);
+        }
+
+        private EditorStates startWarp()
+        {
+            editor!.warpPoint1 = new(editor.cursor.x, editor.cursor.y);
+            return EditorStates.WorldEditorWarpPlacingPoint2;
+        }
+
+        private EditorStates endWarp()
+        {
+            editor?.TryAddWarpAtCursor();
+            return EditorStates.WorldEditorWarps;
+        }
+
+        private EditorStates editWarpAtCursor()
+        {
+            editor?.TryDeleteWarpAtCursor();
+            return EditorStates.None;
         }
 
         private EditorStates editAtCursor()

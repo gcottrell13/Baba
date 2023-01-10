@@ -2,6 +2,7 @@
 using Core.Utils;
 using Editor.SaveFormats;
 using Editor.Screens;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace Editor.Editors
         public SaveFormat save { get; private set; }
         private MapData? pickedMap;
         public ObjectData cursor { get; private set; } = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
+
+        public Vector2 warpPoint1;
 
         public WorldEditor(SaveFormat save) 
         {
@@ -58,6 +61,21 @@ namespace Editor.Editors
             cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)save.width);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
+        }
+
+        public bool TryAddWarpAtCursor()
+        {
+            save.Warps.Add(new() { x1 = (uint)warpPoint1.X, y1 = (uint)warpPoint1.Y, x2 = cursor.x, y2 = cursor.y });
+            return true;
+        }
+
+        public bool TryDeleteWarpAtCursor()
+        {
+            var x = cursor.x;
+            var y = cursor.y;
+            var warp = save.Warps.FirstOrDefault(w => (w.x1 == x && w.y1 == y) || (w.x2 == x && w.y2 == y));
+            if (warp == null) return false;
+            return save.Warps.Remove(warp);
         }
 
         public bool TryDeleteObjectAtCursor()

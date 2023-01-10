@@ -32,7 +32,8 @@ namespace Editor.Screens
 
         // World Editor 
         WorldEditorPickMap, // Choose which map to place in the world 
-        WorldEditorWarp, // edit warp points 
+        WorldEditorWarps,
+        WorldEditorWarpPlacingPoint2, // edit warp points 
         SelectingWorld,
         RenamingWorld,
         ViewingWorld,

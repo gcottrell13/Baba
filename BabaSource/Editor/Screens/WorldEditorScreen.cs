@@ -24,6 +24,7 @@ namespace Editor.Screens
         private RegionPickerScreen? regionPicker;
 
         private WorldEditorDisplay? worldEditorDisplay;
+        private MapLayerEditorScreen? layerEditor;
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: [white]{}") { Name = "editortitle" };
 
@@ -69,12 +70,14 @@ namespace Editor.Screens
                     EditorStates.WorldEditor,
                     c => c switch
                     {
+                        KeyPress { KeyPressed: Keys.S, ModifierKeys: ModifierKeys.Ctrl } => SaveWorld(),
                         KeyPress { KeyPressed: Keys.Escape } => EditorStates.ViewingWorld,
                         KeyPress { Text: 'm' } => EditorStates.WorldEditorPickMap,
                         KeyPress { Text: 'z' } => ZoomOut(),
                         KeyPress { Text: 'x' } => ZoomIn(),
                         KeyPress { Text: 'e' } => editAtCursor(),
                         KeyPress { Text: 'w' } => EditorStates.WorldEditorWarps,
+                        KeyPress { Text: 'g' } => EditorStates.WorldEditorGlobalLayer,
                         KeyPress { KeyPressed: Keys k } => editorhandle(k),
                     },
                     def => def
@@ -106,6 +109,19 @@ namespace Editor.Screens
                     },
                     def => def
                         .AddOnEnter(() => editorCommands(EditorStates.WorldEditorWarpPlacingPoint2))
+                )
+                .State(
+                    EditorStates.WorldEditorGlobalLayer,
+                    c => layerEditor!.Handle(c),
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            // the edit functions make a new screen object
+                            layerEditor = new("global layer", stack, editor!.save.globalObjectLayer, EditorStates.WorldEditor, "default");
+                            stack.Add(layerEditor);
+                            layerEditor.init();
+                        })
                 )
                 .State(
                     EditorStates.WorldEditorPickMap,
@@ -219,6 +235,7 @@ namespace Editor.Screens
                 d.Add("m", "pick map");
                 d.Add("del", "remove map");
                 d.Add("w", "edit warps");
+                d.Add("g", "global layer");
                 d.Add("esc", "back");
             }
             else if (state == EditorStates.ViewingWorld)

@@ -37,6 +37,7 @@ namespace Editor.Screens
         SelectingWorld,
         RenamingWorld,
         ViewingWorld,
+        WorldEditorGlobalLayer,
 
     }
 }

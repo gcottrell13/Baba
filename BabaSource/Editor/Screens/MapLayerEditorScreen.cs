@@ -24,6 +24,7 @@ namespace Editor.Screens
         private NumberPickerScreen? resizeScreen;
         private AddTextToObjectScreen? addTextToObjectScreen;
         private readonly MapLayer mapLayer;
+        private readonly EditorStates parentState;
         private readonly MapLayerEditor mapLayerEditor;
         private readonly MapLayerEditorDisplay layerDisplay;
 
@@ -31,6 +32,7 @@ namespace Editor.Screens
         {
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;
+            this.parentState = parentState;
             Name = name;
             layerDisplay = new MapLayerEditorDisplay(name, mapLayer, mapLayerEditor.cursor, theme);
 
@@ -245,12 +247,7 @@ namespace Editor.Screens
             return r;
         }
 
-        public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
-        {
-            EditorStates.MapEditor => EditorStates.MapEditor,
-            EditorStates.RegionEditor => EditorStates.RegionEditor,
-            _ => EditorStates.None,
-        };
+        public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) == parentState ? parentState : EditorStates.None;
 
         protected override void OnDispose()
         {

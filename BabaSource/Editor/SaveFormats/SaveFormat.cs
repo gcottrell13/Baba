@@ -156,6 +156,8 @@ namespace Editor.SaveFormats
         public string name = string.Empty;
         public string theme = "default";
         public MapLayer regionObjectLayer { get; set; } = new();
+
+        public string musicName = "default";
     }
 
     internal class MapData

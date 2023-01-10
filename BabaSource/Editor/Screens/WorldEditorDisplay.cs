@@ -67,6 +67,7 @@ namespace Editor.Screens
                 return x < topX || x >= topX + zoom || y < topY || y >= topY + zoom;
             }
 
+            var instances = mapsContainer.Children.ToDictionary(x => x.Name);
             foreach (var instance in world.WorldLayout)
             {
                 var name = $"map {instance.x} {instance.y}";
@@ -101,6 +102,13 @@ namespace Editor.Screens
                 mld.Graphics.y = (instance.y - topY) * mapPxHeight;
                 mld.Graphics.xscale = mapPxWidth / (float)(mapData.layer1.width * 24);
                 mld.Graphics.yscale = mapPxHeight / (float)(mapData.layer1.height * 24);
+
+                instances.Remove(name);
+            }
+
+            foreach (var i in instances.Values)
+            {
+                mapsContainer.RemoveChild(i);
             }
 
             var maxYMagnitude = (int)Math.Log10(world.height + 1) + 1;

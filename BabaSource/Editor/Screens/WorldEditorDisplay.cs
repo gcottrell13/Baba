@@ -1,4 +1,4 @@
-using Core;
+﻿using Core;
 using Core.Content;
 using Core.UI;
 using Core.Utils;
@@ -175,12 +175,20 @@ namespace Editor.Screens
                 {
                     one = (one - topVec + half) * scaleVec;
                     two = (two - topVec + half) * scaleVec;
-                    var sub = two - one;
-                    var angle = Math.Atan2(sub.Y, sub.X);
+                    if (one == two)
+                    {
+                        rect.rotation = 0;
+                        rect.xscale = rect.yscale;
+                    }
+                    else
+                    {
+                        var sub = two - one;
+                        var angle = Math.Atan2(sub.Y, sub.X);
+                        rect.rotation = (float)angle;
+                        rect.xscale = sub.Length();
+                    }
                     rect.x = one.X;
                     rect.y = one.Y;
-                    rect.rotation = (float)angle;
-                    rect.xscale = sub.Length();
                 }
 
                 allWarpChildren.Remove(name);

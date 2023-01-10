@@ -2,15 +2,7 @@
 using Core.Screens;
 using Core.Utils;
 using Editor.Editors;
-using Editor.SaveFormats;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using static Editor.Screens.AddTextToObjectScreen;
 
 namespace Editor.Screens

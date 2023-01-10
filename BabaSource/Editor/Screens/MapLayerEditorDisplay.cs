@@ -2,7 +2,6 @@
 using Core.Content;
 using Core.UI;
 using Core.Utils;
-using Editor.SaveFormats;
 using Editor.Utils;
 using Microsoft.Xna.Framework;
 using System;

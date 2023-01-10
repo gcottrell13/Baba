@@ -2,16 +2,10 @@
 using Core.Content;
 using Core.UI;
 using Core.Utils;
-using Editor.SaveFormats;
 using Editor.Utils;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Editor.Screens
 {

@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Editor.SaveFormats
+namespace Core.Content
 {
-    internal static class SaveFormatSerializer
+    public static class SaveFormatSerializer
     {
         private static string serialize<T>(T obj, int indent) where T : notnull => obj switch
         {
@@ -103,102 +105,5 @@ namespace Editor.SaveFormats
             var t = "\t".Repeat(indent + 1);
             return open + "\n" + t + string.Join(",\n" + t, lines) + "\n" + t[..^1] + close;
         }
-    }
-
-    internal class SaveFormat
-    {
-        public List<MapInstance> WorldLayout { get; set; } = new();
-
-        public List<Warp> Warps { get; set; } = new();
-
-        public List<Region> Regions { get; set; } = new();
-
-        public List<MapData> MapDatas { get; set; } = new();
-
-        public MapLayer globalObjectLayer { get; set; } = new();
-
-        public uint startMapX = 0;
-        public uint startMapY = 0;
-
-        public uint width = 30;
-        public uint height = 30;
-
-        public string worldName = string.Empty;
-
-        public string? fileName = null;
-
-    }
-
-    internal class MapInstance
-    {
-        public uint x = 0;
-        public uint y = 0;
-        public int mapDataId = 0;
-
-    }
-
-    internal class Warp
-    {
-        public uint x1 = 0;
-        public uint y1 = 0;
-        public uint x2 = 0;
-        public uint y2 = 0;
-        public string name = string.Empty;
-
-        public int r;
-        public int g;
-        public int b;
-    }
-
-    internal class Region
-    {
-        public int id = 0;
-        public string name = string.Empty;
-        public string theme = "default";
-        public MapLayer regionObjectLayer { get; set; } = new();
-
-        public string musicName = "default";
-    }
-
-    internal class MapData
-    {
-        public int id = 0;
-        public string name = string.Empty;
-        public int regionId = 0;
-        public MapLayer layer1 { get; set; } = new();
-        public MapLayer layer2 { get; set; } = new();
-
-        public bool resetWhenInactive = false;
-
-    }
-
-    internal class MapLayer
-    {
-        public List<ObjectData> objects { get; set; } = new();
-        public uint width = 15;
-        public uint height = 15;
-    }
-
-    internal class ObjectData
-    {
-        public uint x = 0;
-        public uint y = 0;
-        public string name = string.Empty;
-        public uint state = 1;
-        public int color;
-        public string text = string.Empty;
-        public OriginalObjectData? original = null;
-
-        public ObjectData copy()
-        {
-            return new ObjectData { x = x, y = y, color = color, state = state, name = name, original = original, text = text };
-        }
-    }
-
-    internal class OriginalObjectData
-    {
-        public string name = string.Empty;
-        public uint state = 0;
-        public int color;
     }
 }

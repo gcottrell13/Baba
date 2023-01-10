@@ -1,12 +1,9 @@
 ﻿using Core.UI;
 using Core.Screens;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Editor.SaveFormats;
+using Core.Content;
 using Editor.Editors;
 using Core.Utils;
 using Microsoft.Xna.Framework.Input;

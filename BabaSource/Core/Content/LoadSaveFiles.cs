@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.SaveFormats
+namespace Core.Content
 {
-    internal static class LoadSaveFiles
+    public static class LoadSaveFiles
     {
         private static string editorFilesDirectiory =
 #if DEBUG
@@ -70,7 +70,7 @@ namespace Editor.SaveFormats
         }
     }
 
-    internal class ReadonlySavesList : IEnumerable<SaveFormat>
+    public class ReadonlySavesList : IEnumerable<SaveFormat>
     {
         private readonly List<SaveFormat> saves = new();
 

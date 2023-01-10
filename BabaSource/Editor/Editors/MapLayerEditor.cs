@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.Content;
 using Core.Utils;
-using Editor.SaveFormats;
 using Editor.Screens;
 using Microsoft.Xna.Framework.Input;
 using System;

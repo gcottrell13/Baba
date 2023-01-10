@@ -1,10 +1,6 @@
 ﻿using Core.Screens;
-using Editor.SaveFormats;
-using System;
+using Core.Content;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Editor.Screens
 {

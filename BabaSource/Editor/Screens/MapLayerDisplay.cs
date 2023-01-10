@@ -1,7 +1,6 @@
 ﻿using Core.Content;
 using Core.Utils;
 using Core;
-using Editor.SaveFormats;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

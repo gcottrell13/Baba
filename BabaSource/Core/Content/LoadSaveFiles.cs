@@ -11,12 +11,7 @@ namespace Core.Content
 {
     public static class LoadSaveFiles
     {
-        private static string editorFilesDirectiory =
-#if DEBUG
-            "../../../../../editorSaves/";
-#else
-            "./editorSaves/";
-#endif
+        private const string editorFilesDirectory = ContentDirectory.contentDirectory + "/editorSaves/";
 
         private static ReadonlySavesList files = new();
 
@@ -27,7 +22,7 @@ namespace Core.Content
 
         public static IEnumerable<string> GetSaveFiles()
         {
-            foreach (var file in Directory.EnumerateFiles(editorFilesDirectiory))
+            foreach (var file in Directory.EnumerateFiles(editorFilesDirectory))
             {
                 var n = Path.GetFileName(file);
                 yield return n[..n.IndexOf('.')];
@@ -51,7 +46,7 @@ namespace Core.Content
         {
             try
             {
-                var text = File.ReadAllText(editorFilesDirectiory + $"{saveFileName}.json");
+                var text = File.ReadAllText(editorFilesDirectory + $"{saveFileName}.json");
                 var d = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormat>(text) ?? throw new NullReferenceException("could not load");
                 d.fileName = saveFileName;
                 return d;
@@ -66,7 +61,7 @@ namespace Core.Content
         {
             save.fileName ??= save.worldName;
             var text = SaveFormatSerializer.Serialize(save);
-            File.WriteAllText(editorFilesDirectiory + $"{save.fileName}.json", text);
+            File.WriteAllText(editorFilesDirectory + $"{save.fileName}.json", text);
         }
     }
 

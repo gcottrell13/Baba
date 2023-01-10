@@ -241,8 +241,6 @@ namespace Core.Screens
 
         private PickerState Add()
         {
-            if (Selected == null)
-                return PickerState.None;
             if (OnAdd != null)
             {
                 OnAdd();

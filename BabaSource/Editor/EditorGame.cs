@@ -5,6 +5,7 @@ using Core.Screens;
 using Core.Utils;
 using Editor.Screens;
 using Core.Content;
+using Microsoft.Xna.Framework.Media;
 
 namespace Editor
 {
@@ -20,6 +21,7 @@ namespace Editor
         {
             ContentLoader.LoadContent(GraphicsDevice);
             base.Initialize();
+            PlaySound.PlaySoundFile("crystal", true);
         }
 
         private class EditorGameEntryPoint : GameEntryPoint

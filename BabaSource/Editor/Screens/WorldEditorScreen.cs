@@ -298,7 +298,8 @@ namespace Editor.Screens
 
         public void NewWorld()
         {
-            Editor.EDITOR.NewWorld();
+            Editor.EDITOR.LoadWorld(Editor.EDITOR.NewWorld());
+            editor = new(Editor.EDITOR.currentWorld!);
         }
 
         private void addRegion()

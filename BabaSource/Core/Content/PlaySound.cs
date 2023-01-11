@@ -14,10 +14,9 @@ public static class PlaySound
 {
     private const string soundsDirectory = ContentDirectory.contentDirectory + "/sounds/";
 
-    private static Dictionary<string, SoundEffect> sounds = Directory.EnumerateFiles(soundsDirectory).ToDictionary(
-        f => f.Split('\\', '/').Last().Split('.').First(), 
-        f => LoadSound(f.Split('\\', '/').Last())
-    );
+    private static Dictionary<string, string> files = Directory.EnumerateFiles(soundsDirectory).ToDictionary(f => f.Split('\\', '/').Last().Split('.').First());
+
+    private static Dictionary<string, SoundEffect> sounds = new();
 
     private static void LoadOgg(VorbisReader vorbis, out byte[] data)
     {
@@ -44,9 +43,16 @@ public static class PlaySound
                 byte byte1 = (byte)((tempBytes >> 8) & 0x00FF);
                 byte byte2 = (byte)((tempBytes >> 0) & 0x00FF);
 
-                // Little endian
-                bytes[index++] = byte2;
-                bytes[index++] = byte1;
+                try 
+                {
+                    // Little endian
+                    bytes[index++] = byte2;
+                    bytes[index++] = byte1;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    break;
+                }
             }
         }
         data = bytes;
@@ -104,6 +110,15 @@ public static class PlaySound
     /// <returns></returns>
     public static SoundEffectInstance PlaySoundFile(string name, bool loop = false)
     {
+        if (files.ContainsKey(name) == false)
+        {
+            throw new ArgumentOutOfRangeException(nameof(name));
+        }
+
+        if (sounds.ContainsKey(name) == false)
+        {
+            sounds[name] = LoadSound(files[name].Split('\\', '/').Last());
+        }
         var sound = sounds[name];
         var instance = sound.CreateInstance();
         instance.IsLooped = loop;

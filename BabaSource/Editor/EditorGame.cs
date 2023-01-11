@@ -21,7 +21,6 @@ namespace Editor
         {
             ContentLoader.LoadContent(GraphicsDevice);
             base.Initialize();
-            PlaySound.PlayMusic("crystal");
         }
 
         private class EditorGameEntryPoint : GameEntryPoint
@@ -31,6 +30,7 @@ namespace Editor
                 var saveFiles = LoadSaveFiles.LoadAllWorlds();
 
                 var mapStack = new ScreenStack();
+                PlaySound.PlayMusic("editorsong");
 
                 WorldEditorScreen worldEditorScreen = new(mapStack, saveFiles);
 

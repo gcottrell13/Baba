@@ -134,12 +134,12 @@ public static class PlaySound
 
     public static void PlayMusic(string name)
     {
+        if (currentMusicName == name) return;
         if (currentMusic != null)
         {
             currentMusic.Stop();
             currentMusic.Dispose();
         }
-        if (currentMusicName == name) return;
 
         currentMusicName = name;
         currentMusic = PlaySoundFile(name, true);

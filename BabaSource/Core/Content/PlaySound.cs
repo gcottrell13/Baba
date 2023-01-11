@@ -1,3 +1,4 @@
+﻿using Core.Utils;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using NVorbis;
@@ -20,16 +21,14 @@ public static class PlaySound
 
     public static IEnumerable<string> musicNames => files.Keys;
 
-    private static void LoadOgg(VorbisReader vorbis, out byte[] data)
+    private static IEnumerable<byte[]> LoadOgg(VorbisReader vorbis)
     {
-        var len = vorbis.TotalTime;
-
         float[] buffer = new float[vorbis.SampleRate / 10 * vorbis.Channels];
-        var bytes = new byte[(int)(vorbis.SampleRate * vorbis.Channels * 2 * len.TotalSeconds)];
-        var index = 0;
-        int count = 0;
+        var bytes = new byte[buffer.Length * 2];
+        int count;
         while ((count = vorbis.ReadSamples(buffer, 0, buffer.Length)) > 0)
         {
+            var index = 0;
             for (int i = 0; i < count; i++)
             {
                 int temp = (int)(short.MaxValue * buffer[i]);
@@ -56,14 +55,14 @@ public static class PlaySound
                     break;
                 }
             }
+            yield return bytes;
         }
-        data = bytes;
     }
 
-    private static void WriteWave(BinaryWriter writer, int channels, int rate, byte[] data)
+    private static void WriteWave(BinaryWriter writer, int channels, int rate, int dataLength)
     {
         writer.Write(new char[4] { 'R', 'I', 'F', 'F' });
-        writer.Write((int)(36 + data.Length));
+        writer.Write((int)(36 + dataLength));
         writer.Write(new char[4] { 'W', 'A', 'V', 'E' });
         writer.Write(new char[4] { 'f', 'm', 't', ' ' });
         writer.Write((int)16);
@@ -75,28 +74,29 @@ public static class PlaySound
         writer.Write((short)16);
 
         writer.Write(new char[4] { 'd', 'a', 't', 'a' });
-        writer.Write((int)data.Length);
-        writer.Write(data);
+        writer.Write((int)dataLength);
     }
 
     internal static SoundEffect LoadSound(string path)
     {
-        byte[] data;
         if (path.EndsWith(".ogg"))
         {
             using var vorbis = new VorbisReader(soundsDirectory + path);
-            LoadOgg(vorbis, out data);
+            var ogg = LoadOgg(vorbis);
+
+            var dataLength = vorbis.SampleRate * vorbis.Channels * 2 * (int)vorbis.TotalTime.TotalSeconds;
 
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
-            WriteWave(writer, vorbis.Channels, vorbis.SampleRate, data);
+            WriteWave(writer, vorbis.Channels, vorbis.SampleRate, dataLength);
             stream.Position = 0;
-            return SoundEffect.FromStream(stream);
+            var bytes = stream.GetBuffer().Concat(ogg.SelectMany(x => x));
+            return SoundEffect.FromStream(new StreamOverEnumerable(bytes));
         }
         else
         {
             using var fileStream = File.OpenRead(soundsDirectory + path);
-            data = new byte[fileStream.Length];
+            var data = new byte[fileStream.Length];
             fileStream.Read(data, 0, data.Length);
             using var stream = new MemoryStream(data);
 

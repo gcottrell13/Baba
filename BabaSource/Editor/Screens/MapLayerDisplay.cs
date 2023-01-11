@@ -13,6 +13,7 @@ namespace Editor.Screens
 {
     internal class MapLayerDisplay : GameObject
     {
+        public string title;
         public readonly MapLayer mapLayer;
         public string theme;
         private Text objectsDisplay = new();
@@ -20,11 +21,11 @@ namespace Editor.Screens
 
         public bool showObjects = true;
 
-        public MapLayerDisplay(string name, MapLayer mapLayer, string? theme, bool showName = true)
+        public MapLayerDisplay(string title, MapLayer mapLayer, string? theme, bool showName = true)
         {
+            this.title = title;
             this.mapLayer = mapLayer;
             this.theme = theme ?? "default";
-            Name = name;
 
             Graphics.AddChild(background);
             background.SetColor(ThemeInfo.GetThemeBackgroundColor(theme ?? "default"));
@@ -33,7 +34,7 @@ namespace Editor.Screens
 
             if (showName)
             {
-                AddChild(new Text(name));
+                AddChild(new Text(title) { Name="title" });
                 background.y = 25;
                 objectsDisplay.Graphics.y = 25;
             }
@@ -44,6 +45,8 @@ namespace Editor.Screens
 
         protected override void OnUpdate(GameTime gameTime)
         {
+            (ChildByName("title") as Text)?.SetText(title);
+
             if (showObjects)
             {
                 var objects = new Dictionary<uint, Dictionary<uint, string>>();

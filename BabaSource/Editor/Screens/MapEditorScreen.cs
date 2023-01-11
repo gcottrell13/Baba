@@ -26,9 +26,9 @@ namespace Editor.Screens
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
             layerEditorScreen = new("layer 1", stack, mapData.layer1, EditorStates.MapEditor, theme);
 
-            var layer1Display = new MapLayerDisplay("layer 1", mapData.layer1, theme);
+            var layer1Display = new MapLayerDisplay(layerTitle(1, mapData.layer1), mapData.layer1, theme) { Name = "layer 1" };
             layer1Display.Graphics.y = 25;
-            var layer2Display = new MapLayerDisplay("layer 2", mapData.layer2, theme);
+            var layer2Display = new MapLayerDisplay(layerTitle(2, mapData.layer2), mapData.layer2, theme) { Name = "layer 2" };
             layer2Display.Graphics.y = 25;
 
             AddChild(layer1Display);
@@ -151,6 +151,8 @@ namespace Editor.Screens
             });
         }
 
+        private string layerTitle(int num, MapLayer layer) => $"layer {num} {layer.width}x{layer.height}";
+
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
             EditorStates.WorldEditor => EditorStates.WorldEditor,
@@ -176,14 +178,16 @@ namespace Editor.Screens
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            var layer1Display = ChildByName("layer 1")!;
-            var layer2Display = ChildByName("layer 2")!;
+            var layer1Display = (MapLayerDisplay)ChildByName("layer 1")!;
+            var layer2Display = (MapLayerDisplay)ChildByName("layer 2")!;
             layer2Display.Graphics.x = ScreenWidth / 2 / Graphics.xscale;
             layer2Display.Graphics.xscale = (ScreenWidth / 2f) / (mapData.layer2.width * 25);
             layer2Display.Graphics.yscale = layer2Display.Graphics.xscale;
+            layer2Display.title = layerTitle(2, mapData.layer2);
 
             layer1Display.Graphics.xscale = (ScreenWidth / 2f) / (mapData.layer1.width * 25);
             layer1Display.Graphics.yscale = layer1Display.Graphics.xscale;
+            layer1Display.title = layerTitle(1, mapData.layer1);
 
             base.OnUpdate(gameTime);
         }

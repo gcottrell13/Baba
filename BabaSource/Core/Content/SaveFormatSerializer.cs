@@ -57,6 +57,7 @@ namespace Core.Content
                 yield return $"\"id\": {region.id}";
                 yield return $"\"name\": \"{region.name}\"";
                 yield return $"\"theme\": \"{region.theme}\"";
+                yield return $"\"musicName\": \"{region.musicName}\"";
                 yield return $"\"regionObjectLayer\": {serialize(region.regionObjectLayer, indent)}";
             }
             return formatLines(lines(), indent, "{", "}");

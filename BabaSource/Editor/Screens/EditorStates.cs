@@ -29,6 +29,7 @@ namespace Editor.Screens
         EditRegionName,
         EditRegionWordLayer,
         SelectRegionTheme,
+        SelectRegionMusic,
 
         // World Editor 
         WorldEditorPickMap, // Choose which map to place in the world 

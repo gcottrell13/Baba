@@ -16,3 +16,5 @@ pipeline/env.py
 pipeline/modules/env.py
 
 .idea
+
+*.ogg

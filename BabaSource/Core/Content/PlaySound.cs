@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using NVorbis;
 using System;
@@ -17,6 +17,8 @@ public static class PlaySound
     private static Dictionary<string, string> files = Directory.EnumerateFiles(soundsDirectory).ToDictionary(f => f.Split('\\', '/').Last().Split('.').First());
 
     private static Dictionary<string, SoundEffect> sounds = new();
+
+    public static IEnumerable<string> musicNames => files.Keys;
 
     private static void LoadOgg(VorbisReader vorbis, out byte[] data)
     {
@@ -128,6 +130,8 @@ public static class PlaySound
 
 
     private static SoundEffectInstance? currentMusic = null;
+    private static string currentMusicName = string.Empty;
+
     public static void PlayMusic(string name)
     {
         if (currentMusic != null)
@@ -135,7 +139,9 @@ public static class PlaySound
             currentMusic.Stop();
             currentMusic.Dispose();
         }
+        if (currentMusicName == name) return;
 
+        currentMusicName = name;
         currentMusic = PlaySoundFile(name, true);
     }
 }

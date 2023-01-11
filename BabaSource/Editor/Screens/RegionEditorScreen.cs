@@ -16,6 +16,7 @@ namespace Editor.Screens
         private MapLayerEditorDisplay? layerDisplay;
         private Text titleText = new();
         private MapLayerEditorScreen? layerEditor;
+        private MusicPickerScreen? musicPickerScreen;
 
         public RegionEditorScreen(ScreenStack stack, Region region)
         {
@@ -33,6 +34,7 @@ namespace Editor.Screens
                         KeyPress { Text: 'n' } => EditorStates.EditRegionName,
                         KeyPress { Text: 'c' } => EditorStates.EditRegionWordLayer,
                         KeyPress { Text: 't' } => EditorStates.SelectRegionTheme,
+                        KeyPress { Text: 'm' } => EditorStates.SelectRegionMusic,
                         _ => EditorStates.None,
                     }
                 )
@@ -88,9 +90,28 @@ namespace Editor.Screens
                         {
                             themePickerScreen = new(region.theme)
                             {
-                                OnSelect=pickTheme,
+                                OnSelect = pickTheme,
                             };
                             stack.Add(themePickerScreen);
+                        })
+                )
+                .State(
+                    EditorStates.SelectRegionMusic,
+                    c => musicPickerScreen!.Handle(c) switch
+                    {
+                        PickerState.CloseCancel => EditorStates.RegionEditor,
+                        PickerState.ClosePick => EditorStates.RegionEditor,
+                        _ => EditorStates.None,
+                    },
+                    def => def
+                        .AddOnLeave(() => stack.Pop().Dispose())
+                        .AddOnEnter(() =>
+                        {
+                            musicPickerScreen = new(region.musicName)
+                            {
+                                OnSelect = pickMusic,
+                            };
+                            stack.Add(musicPickerScreen);
                         })
                 );
 
@@ -127,6 +148,7 @@ namespace Editor.Screens
                 { "n", "rename region" },
                 { "t", "set theme" },
                 { "c", "edit region layer" },
+                { "m", "set music" },
                 { CommonStrings.ESCAPE, "go back" },
             });
         }
@@ -137,6 +159,11 @@ namespace Editor.Screens
             refreshText();
         }
 
+        private void pickMusic(string name)
+        {
+            region.musicName = name;
+            refreshText();
+        }
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {

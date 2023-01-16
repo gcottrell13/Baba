@@ -212,7 +212,7 @@ new FacingOnMove(
         sheet[0].save(VISUAL_OUTPUT_DIRECTORY / f'{name}.sheet.png')
         with open(str(VISUAL_OUTPUT_DIRECTORY / f'{name}.sheet.png'), 'rb') as f:
             b64 = base64.b64encode(f.read()).decode('utf-8')
-            n = f"\"{name}\"".ljust(longest_name_size + 2)
+            n = f"\"{name}\"".ljust(16 + 2)
             sheets.append(f'\t\t\t{{ {n}, Texture2D.FromStream(graphics, '
                           f'new MemoryStream(System.Convert.FromBase64String("{b64}"))) }}')
 

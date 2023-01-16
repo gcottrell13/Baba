@@ -9,6 +9,29 @@ namespace Core.Content {
         public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {
             return new Dictionary<string, SpriteValues>() {
 			{ "algae", new Wobbler("algae", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["algae"]) },
+			{ "amongi", new FacingOnMove(
+                name: "amongi", 
+				up: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.up.0", new[] { new Point(0, 0), new Point(1, 0), new Point(2, 0) }, new Point(24, 24), sheets["amongi"]), 
+	new Wobbler("amongi.up.1", new[] { new Point(3, 0), new Point(4, 0), new Point(5, 0) }, new Point(24, 24), sheets["amongi"]) }), 
+				sleep_up: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.sleep_up.0", new[] { new Point(0, 1), new Point(1, 1), new Point(2, 1) }, new Point(24, 24), sheets["amongi"]) }), 
+				left: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.left.0", new[] { new Point(3, 1), new Point(4, 1), new Point(5, 1) }, new Point(24, 24), sheets["amongi"]), 
+	new Wobbler("amongi.left.1", new[] { new Point(0, 2), new Point(1, 2), new Point(2, 2) }, new Point(24, 24), sheets["amongi"]) }), 
+				sleep_left: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.sleep_left.0", new[] { new Point(3, 2), new Point(4, 2), new Point(5, 2) }, new Point(24, 24), sheets["amongi"]) }), 
+				down: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.down.0", new[] { new Point(0, 3), new Point(1, 3), new Point(2, 3) }, new Point(24, 24), sheets["amongi"]), 
+	new Wobbler("amongi.down.1", new[] { new Point(3, 3), new Point(4, 3), new Point(5, 3) }, new Point(24, 24), sheets["amongi"]) }), 
+				sleep_down: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.sleep_down.0", new[] { new Point(0, 4), new Point(1, 4), new Point(2, 4) }, new Point(24, 24), sheets["amongi"]) }), 
+				right: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.right.0", new[] { new Point(3, 4), new Point(4, 4), new Point(5, 4) }, new Point(24, 24), sheets["amongi"]), 
+	new Wobbler("amongi.right.1", new[] { new Point(0, 5), new Point(1, 5), new Point(2, 5) }, new Point(24, 24), sheets["amongi"]) }), 
+				sleep_right: new AnimateOnMove("amongi", new Wobbler[] {
+	new Wobbler("amongi.sleep_right.0", new[] { new Point(3, 5), new Point(4, 5), new Point(5, 5) }, new Point(24, 24), sheets["amongi"]) })
+) },
 			{ "arm", new FacingOnMove(
                 name: "arm", 
 				up: new AnimateOnMove("arm", new Wobbler[] {
@@ -1085,6 +1108,7 @@ namespace Core.Content {
 	new Wobbler("nose.right.0", new[] { new Point(1, 2), new Point(2, 2), new Point(3, 2) }, new Point(24, 24), sheets["nose"]) }), 
 				sleep_right: null
 ) },
+			{ "opensquare", new Wobbler("opensquare", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["opensquare"]) },
 			{ "orb", new Wobbler("orb", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["orb"]) },
 			{ "pants", new Wobbler("pants", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["pants"]) },
 			{ "paper", new Wobbler("paper", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["paper"]) },
@@ -1406,6 +1430,7 @@ namespace Core.Content {
 			{ "text_above", new Wobbler("text_above", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_above"]) },
 			{ "text_algae", new Wobbler("text_algae", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_algae"]) },
 			{ "text_all", new Wobbler("text_all", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_all"]) },
+			{ "text_amongi", new Wobbler("text_amongi", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_amongi"]) },
 			{ "text_and", new Wobbler("text_and", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_and"]) },
 			{ "text_apos", new Wobbler("text_apos", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_apos"]) },
 			{ "text_arm", new Wobbler("text_arm", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_arm"]) },
@@ -1453,6 +1478,7 @@ namespace Core.Content {
 			{ "text_cash", new Wobbler("text_cash", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cash"]) },
 			{ "text_cat", new Wobbler("text_cat", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cat"]) },
 			{ "text_chair", new Wobbler("text_chair", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_chair"]) },
+			{ "text_check", new Wobbler("text_check", new[] { new Point(0, 0) }, new Point(24, 24), sheets["text_check"]) },
 			{ "text_cheese", new Wobbler("text_cheese", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_cheese"]) },
 			{ "text_chill", new Wobbler("text_chill", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_chill"]) },
 			{ "text_circle", new Wobbler("text_circle", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_circle"]) },
@@ -1483,6 +1509,7 @@ namespace Core.Content {
 			{ "text_e", new Wobbler("text_e", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_e"]) },
 			{ "text_ear", new Wobbler("text_ear", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_ear"]) },
 			{ "text_eat", new Wobbler("text_eat", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_eat"]) },
+			{ "text_editorsquare", new Wobbler("text_editorsquare", new[] { new Point(0, 0) }, new Point(24, 24), sheets["text_editorsquare"]) },
 			{ "text_egg", new Wobbler("text_egg", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_egg"]) },
 			{ "text_empty", new Wobbler("text_empty", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_empty"]) },
 			{ "text_end", new Wobbler("text_end", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_end"]) },
@@ -1593,6 +1620,7 @@ namespace Core.Content {
 			{ "text_often", new Wobbler("text_often", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_often"]) },
 			{ "text_on", new Wobbler("text_on", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_on"]) },
 			{ "text_open", new Wobbler("text_open", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_open"]) },
+			{ "text_opensquare", new Wobbler("text_opensquare", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_opensquare"]) },
 			{ "text_orange", new Wobbler("text_orange", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_orange"]) },
 			{ "text_orb", new Wobbler("text_orb", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_orb"]) },
 			{ "text_p", new Wobbler("text_p", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_p"]) },
@@ -1600,6 +1628,7 @@ namespace Core.Content {
 			{ "text_paper", new Wobbler("text_paper", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_paper"]) },
 			{ "text_party", new Wobbler("text_party", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_party"]) },
 			{ "text_pawn", new Wobbler("text_pawn", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_pawn"]) },
+			{ "text_period", new Wobbler("text_period", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_period"]) },
 			{ "text_pet", new Wobbler("text_pet", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_pet"]) },
 			{ "text_phantom", new Wobbler("text_phantom", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_phantom"]) },
 			{ "text_piano", new Wobbler("text_piano", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_piano"]) },

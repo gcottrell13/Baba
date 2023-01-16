@@ -114,8 +114,10 @@ def make_proof_joinable(name: str, obj: Joinable, data: dict[str, ObjectSprites]
     return make_proof(proof_layout, actives)
 
 
-def make_all_proofs(data: dict[str, ObjectSprites]):
-    for name, obj in data.items():
+def make_all_proofs(data: dict[str, ObjectSprites], filter: list[str] = None):
+    filter = filter or data.keys()
+    for name in filter:
+        obj = data[name]
         match obj:
             case Wobbler() as w:
                 proof = make_proof_wobbler(name, w, data)

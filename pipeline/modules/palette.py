@@ -1,9 +1,9 @@
 from PIL import Image
 import glob
 import json
-from .vars import FILES_PATH
+from .vars import CUSTOM_FILES_PATH
 
-palettes = glob.glob(str(FILES_PATH / 'Palettes' / "*.png"))
+palettes = glob.glob(str(CUSTOM_FILES_PATH / 'palettes' / "*.png"))
 
 # print(palettes)
 

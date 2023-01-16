@@ -1,9 +1,8 @@
 {
 	"WorldLayout": [
-		{"x":2,"y":2,"mapDataId":1},
-		{"x":1,"y":2,"mapDataId":2},
-		{"x":0,"y":3,"mapDataId":3},
-		{"x":0,"y":0,"mapDataId":4}
+		{"x":0,"y":0,"mapDataId":4},
+		{"x":1,"y":0,"mapDataId":5},
+		{"x":2,"y":0,"mapDataId":3}
 	],
 	"Warps": [],
 	"Regions": [
@@ -11,6 +10,7 @@
 			"id": 0,
 			"name": "autumnregion",
 			"theme": "autumn",
+			"musicName": "baba",
 			"regionObjectLayer": {
 				"objects": [
 					{"x":2,"y":2,"name":"boat","state":1,"color":49,"text":"","original":null},
@@ -24,6 +24,7 @@
 			"id": 1,
 			"name": "region 2",
 			"theme": "garden",
+			"musicName": "default",
 			"regionObjectLayer": {
 				"objects": [],
 				"width": 18,
@@ -34,6 +35,7 @@
 			"id": 2,
 			"name": "new region 2",
 			"theme": "swamp",
+			"musicName": "default",
 			"regionObjectLayer": {
 				"objects": [],
 				"width": 18,
@@ -44,6 +46,7 @@
 			"id": 3,
 			"name": "starting region",
 			"theme": "garden",
+			"musicName": "default",
 			"regionObjectLayer": {
 				"objects": [],
 				"width": 15,
@@ -86,7 +89,9 @@
 			"layer1": {
 				"objects": [
 					{"x":3,"y":2,"name":"pants","state":1,"color":26,"text":"","original":null},
-					{"x":4,"y":5,"name":"pants","state":1,"color":26,"text":"","original":null}
+					{"x":4,"y":5,"name":"pants","state":1,"color":26,"text":"","original":null},
+					{"x":0,"y":3,"name":"pants","state":1,"color":26,"text":"","original":null},
+					{"x":0,"y":5,"name":"pants","state":1,"color":26,"text":"","original":null}
 				],
 				"width": 10,
 				"height": 10
@@ -111,7 +116,10 @@
 					{"x":2,"y":1,"name":"dog","state":1,"color":2,"text":"","original":null},
 					{"x":4,"y":4,"name":"dog","state":4,"color":2,"text":"","original":null},
 					{"x":1,"y":7,"name":"dog","state":1,"color":17,"text":"","original":null},
-					{"x":9,"y":7,"name":"worm","state":1,"color":3,"text":"","original":null}
+					{"x":9,"y":7,"name":"worm","state":1,"color":3,"text":"","original":null},
+					{"x":0,"y":5,"name":"dog","state":1,"color":17,"text":"","original":null},
+					{"x":0,"y":10,"name":"dog","state":4,"color":17,"text":"","original":null},
+					{"x":6,"y":2,"name":"amongi","state":1,"color":17,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
@@ -119,7 +127,8 @@
 			"layer2": {
 				"objects": [
 					{"x":7,"y":6,"name":"cat","state":1,"color":50,"text":"","original":null},
-					{"x":7,"y":10,"name":"banana","state":1,"color":20,"text":"","original":null}
+					{"x":7,"y":10,"name":"banana","state":1,"color":20,"text":"","original":null},
+					{"x":3,"y":3,"name":"text_amongi","state":1,"color":17,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
@@ -247,6 +256,66 @@
 					{"x":1,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
 					{"x":2,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
 				],
+				"width": 15,
+				"height": 15
+			}
+		},
+		{
+			"id": 5,
+			"name": "start2",
+			"regionId": 3,
+			"resetWhenInactive": false,
+			"layer1": {
+				"objects": [
+					{"x":0,"y":0,"name":"tree","state":1,"color":42,"text":"","original":{"name":"tree","state":1,"color":42}},
+					{"x":1,"y":0,"name":"tree","state":1,"color":42,"text":"","original":{"name":"tree","state":1,"color":42}},
+					{"x":2,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":3,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":4,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":5,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":6,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":7,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":8,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":9,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":10,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":11,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":12,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":13,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":0,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":0,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":1,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":2,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":3,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":4,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":5,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":6,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":7,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":8,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":9,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":10,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":11,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":12,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":13,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":14,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":13,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":12,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":11,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":10,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":9,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":8,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":7,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":6,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":5,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":4,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":3,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":2,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":14,"y":1,"name":"tree","state":1,"color":42,"text":"","original":null}
+				],
+				"width": 15,
+				"height": 15
+			},
+			"layer2": {
+				"objects": [],
 				"width": 15,
 				"height": 15
 			}

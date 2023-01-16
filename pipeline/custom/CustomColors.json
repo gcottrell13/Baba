@@ -62,6 +62,13 @@
     "unittype": "text",
     "sprite": "text_comma"
   },
+  "text_period": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_period"
+  },
   "text_escape": {
     "color": [ 1, 3 ],
     "color_active": [ 1, 4 ],
@@ -97,11 +104,53 @@
     "unittype": "text",
     "sprite": "editorsquare"
   },
+  "text_editorsquare": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "object",
+    "sprite": "editorsquare"
+  },
   "check": {
     "color": [ 1, 2 ],
     "color_active": [ 1, 3 ],
     "layer": 10,
-    "unittype": "text",
+    "unittype": "object",
     "sprite": "check"
+  },
+  "text_check": {
+    "color": [ 1, 2 ],
+    "color_active": [ 1, 3 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_check"
+  },
+  "opensquare": {
+    "color": [ 1, 2 ],
+    "color_active": [ 1, 3 ],
+    "layer": 10,
+    "unittype": "object",
+    "sprite": "opensquare"
+  },
+  "text_opensquare": {
+    "color": [ 1, 2 ],
+    "color_active": [ 1, 3 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "opensquare"
+  },
+  "amongi": {
+    "color": [ 2, 1 ],
+    "color_active": [ 2, 1 ],
+    "layer": 110,
+    "unittype": "object",
+    "sprite": "amongi"
+  },
+  "text_amongi": {
+    "color": [ 2, 1 ],
+    "color_active": [ 2, 2 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_amongi"
   }
 }

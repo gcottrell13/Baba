@@ -109,38 +109,120 @@ namespace Tests.Engine
 
 
         [Test]
-        public void GetSentences_ShouldParse()
+        [TestCaseSource(nameof(GetSentencesTestCases))]
+        public void GetSentences_ShouldParse(List<List<Item?>> input, List<Sentence<Item>> expected)
         {
-            var input = new List<List<Item?>>()
-            {
-                new(){"rock", "baba", "baba"},
-                new(){"rock", "has", "flag"},
-                new(){"rock", "rock", "is"},
-                new(){"rock", "baba", "you"},
-                new(){"rock", "has", null},
-                new(){"rock", "box", "you"},
-                new(){"rock", "baba", "you"},
-            };
-
             var sentences = ParseSentences.GetSentences(input, new()
             {
-                nouns = new() { "baba", "rock", "flag", "box" },
+                nouns = new() { "baba", "rock", "flag", "box", "water" },
                 verbs = new() { "is", "has" },
-                modifiers = new() { "not" },
+                modifiers = new() { "not", "lonely" },
                 adjectives = new() { "you", "win" },
                 conjunctions = new() { "and" },
                 relations= new() { "on", "near" },
             });
 
-            Assert.AreEqual(new List<Sentence<Item>>()
-            {
-                new(new(){First=new("rock")}, "has", new(){First=new("flag")}),
-                new(new(){First=new("flag")}, "is", new(){First=new("you")}),
-                new(new(){First=new("baba")}, "has", new(){First=new("rock")}),
-                new(new(){First=new("baba")}, "has", new(){First=new("box")}),
-            }, sentences);
+            Assert.AreEqual(expected, sentences);
         }
 
+        static IEnumerable<TestCaseData> GetSentencesTestCases => _getSentencesTestCases.Select(
+            x => new TestCaseData(x.input, x.expected)
+            .SetName(x.name));
 
+        public static IEnumerable<(string name, List<List<Item?>> input, List<Sentence<Item>> expected)> _getSentencesTestCases { get
+            {
+                yield return (
+                    "parse several at once",
+                    new()
+                    {
+                        new(){"rock", "baba", "baba"},
+                        new(){"rock", "has", "flag"},
+                        new(){"rock", "rock", "is"},
+                        new(){"rock", "baba", "you"},
+                        new(){"rock", "has", null},
+                        new(){"rock", "box", "you"},
+                        new(){"rock", "baba", "you"},
+                    },
+                    new()
+                    {
+                        new(new(){First=new("rock")}, "has", new(){First=new("flag")}),
+                        new(new(){First=new("flag")}, "is", new(){First=new("you")}),
+                        new(new(){First=new("baba")}, "has", new(){First=new("rock")}),
+                        new(new(){First=new("baba")}, "has", new(){First=new("box")}),
+                    }
+                );
+
+                yield return (
+                    "flag not on water is win",
+                    new()
+                    {
+                        new(){"flag", "not", "on", "water", "is", "win"},
+                    },
+                    new()
+                    {
+                        new(new(){
+                            First=new NA_WithRelationship<Item>("flag", "on", new("water")) {RelationModifier="not"},
+                        }, "is", new(){
+                            First=new("win")
+                        }),
+                    }
+                );
+
+                yield return (
+                    "lonely baba is rock",
+                    new()
+                    {
+                        new(){"lonely", "baba", "is", "rock"},
+                    },
+                    new()
+                    {
+                        new(new(){
+                            First=new("baba") {Modifier="lonely"},
+                        }, "is", new(){
+                            First=new("rock")
+                        }),
+                    }
+                );
+
+                yield return (
+                    "baba and flag on water is win and not box",
+                    new()
+                    {
+                        "baba and flag on water is win and not box".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
+                    },
+                    new()
+                    {
+                        new(new(){
+                            First=new("baba"),
+                            Items=new()
+                            {
+                                new("and", new NA_WithRelationship<Item>("flag", "on", new("water"))),
+                            },
+                        }, "is", new(){
+                            First=new("win"),
+                            Items=new()
+                            {
+                                new("and", new("box") {Modifier="not"}),
+                            },
+                        }),
+                    }
+                );
+
+                yield return (
+                    "lonely baba not on not flag is you",
+                    new()
+                    {
+                        "lonely baba not on not flag is you".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
+                    },
+                    new()
+                    {
+                        new(new(){
+                            First=new NA_WithRelationship<Item>("baba", "on", new("flag"){Modifier="not"}) {Modifier="lonely", RelationModifier="not"},
+                        }, "is", new(){
+                            First=new("you"),
+                        }),
+                    }
+                );
+            } }
     }
 }

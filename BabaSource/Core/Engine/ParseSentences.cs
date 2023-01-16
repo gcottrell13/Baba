@@ -32,7 +32,7 @@ public class NounAdjective<T>
         return base.Equals(obj);
     }
 
-    public override string ToString() => $"{Modifier}{Value}";
+    public override string ToString() => $"{Modifier} {Value}".Trim();
 
     public override int GetHashCode() => ToString().GetHashCode();
 }
@@ -41,6 +41,7 @@ public class NA_WithRelationship<T> : NounAdjective<T>
 {
     public T Relation;
     public NounAdjective<T> RelatedTo;
+    public T? RelationModifier;
 
     public NA_WithRelationship(T value, T relation, NounAdjective<T> relatedTo) : base(value)
     {
@@ -51,11 +52,11 @@ public class NA_WithRelationship<T> : NounAdjective<T>
     public override bool Equals(object? obj)
     {
         if (obj is NA_WithRelationship<T> na) 
-            return Equals(Relation, na.Relation) && RelatedTo.Equals(na.RelatedTo) && base.Equals(obj);
+            return Equals(Relation, na.Relation) && RelatedTo.Equals(na.RelatedTo) && Equals(RelationModifier, na.RelationModifier) && base.Equals(obj);
         return base.Equals(obj);
     }
 
-    public override string ToString() => $"{base.ToString()} {Relation} {RelatedTo}";
+    public override string ToString() => $"{base.ToString()} " + $"{RelationModifier} {Relation} {RelatedTo}".Trim();
 
     public override int GetHashCode() => ToString().GetHashCode();
 }
@@ -95,7 +96,7 @@ public class Clause<T>
         return base.Equals(obj);
     }
 
-    public override string ToString() => $"{First}" + string.Join(" ", Items);
+    public override string ToString() => ($"{First} " + string.Join(" ", Items)).Trim();
 
     public override int GetHashCode() => ToString().GetHashCode();
 }
@@ -259,9 +260,6 @@ public class ParseSentences
         return sentences;
     }
 
-
-    private static readonly Regex specifierRegex = new Regex(@"$M?[NA](RM?[NA])?^", RegexOptions.IgnoreCase);
-
     private static NounAdjective<T>? matchSpecifier<T>(T[] chain, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
     {
         var re = new List<char>();
@@ -269,7 +267,7 @@ public class ParseSentences
         {
             if (exclude.Contains(word.Name)) return null;
             else if (vocabulary.Nouns.Contains(word.Name)) re.Add('n');
-            else if (vocabulary.Adjectives.Contains(word.Name)) re.Add('a');
+            else if (vocabulary.Adjectives.Contains(word.Name)) re.Add('n');
             else if (vocabulary.Modifiers.Contains(word.Name)) re.Add('m');
             else if (vocabulary.Relations.Contains(word.Name)) re.Add('r');
             else return null;
@@ -278,12 +276,16 @@ public class ParseSentences
 
         return str switch
         {
-            "n" or "a" => new NounAdjective<T>(chain[0]),
-            "mn" or "ma" => new NounAdjective<T>(chain[1]) { Modifier = chain[0] },
-            "nrn" or "ara" or "arn" or "nra" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[2])),
-            "mnrn" or "mara" or "marn" or "mnra" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[3])) { Modifier = chain[0] },
-            "nrmn" or "arma" or "armn" or "nrma" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[3]) { Modifier = chain[2] }),
-            "mnrmn" or "marma" or "marmn" or "mnrma" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[4]) { Modifier = chain[3] }) { Modifier = chain[0] },
+            "n" => new NounAdjective<T>(chain[0]),
+            "mn" => new NounAdjective<T>(chain[1]) { Modifier = chain[0] },
+            "nrn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[2])),
+            "mnrn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[3])) { Modifier = chain[0] },
+            "nrmn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[3]) { Modifier = chain[2] }),
+            "mnrmn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[4]) { Modifier = chain[3] }) { Modifier = chain[0] },
+            "nmrn" => new NA_WithRelationship<T>(chain[0], chain[2], new(chain[3])) { RelationModifier = chain[1] },
+            "mnmrn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[3])) { Modifier = chain[0], RelationModifier = chain[2] },
+            "nmrmn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[4]) { Modifier = chain[3] }) { RelationModifier = chain[2] },
+            "mnmrmn" => new NA_WithRelationship<T>(chain[1], chain[3], new(chain[5]) { Modifier = chain[4] }) { Modifier = chain[0], RelationModifier = chain[2] },
             _ => null,
         };
     }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Core.Engine.ParseSentences;
 
 namespace Tests.Engine
 {
@@ -32,7 +31,7 @@ namespace Tests.Engine
         [TestCaseSource(nameof(GetChainsTestCases))]
         public void GetChains_Test(List<List<Item?>> input, List<List<Item>> expected)
         {
-            var chains = GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
+            var chains = ParseSentences.GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
             Assert.AreEqual(expected, chains);
         }
 
@@ -102,10 +101,46 @@ namespace Tests.Engine
                 new() { "a", "b", "c", "b", "a" },
             };
 
-            var chains = GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
+            var chains = ParseSentences.GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
 
-            Assert.That(chains[0].Count == 5);
+            Assert.That(chains[0].Length == 5);
             Assert.That(chains[0].Zip(input[0]).All(t => object.ReferenceEquals(t.First, t.Second)));
         }
+
+
+        [Test]
+        public void GetSentences_ShouldParse()
+        {
+            var input = new List<List<Item?>>()
+            {
+                new(){"rock", "baba", "baba"},
+                new(){"rock", "has", "flag"},
+                new(){"rock", "rock", "is"},
+                new(){"rock", "baba", "you"},
+                new(){"rock", "has", null},
+                new(){"rock", "box", "you"},
+                new(){"rock", "baba", "you"},
+            };
+
+            var sentences = ParseSentences.GetSentences(input, new()
+            {
+                nouns = new() { "baba", "rock", "flag", "box" },
+                verbs = new() { "is", "has" },
+                modifiers = new() { "not" },
+                adjectives = new() { "you", "win" },
+                conjunctions = new() { "and" },
+                relations= new() { "on", "near" },
+            });
+
+            Assert.AreEqual(new List<Sentence<Item>>()
+            {
+                new(new(){First=new("rock")}, "has", new(){First=new("flag")}),
+                new(new(){First=new("flag")}, "is", new(){First=new("you")}),
+                new(new(){First=new("baba")}, "has", new(){First=new("rock")}),
+                new(new(){First=new("baba")}, "has", new(){First=new("box")}),
+            }, sentences);
+        }
+
+
     }
 }

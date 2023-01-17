@@ -110,26 +110,27 @@ namespace Tests.Engine
 
         [Test]
         [TestCaseSource(nameof(GetSentencesTestCases))]
-        public void GetSentences_ShouldParse(List<List<Item?>> input, List<Sentence<Item>> expected)
+        public void GetSentences_ShouldParse(List<List<Item?>> input, List<string> expected)
         {
             var sentences = ParseSentences.GetSentences(input, new()
             {
-                nouns = new() { "baba", "rock", "flag", "box", "water" },
+                nouns = new() { "text_baba", "baba", "rock", "flag", "box", "water" },
                 verbs = new() { "is", "has" },
                 modifiers = new() { "not", "lonely" },
                 adjectives = new() { "you", "win" },
                 conjunctions = new() { "and" },
                 relations= new() { "on", "near" },
+                characters = new() { { "b", "b" }, { "a", "a" } },
             });
 
-            Assert.AreEqual(expected, sentences);
+            Assert.AreEqual(expected, sentences.Select(x => x.ToString()).ToList());
         }
 
         static IEnumerable<TestCaseData> GetSentencesTestCases => _getSentencesTestCases.Select(
             x => new TestCaseData(x.input, x.expected)
             .SetName(x.name));
 
-        public static IEnumerable<(string name, List<List<Item?>> input, List<Sentence<Item>> expected)> _getSentencesTestCases { get
+        public static IEnumerable<(string name, List<List<Item?>> input, List<string> expected)> _getSentencesTestCases { get
             {
                 yield return (
                     "parse several at once",
@@ -145,82 +146,37 @@ namespace Tests.Engine
                     },
                     new()
                     {
-                        new(new(){First=new("rock")}, "has", new(){First=new("flag")}),
-                        new(new(){First=new("flag")}, "is", new(){First=new("you")}),
-                        new(new(){First=new("baba")}, "has", new(){First=new("rock")}),
-                        new(new(){First=new("baba")}, "has", new(){First=new("box")}),
+                        "rock has flag",
+                        "flag is you",
+                        "baba has rock",
+                        "baba has box",
                     }
                 );
 
-                yield return (
+                foreach (var sentence in new[]
+                {
                     "flag not on water is win",
-                    new()
-                    {
-                        new(){"flag", "not", "on", "water", "is", "win"},
-                    },
-                    new()
-                    {
-                        new(new(){
-                            First=new NA_WithRelationship<Item>("flag", "on", new("water")) {RelationModifier="not"},
-                        }, "is", new(){
-                            First=new("win")
-                        }),
-                    }
-                );
-
-                yield return (
                     "lonely baba is rock",
-                    new()
-                    {
-                        new(){"lonely", "baba", "is", "rock"},
-                    },
-                    new()
-                    {
-                        new(new(){
-                            First=new("baba") {Modifier="lonely"},
-                        }, "is", new(){
-                            First=new("rock")
-                        }),
-                    }
-                );
-
-                yield return (
                     "baba and flag on water is win and not box",
-                    new()
-                    {
-                        "baba and flag on water is win and not box".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
-                    },
-                    new()
-                    {
-                        new(new(){
-                            First=new("baba"),
-                            Items=new()
-                            {
-                                new("and", new NA_WithRelationship<Item>("flag", "on", new("water"))),
-                            },
-                        }, "is", new(){
-                            First=new("win"),
-                            Items=new()
-                            {
-                                new("and", new("box") {Modifier="not"}),
-                            },
-                        }),
-                    }
-                );
+                    "lonely baba not on not flag is you",
+                })
+                {
+                    yield return (
+                        sentence,
+                        new() { sentence.Split(" ").Select(x => new Item() { Name = x }).ToList()! },
+                        new() { sentence }
+                    );
+                }
 
                 yield return (
-                    "lonely baba not on not flag is you",
+                    "parse characters",
                     new()
                     {
-                        "lonely baba not on not flag is you".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
+                        "b a b a is you".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
                     },
                     new()
                     {
-                        new(new(){
-                            First=new NA_WithRelationship<Item>("baba", "on", new("flag"){Modifier="not"}) {Modifier="lonely", RelationModifier="not"},
-                        }, "is", new(){
-                            First=new("you"),
-                        }),
+                        "text_baba is you",
                     }
                 );
             } }

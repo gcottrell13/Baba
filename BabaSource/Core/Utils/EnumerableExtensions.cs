@@ -64,5 +64,17 @@ namespace Core.Utils
                 yield return enumerators.Select(e => e.Current).ToList();
             }
         }
+
+
+        public static IEnumerable<(T1, T2)> Product<T1, T2>(this IEnumerable<T1> t1s, IEnumerable<T2> t2s)
+        {
+            foreach (var one in t1s)
+            {
+                foreach (var two in t2s)
+                {
+                    yield return (one, two);
+                }
+            }
+        }
     }
 }

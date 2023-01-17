@@ -1,26 +1,66 @@
-﻿using g3;
-using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Core.Engine;
 
 public interface INameable
 {
-    string Name { get; }
+    string Name { get; set; }
 }
 
-public class NounAdjective<T>
+public class Word<T> where T : INameable
 {
-    public T Value;
-    public T? Modifier;
+    private readonly T[]? Characters;
+    private readonly T? Value;
 
-    public NounAdjective(T value)
+    public Word(T value, string name)
+    {
+        Value = value;
+        Name = name;
+    }
+
+    public Word(IEnumerable<T> values, string name)
+    {
+        Characters = values.ToArray();
+        Name = name;
+    }
+
+    public Word(T value)
+    {
+        Value = value;
+        Name = value.Name;
+    }
+
+    public Word(IEnumerable<T> values)
+    {
+        Characters = values.ToArray();
+        Name = string.Join("", values.Select(x => x.Name));
+    }
+
+    public IEnumerable<T> Objects => Characters ?? new[] { Value! };
+
+    public string Name { get; private set; }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Word<T> word) return Name == word.Name;
+        return base.Equals(obj);
+    }
+
+    public static implicit operator Word<T>(T s) => new(s);
+
+    public override string ToString() => Name;
+
+    public override int GetHashCode() => Name.GetHashCode();
+}
+
+public class NounAdjective<T> where T : INameable
+{
+    public Word<T> Value;
+    public Word<T>? Modifier;
+
+    public NounAdjective(Word<T> value)
     {
         Value = value;
     }
@@ -37,13 +77,13 @@ public class NounAdjective<T>
     public override int GetHashCode() => ToString().GetHashCode();
 }
 
-public class NA_WithRelationship<T> : NounAdjective<T>
+public class NA_WithRelationship<T> : NounAdjective<T> where T : INameable
 {
-    public T Relation;
+    public Word<T> Relation;
     public NounAdjective<T> RelatedTo;
-    public T? RelationModifier;
+    public Word<T>? RelationModifier;
 
-    public NA_WithRelationship(T value, T relation, NounAdjective<T> relatedTo) : base(value)
+    public NA_WithRelationship(Word<T> value, Word<T> relation, NounAdjective<T> relatedTo) : base(value)
     {
         Relation = relation;
         RelatedTo = relatedTo;
@@ -61,12 +101,12 @@ public class NA_WithRelationship<T> : NounAdjective<T>
     public override int GetHashCode() => ToString().GetHashCode();
 }
 
-public class Conjunction<T>
+public class Conjunction<T> where T : INameable
 {
-    public T Conj;
+    public Word<T> Conj;
     public NounAdjective<T> Item;
 
-    public Conjunction(T conj, NounAdjective<T> item)
+    public Conjunction(Word<T> conj, NounAdjective<T> item)
     {
         Conj = conj;
         Item = item;
@@ -84,10 +124,15 @@ public class Conjunction<T>
     public override int GetHashCode() => ToString().GetHashCode();
 }
 
-public class Clause<T>
+public class Clause<T> where T : INameable
 {
-    public NounAdjective<T>? First;
+    public NounAdjective<T> First;
     public List<Conjunction<T>> Items = new();
+
+    public Clause(NounAdjective<T> first)
+    {
+        First = first;
+    }
 
     public override bool Equals(object? obj)
     {
@@ -101,13 +146,13 @@ public class Clause<T>
     public override int GetHashCode() => ToString().GetHashCode();
 }
 
-public class Sentence<T>
+public class Sentence<T> where T : INameable
 {
     public Clause<T> Object;
-    public T Verb;
+    public Word<T> Verb;
     public Clause<T> Subject;
 
-    public Sentence(Clause<T> @object, T verb, Clause<T> subject)
+    public Sentence(Clause<T> @object, Word<T> verb, Clause<T> subject)
     {
         Object = @object;
         Verb = verb;
@@ -127,6 +172,8 @@ public class Sentence<T>
 }
 
 
+
+
 internal class VocabSet : HashSet<string?>
 {
     public VocabSet(string name)
@@ -136,7 +183,7 @@ internal class VocabSet : HashSet<string?>
 
     public string Name { get; }
 
-    public static VocabSet operator &(VocabSet v, HashSet<string?> one)
+    public static VocabSet operator &(VocabSet v, IEnumerable<string?> one)
     {
         var c = new VocabSet(v.Name);
         foreach (var item in v.Union(one))
@@ -155,6 +202,7 @@ public class Vocabulary
     internal VocabSet Modifiers = new("Modifiers");
     internal VocabSet Conjunctions = new("Conjunctions");
     internal VocabSet Relations = new("Relations");
+    internal Dictionary<string, string> Characters = new();
     internal VocabSet Total = new("Total");
 
     public HashSet<string> verbs { set { Verbs &= value!; Total &= value!; } }
@@ -163,6 +211,44 @@ public class Vocabulary
     public HashSet<string> modifiers { set { Modifiers &= value!; Total &= value!; } }
     public HashSet<string> conjunctions { set { Conjunctions &= value!; Total &= value!; } }
     public HashSet<string> relations { set { Relations &= value!; Total &= value!; } }
+    public Dictionary<string, string> characters { set { Characters = value; Total &= Characters.Keys; } }
+}
+
+internal class ConsumeCharacters<T> where T : INameable
+{
+    private readonly T[] chain;
+    private readonly Vocabulary vocabulary;
+    private uint index = 0;
+
+    public ConsumeCharacters(T[] chain, Vocabulary vocabulary)
+    {
+        this.chain = chain;
+        this.vocabulary = vocabulary;
+    }
+
+    private IEnumerable<T> getNextWord()
+    {
+        if (index >= chain.Length) yield break;
+
+        yield return chain[index++];
+        while (index < chain.Length && vocabulary.Characters.ContainsKey(chain[index].Name))
+        {
+            yield return chain[index++];
+        }
+    }
+
+    private Word<T>? next()
+    {
+        var word = getNextWord().ToArray();
+        if (word.Length == 0) return null;
+        if (word.Length == 1) return new(word[0]);
+        return new(word, "text_" + string.Join("", word.Select(x => vocabulary.Characters[x.Name])));
+    }
+
+    public IEnumerable<Word<T>> ParseAll()
+    {
+        while (next() is Word<T> word) yield return word;
+    }
 }
 
 
@@ -240,7 +326,9 @@ public class ParseSentences
             var current = chain;
             while (current.Length >= 3)
             {
-                if (matchSentence(current, vocabulary) is Sentence<T> match)
+                var words = new ConsumeCharacters<T>(current, vocabulary).ParseAll().ToList();
+
+                if (matchSentence(words, vocabulary) is Sentence<T> match)
                 {
                     sentences.Add(match);
                     chains.Push(chain[(i + current.Length)..]);
@@ -260,67 +348,69 @@ public class ParseSentences
         return sentences;
     }
 
-    private static NounAdjective<T>? matchSpecifier<T>(T[] chain, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
+    private static NounAdjective<T>? matchSpecifier<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
     {
         var re = new List<char>();
-        foreach (var word in chain)
+
+        foreach (var word in words)
         {
-            if (exclude.Contains(word.Name)) return null;
-            else if (vocabulary.Nouns.Contains(word.Name)) re.Add('n');
-            else if (vocabulary.Adjectives.Contains(word.Name)) re.Add('n');
-            else if (vocabulary.Modifiers.Contains(word.Name)) re.Add('m');
-            else if (vocabulary.Relations.Contains(word.Name)) re.Add('r');
+            var name = word.Name;
+
+            if (exclude.Contains(name)) return null;
+            else if (vocabulary.Nouns.Contains(name)) re.Add('n');
+            else if (vocabulary.Adjectives.Contains(name)) re.Add('n');
+            else if (vocabulary.Modifiers.Contains(name)) re.Add('m');
+            else if (vocabulary.Relations.Contains(name)) re.Add('r');
             else return null;
         }
         var str = string.Join("", re);
 
         return str switch
         {
-            "n" => new NounAdjective<T>(chain[0]),
-            "mn" => new NounAdjective<T>(chain[1]) { Modifier = chain[0] },
-            "nrn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[2])),
-            "mnrn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[3])) { Modifier = chain[0] },
-            "nrmn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[3]) { Modifier = chain[2] }),
-            "mnrmn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[4]) { Modifier = chain[3] }) { Modifier = chain[0] },
-            "nmrn" => new NA_WithRelationship<T>(chain[0], chain[2], new(chain[3])) { RelationModifier = chain[1] },
-            "mnmrn" => new NA_WithRelationship<T>(chain[1], chain[2], new(chain[3])) { Modifier = chain[0], RelationModifier = chain[2] },
-            "nmrmn" => new NA_WithRelationship<T>(chain[0], chain[1], new(chain[4]) { Modifier = chain[3] }) { RelationModifier = chain[2] },
-            "mnmrmn" => new NA_WithRelationship<T>(chain[1], chain[3], new(chain[5]) { Modifier = chain[4] }) { Modifier = chain[0], RelationModifier = chain[2] },
+            "n" => new NounAdjective<T>(words[0]),
+            "mn" => new NounAdjective<T>(words[1]) { Modifier = words[0] },
+            "nrn" => new NA_WithRelationship<T>(words[0], words[1], new(words[2])),
+            "mnrn" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0] },
+            "nrmn" => new NA_WithRelationship<T>(words[0], words[1], new(words[3]) { Modifier = words[2] }),
+            "mnrmn" => new NA_WithRelationship<T>(words[1], words[2], new(words[4]) { Modifier = words[3] }) { Modifier = words[0] },
+            "nmrn" => new NA_WithRelationship<T>(words[0], words[2], new(words[3])) { RelationModifier = words[1] },
+            "mnmrn" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0], RelationModifier = words[2] },
+            "nmrmn" => new NA_WithRelationship<T>(words[0], words[1], new(words[4]) { Modifier = words[3] }) { RelationModifier = words[2] },
+            "mnmrmn" => new NA_WithRelationship<T>(words[1], words[3], new(words[5]) { Modifier = words[4] }) { Modifier = words[0], RelationModifier = words[2] },
             _ => null,
         };
     }
 
-    private static Clause<T>? matchClause<T>(T[] chain, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
+    private static Clause<T>? matchClause<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
     {
-        var clause = new Clause<T>();
+        Clause<T>? clause = null;
         int lastI = 0;
-        T? lastConjunction = default;
+        Word<T>? lastConjunction = default;
 
-        void addSpec(NounAdjective<T> spec, T? conj)
+        void addSpec(NounAdjective<T> spec, Word<T>? conj)
         {
-
-            if (lastConjunction == null)
+            if (clause == null)
             {
-                clause.First = spec;
+                clause = new(spec);
             }
             else
             {
-                clause.Items.Add(new(lastConjunction, spec));
+                clause.Items.Add(new(lastConjunction!, spec));
             }
             lastConjunction = conj;
         }
 
-        foreach (var (index, word) in chain.Select((t, i) => (i, t)))
+        foreach (var (index, word) in words.Select((t, i) => (i, t)))
         {
             if (!vocabulary.Conjunctions.Contains(word.Name)) continue;
 
-            var spec = matchSpecifier(chain[lastI..index], exclude, vocabulary);
+            var spec = matchSpecifier(words[lastI..index], exclude, vocabulary);
             if (spec == null) return null;
             addSpec(spec, word);
             lastI = index + 1;
         }
 
-        var last = chain[lastI..];
+        var last = words[lastI..];
         if (last.Length == 0) 
             return null;
         else
@@ -330,17 +420,19 @@ public class ParseSentences
             addSpec(spec, default);
         }
 
+        if (clause?.First == null) return null;
+
         return clause;
     }
 
-    private static Sentence<T>? matchSentence<T>(T[] chain, Vocabulary vocabulary) where T : INameable
+    private static Sentence<T>? matchSentence<T>(List<Word<T>> alist, Vocabulary vocabulary) where T : INameable
     {
-        var alist = chain.ToList();
         if (alist.FindAll(x => vocabulary.Verbs.Contains(x.Name)).Count > 1) return null;
 
         var verbIndex = alist.FindIndex(0, x => vocabulary.Verbs.Contains(x.Name));
         if (verbIndex == -1) return null;
 
+        var chain = alist.ToArray();
         var first = chain[..verbIndex];
         var second = chain[(verbIndex + 1)..];
         if (matchClause(first, new(), vocabulary) is Clause<T> m1 && matchClause(second, vocabulary.Relations, vocabulary) is Clause<T> m2)

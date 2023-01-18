@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace BabaGame.src.Resources
+namespace BabaGame.Resources
 {
     class Load
     {
-        public static Dictionary<string, ResourceHandle<T>> loadAll<T>(string path, Func<string, ResourceHandle<T>> act)
+        public static Dictionary<string, ResourceHandle<T>> loadAll<T>(string path, Func<string, ResourceHandle<T>> act) where T : class
         {
             DirectoryInfo d = new DirectoryInfo(Environment.CurrentDirectory + @$"\Content\{path}\");
             var dict = new Dictionary<string, ResourceHandle<T>>();

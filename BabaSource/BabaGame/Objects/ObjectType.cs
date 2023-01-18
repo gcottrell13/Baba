@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src.Objects
+namespace BabaGame.Objects
 {
     public enum ObjectType
     {

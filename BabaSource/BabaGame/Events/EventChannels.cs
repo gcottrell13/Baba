@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src.Events
+namespace BabaGame.Events
 {
     static class EventChannels
     {
         public static EventChannel<MapChange> MapChange = EventManager.CreateChannel<MapChange>();
-        public static EventChannel<CharacterControl> CharacterControl = EventManager.CreateChannel<CharacterControl>();
         public static EventChannel<MusicPlay> MusicPlay = EventManager.CreateChannel<MusicPlay>();
     }
 }

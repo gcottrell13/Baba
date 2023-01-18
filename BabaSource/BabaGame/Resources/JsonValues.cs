@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BabaGame.src.Resources
+namespace BabaGame.Resources
 {
     using ObjectInformationStructure = Dictionary<string, JsonValues.ObjectInfoItem>;
     using AnimationStructure = Dictionary<string, Dictionary<string, int[][][]>>;

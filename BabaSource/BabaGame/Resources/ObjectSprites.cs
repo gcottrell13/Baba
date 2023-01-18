@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace BabaGame.src.Resources
+namespace BabaGame.Resources
 {
     public static class ObjectSprites
     {

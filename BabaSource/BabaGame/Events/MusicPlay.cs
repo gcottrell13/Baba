@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src.Events
+namespace BabaGame.Events
 {
     public class MusicPlay
     {

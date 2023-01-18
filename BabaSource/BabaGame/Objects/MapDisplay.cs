@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BabaGame.src.Objects
+namespace BabaGame.Objects
 {
     public class MapDisplay : GameObject
     {

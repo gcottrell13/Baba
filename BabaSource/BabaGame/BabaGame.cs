@@ -1,6 +1,5 @@
-﻿using BabaGame.src;
-using BabaGame.src.Events;
-using BabaGame.src.Resources;
+﻿using BabaGame.Events;
+using BabaGame.Resources;
 using Core.Bootstrap;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -33,11 +32,10 @@ namespace BabaGame
                 AllMaps.LoadWorlds();
                 ObjectSprites.LoadTextures();
 
-                AddChild(new World("world1"), true);
+               //  AddChild(new World("world1"), true);
                 AddCallbackRunner();
 
                 EventChannels.MapChange.SendAsyncMessage(new MapChange { X = 22, Y = 26 });
-                EventChannels.CharacterControl.SendAsyncMessage(new CharacterControl { Enable = true });
             }
         }
     }

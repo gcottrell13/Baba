@@ -1,9 +1,6 @@
-﻿using BabaGame.src.Engine;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Core.Utils;
 
-namespace BabaGame.src.Events
+namespace BabaGame.Events
 {
     public class MapChange
     {

@@ -33,6 +33,17 @@ def save_object_info():
         for name, item in info.items()
     ])
 
+    keyIndex = list(enumerate(info.keys()))
+
+    id_to_name = ",\n".join(
+        f"\t\t\t{{ {index}, \"{key}\" }}"
+        for index, key in keyIndex
+    )
+    name_to_id = ",\n".join(
+        f"\t\t\t{{ \"{key}\", {index} }}"
+        for index, key in keyIndex
+    )
+
     output_directory_structure(OUTPUT_DIRECTORY, {
         'Content/ObjectInfo.cs': f"""
 using System;
@@ -52,6 +63,14 @@ namespace {NAMESPACE} {{
         private const int shift = {(7).bit_length()};
         public static readonly Dictionary<string, ObjectInfoItem> Info = new Dictionary<string, ObjectInfoItem>() {{
 {items}
+        }};
+        
+        public static readonly Dictionary<int, string> IdToName = new() {{
+{id_to_name}
+        }};
+        
+        public static readonly Dictionary<string, int> NameToId = new() {{
+{name_to_id}
         }};
     }}
 }}

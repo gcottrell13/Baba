@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Editor", "Editor\Editor.csproj", "{77018DE6-DCF6-48D7-B828-9BA97D974722}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BabaGameTests", "BabaGameTests\BabaGameTests.csproj", "{F15BD579-F285-44DB-B520-DCB5313CFBE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77018DE6-DCF6-48D7-B828-9BA97D974722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F15BD579-F285-44DB-B520-DCB5313CFBE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F15BD579-F285-44DB-B520-DCB5313CFBE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F15BD579-F285-44DB-B520-DCB5313CFBE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F15BD579-F285-44DB-B520-DCB5313CFBE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

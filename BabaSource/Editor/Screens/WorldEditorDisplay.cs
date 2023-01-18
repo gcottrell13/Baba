@@ -11,8 +11,8 @@ namespace Editor.Screens
 {
     internal class WorldEditorDisplay : GameObject
     {
-        private readonly SaveFormat world;
-        private readonly ObjectData cursor;
+        private readonly SaveFormatWorld world;
+        private readonly SaveObjectData cursor;
         private readonly float gridWidth;
         private int zoom = 4;
 
@@ -23,7 +23,7 @@ namespace Editor.Screens
         private Text rowNumberDisplay = new();
         private SpriteContainer warpsContainer = new();
 
-        public WorldEditorDisplay(SaveFormat world, ObjectData cursor, float gridWidth)
+        public WorldEditorDisplay(SaveFormatWorld world, SaveObjectData cursor, float gridWidth)
         {
             this.world = world;
             this.cursor = cursor;

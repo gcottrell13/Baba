@@ -12,13 +12,13 @@ namespace Editor.Screens
         private RenameScreen? renameScreen;
         private ThemePickerScreen? themePickerScreen;
         private RectangleSprite bg = new RectangleSprite();
-        private readonly Region region;
+        private readonly SaveRegion region;
         private MapLayerEditorDisplay? layerDisplay;
         private Text titleText = new();
         private MapLayerEditorScreen? layerEditor;
         private MusicPickerScreen? musicPickerScreen;
 
-        public RegionEditorScreen(ScreenStack stack, Region region)
+        public RegionEditorScreen(ScreenStack stack, SaveRegion region)
         {
             this.region = region;
             bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));

@@ -15,7 +15,7 @@ namespace Core.Content
 
         private static ReadonlySavesList files = new();
 
-        public static void AddNewSave(SaveFormat saveFormat)
+        public static void AddNewSave(SaveFormatWorld saveFormat)
         {
             files.Add(saveFormat);
         }
@@ -31,7 +31,7 @@ namespace Core.Content
 
         public static ReadonlySavesList LoadAllWorlds()
         {
-            var alist = new List<SaveFormat>();
+            var alist = new List<SaveFormatWorld>();
             foreach (var f in GetSaveFiles().Select(LoadWorld))
             {
                 if (f == null) continue;
@@ -42,12 +42,12 @@ namespace Core.Content
             return files;
         }
 
-        public static SaveFormat? LoadWorld(string saveFileName)
+        public static SaveFormatWorld? LoadWorld(string saveFileName)
         {
             try
             {
                 var text = File.ReadAllText(editorFilesDirectory + $"{saveFileName}.json");
-                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormat>(text) ?? throw new NullReferenceException("could not load");
+                var d = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormatWorld>(text) ?? throw new NullReferenceException("could not load");
                 d.fileName = saveFileName;
                 return d;
             }
@@ -57,7 +57,7 @@ namespace Core.Content
             }
         }
 
-        public static void SaveAll(SaveFormat save)
+        public static void SaveAll(SaveFormatWorld save)
         {
             save.fileName ??= save.worldName;
             var text = SaveFormatSerializer.Serialize(save);
@@ -65,16 +65,16 @@ namespace Core.Content
         }
     }
 
-    public class ReadonlySavesList : IEnumerable<SaveFormat>
+    public class ReadonlySavesList : IEnumerable<SaveFormatWorld>
     {
-        private readonly List<SaveFormat> saves = new();
+        private readonly List<SaveFormatWorld> saves = new();
 
-        public void Add(SaveFormat save)
+        public void Add(SaveFormatWorld save)
         {
             saves.Add(save);
         }
 
-        public void AddRange(IEnumerable<SaveFormat> saves)
+        public void AddRange(IEnumerable<SaveFormatWorld> saves)
         {
             this.saves.AddRange(saves);
         }
@@ -84,16 +84,16 @@ namespace Core.Content
             return saves.GetEnumerator();
         }
 
-        IEnumerator<SaveFormat> IEnumerable<SaveFormat>.GetEnumerator()
+        IEnumerator<SaveFormatWorld> IEnumerable<SaveFormatWorld>.GetEnumerator()
         {
             return saves.GetEnumerator();
         }
 
         public int Count => saves.Count;
 
-        public ReadOnlyCollection<SaveFormat> ToList()
+        public ReadOnlyCollection<SaveFormatWorld> ToList()
         {
-            return new ReadOnlyCollection<SaveFormat>(saves);
+            return new ReadOnlyCollection<SaveFormatWorld>(saves);
         }
     }
 }

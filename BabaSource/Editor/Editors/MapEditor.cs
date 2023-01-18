@@ -5,9 +5,9 @@ namespace Editor.Editors
 {
     internal class MapEditor
     {
-        public MapData mapData; 
+        public SaveMapData mapData; 
 
-        public MapEditor(MapData mapData)
+        public MapEditor(SaveMapData mapData)
         {
             this.mapData = mapData;
         }

@@ -286,7 +286,7 @@ namespace Editor.Screens
             titleText.SetText(name);
         }
 
-        public void LoadWorld(SaveFormat save)
+        public void LoadWorld(SaveFormatWorld save)
         {
             Editor.EDITOR.LoadWorld(save);
             SetEditor(new WorldEditor(save));
@@ -307,7 +307,7 @@ namespace Editor.Screens
             Editor.EDITOR.LoadRegion(Editor.EDITOR.NewRegion());
         }
 
-        private void editRegion(Region region)
+        private void editRegion(SaveRegion region)
         {
             Editor.EDITOR.LoadRegion(region);
         }
@@ -339,7 +339,7 @@ namespace Editor.Screens
             return EditorStates.MapEditor;
         }
 
-        public EditorStates SetPickedMap(MapData? pickedMap)
+        public EditorStates SetPickedMap(SaveMapData? pickedMap)
         {
             if (pickedMap == null) throw new ArgumentNullException(nameof(pickedMap));
             editor?.setPickedMap(pickedMap);
@@ -364,7 +364,7 @@ namespace Editor.Screens
             Editor.EDITOR.LoadMap(Editor.EDITOR.NewMap());
         }
 
-        private void EditMap(MapData selected)
+        private void EditMap(SaveMapData selected)
         {
             Editor.EDITOR.LoadMap(selected);
         }

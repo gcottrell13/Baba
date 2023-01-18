@@ -14,14 +14,14 @@ namespace Editor.Screens
     internal class MapLayerDisplay : GameObject
     {
         public string title;
-        public readonly MapLayer mapLayer;
+        public readonly SaveMapLayer mapLayer;
         public string theme;
         private Text objectsDisplay = new();
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
         public bool showObjects = true;
 
-        public MapLayerDisplay(string title, MapLayer mapLayer, string? theme, bool showName = true)
+        public MapLayerDisplay(string title, SaveMapLayer mapLayer, string? theme, bool showName = true)
         {
             this.title = title;
             this.mapLayer = mapLayer;

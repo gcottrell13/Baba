@@ -15,12 +15,12 @@ namespace Editor.Screens
         private ObjectPickerScreen? objectPicker;
         private NumberPickerScreen? resizeScreen;
         private AddTextToObjectScreen? addTextToObjectScreen;
-        private readonly MapLayer mapLayer;
+        private readonly SaveMapLayer mapLayer;
         private readonly EditorStates parentState;
         private readonly MapLayerEditor mapLayerEditor;
         private readonly MapLayerEditorDisplay layerDisplay;
 
-        public MapLayerEditorScreen(string name, ScreenStack stack, MapLayer mapLayer, EditorStates parentState, string? theme)
+        public MapLayerEditorScreen(string name, ScreenStack stack, SaveMapLayer mapLayer, EditorStates parentState, string? theme)
         {
             mapLayerEditor = new(mapLayer);
             this.mapLayer = mapLayer;

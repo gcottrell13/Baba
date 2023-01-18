@@ -12,13 +12,13 @@ namespace Editor.Editors
     {
 
         private Stack<Action> undoActions = new(capacity: 20);
-        public readonly ObjectData cursor = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
+        public readonly SaveObjectData cursor = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
 
-        public ObjectData? currentObject { get; private set; }
+        public SaveObjectData? currentObject { get; private set; }
 
-        private MapLayer mapLayer;
+        private SaveMapLayer mapLayer;
 
-        public MapLayerEditor(MapLayer map)
+        public MapLayerEditor(SaveMapLayer map)
         {
             mapLayer = map;
         }
@@ -70,23 +70,23 @@ namespace Editor.Editors
             return EditorStates.None;
         }
 
-        public ObjectData? ObjectAtCursor() => ObjectAtPosition(cursor.x, cursor.y);
+        public SaveObjectData? ObjectAtCursor() => ObjectAtPosition(cursor.x, cursor.y);
 
-        public ObjectData? ObjectAtPosition(uint x, uint y) => Editor.ObjectAtPosition(x, y, mapLayer);
+        public SaveObjectData? ObjectAtPosition(uint x, uint y) => Editor.ObjectAtPosition(x, y, mapLayer);
 
-        public ObjectData SetSelectedObject(string name, bool withUndo = true)
+        public SaveObjectData SetSelectedObject(string name, bool withUndo = true)
         {
             if (withUndo && currentObject != null)
             {
                 var oldSelectedObject = currentObject;
                 undoActions.Push(() => SetSelectedObject(oldSelectedObject));
             }
-            var d = new ObjectData() { name = name, color = ObjectInfo.Info[name].color_active };
+            var d = new SaveObjectData() { name = name, color = ObjectInfo.Info[name].color_active };
             SetSelectedObject(d);
             return d;
         }
 
-        private void SetSelectedObject(ObjectData? selectedObject)
+        private void SetSelectedObject(SaveObjectData? selectedObject)
         {
             currentObject = selectedObject;
         }
@@ -100,7 +100,7 @@ namespace Editor.Editors
                 var oldSelectedObject = currentObject;
                 undoActions.Push(() => SetSelectedObject(oldSelectedObject));
             }
-            SetSelectedObject(new ObjectData() { 
+            SetSelectedObject(new SaveObjectData() { 
                 name = atCursor.name, 
                 color = atCursor.color,
                 state = atCursor.state,
@@ -172,13 +172,13 @@ namespace Editor.Editors
             return trySetObjectAtPosition(currentObject, cursor.x, cursor.y);
         }
 
-        private bool trySetObjectAtPosition(ObjectData d, uint x, uint y, bool keepOriginal = true)
+        private bool trySetObjectAtPosition(SaveObjectData d, uint x, uint y, bool keepOriginal = true)
         {
             var obj = ObjectAtPosition(x, y);
 
             if (obj == null)
             {
-                obj = new ObjectData()
+                obj = new SaveObjectData()
                 {
                     name = d.name,
                     x = x,

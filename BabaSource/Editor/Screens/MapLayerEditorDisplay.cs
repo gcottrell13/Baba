@@ -14,18 +14,18 @@ namespace Editor.Screens
 {
     internal class MapLayerEditorDisplay : GameObject
     {
-        private readonly MapLayer mapLayer;
-        private readonly ObjectData? cursor;
+        private readonly SaveMapLayer mapLayer;
+        private readonly SaveObjectData? cursor;
         public string theme;
         private Text objectsDisplay = new();
         private Text gridDisplay = new();
         private Text cursorDisplay = new();
         private Text columnNumberDisplay = new();
         private Text rowNumberDisplay = new();
-        private ObjectData? itemAtCursor;
+        private SaveObjectData? itemAtCursor;
         private RectangleSprite background = new() { xscale = ScreenWidth, yscale = ScreenHeight };
 
-        public MapLayerEditorDisplay(string name, MapLayer mapLayer, ObjectData? cursor, string? theme)
+        public MapLayerEditorDisplay(string name, SaveMapLayer mapLayer, SaveObjectData? cursor, string? theme)
         {
             this.mapLayer = mapLayer;
             this.cursor = cursor;
@@ -45,7 +45,7 @@ namespace Editor.Screens
 
         }
 
-        public void SetSelectedObject(ObjectData? displayItem)
+        public void SetSelectedObject(SaveObjectData? displayItem)
         {
             itemAtCursor = displayItem;
         }

@@ -11,20 +11,20 @@ namespace Core.Content
     {
         private static string serialize<T>(T obj, int indent) where T : notnull => obj switch
         {
-            SaveFormat s => Serialize(s, indent + 1),
-            MapInstance s => Serialize(s, indent + 1),
-            Warp s => Serialize(s, indent + 1),
-            MapData s => Serialize(s, indent + 1),
-            MapLayer s => Serialize(s, indent + 1),
-            Region s => Serialize(s, indent + 1),
-            ObjectData s => Serialize(s, indent + 1),
+            SaveFormatWorld s => Serialize(s, indent + 1),
+            SaveMapInstance s => Serialize(s, indent + 1),
+            SaveWarp s => Serialize(s, indent + 1),
+            SaveMapData s => Serialize(s, indent + 1),
+            SaveMapLayer s => Serialize(s, indent + 1),
+            SaveRegion s => Serialize(s, indent + 1),
+            SaveObjectData s => Serialize(s, indent + 1),
             string s => s,
             _ => obj?.ToString() ?? "",
         };
 
-        public static string Serialize(SaveFormat save, int indent) => Serialize(save);
+        public static string Serialize(SaveFormatWorld save, int indent) => Serialize(save);
 
-        public static string Serialize(SaveFormat save)
+        public static string Serialize(SaveFormatWorld save)
         {
             IEnumerable<string> lines()
             {
@@ -40,17 +40,17 @@ namespace Core.Content
             return formatLines(lines(), 0, "{", "}");
         }
 
-        public static string Serialize(MapInstance mapInstance, int indent)
+        public static string Serialize(SaveMapInstance mapInstance, int indent)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(mapInstance);
         }
 
-        public static string Serialize(Warp warp, int indent)
+        public static string Serialize(SaveWarp warp, int indent)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(warp);
         }
 
-        public static string Serialize(Region region, int indent)
+        public static string Serialize(SaveRegion region, int indent)
         {
             IEnumerable<string> lines()
             {
@@ -63,7 +63,7 @@ namespace Core.Content
             return formatLines(lines(), indent, "{", "}");
         }
 
-        public static string Serialize(MapLayer map, int indent)
+        public static string Serialize(SaveMapLayer map, int indent)
         {
             IEnumerable<string> lines()
             {
@@ -74,7 +74,7 @@ namespace Core.Content
             return formatLines(lines(), indent, "{", "}");
         }
 
-        public static string Serialize(MapData map, int indent)
+        public static string Serialize(SaveMapData map, int indent)
         {
             IEnumerable<string> lines()
             {
@@ -88,7 +88,7 @@ namespace Core.Content
             return formatLines(lines(), indent, "{", "}");
         }
 
-        public static string Serialize(ObjectData obj, int indent)
+        public static string Serialize(SaveObjectData obj, int indent)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }

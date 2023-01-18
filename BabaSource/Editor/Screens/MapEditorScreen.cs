@@ -18,9 +18,9 @@ namespace Editor.Screens
         private MapLayerEditorScreen layerEditorScreen;
 
         private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: [white]{}") { Name = "editortitle" };
-        private readonly MapData mapData;
+        private readonly SaveMapData mapData;
 
-        public MapEditorScreen(ScreenStack stack, MapData mapData)
+        public MapEditorScreen(ScreenStack stack, SaveMapData mapData)
         {
             editor = new(mapData);
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;
@@ -100,7 +100,7 @@ namespace Editor.Screens
                             {
                                 OnEdit = editRegion,
                                 OnAdd = addRegion,
-                                OnSelect = (Region region) =>
+                                OnSelect = (SaveRegion region) =>
                                 {
                                     Editor.EDITOR.currentMap!.regionId = region.id;
                                     layer1Display.theme = region.theme;
@@ -151,7 +151,7 @@ namespace Editor.Screens
             });
         }
 
-        private string layerTitle(int num, MapLayer layer) => $"layer {num} {layer.width}x{layer.height}";
+        private string layerTitle(int num, SaveMapLayer layer) => $"layer {num} {layer.width}x{layer.height}";
 
         public override EditorStates Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
         {
@@ -165,7 +165,7 @@ namespace Editor.Screens
             Editor.EDITOR.LoadRegion(Editor.EDITOR.NewRegion());
         }
 
-        private void editRegion(Region? r)
+        private void editRegion(SaveRegion? r)
         {
             Editor.EDITOR.LoadRegion(r);
         }

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Core.Content
 {
-    public class SaveFormat
+    public class SaveFormatWorld
     {
-        public List<MapInstance> WorldLayout { get; set; } = new();
+        public List<SaveMapInstance> WorldLayout { get; set; } = new();
 
-        public List<Warp> Warps { get; set; } = new();
+        public List<SaveWarp> Warps { get; set; } = new();
 
-        public List<Region> Regions { get; set; } = new();
+        public List<SaveRegion> Regions { get; set; } = new();
 
-        public List<MapData> MapDatas { get; set; } = new();
+        public List<SaveMapData> MapDatas { get; set; } = new();
 
-        public MapLayer globalObjectLayer { get; set; } = new();
+        public SaveMapLayer globalObjectLayer { get; set; } = new();
 
         public uint startMapX = 0;
         public uint startMapY = 0;
@@ -30,7 +30,7 @@ namespace Core.Content
 
     }
 
-    public class MapInstance
+    public class SaveMapInstance
     {
         public uint x = 0;
         public uint y = 0;
@@ -38,7 +38,7 @@ namespace Core.Content
 
     }
 
-    public class Warp
+    public class SaveWarp
     {
         public uint x1 = 0;
         public uint y1 = 0;
@@ -51,36 +51,36 @@ namespace Core.Content
         public int b;
     }
 
-    public class Region
+    public class SaveRegion
     {
         public int id = 0;
         public string name = string.Empty;
         public string theme = "default";
-        public MapLayer regionObjectLayer { get; set; } = new();
+        public SaveMapLayer regionObjectLayer { get; set; } = new();
 
         public string musicName = "default";
     }
 
-    public class MapData
+    public class SaveMapData
     {
         public int id = 0;
         public string name = string.Empty;
         public int regionId = 0;
-        public MapLayer layer1 { get; set; } = new();
-        public MapLayer layer2 { get; set; } = new();
+        public SaveMapLayer layer1 { get; set; } = new();
+        public SaveMapLayer layer2 { get; set; } = new();
 
         public bool resetWhenInactive = false;
 
     }
 
-    public class MapLayer
+    public class SaveMapLayer
     {
-        public List<ObjectData> objects { get; set; } = new();
+        public List<SaveObjectData> objects { get; set; } = new();
         public uint width = 15;
         public uint height = 15;
     }
 
-    public class ObjectData
+    public class SaveObjectData
     {
         public uint x = 0;
         public uint y = 0;
@@ -88,15 +88,15 @@ namespace Core.Content
         public uint state = 1;
         public int color;
         public string text = string.Empty;
-        public OriginalObjectData? original = null;
+        public SaveOriginalObjectData? original = null;
 
-        public ObjectData copy()
+        public SaveObjectData copy()
         {
-            return new ObjectData { x = x, y = y, color = color, state = state, name = name, original = original, text = text };
+            return new SaveObjectData { x = x, y = y, color = color, state = state, name = name, original = original, text = text };
         }
     }
 
-    public class OriginalObjectData
+    public class SaveOriginalObjectData
     {
         public string name = string.Empty;
         public uint state = 0;

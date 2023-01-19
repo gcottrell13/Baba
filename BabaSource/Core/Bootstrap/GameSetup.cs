@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Configuration;
+using Core.Content;
 using Core.Events;
 using Core.Utils;
 using Microsoft.Xna.Framework;
@@ -17,6 +18,8 @@ namespace Core.Bootstrap
         protected static int MAX_HEIGHT = 720;
 
         protected GameEntryPoint EntryPoint { get; }
+
+        //private LoadingScreen loadingScreen = new();
 
         public GameSetup(GameEntryPoint entryPoint)
         {
@@ -37,8 +40,6 @@ namespace Core.Bootstrap
             whiteRectangle.SetData(new[] { Color.White });
 
             RectangleSprite.WhiteRectangle = whiteRectangle;
-
-            EntryPoint.Initialize();
             base.Initialize();
         }
 
@@ -88,13 +89,28 @@ namespace Core.Bootstrap
 
         protected override void LoadContent()
         {
-            ResourceLoader.LoadAll(this);
-
+            ContentLoader.LoadContent(GraphicsDevice);
+            EntryPoint.Initialize();
             EntryPoint.AfterInitialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
+            //var pct = ContentLoader.LoadedContent?.PercentLoaded ?? 0;
+            //if (pct < 100)
+            //{
+            //    loadingScreen.SetPercent(pct);
+            //    loadingScreen.Tick(gameTime);
+            //    base.Update(gameTime);
+            //    return;
+            //}
+            //else if (!ReferenceEquals(currentDisplay, EntryPoint))
+            //{
+            //    EntryPoint.Initialize();
+            //    EntryPoint.AfterInitialize();
+            //    currentDisplay = EntryPoint;
+            //}
+
             CoreKeyboard.PollState();
             CoreMouse.PollState();
 

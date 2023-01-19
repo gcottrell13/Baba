@@ -15,7 +15,10 @@ public static class PlaySound
 {
     private const string soundsDirectory = ContentDirectory.contentDirectory + "/sounds/";
 
-    private static Dictionary<string, string> files = Directory.EnumerateFiles(soundsDirectory).ToDictionary(f => f.Split('\\', '/').Last().Split('.').First());
+    internal static Dictionary<string, string> files = Directory.EnumerateFiles(soundsDirectory).ToDictionary(
+        f => f.Split('\\', '/').Last().Split('.').First(), 
+        f => f.Split('\\', '/').Last()
+    );
 
     private static Dictionary<string, SoundEffect> sounds = new();
 
@@ -77,11 +80,13 @@ public static class PlaySound
         writer.Write((int)dataLength);
     }
 
-    internal static SoundEffect LoadSound(string path)
+    internal static async Task<SoundEffect> LoadSound(string path)
     {
+        using var fileStream = File.OpenRead(soundsDirectory + path);
+
         if (path.EndsWith(".ogg"))
         {
-            using var vorbis = new VorbisReader(soundsDirectory + path);
+            using var vorbis = new VorbisReader(fileStream, false);
             var ogg = LoadOgg(vorbis);
 
             var dataLength = vorbis.SampleRate * vorbis.Channels * 2 * (int)vorbis.TotalTime.TotalSeconds;
@@ -95,13 +100,17 @@ public static class PlaySound
         }
         else
         {
-            using var fileStream = File.OpenRead(soundsDirectory + path);
             var data = new byte[fileStream.Length];
-            fileStream.Read(data, 0, data.Length);
+            await fileStream.ReadAsync(data, 0, data.Length);
             using var stream = new MemoryStream(data);
 
             return SoundEffect.FromStream(stream);
         }
+    }
+
+    internal static void AddSound(string name, SoundEffect sound)
+    {
+        sounds[name] = sound;
     }
 
     /// <summary>
@@ -110,7 +119,7 @@ public static class PlaySound
     /// <param name="name"></param>
     /// <param name="loop"></param>
     /// <returns></returns>
-    public static SoundEffectInstance PlaySoundFile(string name, bool loop = false)
+    public static async Task<SoundEffectInstance> PlaySoundFile(string name, bool loop = false)
     {
         if (files.ContainsKey(name) == false)
         {
@@ -119,8 +128,9 @@ public static class PlaySound
 
         if (sounds.ContainsKey(name) == false)
         {
-            sounds[name] = LoadSound(files[name].Split('\\', '/').Last());
+            sounds[name] = await LoadSound(files[name].Split('\\', '/').Last());
         }
+
         var sound = sounds[name];
         var instance = sound.CreateInstance();
         instance.IsLooped = loop;
@@ -142,6 +152,10 @@ public static class PlaySound
         }
 
         currentMusicName = name;
-        currentMusic = PlaySoundFile(name, true);
+        currentMusic = null;
+        Task.Run(async () =>
+        {
+            currentMusic = await PlaySoundFile(name, true);
+        });
     }
 }

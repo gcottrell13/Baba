@@ -17,12 +17,6 @@ namespace Editor
             MAX_HEIGHT = 720;
         }
 
-        protected override void Initialize()
-        {
-            ContentLoader.LoadContent(GraphicsDevice);
-            base.Initialize();
-        }
-
         private class EditorGameEntryPoint : GameEntryPoint
         {
             public override void Initialize()

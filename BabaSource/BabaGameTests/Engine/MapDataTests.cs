@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace BabaGameTests.Engine
 {
     [TestFixture]
-    public class WorldDataTests
+    public class MapDataTests
     {
         [Test]
         [TestCaseSource(nameof(_serializeTestCases))]
         public void WorldData_Serialize(WorldObject[] input)
         {
-            var data = new WorldData(input);
+            var data = new MapData(input);
 
             var serialized = data.Serialize();
-            var deserialized = WorldData.Deserialize(serialized).WorldObjects;
+            var deserialized = MapData.Deserialize(serialized).WorldObjects;
             Assert.AreEqual(input, deserialized);
         }
 
@@ -46,8 +46,20 @@ namespace BabaGameTests.Engine
                         new WorldObject() { Occupied= true, Color=WorldObjectColor.Faded | WorldObjectColor.Pink, Kind=WorldObjectKind.Object, ObjectId=400, Facing=Core.Utils.Direction.Left, Name="text_rubble" },
                     }
                 );
-            } }
+            } 
+        }
 
-
+        [Test]
+        public void WorldData_Serialize_AssertFormat()
+        {
+            var data = new MapData(
+                    new[]
+                    {
+                        new WorldObject() { Occupied= true, Color=WorldObjectColor.Blue, Kind=WorldObjectKind.Text, ObjectId=1, Name="amongi" },
+                        new WorldObject() { Occupied= true, Color=WorldObjectColor.Red, Kind=WorldObjectKind.Text, ObjectId=5, x=10, y=15, Name="badbad" },
+                        new WorldObject() { Occupied= true, Color=WorldObjectColor.Faded | WorldObjectColor.Pink, Kind=WorldObjectKind.Object, ObjectId=400, Facing=Core.Utils.Direction.Left, Name="text_rubble" },
+                    });
+            Assert.AreEqual("AAAAAAAAAgAAAAEACgAPAAAAAQAAAAUAAAAAAAQASQABAJAB", data.Serialize());
+        }
     }
 }

@@ -8,18 +8,18 @@ using System.Text;
 
 namespace BabaGame.Engine
 {
-    public class WorldData
+    public class MapData
     {
         public WorldObject[] WorldObjects { get; private set; }
         private Stack<uint> pointers = new();
 
-        public WorldData(int size = 0)
+        public MapData(int size = 0)
         {
             WorldObjects = new WorldObject[size];
             pointers.Push(0);
         }
 
-        public WorldData(WorldObject[] data)
+        public MapData(WorldObject[] data)
         {
             WorldObjects = data;
             pointers.Push(0);
@@ -68,12 +68,12 @@ namespace BabaGame.Engine
                 bytes.AddRange(BitConverter.GetBytes((short)obj.ObjectId));
             }
 
-            return Encoding.BigEndianUnicode.GetString(bytes.ToArray());
+            return Convert.ToBase64String(bytes.ToArray());
         }
 
-        public static WorldData Deserialize(string str)
+        public static MapData Deserialize(string str)
         {
-            var bytes = Encoding.BigEndianUnicode.GetBytes(str);
+            var bytes = Convert.FromBase64String(str);
             var data = new List<WorldObject>();
             var intSize = sizeof(short);
             for (var i = 0; i < bytes.Length; i += intSize * 6)

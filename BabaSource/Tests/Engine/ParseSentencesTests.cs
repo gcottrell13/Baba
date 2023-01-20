@@ -12,27 +12,12 @@ namespace Tests.Engine
     internal class ParseSentencesTests
     {
 
-        public class Item : INameable
-        {
-            public string Name { get; set; }
-            public static implicit operator Item(string s) { return new() { Name = s }; }
-            public override string ToString() => Name;
-            public override bool Equals(object? obj)
-            {
-                if (obj is string s) return s == Name;
-                if (obj is Item i) return i.Name == Name;
-                return base.Equals(obj);
-            }
-
-            public override int GetHashCode() => Name.GetHashCode();
-        }
-
         [Test]
         [TestCaseSource(nameof(GetChainsTestCases))]
         public void GetChains_Test(List<List<Item?>> input, List<List<Item>> expected)
         {
-            var chains = ParseSentences.GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
-            Assert.AreEqual(expected, chains);
+            var chains = ParseSentences.GetWordChains(new Grid(input));
+            Assert.AreEqual(expected.Select(x => x.ToArray()), chains);
         }
 
         static IEnumerable<TestCaseData> GetChainsTestCases => _getChainsTestCases.Select(
@@ -83,8 +68,8 @@ namespace Tests.Engine
                         new() { "c", "b", "a" },
                     },
                     new() {
-                        new() { "c", "c", "c", "c" },
                         new() { "c", "b", "a" },
+                        new() { "c", "c", "c", "c" },
                         new() { "b", "b", "b", "b" },
                         new() { "a", "a", "a", "a" },
                         new() { "c", "b", "a" },
@@ -101,7 +86,7 @@ namespace Tests.Engine
                 new() { "a", "b", "c", "b", "a" },
             };
 
-            var chains = ParseSentences.GetWordChains(input, new HashSet<string?> { "a", "b", "c" });
+            var chains = ParseSentences.GetWordChains(new Grid(input));
 
             Assert.That(chains[0].Length == 5);
             Assert.That(chains[0].Zip(input[0]).All(t => object.ReferenceEquals(t.First, t.Second)));
@@ -112,7 +97,7 @@ namespace Tests.Engine
         [TestCaseSource(nameof(GetSentencesTestCases))]
         public void GetSentences_ShouldParse(List<List<Item?>> input, List<string> expected)
         {
-            var sentences = ParseSentences.GetSentences(input, new()
+            var sentences = ParseSentences.GetSentences(new Grid(input), new()
             {
                 nouns = new() { "text_baba", "baba", "rock", "flag", "box", "water" },
                 verbs = new() { "is", "has" },

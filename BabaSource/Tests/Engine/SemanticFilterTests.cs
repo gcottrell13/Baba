@@ -12,26 +12,12 @@ namespace Tests.Engine
     [TestFixture]
     public class SemanticFilterTests
     {
-        public class Item : INameable
-        {
-            public string Name { get; set; }
-            public static implicit operator Item(string s) { return new() { Name = s }; }
-            public override string ToString() => Name;
-            public override bool Equals(object? obj)
-            {
-                if (obj is string s) return s == Name;
-                if (obj is Item i) return i.Name == Name;
-                return base.Equals(obj);
-            }
-
-            public override int GetHashCode() => Name.GetHashCode();
-        }
 
         [Test]
         [TestCaseSource(nameof(GetTestCases))]
         public void Filter_ShouldNotSkipWords(List<List<Item?>> input, List<string> expected)
         {
-            var rules = SemanticFilter.FindRulesAndFilterInvalid(input);
+            var rules = SemanticFilter.FindRulesAndFilterInvalid(new Grid(input));
             Assert.AreEqual(expected, rules.Select(r => r.ToString()).ToList());
         }
 

@@ -43,7 +43,7 @@ namespace Core.Engine
         /// <typeparam name="T"></typeparam>
         /// <param name="grid"></param>
         /// <returns></returns>
-        private static IEnumerable<Rule<T>> findAndFilter<T>(List<List<T?>> grid) where T : INameable
+        private static IEnumerable<Rule<T>> findAndFilter<T>(List<T> grid) where T : INameable
         {
             //if (objectIsWord.Count > 0)
             //{
@@ -100,7 +100,7 @@ namespace Core.Engine
         /// <typeparam name="T"></typeparam>
         /// <param name="grid"></param>
         /// <returns></returns>
-        public static List<Rule<T>> FindRulesAndFilterInvalid<T>(List<List<T?>> grid) where T : INameable
+        public static List<Rule<T>> FindRulesAndFilterInvalid<T>(List<T> grid) where T : INameable
         {
             return findAndFilter(grid).ToList();
         }

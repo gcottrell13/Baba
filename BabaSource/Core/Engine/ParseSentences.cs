@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Core.Utils;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,9 @@ namespace Core.Engine;
 
 public interface INameable
 {
-    string Name { get; set; }
+    string Name { get; }
+    int X { get; }
+    int Y { get; }
 }
 
 public class Word<T> where T : INameable
@@ -218,7 +221,7 @@ internal class ConsumeCharacters<T> where T : INameable
 {
     private readonly T[] chain;
     private readonly Vocabulary vocabulary;
-    private uint index = 0;
+    private int index = 0;
 
     public ConsumeCharacters(T[] chain, Vocabulary vocabulary)
     {
@@ -254,74 +257,71 @@ internal class ConsumeCharacters<T> where T : INameable
 
 public class ParseSentences
 {
-
-    private static IEnumerable<(int index, T item)> enumerate<T>(IEnumerable<T> collection)
+    /// <summary>
+    /// The grid is assumed to contain only valid words
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="allObjects"></param>
+    /// <returns></returns>
+    public static List<T[]> GetWordChains<T>(IEnumerable<T> allObjects) where T : INameable
     {
-        foreach (var (index, item) in collection.Select((t, i) => (i, t)))
+        var grid = new Dictionary<(int x, int y), List<T>>();
+
+        foreach (var word in allObjects)
         {
-            yield return (index, item);
-        }
-    }
-
-    public static List<T[]> GetWordChains<T>(List<List<T?>> grid, HashSet<string?> words) where T : INameable
-    {
-        List<(int x, int y, string dir)> starts = new();
-        foreach (var (x, col) in enumerate(grid))
-        {
-            foreach (var (y, word) in enumerate(col))
-            {
-                if (word == null || words.Contains(word.Name) == false) continue;
-
-                if (x < grid.Count - 2 && words.Contains(grid[x + 1][y]?.Name))
-                    starts.Add((x, y, "right"));
-
-                if (y < grid[x].Count - 2 && words.Contains(grid[x][y + 1]?.Name))
-                    starts.Add((x, y, "down"));
-            }
+            var x = word.X;
+            var y = word.Y;
+            grid.ConstructDefaultValue((x, y)).Add(word);
         }
 
-        HashSet<(int, int, string)> consumed = new();
+        var starts = new List<(T item, string direction)>();
+        foreach (var word in allObjects)
+        {
+            if (grid.ContainsKey((word.X, word.Y - 1)) == false) starts.Add((word, "down"));
+            if (grid.ContainsKey((word.X - 1, word.Y)) == false) starts.Add((word, "right"));
+        }
+
         List<T[]> chains = new();
 
         foreach (var m0 in starts)
         {
-            var (x, y, dir) = m0;
+            var chainsFromThisStart = new List<List<T>>();
+
+            var (item, dir) = m0;
             var chain = new List<T>();
+            var x = item.X;
+            var y = item.Y;
 
-            var m = (x, y, dir);
-
-            while (x < grid.Count && y < grid[x].Count && grid[x][y] is T t && words.Contains(t.Name))
+            while (grid.TryGetValue((x, y), out var items))
             {
-                if (consumed.Contains(m))
-                    goto Done;
-
-                consumed.Add(m);
-
-                chain.Add(t);
+                if (chainsFromThisStart.Count == 0)
+                {
+                    chainsFromThisStart = items.Select(item => new List<T>() { item }).ToList();
+                }
+                else
+                {
+                    chainsFromThisStart = items.SelectMany(a => chainsFromThisStart.Select(list => list.Append(a).ToList())).ToList();
+                }
 
                 if (dir == "down")
                     y += 1;
                 else if (dir == "right")
                     x += 1;
-
-                m = (x, y, dir);
             }
 
-            chains.Add(chain.ToArray());
-
-            Done: { }
+            chains.AddRange(chainsFromThisStart.Where(x => x.Count >= 3).Select(x => x.ToArray()));
         }
 
         return chains;
     }
 
-    public static List<Sentence<T>> GetSentences<T>(List<List<T?>> grid, Vocabulary vocabulary) where T : INameable
+    public static List<Sentence<T>> GetSentences<T>(List<T> grid, Vocabulary vocabulary) where T : INameable
     {
-        var chains = new Stack<T[]>(GetWordChains(grid, vocabulary.Total).ToList());
+        var chains = new Stack<T[]>(GetWordChains(grid.Where(item => vocabulary.Total.Contains(item.Name))));
         var sentences = new List<Sentence<T>>();
         while (chains.Count > 0)
         {
-            var chain = chains.Pop();
+            var chain = chains.Pop().ToArray();
             var i = 0;
             var current = chain;
             while (current.Length >= 3)
@@ -357,8 +357,8 @@ public class ParseSentences
             var name = word.Name;
 
             if (exclude.Contains(name)) return null;
-            else if (vocabulary.Nouns.Contains(name)) re.Add('n');
-            else if (vocabulary.Adjectives.Contains(name)) re.Add('n');
+            else if (vocabulary.Nouns.Contains(name)) re.Add('a');
+            else if (vocabulary.Adjectives.Contains(name)) re.Add('a');
             else if (vocabulary.Modifiers.Contains(name)) re.Add('m');
             else if (vocabulary.Relations.Contains(name)) re.Add('r');
             else return null;
@@ -367,16 +367,16 @@ public class ParseSentences
 
         return str switch
         {
-            "n" => new NounAdjective<T>(words[0]),
-            "mn" => new NounAdjective<T>(words[1]) { Modifier = words[0] },
-            "nrn" => new NA_WithRelationship<T>(words[0], words[1], new(words[2])),
-            "mnrn" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0] },
-            "nrmn" => new NA_WithRelationship<T>(words[0], words[1], new(words[3]) { Modifier = words[2] }),
-            "mnrmn" => new NA_WithRelationship<T>(words[1], words[2], new(words[4]) { Modifier = words[3] }) { Modifier = words[0] },
-            "nmrn" => new NA_WithRelationship<T>(words[0], words[2], new(words[3])) { RelationModifier = words[1] },
-            "mnmrn" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0], RelationModifier = words[2] },
-            "nmrmn" => new NA_WithRelationship<T>(words[0], words[1], new(words[4]) { Modifier = words[3] }) { RelationModifier = words[2] },
-            "mnmrmn" => new NA_WithRelationship<T>(words[1], words[3], new(words[5]) { Modifier = words[4] }) { Modifier = words[0], RelationModifier = words[2] },
+            "a" => new NounAdjective<T>(words[0]),
+            "ma" => new NounAdjective<T>(words[1]) { Modifier = words[0] },
+            "ara" => new NA_WithRelationship<T>(words[0], words[1], new(words[2])),
+            "mara" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0] },
+            "arma" => new NA_WithRelationship<T>(words[0], words[1], new(words[3]) { Modifier = words[2] }),
+            "marma" => new NA_WithRelationship<T>(words[1], words[2], new(words[4]) { Modifier = words[3] }) { Modifier = words[0] },
+            "amra" => new NA_WithRelationship<T>(words[0], words[2], new(words[3])) { RelationModifier = words[1] },
+            "mamra" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0], RelationModifier = words[2] },
+            "amrma" => new NA_WithRelationship<T>(words[0], words[1], new(words[4]) { Modifier = words[3] }) { RelationModifier = words[2] },
+            "mamrma" => new NA_WithRelationship<T>(words[1], words[3], new(words[5]) { Modifier = words[4] }) { Modifier = words[0], RelationModifier = words[2] },
             _ => null,
         };
     }

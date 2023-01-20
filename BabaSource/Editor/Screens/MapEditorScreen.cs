@@ -1,9 +1,7 @@
 ﻿using Core.UI;
 using Core.Screens;
-using System;
-using System.Diagnostics;
+using Editor.Saves;
 using System.Linq;
-using Core.Content;
 using Editor.Editors;
 using Core.Utils;
 using Microsoft.Xna.Framework.Input;
@@ -194,15 +192,6 @@ namespace Editor.Screens
 
         public EditorStates SaveMap()
         {
-            if (KeyboardState.GetPressedKeys().Contains(Keys.LeftControl))
-            {
-                // save
-                Debug.WriteLine("saving!");
-            }
-            else
-            {
-                Debug.WriteLine("not saving =(");
-            }
             return EditorStates.MapEditor;
         }
 

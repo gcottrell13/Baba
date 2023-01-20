@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Content
+namespace Editor.Saves
 {
     public class SaveFormatWorld
     {
@@ -17,9 +17,6 @@ namespace Core.Content
         public List<SaveMapData> MapDatas { get; set; } = new();
 
         public SaveMapLayer globalObjectLayer { get; set; } = new();
-
-        public uint startMapX = 0;
-        public uint startMapY = 0;
 
         public uint width = 30;
         public uint height = 30;

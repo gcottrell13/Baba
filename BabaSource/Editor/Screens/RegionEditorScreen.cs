@@ -3,6 +3,7 @@ using Core.Screens;
 using Core.UI;
 using Core.Utils;
 using Microsoft.Xna.Framework.Input;
+using Editor.Saves;
 
 namespace Editor.Screens
 {
@@ -162,6 +163,7 @@ namespace Editor.Screens
         private void pickMusic(string name)
         {
             region.musicName = name;
+            PlaySound.PlayMusic(name);
             refreshText();
         }
 

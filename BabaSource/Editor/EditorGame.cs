@@ -1,11 +1,9 @@
-﻿using Core;
-using Core.UI;
-using Core.Bootstrap;
+﻿using Core.Bootstrap;
 using Core.Screens;
 using Core.Utils;
 using Editor.Screens;
 using Core.Content;
-using Microsoft.Xna.Framework.Media;
+using Editor.Saves;
 
 namespace Editor
 {

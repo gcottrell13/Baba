@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Content
+namespace Editor.Saves
 {
     public static class SaveFormatSerializer
     {
@@ -33,8 +33,6 @@ namespace Core.Content
                 yield return $"\"Regions\": {slist(save.Regions, 0)}";
                 yield return $"\"MapDatas\": {slist(save.MapDatas, 0)}";
                 yield return $"\"globalObjectLayer\": {serialize(save.globalObjectLayer, 0)}";
-                yield return $"\"startMapX\": {save.startMapX}";
-                yield return $"\"startMapY\": {save.startMapY}";
                 yield return $"\"worldName\": \"{save.worldName}\"";
             }
             return formatLines(lines(), 0, "{", "}");

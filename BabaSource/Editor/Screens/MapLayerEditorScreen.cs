@@ -4,6 +4,7 @@ using Core.Utils;
 using Editor.Editors;
 using Microsoft.Xna.Framework.Input;
 using static Editor.Screens.AddTextToObjectScreen;
+using Core.UI;
 
 namespace Editor.Screens
 {

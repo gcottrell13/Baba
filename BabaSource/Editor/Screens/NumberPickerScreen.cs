@@ -14,7 +14,7 @@ namespace Editor.Screens
             for (var i = start; i <= end; i++) yield return i.ToString();
         }
 
-        public NumberPickerScreen(uint lo, uint hi, uint? current = null) : base(range(lo, hi), 15, filterBy: x => x.ToString(), currentValue: current?.ToString())
+        public NumberPickerScreen(uint lo, uint hi, uint? current = null) : base(range(lo, hi), 15, display: x => x.ToString(), currentValue: current?.ToString())
         {
 
         }

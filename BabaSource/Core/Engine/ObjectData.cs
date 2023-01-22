@@ -27,6 +27,16 @@ namespace Core.Engine
             return base.Equals(obj);
         }
 
-        public override string ToString() => $"{Occupied} {Color} {ObjectId} {Facing} {x} {y} {Name}";
+        public override string ToString() => $$"""
+            new ObjectData() {
+                Occupied = {{Occupied.ToString().ToLower()}},
+                Color = {{Color}},
+                ObjectId = {{ObjectId}},
+                Facing = {{Facing}},
+                x = {{x}},
+                y = {{y}},
+                Name = "{{Name}}",
+            }
+            """;
     }
 }

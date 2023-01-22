@@ -11,7 +11,7 @@ namespace Core.Utils
 
         public static string ToRowColString(this Microsoft.Xna.Framework.Vector2 dims)
         {
-            return $"{EnumerableExtensions.ToColString((uint)dims.X)}{dims.Y + 1}";
+            return $"{EnumerableExtensions.ToColString((int)dims.X)}{dims.Y + 1}";
         }
     }
 }

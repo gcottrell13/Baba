@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Editor.Saves
 {
-    public class CompiledMap
+    public static class CompileMap
     {
         private class MapTemp
         {
-            internal uint x;
-            internal uint y;
+            internal int x;
+            internal int y;
             internal MapData data;
         }
 
-        public static List<string> CompileWorld(SaveFormatWorld world)
+        public static WorldData CompileWorld(SaveFormatWorld world)
         {
             var mapTemps = new List<MapTemp>();
 
@@ -25,31 +25,47 @@ namespace Editor.Saves
 
             MapData fromMapLayer(SaveMapLayer layer)
             {
-                var md = new MapData(layer.objects.Select(x => new WorldObject()
+                var md = new MapData(layer.objects.Select(x => new ObjectData()
                 {
                     Color = (short)x.color,
-                    x = (int)x.x,
-                    y = (int)x.y,
+                    x = x.x,
+                    y = x.y,
                     ObjectId = ObjectInfo.NameToId[x.name],
-                }).ToArray());
-
-                md.id = mapTempId++;
+                    Name = x.name,
+                }).ToArray())
+                {
+                    MapId = mapTempId++
+                };
                 return md;
             }
 
+            var globalLayer = fromMapLayer(world.globalObjectLayer);
             mapTemps.Add(new()
             {
-                data = fromMapLayer(world.globalObjectLayer),
+                data = globalLayer,
             });
 
             var regionMap = new Dictionary<int, MapTemp>();
+            var regionDatas = new List<RegionData>();
 
+            short regionIds = 0;
             foreach (var region in world.Regions)
             {
                 var md = fromMapLayer(region.regionObjectLayer);
-                var temp = new MapTemp() { data = md };
+                var temp = new MapTemp() { 
+                    data = md,
+                    x = -1,
+                    y = -1,
+                };
                 mapTemps.Add(temp);
                 regionMap[region.id] = temp;
+                regionDatas.Add(new()
+                {
+                    Music=region.musicName,
+                    RegionId=regionIds++,
+                    Theme=region.theme,
+                    WordLayerId=md.MapId,
+                });
             }
 
             foreach (var instance in world.WorldLayout)
@@ -59,7 +75,7 @@ namespace Editor.Saves
 
                 var md = fromMapLayer(data.layer1);
 
-                md.region = regionMap.TryGetValue(data.regionId, out var regionMapTemp) ? regionMapTemp.data.id : (short)0;
+                md.region = regionMap.TryGetValue(data.regionId, out var regionMapTemp) ? regionMapTemp.data.MapId : (short)0;
 
                 mapTemps.Add(new()
                 {
@@ -73,29 +89,40 @@ namespace Editor.Saves
             {
                 var x = mapTemp.x;
                 var y = mapTemp.y;
-                mapTemp.data.northNeighbor = findNeighbor(mapTemps, world, x, y, 0, -1)?.data.id ?? 0;
-                mapTemp.data.southNeighbor = findNeighbor(mapTemps, world, x, y, 0, 1)?.data.id ?? 0;
-                mapTemp.data.eastNeighbor = findNeighbor(mapTemps, world, x, y, 1, 0)?.data.id ?? 0;
-                mapTemp.data.westNeighbor = findNeighbor(mapTemps, world, x, y, -1, 0)?.data.id ?? 0;
+                mapTemp.data.northNeighbor = findNeighbor(mapTemps, world, x, y, 0, -1)?.data.MapId ?? 0;
+                mapTemp.data.southNeighbor = findNeighbor(mapTemps, world, x, y, 0, 1)?.data.MapId ?? 0;
+                mapTemp.data.eastNeighbor = findNeighbor(mapTemps, world, x, y, 1, 0)?.data.MapId ?? 0;
+                mapTemp.data.westNeighbor = findNeighbor(mapTemps, world, x, y, -1, 0)?.data.MapId ?? 0;
             }
 
-            return mapTemps.Select(outputMap).ToList();
+            globalLayer.eastNeighbor = 0;
+            globalLayer.westNeighbor = 0;
+            globalLayer.northNeighbor = 0;
+            globalLayer.southNeighbor = 0;
+
+            return new WorldData()
+            {
+                Maps = mapTemps.Select(x => x.data).ToList(),
+                Regions = regionDatas,
+                GlobalWordMapId = globalLayer.MapId,
+                Name = world.worldName,
+            };
         }
 
-        private static MapTemp? findNeighbor(List<MapTemp> maps, SaveFormatWorld world, uint x0, uint y0, int dx, int dy)
+        private static MapTemp? findNeighbor(List<MapTemp> maps, SaveFormatWorld world, int x0, int y0, int dx, int dy)
         {
             if (x0 == 0 && dx < 0) return null;
             if (y0 == 0 && dy < 0) return null;
 
-            var x = (uint)(x0 + dx);
-            var y = (uint)(y0 + dy);
+            var x = x0 + dx;
+            var y = y0 + dy;
 
             if (mapExistsAt(maps, x, y) is MapTemp nearMap) return nearMap;
 
             var warps = world.Warps.Where(w => (w.x1 == x && w.y1 == y) || (w.x2 == x && w.y2 == y));
             foreach (var warp in warps)
             {
-                uint xf; uint yf;
+                int xf; int yf;
                 if (warp.x1 == x && warp.y1 == y)
                     (xf, yf) = (warp.x2, warp.y2);
                 else
@@ -109,27 +136,9 @@ namespace Editor.Saves
             return null;
         }
 
-        private static MapTemp? mapExistsAt(List<MapTemp> maps, uint x, uint y)
+        private static MapTemp? mapExistsAt(List<MapTemp> maps, int x, int y)
         {
             return maps.FirstOrDefault(w => w.x == x && w.y == y);
-        }
-
-        private static string outputRegion(RegionData region)
-        {
-            return $"""
-                ---- BEGIN REGION ----
-                {region.Serialize()}
-                ---- END REGION ----
-                """;
-        }
-
-        private static string outputMap(MapTemp mapInfo)
-        {
-            return $"""
-                ---- BEGIN MAP ----
-                {mapInfo.data.Serialize()}
-                ---- END MAP ----
-                """;
         }
     }
 }

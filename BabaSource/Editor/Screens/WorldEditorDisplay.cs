@@ -54,10 +54,10 @@ namespace Editor.Screens
             var mapPxWidth = gridWidth / zoom;
             var mapPxHeight = (18f / 24) * mapPxWidth;
 
-            var topX = (int)Math.Clamp(cursor.x - (int)(zoom / 2), 0, world.width - zoom);
-            var topY = (int)Math.Clamp(cursor.y - (int)(zoom / 2), 0, world.height - zoom);
+            var topX = Math.Clamp(cursor.x - (zoom / 2), 0, world.width - zoom);
+            var topY = Math.Clamp(cursor.y - (zoom / 2), 0, world.height - zoom);
 
-            bool isOutOfBounds(uint x, uint y)
+            bool isOutOfBounds(int x, int y)
             {
                 return x < topX || x >= topX + zoom || y < topY || y >= topY + zoom;
             }
@@ -109,8 +109,8 @@ namespace Editor.Screens
             var maxYMagnitude = (int)Math.Log10(world.height + 1) + 1;
             var maxXMagnitude = (int)Math.Log(world.width, 26) + 1;
 
-            var columnHeaderLines = GridHelpers.GetColumnHeaders((uint)topX, (uint)(topX + zoom), (uint)maxXMagnitude);
-            var rowHeaderLines = GridHelpers.GetRowHeaders((uint)topY, (uint)(topY + zoom), (uint)maxYMagnitude);
+            var columnHeaderLines = GridHelpers.GetColumnHeaders(topX, topX + zoom, maxXMagnitude);
+            var rowHeaderLines = GridHelpers.GetRowHeaders(topY, topY + zoom, maxYMagnitude);
 
             columnNumberDisplay.SetText(string.Join("\n", columnHeaderLines), new() { blockWidth = (int)mapPxWidth });
             rowNumberDisplay.SetText(string.Join("\n", rowHeaderLines), new() { lineHeight = (int)mapPxHeight });

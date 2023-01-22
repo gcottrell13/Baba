@@ -125,7 +125,7 @@ namespace Editor.Screens
                             {
                                 OnSelect = (obj) =>
                                 {
-                                    mapLayer.width = uint.Parse(obj);
+                                    mapLayer.width = int.Parse(obj);
                                 },
                             };
                             stack.Add(resizeScreen);
@@ -147,7 +147,7 @@ namespace Editor.Screens
                             {
                                 OnSelect = (obj) =>
                                 {
-                                    mapLayer.height = uint.Parse(obj);
+                                    mapLayer.height = int.Parse(obj);
                                 },
                             };
                             stack.Add(resizeScreen);

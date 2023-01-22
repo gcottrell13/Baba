@@ -12,7 +12,7 @@ namespace Core.Engine
     {
         public ObjectData[] WorldObjects { get; private set; }
         private Stack<int> pointers = new();
-        public short id;
+        public short MapId;
         public short northNeighbor;
         public short eastNeighbor;
         public short southNeighbor;
@@ -32,6 +32,30 @@ namespace Core.Engine
             WorldObjects = data;
             pointers.Push(0);
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is MapData map)
+                return WorldObjects.Compare(map.WorldObjects) && MapId == map.MapId && northNeighbor == map.northNeighbor && westNeighbor == map.westNeighbor && map.eastNeighbor == eastNeighbor && southNeighbor == map.southNeighbor && upLayer == map.upLayer && region == map.region;
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString() => $$"""
+            new MapData(new ObjectData[] { {{string.Join(",\n", WorldObjects.Select(x => "\n" + x.ToString().Indent(2)))}} }) {
+                MapId = {{MapId}},
+                northNeighbor = {{northNeighbor}},
+                southNeighbor = {{southNeighbor}},
+                eastNeighbor = {{eastNeighbor}},
+                westNeighbor = {{westNeighbor}},
+                upLayer = {{upLayer}},
+                region = {{region}},
+            }
+            """;
 
         public int AddObject(ObjectData obj)
         {

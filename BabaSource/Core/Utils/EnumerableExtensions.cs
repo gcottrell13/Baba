@@ -41,7 +41,7 @@ namespace Core.Utils
             return true;
         }
 
-        public static string ToColString(uint c)
+        public static string ToColString(int c)
         {
             var col = ((char)('A' + (c % 26))).ToString();
             if (c > 25)
@@ -75,6 +75,23 @@ namespace Core.Utils
                     yield return (one, two);
                 }
             }
+        }
+
+        public static bool Compare<T1, T2>(this ICollection<T1> t1, ICollection<T2> t2)
+        {
+            if (t1.Count != t2.Count) return false;
+            foreach (var (one, two) in t1.Zip(t2))
+            {
+                if (one == null || two == null) return object.Equals(one, two);
+                if (!one.Equals(two)) return false;
+            }
+            return true;
+        }
+
+        public static string Indent(this string s, int indent)
+        {
+            var t = "\t".Repeat(indent);
+            return string.Join("\n", s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(x => t + x));
         }
     }
 }

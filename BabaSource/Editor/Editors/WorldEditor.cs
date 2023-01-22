@@ -39,32 +39,32 @@ namespace Editor.Editors
 
         private EditorStates cursorUp(bool isSpaceDown)
         {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y - 1, (int)save.height);
+            cursor.y = MathExtra.MathMod((int)cursor.y - 1, (int)save.height);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorDown(bool isSpaceDown)
         {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y + 1, (int)save.height);
+            cursor.y = MathExtra.MathMod((int)cursor.y + 1, (int)save.height);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorLeft(bool isSpaceDown)
         {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x - 1, (int)save.width);
+            cursor.x = MathExtra.MathMod((int)cursor.x - 1, (int)save.width);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorRight(bool isSpaceDown)
         {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)save.width);
+            cursor.x = MathExtra.MathMod((int)cursor.x + 1, (int)save.width);
             //if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
 
         public bool TryAddWarpAtCursor()
         {
-            save.Warps.Add(new() { x1 = (uint)warpPoint1.X, y1 = (uint)warpPoint1.Y, x2 = cursor.x, y2 = cursor.y });
+            save.Warps.Add(new() { x1 = (int)warpPoint1.X, y1 = (int)warpPoint1.Y, x2 = cursor.x, y2 = cursor.y });
             return true;
         }
 

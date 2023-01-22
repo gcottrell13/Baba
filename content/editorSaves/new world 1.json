@@ -4,16 +4,18 @@
 		{"x":1,"y":0,"mapDataId":5},
 		{"x":2,"y":0,"mapDataId":3}
 	],
-	"Warps": [],
+	"Warps": [
+		{"x1":0,"y1":2,"x2":4,"y2":0,"name":"","r":234,"g":168,"b":229}
+	],
 	"Regions": [
 		{
 			"id": 0,
 			"name": "autumnregion",
 			"theme": "autumn",
-			"musicName": "baba",
+			"musicName": "editorsong",
 			"regionObjectLayer": {
 				"objects": [
-					{"x":2,"y":2,"name":"boat","state":1,"color":49,"text":"","original":null},
+					{"x":2,"y":2,"name":"boat","state":4,"color":49,"text":"","original":null},
 					{"x":5,"y":4,"name":"boat","state":1,"color":49,"text":"","original":null}
 				],
 				"width": 10,
@@ -309,13 +311,18 @@
 					{"x":14,"y":4,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":3,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":2,"name":"tree","state":1,"color":42,"text":"","original":null},
-					{"x":14,"y":1,"name":"tree","state":1,"color":42,"text":"","original":null}
+					{"x":14,"y":1,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":3,"y":4,"name":"text_back","state":1,"color":33,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
 			},
 			"layer2": {
-				"objects": [],
+				"objects": [
+					{"x":2,"y":1,"name":"text_tree","state":1,"color":42,"text":"","original":null},
+					{"x":3,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":4,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
+				],
 				"width": 15,
 				"height": 15
 			}

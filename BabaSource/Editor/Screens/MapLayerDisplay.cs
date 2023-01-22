@@ -49,7 +49,7 @@ namespace Editor.Screens
 
             if (showObjects)
             {
-                var objects = new Dictionary<uint, Dictionary<uint, string>>();
+                var objects = new Dictionary<int, Dictionary<int, string>>();
 
                 foreach (var obj in mapLayer.objects)
                 {
@@ -59,11 +59,11 @@ namespace Editor.Screens
 
                 var lines = new List<string>();
 
-                for (uint y = 0; y < mapLayer.height; y++)
+                for (int y = 0; y < mapLayer.height; y++)
                 {
                     var line = new List<string>();
 
-                    for (uint x = 0; x < mapLayer.width; x++)
+                    for (int x = 0; x < mapLayer.width; x++)
                     {
                         if (objects.ConstructDefaultValue(x).TryGetValue(y, out var obj))
                         {

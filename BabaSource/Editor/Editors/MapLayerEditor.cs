@@ -48,32 +48,32 @@ namespace Editor.Editors
 
         private EditorStates cursorUp(bool isSpaceDown)
         {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y - 1, (int)mapLayer.height);
+            cursor.y = MathExtra.MathMod((int)cursor.y - 1, (int)mapLayer.height);
             if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorDown(bool isSpaceDown)
         {
-            cursor.y = (uint)MathExtra.MathMod((int)cursor.y + 1, (int)mapLayer.height);
+            cursor.y = MathExtra.MathMod((int)cursor.y + 1, (int)mapLayer.height);
             if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorLeft(bool isSpaceDown)
         {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x - 1, (int)mapLayer.width);
+            cursor.x = MathExtra.MathMod((int)cursor.x - 1, (int)mapLayer.width);
             if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
         private EditorStates cursorRight(bool isSpaceDown)
         {
-            cursor.x = (uint)MathExtra.MathMod((int)cursor.x + 1, (int)mapLayer.width);
+            cursor.x = MathExtra.MathMod((int)cursor.x + 1, (int)mapLayer.width);
             if (isSpaceDown) { TryPlaceObject(); }
             return EditorStates.None;
         }
 
         public SaveObjectData? ObjectAtCursor() => ObjectAtPosition(cursor.x, cursor.y);
 
-        public SaveObjectData? ObjectAtPosition(uint x, uint y) => Editor.ObjectAtPosition(x, y, mapLayer);
+        public SaveObjectData? ObjectAtPosition(int x, int y) => Editor.ObjectAtPosition(x, y, mapLayer);
 
         public SaveObjectData SetSelectedObject(string name, bool withUndo = true)
         {
@@ -122,7 +122,7 @@ namespace Editor.Editors
             return tryDeleteObjectAtPosition(cursor.x, cursor.y);
         }
 
-        private bool tryDeleteObjectAtPosition(uint x, uint y)
+        private bool tryDeleteObjectAtPosition(int x, int y)
         {
             var removed = mapLayer.objects.RemoveAll(item => item.x == x && item.y == y);
             return removed > 0;
@@ -141,7 +141,7 @@ namespace Editor.Editors
             return trySetColorAtPosition(color, obj.x, obj.y);
         }
 
-        private bool trySetColorAtPosition(int color, uint x, uint y)
+        private bool trySetColorAtPosition(int color, int x, int y)
         {
             var obj = ObjectAtPosition(x, y);
             if (obj == null) return false;
@@ -173,7 +173,7 @@ namespace Editor.Editors
             return trySetObjectAtPosition(currentObject, cursor.x, cursor.y);
         }
 
-        private bool trySetObjectAtPosition(SaveObjectData d, uint x, uint y, bool keepOriginal = true)
+        private bool trySetObjectAtPosition(SaveObjectData d, int x, int y, bool keepOriginal = true)
         {
             var obj = ObjectAtPosition(x, y);
 
@@ -212,8 +212,8 @@ namespace Editor.Editors
         {
             if (!size.TryRowColToInt(out var dims)) return false;
 
-            mapLayer.width = (uint)dims.X;
-            mapLayer.height = (uint)dims.Y;
+            mapLayer.width = (int)dims.X;
+            mapLayer.height = (int)dims.Y;
             return true;
         }
 
@@ -229,7 +229,7 @@ namespace Editor.Editors
             return tryRotateObjectAtPosition(obj.x, obj.y, ccw);
         }
 
-        public bool tryRotateObjectAtPosition(uint x, uint y, bool ccw = true)
+        public bool tryRotateObjectAtPosition(int x, int y, bool ccw = true)
         {
             var obj = ObjectAtPosition(x, y);
             if (obj == null) return false;

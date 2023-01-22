@@ -52,7 +52,7 @@ namespace Editor.Screens
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            var objects = new Dictionary<uint, Dictionary<uint, string>>();
+            var objects = new Dictionary<int, Dictionary<int, string>>();
 
             foreach (var obj in mapLayer.objects)
             {
@@ -67,11 +67,11 @@ namespace Editor.Screens
             var columnHeaderLines = GridHelpers.GetColumnHeaders(0, mapLayer.width);
             var rowHeaderLines = GridHelpers.GetRowHeaders(0, mapLayer.height);
 
-            for (uint y = 0; y < mapLayer.height; y++)
+            for (int y = 0; y < mapLayer.height; y++)
             {
                 var line = new List<string>();
 
-                for (uint x = 0; x < mapLayer.width; x++)
+                for (int x = 0; x < mapLayer.width; x++)
                 {
                     line.Add(objects.ConstructDefaultValue(x).TryGetValue(y, out var obj) ? obj : " ");
                 }

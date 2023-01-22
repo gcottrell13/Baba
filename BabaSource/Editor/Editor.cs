@@ -82,7 +82,7 @@ namespace Editor
 
         public List<SaveRegion> regions => currentWorld?.Regions ?? new List<SaveRegion>();
 
-        public static SaveObjectData? ObjectAtPosition(uint x, uint y, SaveMapLayer? map)
+        public static SaveObjectData? ObjectAtPosition(int x, int y, SaveMapLayer? map)
         {
             if (map == null) return null;
 

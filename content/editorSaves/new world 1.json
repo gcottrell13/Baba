@@ -50,7 +50,14 @@
 			"theme": "garden",
 			"musicName": "default",
 			"regionObjectLayer": {
-				"objects": [],
+				"objects": [
+					{"x":0,"y":0,"name":"text_tree","state":1,"color":42,"text":"","original":null},
+					{"x":0,"y":1,"name":"text_trees","state":1,"color":42,"text":"","original":null},
+					{"x":1,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":1,"y":0,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":2,"y":0,"name":"text_stop","state":1,"color":41,"text":"","original":null},
+					{"x":2,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
+				],
 				"width": 15,
 				"height": 15
 			}
@@ -250,14 +257,7 @@
 				"height": 15
 			},
 			"layer2": {
-				"objects": [
-					{"x":0,"y":0,"name":"text_tree","state":1,"color":42,"text":"","original":null},
-					{"x":1,"y":0,"name":"text_is","state":1,"color":3,"text":"","original":null},
-					{"x":2,"y":0,"name":"text_stop","state":1,"color":41,"text":"","original":null},
-					{"x":0,"y":1,"name":"text_trees","state":1,"color":42,"text":"","original":null},
-					{"x":1,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
-					{"x":2,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
-				],
+				"objects": [],
 				"width": 15,
 				"height": 15
 			}
@@ -318,11 +318,7 @@
 				"height": 15
 			},
 			"layer2": {
-				"objects": [
-					{"x":2,"y":1,"name":"text_tree","state":1,"color":42,"text":"","original":null},
-					{"x":3,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
-					{"x":4,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
-				],
+				"objects": [],
 				"width": 15,
 				"height": 15
 			}
@@ -337,7 +333,5 @@
 		"width": 18,
 		"height": 18
 	},
-	"startMapX": 0,
-	"startMapY": 0,
 	"worldName": "new [baba] city"
 }

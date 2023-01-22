@@ -1,4 +1,5 @@
 ﻿using Core.Engine;
+using Core.Utils;
 using Editor.Saves;
 using NUnit.Framework;
 
@@ -13,6 +14,7 @@ public class CompileMapTests
     {
         var editorFormat = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormatWorld>(saveFile)!;
         var compiledTest = CompileMap.CompileWorld(editorFormat);
+
         Assert.AreEqual(expectedCompiledMap.ToString(), compiledTest.ToString());
         Assert.AreEqual(expectedCompiledMap, compiledTest);
     }
@@ -22,7 +24,7 @@ public class CompileMapTests
         GlobalWordMapId = 1,
         Name = "new [baba] city",
         Maps = new() {
-        new MapData(new ObjectData[] {
+            new MapData(new ObjectData[] {
                 new ObjectData() {
                     Occupied = false,
                     Color = 33,
@@ -50,15 +52,16 @@ public class CompileMapTests
                     y = 5,
                     Name = "text_you",
                 } }) {
-            MapId = 1,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-        },
-        new MapData(new ObjectData[] {
+                MapId = 1,
+                Name = "global",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {
                 new ObjectData() {
                     Occupied = false,
                     Color = 49,
@@ -77,42 +80,110 @@ public class CompileMapTests
                     y = 4,
                     Name = "boat",
                 } }) {
-            MapId = 2,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 7,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-        },
-        new MapData(new ObjectData[] {  }) {
-            MapId = 3,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-        },
-        new MapData(new ObjectData[] {  }) {
-            MapId = 4,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-        },
-        new MapData(new ObjectData[] {  }) {
-            MapId = 5,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-        },
-        new MapData(new ObjectData[] {
+                MapId = 2,
+                Name = "region 0 - autumnregion",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {  }) {
+                MapId = 3,
+                Name = "region 1 - region 2",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {  }) {
+                MapId = 4,
+                Name = "region 2 - new region 2",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {  }) {
+                MapId = 5,
+                Name = "region 3 - starting region",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 42,
+                    ObjectId = 443,
+                    Facing = 0,
+                    x = 0,
+                    y = 0,
+                    Name = "text_tree",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 3,
+                    ObjectId = 297,
+                    Facing = 0,
+                    x = 1,
+                    y = 0,
+                    Name = "text_is",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 41,
+                    ObjectId = 429,
+                    Facing = 0,
+                    x = 2,
+                    y = 0,
+                    Name = "text_stop",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 42,
+                    ObjectId = 444,
+                    Facing = 0,
+                    x = 0,
+                    y = 1,
+                    Name = "text_trees",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 3,
+                    ObjectId = 297,
+                    Facing = 0,
+                    x = 1,
+                    y = 1,
+                    Name = "text_is",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 41,
+                    ObjectId = 429,
+                    Facing = 0,
+                    x = 2,
+                    y = 1,
+                    Name = "text_stop",
+                } }) {
+                MapId = 7,
+                Name = "6 uplayer - start",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {
                 new ObjectData() {
                     Occupied = false,
                     Color = 42,
@@ -125,21 +196,59 @@ public class CompileMapTests
                 new ObjectData() {
                     Occupied = false,
                     Color = 42,
-                    ObjectId = 480,
+                    ObjectId = 4,
                     Facing = 0,
                     x = 1,
                     y = 0,
-                    Name = "tree",
+                    Name = "baba",
                 } }) {
-            MapId = 6,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 5,
-        },
-        new MapData(new ObjectData[] {
+                MapId = 6,
+                Name = "start",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 8,
+                westNeighbor = 0,
+                upLayer = 7,
+                region = 3,
+            },
+            new MapData(new ObjectData[] {
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 42,
+                    ObjectId = 443,
+                    Facing = 0,
+                    x = 2,
+                    y = 1,
+                    Name = "text_tree",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 3,
+                    ObjectId = 297,
+                    Facing = 0,
+                    x = 3,
+                    y = 1,
+                    Name = "text_is",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 41,
+                    ObjectId = 429,
+                    Facing = 0,
+                    x = 4,
+                    y = 1,
+                    Name = "text_stop",
+                } }) {
+                MapId = 9,
+                Name = "8 uplayer - start2",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {
                 new ObjectData() {
                     Occupied = false,
                     Color = 42,
@@ -152,21 +261,59 @@ public class CompileMapTests
                 new ObjectData() {
                     Occupied = false,
                     Color = 42,
-                    ObjectId = 480,
+                    ObjectId = 1,
                     Facing = 0,
                     x = 1,
                     y = 0,
-                    Name = "tree",
+                    Name = "amongi",
                 } }) {
-            MapId = 7,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 8,
-            westNeighbor = 1,
-            upLayer = 0,
-            region = 5,
-        },
-        new MapData(new ObjectData[] {
+                MapId = 8,
+                Name = "start2",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 10,
+                westNeighbor = 1,
+                upLayer = 9,
+                region = 3,
+            },
+            new MapData(new ObjectData[] {
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 50,
+                    ObjectId = 31,
+                    Facing = 0,
+                    x = 7,
+                    y = 6,
+                    Name = "cat",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 20,
+                    ObjectId = 6,
+                    Facing = 0,
+                    x = 7,
+                    y = 10,
+                    Name = "banana",
+                },
+                new ObjectData() {
+                    Occupied = false,
+                    Color = 17,
+                    ObjectId = 161,
+                    Facing = 0,
+                    x = 3,
+                    y = 3,
+                    Name = "text_amongi",
+                } }) {
+                MapId = 11,
+                Name = "10 uplayer - doggos cattos",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 0,
+                upLayer = 0,
+                region = 0,
+            },
+            new MapData(new ObjectData[] {
                 new ObjectData() {
                     Occupied = false,
                     Color = 2,
@@ -230,39 +377,44 @@ public class CompileMapTests
                     y = 2,
                     Name = "amongi",
                 } }) {
-            MapId = 8,
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 7,
-            upLayer = 0,
-            region = 3,
-        } },
+                MapId = 10,
+                Name = "doggos cattos",
+                northNeighbor = 0,
+                southNeighbor = 0,
+                eastNeighbor = 0,
+                westNeighbor = 8,
+                upLayer = 11,
+                region = 1,
+            } },
         Regions = new() {
-        new RegionData() {
-            RegionId = 0,
-            WordLayerId = 2,
-            Theme = "autumn",
-            Music = "editorsong"
-        },
-        new RegionData() {
-            RegionId = 1,
-            WordLayerId = 3,
-            Theme = "garden",
-            Music = "default"
-        },
-        new RegionData() {
-            RegionId = 2,
-            WordLayerId = 4,
-            Theme = "swamp",
-            Music = "default"
-        },
-        new RegionData() {
-            RegionId = 3,
-            WordLayerId = 5,
-            Theme = "garden",
-            Music = "default"
-        } }
+            new RegionData() {
+                RegionId = 0,
+                WordLayerId = 2,
+                Theme = "autumn",
+                Music = "editorsong",
+                Name = "autumnregion"
+            },
+            new RegionData() {
+                RegionId = 1,
+                WordLayerId = 3,
+                Theme = "garden",
+                Music = "default",
+                Name = "region 2"
+            },
+            new RegionData() {
+                RegionId = 2,
+                WordLayerId = 4,
+                Theme = "swamp",
+                Music = "default",
+                Name = "new region 2"
+            },
+            new RegionData() {
+                RegionId = 3,
+                WordLayerId = 5,
+                Theme = "garden",
+                Music = "default",
+                Name = "starting region"
+            } }
     };
 
     private const string saveFile = """

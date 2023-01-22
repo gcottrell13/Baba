@@ -7,6 +7,7 @@ public class RegionData
     public short WordLayerId;
     public string Theme = string.Empty;
     public string Music = string.Empty;
+    public string Name = string.Empty;
 
     public string Serialize()
     {
@@ -30,7 +31,8 @@ public class RegionData
             RegionId = {{RegionId}},
             WordLayerId = {{WordLayerId}},
             Theme = "{{Theme}}",
-            Music = "{{Music}}"
+            Music = "{{Music}}",
+            Name = "{{Name}}"
         }
         """;
 

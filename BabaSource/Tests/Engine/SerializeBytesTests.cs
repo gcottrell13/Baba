@@ -33,7 +33,7 @@ namespace Tests.Engine
         }
 
         [Test]
-        public void ShouldSerializeItems()
+        public void Should_De_SerializeItems()
         {
             var input = new List<TestClass>()
             {
@@ -46,6 +46,22 @@ namespace Tests.Engine
             var serialized = SerializeBytes.SerializeObjects(input);
             var deserialized = SerializeBytes.DeserializeObjects<TestClass>(serialized);
             Assert.AreEqual(input, deserialized);
+        }
+
+        [Test]
+        public void JoinSerialized()
+        {
+            var joined = SerializeBytes.JoinSerializedStrings("hi", "thereblahfffffffffffffffffffffffffffffffffffffnewline");
+
+            Assert.AreEqual("AgAAAAhiNQAAAAthereblahfffffffffffffffffffffffffffffffffffffnewl\nine", joined);
+        }
+
+        [Test]
+        public void SplitJoinedSerialized()
+        {
+            var joined = "AgAAAAhiNQAAAAthereblahfffffffffffffffffffffffffffffffffffff\nnewline";
+            var split = SerializeBytes.SplitSerializedStrings(joined);
+            Assert.AreEqual(new string[] { "hi", "thereblahfffffffffffffffffffffffffffffffffffffnewline" }, split);
         }
     }
 }

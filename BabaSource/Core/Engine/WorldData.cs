@@ -54,13 +54,15 @@ public class WorldData
         var worldEndIndex = str.IndexOf(endWorld, worldStartIndex);
         if (worldEndIndex == -1) throw new Exception("could not find end of world section");
 
+        worldStartIndex += beginWorld.Length;
         var world = SerializeBytes.DeserializeObjects<WorldData>(str.Substring(worldStartIndex, worldEndIndex - worldStartIndex))[0];
 
         var regionStartIndex = str.IndexOf(beginRegion);
         while (regionStartIndex != -1)
         {
             var endIndex = str.IndexOf(endRegion, regionStartIndex);
-            world.Regions.AddRange(SerializeBytes.DeserializeObjects<RegionData>(str.Substring(regionStartIndex, endIndex - regionStartIndex)));
+            regionStartIndex += beginRegion.Length;
+            world.Regions.Add(RegionData.Deserialize(str.Substring(regionStartIndex, endIndex - regionStartIndex)));
             regionStartIndex = str.IndexOf(beginRegion, endIndex);
         }
 
@@ -68,7 +70,8 @@ public class WorldData
         while (mapStartIndex != -1)
         {
             var endIndex = str.IndexOf(endMap, mapStartIndex);
-            world.Maps.AddRange(SerializeBytes.DeserializeObjects<MapData>(str.Substring(mapStartIndex, endIndex - mapStartIndex)));
+            mapStartIndex += beginMap.Length;
+            world.Maps.Add(MapData.Deserialize(str.Substring(mapStartIndex, endIndex - mapStartIndex)));
             mapStartIndex = str.IndexOf(beginMap, endIndex);
         }
 

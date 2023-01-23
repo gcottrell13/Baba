@@ -49,9 +49,9 @@ public class SerializeBytes
         return Encoding.UTF8.GetString(bytes);
     }
 
-    private static byte[] take(Enumerator<byte> enumerator, int count)
+    private static T[] take<T>(Enumerator<T> enumerator, int count)
     {
-        var bytes = new byte[count];
+        var bytes = new T[count];
         if (count == 0) 
             return bytes;
 
@@ -87,21 +87,31 @@ public class SerializeBytes
         }
 
         var str = Convert.ToBase64String(bytes.ToArray());
-        var output = "";
+        return formatStr(str);
+    }
+
+    private static string normalize(string str) => string.Join("", str.Split('\n'));
+
+    private static string formatStr(string str)
+    {
+        var output = new StringBuilder();
+
         for (var i = 0; i < str.Length; i += 64)
         {
-            if (str.Length - i < 64) output += str[i..];
-            else output += str[i..(i + 64)] + "\n";
+            if (str.Length - i < 64) output.Append(str[i..]);
+            else output.Append(str[i..(i + 64)] + "\n");
         }
 
-        return output;
+        return output.ToString().Trim();
     }
 
     public static List<T> DeserializeObjects<T>(string? str) where T : new()
     {
         if (str == null) return new();
 
-        var bytes = Convert.FromBase64String(str.Replace("\n", "").Replace("\r", "")).ToList();
+        var actualString = string.Join("", str.Trim().Split('\n', '\r'));
+        List<byte> bytes;
+        bytes = Convert.FromBase64String(actualString.Replace("\n", "").Replace("\r", "")).ToList();
 
         var fields = typeof(T).GetFields();
         var props = typeof(T).GetProperties().Where(x => x.CanWrite && x.CanRead).ToArray();
@@ -147,6 +157,33 @@ public class SerializeBytes
         }
 
         return arr;
+    }
+
+    public static string JoinSerializedStrings(params string[] strings)
+    {
+        var sb = new StringBuilder();
+        foreach (var str in strings)
+        {
+            var norm = normalize(str);
+            var len = BitConverter.GetBytes(norm.Length);
+            sb.Append(Convert.ToBase64String(len).TrimEnd('='));
+            sb.Append(norm);
+        }
+        return formatStr(sb.ToString());
+    }
+
+    public static string[] SplitSerializedStrings(string joined)
+    {
+        var enumerator = new Enumerator<char>(normalize(joined));
+        var strings = new List<string>();
+        while (enumerator.HasNext())
+        {
+            var s = new string(take(enumerator, 6));
+            var bytes = Convert.FromBase64String(s.PadRight(8, '='));
+            var len = BitConverter.ToInt32(bytes);
+            strings.Add(new string(take(enumerator, len)).Replace("\n", ""));
+        }
+        return strings.ToArray();
     }
 
     [DebuggerDisplay("Enumerator at {index} = {Current}")]

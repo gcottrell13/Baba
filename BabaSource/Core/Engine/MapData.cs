@@ -92,12 +92,12 @@ namespace Core.Engine
 
         public string Serialize()
         {
-            return SerializeBytes.SerializeObjects(new[] { this }) + "\n" + SerializeBytes.SerializeObjects(WorldObjects);
+            return SerializeBytes.JoinSerializedStrings(SerializeBytes.SerializeObjects(new[] { this }), SerializeBytes.SerializeObjects(WorldObjects));
         }
 
         public static MapData Deserialize(string str)
         {
-            var parts = str.Split("\n", 2);
+            var parts = SerializeBytes.SplitSerializedStrings(str);
             var map = SerializeBytes.DeserializeObjects<MapData>(parts[0])[0];
             var data = SerializeBytes.DeserializeObjects<ObjectData>(parts[1]);
 

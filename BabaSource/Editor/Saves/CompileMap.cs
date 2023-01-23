@@ -15,6 +15,11 @@ namespace Editor.Saves
             internal int x;
             internal int y;
             internal MapData data;
+
+            public MapTemp(MapData data)
+            {
+                this.data = data;
+            }
         }
 
         public static WorldData CompileWorld(SaveFormatWorld world)
@@ -41,10 +46,7 @@ namespace Editor.Saves
 
             var globalLayer = fromMapLayer(world.globalObjectLayer);
             globalLayer.Name = "global";
-            mapTemps.Add(new()
-            {
-                data = globalLayer,
-            });
+            mapTemps.Add(new(globalLayer));
 
             var regionMap = new Dictionary<int, short>();
             var regionDatas = new List<RegionData>();
@@ -54,8 +56,7 @@ namespace Editor.Saves
             {
                 var md = fromMapLayer(region.regionObjectLayer);
                 md.Name = $"region {regionIds} - {region.name}";
-                var temp = new MapTemp() { 
-                    data = md,
+                var temp = new MapTemp(md) { 
                     x = -1,
                     y = -1,
                 };
@@ -79,9 +80,8 @@ namespace Editor.Saves
                 var md = fromMapLayer(data.layer1);
                 var wordLayer = fromMapLayer(data.layer2);
                 wordLayer.Name = $"{md.MapId} uplayer - {data.name}";
-                mapTemps.Add(new()
+                mapTemps.Add(new(wordLayer)
                 {
-                    data = wordLayer,
                     x = -1,
                     y = -1,
                 });
@@ -90,9 +90,8 @@ namespace Editor.Saves
                 md.Name = data.name;
                 md.upLayer = wordLayer.MapId;
 
-                mapTemps.Add(new()
+                mapTemps.Add(new(md)
                 {
-                    data = md,
                     x = instance.x,
                     y = instance.y,
                 });

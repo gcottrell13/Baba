@@ -18,8 +18,10 @@ public class WorldData
     {
         return $"""
             {outputWorldData(this)}
-            {string.Join("\n", Regions.Select(outputRegion))}
-            {string.Join("\n", Maps.Select(outputMap))}
+
+            {string.Join("\n\n", Regions.Select(outputRegion))}
+
+            {string.Join("\n\n", Maps.Select(outputMap))}
             """;
     }
 
@@ -83,6 +85,7 @@ public class WorldData
     private static string outputWorldData(WorldData data)
     {
         return $"""
+            # world {data.Name}
             {beginWorld}
             {SerializeBytes.SerializeObjects(new[] { data })}
             {endWorld}
@@ -92,7 +95,7 @@ public class WorldData
     private static string outputRegion(RegionData region)
     {
         return $"""
-                # {region.RegionId}
+                # {region.RegionId} {region.Name}
                 {beginRegion}
                 {region.Serialize()}
                 {endRegion}
@@ -102,7 +105,7 @@ public class WorldData
     private static string outputMap(MapData mapInfo)
     {
         return $"""
-                # {mapInfo.MapId}
+                # {mapInfo.MapId} {mapInfo.Name}
                 {beginMap}
                 {mapInfo.Serialize()}
                 {endMap}

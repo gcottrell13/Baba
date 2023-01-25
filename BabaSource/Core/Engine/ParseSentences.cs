@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.UI;
+using Core.Utils;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,10 +59,19 @@ public class Word<T> where T : INameable
     public override int GetHashCode() => Name.GetHashCode();
 }
 
-public class NounAdjective<T> where T : INameable
+public interface ISpecifier<T>
+    where T : INameable
+{
+    bool Not { get; set; }
+    Word<T>? Modifier { get; set; }
+}
+
+public class NounAdjective<T> : ISpecifier<T>
+    where T : INameable
 {
     public Word<T> Value;
-    public Word<T>? Modifier;
+    public Word<T>? Modifier { get; set; }
+    public bool Not { get; set; } = false;
 
     public NounAdjective(Word<T> value)
     {
@@ -75,19 +85,25 @@ public class NounAdjective<T> where T : INameable
         return base.Equals(obj);
     }
 
-    public override string ToString() => $"{Modifier} {Value}".Trim();
+    public override string ToString() => string.Join(" ", $"{_not()} {Modifier} {Value}".Split(" ", System.StringSplitOptions.RemoveEmptyEntries));
 
     public override int GetHashCode() => ToString().GetHashCode();
+
+    private string _not() => Not ? "not" : "";
 }
 
-public class NA_WithRelationship<T> : NounAdjective<T> where T : INameable
+public class NA_WithRelationship<T> : ISpecifier<T>
+    where T : INameable
 {
+    public NounAdjective<T> Target;
+    public bool Not { get; set; } = false;
     public Word<T> Relation;
-    public NounAdjective<T> RelatedTo;
-    public Word<T>? RelationModifier;
+    public Word<T>? Modifier { get; set; }
+    public ISpecifier<T> RelatedTo;
 
-    public NA_WithRelationship(Word<T> value, Word<T> relation, NounAdjective<T> relatedTo) : base(value)
+    public NA_WithRelationship(Word<T> relation, ISpecifier<T> relatedTo)
     {
+        Target = null!;
         Relation = relation;
         RelatedTo = relatedTo;
     }
@@ -95,11 +111,13 @@ public class NA_WithRelationship<T> : NounAdjective<T> where T : INameable
     public override bool Equals(object? obj)
     {
         if (obj is NA_WithRelationship<T> na) 
-            return Equals(Relation, na.Relation) && RelatedTo.Equals(na.RelatedTo) && Equals(RelationModifier, na.RelationModifier) && base.Equals(obj);
+            return Equals(Relation, na.Relation) && RelatedTo.Equals(na.RelatedTo) && Equals(Modifier, na.Modifier) && Not == na.Not && Target.Equals(na.Target);
         return base.Equals(obj);
     }
 
-    public override string ToString() => $"{base.ToString()} " + $"{RelationModifier} {Relation} {RelatedTo}".Trim();
+    private string _not() => Not ? "not" : "";
+
+    public override string ToString() => string.Join(" ", $"{Target} {_not()} {Modifier} {Relation} {RelatedTo}".Split(" ", System.StringSplitOptions.RemoveEmptyEntries));
 
     public override int GetHashCode() => ToString().GetHashCode();
 }
@@ -107,9 +125,9 @@ public class NA_WithRelationship<T> : NounAdjective<T> where T : INameable
 public class Conjunction<T> where T : INameable
 {
     public Word<T> Conj;
-    public NounAdjective<T> Item;
+    public ISpecifier<T> Item;
 
-    public Conjunction(Word<T> conj, NounAdjective<T> item)
+    public Conjunction(Word<T> conj, ISpecifier<T> item)
     {
         Conj = conj;
         Item = item;
@@ -129,10 +147,10 @@ public class Conjunction<T> where T : INameable
 
 public class Clause<T> where T : INameable
 {
-    public NounAdjective<T> First;
+    public ISpecifier<T> First;
     public List<Conjunction<T>> Items = new();
 
-    public Clause(NounAdjective<T> first)
+    public Clause(ISpecifier<T> first)
     {
         First = first;
     }
@@ -348,7 +366,7 @@ public class ParseSentences
         return sentences;
     }
 
-    private static NounAdjective<T>? matchSpecifier<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
+    private static ISpecifier<T>? matchSpecifier<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
     {
         var re = new List<char>();
 
@@ -357,28 +375,36 @@ public class ParseSentences
             var name = word.Name;
 
             if (exclude.Contains(name)) return null;
+            else if (name == "text_not" || name == "not") re.Add('n');
             else if (vocabulary.Nouns.Contains(name)) re.Add('a');
             else if (vocabulary.Adjectives.Contains(name)) re.Add('a');
             else if (vocabulary.Modifiers.Contains(name)) re.Add('m');
             else if (vocabulary.Relations.Contains(name)) re.Add('r');
             else return null;
         }
-        var str = string.Join("", re);
 
-        return str switch
+        if (re.Count == 0) return null;
+
+        if (re[^1] != 'a') return null;
+
+        ISpecifier<T> current = new NounAdjective<T>(words[^1]);
+
+        var i = re.Count - 1;
+        while (i-- > 0)
         {
-            "a" => new NounAdjective<T>(words[0]),
-            "ma" => new NounAdjective<T>(words[1]) { Modifier = words[0] },
-            "ara" => new NA_WithRelationship<T>(words[0], words[1], new(words[2])),
-            "mara" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0] },
-            "arma" => new NA_WithRelationship<T>(words[0], words[1], new(words[3]) { Modifier = words[2] }),
-            "marma" => new NA_WithRelationship<T>(words[1], words[2], new(words[4]) { Modifier = words[3] }) { Modifier = words[0] },
-            "amra" => new NA_WithRelationship<T>(words[0], words[2], new(words[3])) { RelationModifier = words[1] },
-            "mamra" => new NA_WithRelationship<T>(words[1], words[2], new(words[3])) { Modifier = words[0], RelationModifier = words[2] },
-            "amrma" => new NA_WithRelationship<T>(words[0], words[1], new(words[4]) { Modifier = words[3] }) { RelationModifier = words[2] },
-            "mamrma" => new NA_WithRelationship<T>(words[1], words[3], new(words[5]) { Modifier = words[4] }) { Modifier = words[0], RelationModifier = words[2] },
-            _ => null,
-        };
+            var wr = current as NA_WithRelationship<T>;
+            ISpecifier<T> target = wr?.Target != null ? wr.Target : current;
+
+            switch (re[i])
+            {
+                case 'n': { target.Not = true; break; }
+                case 'a': { if (wr != null) wr.Target = new(words[i]); else return null; break; }
+                case 'r': { current = new NA_WithRelationship<T>(words[i], current); break; }
+                case 'm': { target.Modifier = words[i]; break; }
+                default: { return null; }
+            }
+        }
+        return current;
     }
 
     private static Clause<T>? matchClause<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
@@ -387,7 +413,7 @@ public class ParseSentences
         int lastI = 0;
         Word<T>? lastConjunction = default;
 
-        void addSpec(NounAdjective<T> spec, Word<T>? conj)
+        void addSpec(ISpecifier<T> spec, Word<T>? conj)
         {
             if (clause == null)
             {

@@ -143,7 +143,7 @@ namespace Tests.Engine
                     "flag not on water is win",
                     "lonely baba is rock",
                     "baba and flag on water is win and not box",
-                    "lonely baba not on not flag is you",
+                    "not lonely baba not on not flag is you",
                 })
                 {
                     yield return (

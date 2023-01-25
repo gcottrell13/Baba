@@ -55,35 +55,38 @@ namespace Core.Engine
 
             foreach (var sentence in sentences)
             {
-                var objects = sentence.Object.Items.Select(x => x.Item).Reverse().Append(sentence.Object.First).TakeWhile(obj =>
+                var objects = new List<ISpecifier<T>>();
+                foreach (var obj in sentence.Object.Items.Select(x => x.Item).Reverse().Append(sentence.Object.First))
                 {
-                    if (obj is NA_WithRelationship<T> na)
+                    if (obj is NA_WithRelationship<T> wr)
                     {
-                        // an object can only be "feeling" an adjective
-                        if (nouns.Contains(na.RelatedTo.Value.Name) && na.Relation.Name == "text_feeling") return false;
-
-                        // relations to objects only on the relations that allow objects
-                        if (adjectives.Contains(na.RelatedTo.Value.Name) && nounOnlyRelations.Contains(na.Relation.Name)) return false;
+                        if (!_checkNA(wr)) break;
                     }
-                    // adjectives are not allowed as the object of a sentence, use "feeling"
-                    if (adjectives.Contains(obj.Value.Name)) return false;
-                    return true;
-                }).ToList();
+                    else if (obj is NounAdjective<T> na)
+                    {
+                        // adjectives are not allowed as the object of a sentence, use "feeling"
+                        if (adjectives.Contains(na.Value.Name)) break;
+                    }
+                    objects.Add(obj);
+                }
 
                 if (objects.Count == 0) continue;
 
-                var subjects = sentence.Subject.Items.Select(x => x.Item).Reverse().Append(sentence.Subject.First).Reverse().TakeWhile(sub =>
+                var subjects = new List<ISpecifier<T>>();
+                foreach (var sub in sentence.Subject.Items.Select(x => x.Item).Reverse().Append(sentence.Subject.First).Reverse())
                 {
-                    // some verbs only make sense for nouns
-                    if (nounOnlyVerbs.Contains(sentence.Verb.Name) && adjectives.Contains(sub.Value.Name)) return false;
-
                     // the subject of a sentence has to be simple, relations don't make sense
-                    if (sub is NA_WithRelationship<T>) return false;
+                    if (sub is NA_WithRelationship<T>) break;
+
+                    if (sub is not NounAdjective<T> na) break; // shouldn't happen though
+
+                    // some verbs only make sense for nouns
+                    if (nounOnlyVerbs.Contains(sentence.Verb.Name) && adjectives.Contains(na.Value.Name)) break;
 
                     // the only modifier allowed in the subject is "not"
-                    if (sub.Modifier?.Name != null && sub.Modifier.Name != "text_not" && adjectives.Contains(sub.Value.Name)) return false;
-                    return true;
-                }).ToList();
+                    if (sub.Modifier?.Name != null && sub.Modifier.Name != "text_not" && adjectives.Contains(na.Value.Name)) break;
+                    subjects.Add(sub);
+                }
 
                 if (subjects.Count == 0) continue;
 
@@ -104,15 +107,28 @@ namespace Core.Engine
         {
             return findAndFilter(grid).ToList();
         }
+
+        private static bool _checkNA<T>(NA_WithRelationship<T> wr) where T : INameable
+        {
+            var na = wr.RelatedTo as NounAdjective<T>;
+            if (na == null) return false;
+
+            // an object can only be "feeling" an adjective
+            if (wr.Relation.Name == "text_feeling" && nouns.Contains(na.Value.Name)) return false;
+
+            // relations to objects only on the relations that allow objects
+            if (adjectives.Contains(na.Value.Name) && nounOnlyRelations.Contains(wr.Relation.Name)) return false;
+            return true;
+        }
     }
 
     public struct Rule<T> where T : INameable
     {
-        public NounAdjective<T> LHS;
+        public ISpecifier<T> LHS;
         public Word<T> Verb;
-        public NounAdjective<T> RHS; 
+        public ISpecifier<T> RHS; 
 
-        public Rule(NounAdjective<T> LHS, Word<T> Verb, NounAdjective<T> RHS)
+        public Rule(ISpecifier<T> LHS, Word<T> Verb, ISpecifier<T> RHS)
         {
             this.LHS = LHS;
             this.Verb = Verb;

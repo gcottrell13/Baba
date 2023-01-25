@@ -1093,6 +1093,8 @@ namespace Core.Content {
 	new Wobbler("monster.sleep_right.0", new[] { new Point(1, 7), new Point(2, 7), new Point(3, 7) }, new Point(24, 24), sheets["monster"]) })
 ) },
 			{ "moon", new Wobbler("moon", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["moon"]) },
+			{ "nnope", new Wobbler("nnope", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["nnope"]) },
+			{ "nonono", new Wobbler("nonono", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1) }, new Point(24, 24), sheets["nonono"]) },
 			{ "nose", new FacingOnMove(
                 name: "nose", 
 				up: new AnimateOnMove("nose", new Wobbler[] {
@@ -1610,6 +1612,8 @@ namespace Core.Content {
 			{ "text_n", new Wobbler("text_n", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_n"]) },
 			{ "text_near", new Wobbler("text_near", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_near"]) },
 			{ "text_nextto", new Wobbler("text_nextto", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nextto"]) },
+			{ "text_nnope", new Wobbler("text_nnope", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nnope"]) },
+			{ "text_nonono", new Wobbler("text_nonono", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nonono"]) },
 			{ "text_nose", new Wobbler("text_nose", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nose"]) },
 			{ "text_not", new Wobbler("text_not", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_not"]) },
 			{ "text_nudgedown", new Wobbler("text_nudgedown", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(30, 30), sheets["text_nudgedown"]) },

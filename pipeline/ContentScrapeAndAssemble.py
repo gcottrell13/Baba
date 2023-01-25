@@ -15,4 +15,6 @@ if __name__ == "__main__":
     output_spritesheets(analysis_result)
     make_all_proofs(analysis_result, [
         'amongi',
+        'nonono',
+        'nnope',
     ])

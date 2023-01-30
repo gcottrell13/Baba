@@ -97,11 +97,14 @@ public static class ObjectInfo {{
     }};
     
 }}
+        """,
+        "Content/ObjectTypeId.cs": f"""
+namespace {NAMESPACE};
 
 public enum ObjectTypeId {{
 {enum_values}
 }}
-        """,
+        """
     })
 
 

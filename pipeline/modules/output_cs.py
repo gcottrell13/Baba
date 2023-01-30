@@ -11,6 +11,11 @@ from modules.load_object_information import load_information, all_palettes
 
 NAMESPACE = "Core.Content"
 
+csharp_keywords = [
+    "lock", "object", "async", "float", "is"
+]
+
+
 def save_object_info():
     info, colors = load_information()
 
@@ -33,15 +38,32 @@ def save_object_info():
         for name, item in info.items()
     ])
 
-    keyIndex = list(enumerate(info.keys()))
+    def transform_name(name: str):
+        name = name.removeprefix('text_')
+        if ord('0') <= ord(name[0]) <= ord('9'):
+            name = "_" + name
+        if name in csharp_keywords:
+            name = "@" + name
+        return name
+
+    keyIndex = [
+        k
+        for k in info.keys()
+        if not k.startswith('text_') or k[5:] not in info
+    ]
+
+    enum_values = ",\n".join(
+        f"\t{transform_name(key)} = {index}"
+        for index, key in enumerate(keyIndex)
+    )
 
     id_to_name = ",\n".join(
-        f"\t\t\t{{ {index}, \"{key}\" }}"
-        for index, key in keyIndex
+        f"\t\t{{ ObjectTypeId.{transform_name(key)}, \"{key}\" }}"
+        for key in keyIndex
     )
     name_to_id = ",\n".join(
-        f"\t\t\t{{ \"{key}\", {index} }}"
-        for index, key in keyIndex
+        f"\t\t{{ \"{key}\", ObjectTypeId.{transform_name(key)} }}"
+        for key in keyIndex
     )
 
     output_directory_structure(OUTPUT_DIRECTORY, {
@@ -50,29 +72,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace {NAMESPACE} {{
-    public class ObjectInfoItem {{
-        public int color;
-        public int color_active;
-        public string sprite = string.Empty;
-        public int layer;
-        public string unittype = string.Empty;
-    }}
+namespace {NAMESPACE};
 
-    public static class ObjectInfo {{
-        private const int shift = {(7).bit_length()};
-        public static readonly Dictionary<string, ObjectInfoItem> Info = new Dictionary<string, ObjectInfoItem>() {{
+public class ObjectInfoItem {{
+    public int color;
+    public int color_active;
+    public string sprite = string.Empty;
+    public int layer;
+    public string unittype = string.Empty;
+}}
+
+public static class ObjectInfo {{
+    private const int shift = {(7).bit_length()};
+    public static readonly Dictionary<string, ObjectInfoItem> Info = new Dictionary<string, ObjectInfoItem>() {{
 {items}
-        }};
-        
-        public static readonly Dictionary<int, string> IdToName = new() {{
+    }};
+    
+    public static readonly Dictionary<ObjectTypeId, string> IdToName = new() {{
 {id_to_name}
-        }};
-        
-        public static readonly Dictionary<string, int> NameToId = new() {{
+    }};
+    
+    public static readonly Dictionary<string, ObjectTypeId> NameToId = new() {{
 {name_to_id}
-        }};
-    }}
+    }};
+    
+}}
+
+public enum ObjectTypeId {{
+{enum_values}
 }}
         """,
     })
@@ -238,7 +265,7 @@ new FacingOnMove(
     sheet_text = ',\n'.join(sheets)
     lines_text = ',\n'.join(lines)
     output_directory_structure(OUTPUT_DIRECTORY, {
-            'Content/Sheets.cs': f"""
+        'Content/Sheets.cs': f"""
 using Microsoft.Xna.Framework.Graphics; 
 using System.Collections.Generic;
 using System.IO;
@@ -251,7 +278,7 @@ namespace {NAMESPACE} {{
     }}
 }}
     """,
-            'Content/SheetMap.cs': f"""
+        'Content/SheetMap.cs': f"""
 using Core.Utils; 
 using Microsoft.Xna.Framework.Graphics; 
 using Microsoft.Xna.Framework;
@@ -267,4 +294,4 @@ namespace {NAMESPACE} {{
     }}
 }}
 """,
-        })
+    })

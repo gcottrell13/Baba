@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,17 @@ namespace Tests.Engine;
 
 public class Item : INameable
 {
-    public string Name { get; set; }
+    public ObjectTypeId Name { get; set; }
 
     public int X { get; set; }
 
     public int Y { get; set; }
 
-    public static implicit operator Item(string s) { return new() { Name = s }; }
-    public override string ToString() => Name;
+    public static implicit operator Item(string s) { return new() { Name = Enum.Parse<ObjectTypeId>(s) }; }
+    public override string ToString() => Name.ToString();
     public override bool Equals(object? obj)
     {
-        if (obj is string s) return s == Name;
+        if (obj is ObjectTypeId s) return s == Name;
         if (obj is Item i) return i.Name == Name;
         return base.Equals(obj);
     }

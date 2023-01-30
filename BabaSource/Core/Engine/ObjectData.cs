@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Core.Content;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Core.Engine;
 
@@ -12,14 +13,13 @@ public struct ObjectData : INameable
 {
     public bool Deleted;
     public short Color;
-    public int ObjectId;
     public int Facing;
     public int x;
     public int y;
     public int index;
     public ObjectKind Kind;
     
-    public string Name { get; set; }
+    public ObjectTypeId Name { get; set; }
 
     public int X => x;
 
@@ -37,21 +37,14 @@ public struct ObjectData : INameable
     {
         if (obj is ObjectData w)
         {
-            return w.Deleted == Deleted && w.Color == Color && w.ObjectId == ObjectId && w.Facing == Facing && w.x == x && w.y == y && w.Name == Name && w.Kind == Kind;
+            return w.Deleted == Deleted && w.Color == Color && w.Facing == Facing && w.x == x && w.y == y && w.Name == Name && w.Kind == Kind;
         }
         return base.Equals(obj);
     }
 
     public override string ToString() => $$"""
         new ObjectData() {
-            {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}},
-            {{nameof(Color)}} = {{Color}},
-            {{nameof(ObjectId)}} = {{ObjectId}},
-            {{nameof(Facing)}} = {{Facing}},
-            {{nameof(x)}} = {{x}},
-            {{nameof(y)}} = {{y}},
-            {{nameof(Name)}} = "{{Name}}",
-            {{nameof(Kind)}} = ObjectKind.{{Kind}},
+            {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}}, {{nameof(Color)}} = {{Color}}, {{nameof(Facing)}} = {{Facing}}, {{nameof(x)}} = {{x}}, {{nameof(y)}} = {{y}}, {{nameof(Name)}} = "{{Name}}", {{nameof(Kind)}} = ObjectKind.{{Kind}},
         }
         """;
 

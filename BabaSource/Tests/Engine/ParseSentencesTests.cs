@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -99,13 +100,13 @@ namespace Tests.Engine
         {
             var sentences = ParseSentences.GetSentences(new Grid(input), new()
             {
-                nouns = new() { "text_baba", "baba", "rock", "flag", "box", "water" },
-                verbs = new() { "is", "has" },
-                modifiers = new() { "not", "lonely" },
-                adjectives = new() { "you", "win" },
-                conjunctions = new() { "and" },
-                relations= new() { "on", "near" },
-                characters = new() { { "b", "b" }, { "a", "a" } },
+                nouns = new() { ObjectTypeId.baba, ObjectTypeId.rock, ObjectTypeId.flag, ObjectTypeId.box, ObjectTypeId.water },
+                verbs = new() { ObjectTypeId.@is, ObjectTypeId.has },
+                modifiers = new() { ObjectTypeId.not, ObjectTypeId.lonely },
+                adjectives = new() { ObjectTypeId.you, ObjectTypeId.win },
+                conjunctions = new() { ObjectTypeId.and },
+                relations= new() { ObjectTypeId.on, ObjectTypeId.near },
+                characters = new() { { ObjectTypeId.b, "b" }, { ObjectTypeId.a, "a" } },
             });
 
             Assert.AreEqual(expected, sentences.Select(x => x.ToString()).ToList());
@@ -148,7 +149,7 @@ namespace Tests.Engine
                 {
                     yield return (
                         sentence,
-                        new() { sentence.Split(" ").Select(x => new Item() { Name = x }).ToList()! },
+                        new() { sentence.Split(" ").Select(x => new Item() { Name = Enum.Parse<ObjectTypeId>(x) }).ToList()! },
                         new() { sentence }
                     );
                 }
@@ -157,11 +158,11 @@ namespace Tests.Engine
                     "parse characters",
                     new()
                     {
-                        "b a b a is you".Split(" ").Select(x => new Item() {Name=x}).ToList()!,
+                        "b a b a is you".Split(" ").Select(x => new Item() {Name = Enum.Parse<ObjectTypeId>(x) }).ToList()!,
                     },
                     new()
                     {
-                        "text_baba is you",
+                        "baba is you",
                     }
                 );
             } }

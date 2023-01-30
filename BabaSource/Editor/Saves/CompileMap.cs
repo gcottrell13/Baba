@@ -35,9 +35,8 @@ namespace Editor.Saves
                     Color = (short)x.color,
                     x = x.x,
                     y = x.y,
-                    ObjectId = ObjectInfo.NameToId.TryGetValue(x.name.Replace("text_", ""), out var value) ? value : ObjectInfo.NameToId[x.name],
                     Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
-                    Name = x.name.Replace("text_", ""),
+                    Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
                 }).ToArray())
                 {
                     MapId = mapTempId++,

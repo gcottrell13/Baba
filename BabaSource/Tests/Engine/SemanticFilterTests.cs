@@ -32,23 +32,23 @@ namespace Tests.Engine
                 yield return (
                     "should not skip words",
                     new() { 
-                        new() { "text_baba", "text_and", "text_stop", "text_is", "text_win" },
+                        new() { "baba", "and", "stop", "is", "win" },
                     },
                     new() { }
                 );
                 yield return (
                     "should not include invalid rules",
                     new() {
-                        new() { "text_stop", "text_and", "text_baba", "text_is", "text_win" },
+                        new() { "stop", "and", "baba", "is", "win" },
                     },
                     new() {
-                        "text_baba text_is text_win",
+                        "baba is win",
                     }
                 );
                 yield return (
                     "should not include object feeling object",
                     new() {
-                        new() { "text_baba", "text_feeling", "text_baba", "text_is", "text_win" },
+                        new() { "baba", "feeling", "baba", "is", "win" },
                     },
                     new() { }
                 );
@@ -56,23 +56,23 @@ namespace Tests.Engine
                 yield return (
                     "parse letters as word",
                     new() {
-                        new() { "text_b", "text_a", "text_b", "text_a", "text_is", "text_win" },
+                        new() { "b", "a", "b", "a", "is", "win" },
                     },
                     new() {
-                        "text_baba text_is text_win",
+                        "baba is win",
                     }
                 );
 
                 yield return (
                     "multiple rules",
                     new() {
-                        new() { "text_baba", "text_and", "text_lonely", "text_rock", "text_is", "text_win", "text_and", "text_stop" },
+                        new() { "baba", "and", "lonely", "rock", "is", "win", "and", "stop" },
                     },
                     new() {
-                        "text_lonely text_rock text_is text_win",
-                        "text_lonely text_rock text_is text_stop", 
-                        "text_baba text_is text_win", 
-                        "text_baba text_is text_stop",
+                        "lonely rock is win",
+                        "lonely rock is stop", 
+                        "baba is win", 
+                        "baba is stop",
                     }
                 );
             } }

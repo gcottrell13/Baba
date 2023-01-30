@@ -162,7 +162,7 @@
   },
   "text_nonono": {
     "color": [ 2, 3 ],
-    "color_active": [ 2,4  ],
+    "color_active": [ 2, 4 ],
     "layer": 10,
     "unittype": "text",
     "sprite": "text_nonono"

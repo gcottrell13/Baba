@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -34,16 +35,16 @@ namespace Tests.Engine
                     "one",
                     new[]
                     {
-                        new ObjectData() { Deleted= true, Color=2, ObjectId=1, Name="amongi" },
+                        new ObjectData() { Deleted= true, Color=2, Name=ObjectTypeId.amongi },
                     }
                 );
                 yield return (
                     "three",
                     new[]
                     {
-                        new ObjectData() { Deleted= true, Color=2, ObjectId=1, Name="amongi" },
-                        new ObjectData() { Deleted= true, Color=1, ObjectId=5, x=10, y=15, Name="badbad" },
-                        new ObjectData() { Deleted= true, Color=3, ObjectId=400, Facing=(int)Core.Utils.Direction.Left, Name="text_rubble" },
+                        new ObjectData() { Deleted= true, Color=2, Name=ObjectTypeId.amongi },
+                        new ObjectData() { Deleted= true, Color=1, Name=ObjectTypeId.badbad, x=10, y=15 },
+                        new ObjectData() { Deleted= true, Color=3, Name=ObjectTypeId.rubble, Facing=(int)Core.Utils.Direction.Left, Kind=ObjectKind.Text },
                     }
                 );
             } 

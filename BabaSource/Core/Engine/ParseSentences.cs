@@ -1,6 +1,8 @@
-﻿using Core.UI;
+﻿using Core.Content;
+using Core.UI;
 using Core.Utils;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +10,7 @@ namespace Core.Engine;
 
 public interface INameable
 {
-    string Name { get; }
+    ObjectTypeId Name { get; }
     int X { get; }
     int Y { get; }
 }
@@ -18,33 +20,39 @@ public class Word<T> where T : INameable
     private readonly T[]? Characters;
     private readonly T? Value;
 
-    public Word(T value, string name)
+    private Word(string name)
+    {
+        Name = Enum.Parse<ObjectTypeId>(name);
+    }
+
+    private Word(ObjectTypeId id)
+    {
+        Name = id;
+    }
+
+    public Word(T value, string name) : this(name)
     {
         Value = value;
-        Name = name;
     }
 
-    public Word(IEnumerable<T> values, string name)
+    public Word(IEnumerable<T> values, string name) : this(name)
     {
         Characters = values.ToArray();
-        Name = name;
     }
 
-    public Word(T value)
+    public Word(T value) : this(value.Name)
     {
         Value = value;
-        Name = value.Name;
     }
 
-    public Word(IEnumerable<T> values)
+    public Word(IEnumerable<T> values) : this(string.Join("", values.Select(x => x.Name)))
     {
         Characters = values.ToArray();
-        Name = string.Join("", values.Select(x => x.Name));
     }
 
     public IEnumerable<T> Objects => Characters ?? new[] { Value! };
 
-    public string Name { get; private set; }
+    public ObjectTypeId Name { get; private set; }
 
     public override bool Equals(object? obj)
     {
@@ -54,7 +62,7 @@ public class Word<T> where T : INameable
 
     public static implicit operator Word<T>(T s) => new(s);
 
-    public override string ToString() => Name;
+    public override string ToString() => Name.ToString();
 
     public override int GetHashCode() => Name.GetHashCode();
 }
@@ -195,7 +203,7 @@ public class Sentence<T> where T : INameable
 
 
 
-internal class VocabSet : HashSet<string?>
+internal class VocabSet<K> : HashSet<K?>
 {
     public VocabSet(string name)
     {
@@ -204,9 +212,9 @@ internal class VocabSet : HashSet<string?>
 
     public string Name { get; }
 
-    public static VocabSet operator &(VocabSet v, IEnumerable<string?> one)
+    public static VocabSet<K> operator &(VocabSet<K> v, IEnumerable<K?> one)
     {
-        var c = new VocabSet(v.Name);
+        var c = new VocabSet<K>(v.Name);
         foreach (var item in v.Union(one))
         {
             c.Add(item);
@@ -215,33 +223,33 @@ internal class VocabSet : HashSet<string?>
     }
 }
 
-public class Vocabulary
+public class Vocabulary<K> where K : notnull
 {
-    internal VocabSet Verbs = new("Verbs");
-    internal VocabSet Adjectives = new("Adjectives");
-    internal VocabSet Nouns = new("Nouns");
-    internal VocabSet Modifiers = new("Modifiers");
-    internal VocabSet Conjunctions = new("Conjunctions");
-    internal VocabSet Relations = new("Relations");
-    internal Dictionary<string, string> Characters = new();
-    internal VocabSet Total = new("Total");
+    internal VocabSet<K> Verbs = new("Verbs");
+    internal VocabSet<K> Adjectives = new("Adjectives");
+    internal VocabSet<K> Nouns = new("Nouns");
+    internal VocabSet<K> Modifiers = new("Modifiers");
+    internal VocabSet<K> Conjunctions = new("Conjunctions");
+    internal VocabSet<K> Relations = new("Relations");
+    internal Dictionary<K, string> Characters = new();
+    internal VocabSet<K> Total = new("Total");
 
-    public HashSet<string> verbs { set { Verbs &= value!; Total &= value!; } }
-    public HashSet<string> adjectives { set { Adjectives &= value!; Total &= value!; } }
-    public HashSet<string> nouns { set { Nouns &= value!; Total &= value!; } }
-    public HashSet<string> modifiers { set { Modifiers &= value!; Total &= value!; } }
-    public HashSet<string> conjunctions { set { Conjunctions &= value!; Total &= value!; } }
-    public HashSet<string> relations { set { Relations &= value!; Total &= value!; } }
-    public Dictionary<string, string> characters { set { Characters = value; Total &= Characters.Keys; } }
+    public HashSet<K> verbs { set { Verbs &= value!; Total &= value!; } }
+    public HashSet<K> adjectives { set { Adjectives &= value!; Total &= value!; } }
+    public HashSet<K> nouns { set { Nouns &= value!; Total &= value!; } }
+    public HashSet<K> modifiers { set { Modifiers &= value!; Total &= value!; } }
+    public HashSet<K> conjunctions { set { Conjunctions &= value!; Total &= value!; } }
+    public HashSet<K> relations { set { Relations &= value!; Total &= value!; } }
+    public Dictionary<K, string> characters { set { Characters = value; Total &= Characters.Keys; } }
 }
 
 internal class ConsumeCharacters<T> where T : INameable
 {
     private readonly T[] chain;
-    private readonly Vocabulary vocabulary;
+    private readonly Vocabulary<ObjectTypeId> vocabulary;
     private int index = 0;
 
-    public ConsumeCharacters(T[] chain, Vocabulary vocabulary)
+    public ConsumeCharacters(T[] chain, Vocabulary<ObjectTypeId> vocabulary)
     {
         this.chain = chain;
         this.vocabulary = vocabulary;
@@ -263,7 +271,7 @@ internal class ConsumeCharacters<T> where T : INameable
         var word = getNextWord().ToArray();
         if (word.Length == 0) return null;
         if (word.Length == 1) return new(word[0]);
-        return new(word, "text_" + string.Join("", word.Select(x => vocabulary.Characters[x.Name])));
+        return new(word);
     }
 
     public IEnumerable<Word<T>> ParseAll()
@@ -333,7 +341,7 @@ public class ParseSentences
         return chains;
     }
 
-    public static List<Sentence<T>> GetSentences<T>(List<T> grid, Vocabulary vocabulary) where T : INameable
+    public static List<Sentence<T>> GetSentences<T>(List<T> grid, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         var chains = new Stack<T[]>(GetWordChains(grid.Where(item => vocabulary.Total.Contains(item.Name))));
         var sentences = new List<Sentence<T>>();
@@ -366,7 +374,7 @@ public class ParseSentences
         return sentences;
     }
 
-    private static ISpecifier<T>? matchSpecifier<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
+    private static ISpecifier<T>? matchSpecifier<T>(Word<T>[] words, HashSet<ObjectTypeId> exclude, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         var re = new List<char>();
 
@@ -375,7 +383,7 @@ public class ParseSentences
             var name = word.Name;
 
             if (exclude.Contains(name)) return null;
-            else if (name == "text_not" || name == "not") re.Add('n');
+            else if (name == ObjectTypeId.not) re.Add('n');
             else if (vocabulary.Nouns.Contains(name)) re.Add('a');
             else if (vocabulary.Adjectives.Contains(name)) re.Add('a');
             else if (vocabulary.Modifiers.Contains(name)) re.Add('m');
@@ -407,7 +415,7 @@ public class ParseSentences
         return current;
     }
 
-    private static Clause<T>? matchClause<T>(Word<T>[] words, HashSet<string?> exclude, Vocabulary vocabulary) where T : INameable
+    private static Clause<T>? matchClause<T>(Word<T>[] words, HashSet<ObjectTypeId> exclude, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         Clause<T>? clause = null;
         int lastI = 0;
@@ -451,7 +459,7 @@ public class ParseSentences
         return clause;
     }
 
-    private static Sentence<T>? matchSentence<T>(List<Word<T>> alist, Vocabulary vocabulary) where T : INameable
+    private static Sentence<T>? matchSentence<T>(List<Word<T>> alist, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         if (alist.FindAll(x => vocabulary.Verbs.Contains(x.Name)).Count > 1) return null;
 

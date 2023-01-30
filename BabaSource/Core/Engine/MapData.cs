@@ -68,10 +68,10 @@ namespace Core.Engine
             var pointer = initialPointer;
             while (pointers.Count > 0)
             {
-                if (!WorldObjects[pointer].Occupied)
+                if (!WorldObjects[pointer].Deleted)
                 {
                     WorldObjects[pointer] = obj;
-                    obj.Occupied = true;
+                    obj.Deleted = true;
                     obj.index = pointer;
                     return pointer;
                 }

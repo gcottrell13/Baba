@@ -65,6 +65,8 @@ public class SerializeBytes
         return bytes;
     }
 
+    private static Type _underlying(Type t) => t.IsEnum ? Enum.GetUnderlyingType(t) : t;
+
     public static string SerializeObjects<T>(IEnumerable<T> objects)
     {
         var fields = typeof(T).GetFields();
@@ -76,12 +78,12 @@ public class SerializeBytes
         {
             foreach (var field in fields)
             {
-                if(serializers.TryGetValue(field.FieldType, out var serializer))
+                if (serializers.TryGetValue(_underlying(field.FieldType), out var serializer))
                     bytes.AddRange(serializer(field.GetValue(obj)));
             }
             foreach (var prop in props)
             {
-                if (serializers.TryGetValue(prop.PropertyType, out var serializer))
+                if (serializers.TryGetValue(_underlying(prop.PropertyType), out var serializer))
                     bytes.AddRange(serializer(prop.GetValue(obj)));
             }
         }
@@ -126,7 +128,7 @@ public class SerializeBytes
             foreach (var field in fields)
             {
                 object? value;
-                if (deserializers.TryGetValue(field.FieldType, out var deserializer))
+                if (deserializers.TryGetValue(_underlying(field.FieldType), out var deserializer))
                 {
                     value = deserializer(enumerator);
                 }
@@ -141,7 +143,7 @@ public class SerializeBytes
             foreach (var prop in props)
             {
                 object? value;
-                if (deserializers.TryGetValue(prop.PropertyType, out var deserializer))
+                if (deserializers.TryGetValue(_underlying(prop.PropertyType), out var deserializer))
                 {
                     value = deserializer(enumerator);
                 }

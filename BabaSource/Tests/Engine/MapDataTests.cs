@@ -34,16 +34,16 @@ namespace Tests.Engine
                     "one",
                     new[]
                     {
-                        new ObjectData() { Occupied= true, Color=2, ObjectId=1, Name="amongi" },
+                        new ObjectData() { Deleted= true, Color=2, ObjectId=1, Name="amongi" },
                     }
                 );
                 yield return (
                     "three",
                     new[]
                     {
-                        new ObjectData() { Occupied= true, Color=2, ObjectId=1, Name="amongi" },
-                        new ObjectData() { Occupied= true, Color=1, ObjectId=5, x=10, y=15, Name="badbad" },
-                        new ObjectData() { Occupied= true, Color=3, ObjectId=400, Facing=(int)Core.Utils.Direction.Left, Name="text_rubble" },
+                        new ObjectData() { Deleted= true, Color=2, ObjectId=1, Name="amongi" },
+                        new ObjectData() { Deleted= true, Color=1, ObjectId=5, x=10, y=15, Name="badbad" },
+                        new ObjectData() { Deleted= true, Color=3, ObjectId=400, Facing=(int)Core.Utils.Direction.Left, Name="text_rubble" },
                     }
                 );
             } 

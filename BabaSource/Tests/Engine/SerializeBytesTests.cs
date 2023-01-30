@@ -11,6 +11,13 @@ namespace Tests.Engine
     [TestFixture]
     public class SerializeBytesTests
     {
+        public enum Enum
+        {
+            None,
+            One, 
+            Two,
+            Three,
+        }
 
         public class TestClass
         {
@@ -22,14 +29,16 @@ namespace Tests.Engine
             public string? StringProp { get; set; }
             public string? StringField;
 
+            public Enum EnumField { get; set; }
+
             public override bool Equals(object? obj)
             {
                 if (obj is TestClass c)
-                    return c.IntField== IntField && c.StringField==StringField && c.IntProp == IntProp && c.ShortProp == ShortProp && c.ShortField == ShortField && c.StringProp == StringProp;
+                    return c.IntField== IntField && c.StringField==StringField && c.IntProp == IntProp && c.ShortProp == ShortProp && c.ShortField == ShortField && c.StringProp == StringProp && c.EnumField == EnumField;
                 return base.Equals(obj);    
             }
 
-            public override string ToString() => $"{IntProp} {IntField} {ShortProp} {ShortField} {StringProp} {StringField}";
+            public override string ToString() => $"{IntProp} {IntField} {ShortProp} {ShortField} {StringProp} {StringField} {EnumField}";
         }
 
         [Test]
@@ -37,11 +46,11 @@ namespace Tests.Engine
         {
             var input = new List<TestClass>()
             {
-                new TestClass { IntProp = 1, IntField=2, ShortField=3, ShortProp=4, StringField="hi", StringProp="there" },
-                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField="33333", StringProp="there2" },
-                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField=null, StringProp="there2" },
-                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField=null, StringProp=null },
-                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField="AAAA===/ds/fsdf", StringProp="there2" },
+                new TestClass { IntProp = 1, IntField=2, ShortField=3, ShortProp=4, StringField="hi", StringProp="there", EnumField=Enum.One },
+                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField="33333", StringProp="there2", EnumField=Enum.Two },
+                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField=null, StringProp="there2", EnumField=Enum.Two },
+                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField=null, StringProp=null, EnumField=Enum.One },
+                new TestClass { IntProp = 10, IntField=2, ShortField=3, ShortProp=4, StringField="AAAA===/ds/fsdf", StringProp="there2", EnumField=Enum.Three },
             };
             var serialized = SerializeBytes.SerializeObjects(input);
             var deserialized = SerializeBytes.DeserializeObjects<TestClass>(serialized);

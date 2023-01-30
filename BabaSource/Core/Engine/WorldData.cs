@@ -11,7 +11,7 @@ public class WorldData
 {
     public List<RegionData> Regions = new();
     public List<MapData> Maps = new();
-    public int GlobalWordMapId;
+    public short GlobalWordMapId;
     public string Name = string.Empty;
 
     public string Serialize()

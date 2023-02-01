@@ -165,6 +165,18 @@ namespace Tests.Engine
                         "baba is you",
                     }
                 );
+
+                yield return (
+                    "parse recursive on",
+                    new()
+                    {
+                        "rock not on baba on water is win".Split(" ").Select(x => new Item() {Name = Enum.Parse<ObjectTypeId>(x) }).ToList()!,
+                    },
+                    new()
+                    {
+                        "rock not on baba on water is win",
+                    }
+                );
             } }
     }
 }

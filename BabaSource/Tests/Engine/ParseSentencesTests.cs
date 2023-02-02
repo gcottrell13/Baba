@@ -103,7 +103,7 @@ namespace Tests.Engine
                 nouns = new() { ObjectTypeId.baba, ObjectTypeId.rock, ObjectTypeId.flag, ObjectTypeId.box, ObjectTypeId.water },
                 verbs = new() { ObjectTypeId.@is, ObjectTypeId.has },
                 modifiers = new() { ObjectTypeId.not, ObjectTypeId.lonely },
-                adjectives = new() { ObjectTypeId.you, ObjectTypeId.win },
+                adjectives = new() { ObjectTypeId.you, ObjectTypeId.win, ObjectTypeId.green },
                 conjunctions = new() { ObjectTypeId.and },
                 relations= new() { ObjectTypeId.on, ObjectTypeId.near },
                 characters = new() { { ObjectTypeId.b, "b" }, { ObjectTypeId.a, "a" } },
@@ -175,6 +175,19 @@ namespace Tests.Engine
                     new()
                     {
                         "rock not on baba on water is win",
+                    }
+                );
+
+                yield return (
+                    "overlapping sentences",
+                    new()
+                    {
+                        "baba is rock and flag is green".Split(" ").Select(x => new Item() {Name = Enum.Parse<ObjectTypeId>(x) }).ToList()!,
+                    },
+                    new()
+                    {
+                        "baba is rock and flag",
+                        "rock and flag is green",
                     }
                 );
             } }

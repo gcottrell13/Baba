@@ -34,13 +34,17 @@ namespace Core.Engine
         public static readonly HashSet<ObjectTypeId> adjectives = new(Enum.GetValues<ObjectTypeId>().Where(x =>
         {
             var name = Enum.GetName(typeof(ObjectTypeId), x);
+            if (name == "all") return false;
             return name != null && !ObjectInfo.Info.ContainsKey(name) && !relations.Contains(x) && !verbs.Contains(x) && !conjunctions.Contains(x) && !modifiers.Contains(x) && !text_characters.ContainsKey(x);
         }));
 
-        public static readonly HashSet<ObjectTypeId> nouns = AppendText_ToNames(ObjectInfo.Info.Keys.Where(x => !x.StartsWith("text_")));
+        public static readonly HashSet<ObjectTypeId> nouns = AppendText_ToNames(ObjectInfo.Info.Keys.Where(x => !x.StartsWith("text_")).Append("all"));
 
         private static readonly HashSet<ObjectTypeId> nounOnlyVerbs = AppendText_ToNames(new[] { "eat", "has", "make", "mimic", "follow", "fear" });
         private static readonly HashSet<ObjectTypeId> nounOnlyRelations = AppendText_ToNames(new[] { "on", "nextto", "above", "below" });
+
+        private static readonly HashSet<ObjectTypeId> complexSubjectNouns = AppendText_ToNames(new[] { "eat", "fear", "follow" });
+        private static readonly HashSet<ObjectTypeId> subjectCannotBeNegatedNouns = AppendText_ToNames(new[] { "has", "make" });
 
         /// <summary>
         /// 
@@ -80,8 +84,14 @@ namespace Core.Engine
                 var subjects = new List<ISpecifier<T>>();
                 foreach (var sub in sentence.Subject.Items.Select(x => x.Item).Reverse().Append(sentence.Subject.First).Reverse())
                 {
-                    // the subject of a sentence has to be simple, relations don't make sense
-                    if (sub is NA_WithRelationship<T>) break;
+                    // the subject of a sentence can only be complex with some verbs
+                    if (sub is NA_WithRelationship<T> wr)
+                    {
+                        if (complexSubjectNouns.Contains(sentence.Verb.Name) == false) break;
+                        if (!_checkNA(wr)) break;
+                        subjects.Add(sub);
+                        continue;
+                    }
 
                     if (sub is not NounAdjective<T> na) break; // shouldn't happen though
 
@@ -90,6 +100,10 @@ namespace Core.Engine
 
                     // the only modifier allowed in the subject is "not"
                     if (sub.Modifier?.Name != null && sub.Modifier.Name != ObjectTypeId.not && adjectives.Contains(na.Value.Name)) break;
+
+                    // you cannot HAS NOT something or MAKE NOT something
+                    if (subjectCannotBeNegatedNouns.Contains(sentence.Verb.Name) && sub.Not) break;
+
                     subjects.Add(sub);
                 }
 

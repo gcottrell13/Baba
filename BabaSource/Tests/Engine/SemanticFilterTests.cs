@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using MonoGame.Extended.Collections;
 using NUnit.Framework;
 using System;
@@ -70,9 +71,46 @@ namespace Tests.Engine
                     },
                     new() {
                         "lonely rock is win",
-                        "lonely rock is stop", 
-                        "baba is win", 
+                        "lonely rock is stop",
+                        "baba is win",
                         "baba is stop",
+                    }
+                );
+
+                foreach (var sentence in new[]
+                {
+                    "baba has flag",
+                    "baba eat flag on water",
+                    "baba fear flag not on not water",
+                    "baba follow me feeling blue"
+                })
+                {
+                    yield return (
+                        sentence,
+                        new() { sentence.Split(" ").Select(x => new Item() { Name = Enum.Parse<ObjectTypeId>(x) }).ToList()! },
+                        new() { sentence }
+                    );
+                }
+
+                yield return (
+                    "all",
+                    new() {
+                        new() { "all", "is", "win", "and", "stop", "rock", "is", "all" },
+                    },
+                    new() {
+                        "all is win",
+                        "all is stop",
+                        "rock is all",
+                    }
+                );
+
+                yield return (
+                    "HAS NOT - does not work",
+                    new() {
+                        new() { "baba", "has", "not", "rock", "is", "all" },
+                    },
+                    new() {
+                        "not rock is all",
                     }
                 );
             } }

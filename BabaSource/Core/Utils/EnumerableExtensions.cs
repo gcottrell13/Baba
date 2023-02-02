@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,17 @@ namespace Core.Utils
                 col = ((char)('A' + (c / 26) - 1)).ToString() + col;
             }
             return col;
+        }
+
+        public static IEnumerable<(T1, T2, T3)> ZipThree<T1, T2, T3>(this IEnumerable<T1> one, IEnumerable<T2> two, IEnumerable<T3> three)
+        {
+            var eOne = one.GetEnumerator();
+            var eTwo = two.GetEnumerator();
+            var eThree = three.GetEnumerator();
+            while (eOne.MoveNext() && eTwo.MoveNext() && eThree.MoveNext())
+            {
+                yield return (eOne.Current, eTwo.Current, eThree.Current);
+            }
         }
 
         public static IEnumerable<string> ZipMany(this IEnumerable<string> sequences)

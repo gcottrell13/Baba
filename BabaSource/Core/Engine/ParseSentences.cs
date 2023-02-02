@@ -354,10 +354,12 @@ public class ParseSentences
             {
                 var words = new ConsumeCharacters<T>(current, vocabulary).ParseAll().ToList();
 
-                if (matchSentence(words, vocabulary) is Sentence<T> match)
+                var matchedSentences = matchSentences(words, vocabulary);
+                if (matchedSentences.Count > 0)
                 {
-                    sentences.Add(match);
+                    sentences.AddRange(matchedSentences);
                     chains.Push(chain[(i + current.Length)..]);
+                    chains.Push(chain[..i]);
                     break;
                 }
                 else if (current.Length > 3)
@@ -374,7 +376,7 @@ public class ParseSentences
         return sentences;
     }
 
-    private static ISpecifier<T>? matchSpecifier<T>(Word<T>[] words, HashSet<ObjectTypeId> exclude, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
+    private static ISpecifier<T>? matchSpecifier<T>(Word<T>[] words, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         var re = new List<char>();
 
@@ -382,8 +384,7 @@ public class ParseSentences
         {
             var name = word.Name;
 
-            if (exclude.Contains(name)) return null;
-            else if (name == ObjectTypeId.not) re.Add('n');
+            if (name == ObjectTypeId.not) re.Add('n');
             else if (vocabulary.Nouns.Contains(name)) re.Add('a');
             else if (vocabulary.Adjectives.Contains(name)) re.Add('a');
             else if (vocabulary.Modifiers.Contains(name)) re.Add('m');
@@ -415,7 +416,7 @@ public class ParseSentences
         return current;
     }
 
-    private static Clause<T>? matchClause<T>(Word<T>[] words, HashSet<ObjectTypeId> exclude, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
+    private static Clause<T>? matchClause<T>(Word<T>[] words, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
         Clause<T>? clause = null;
         int lastI = 0;
@@ -438,7 +439,7 @@ public class ParseSentences
         {
             if (!vocabulary.Conjunctions.Contains(word.Name)) continue;
 
-            var spec = matchSpecifier(words[lastI..index], exclude, vocabulary);
+            var spec = matchSpecifier(words[lastI..index], vocabulary);
             if (spec == null) return null;
             addSpec(spec, word);
             lastI = index + 1;
@@ -449,7 +450,7 @@ public class ParseSentences
             return null;
         else
         {
-            var spec = matchSpecifier(last, exclude, vocabulary);
+            var spec = matchSpecifier(last, vocabulary);
             if (spec == null) return null;
             addSpec(spec, default);
         }
@@ -459,20 +460,36 @@ public class ParseSentences
         return clause;
     }
 
-    private static Sentence<T>? matchSentence<T>(List<Word<T>> alist, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
+    private static IList<Sentence<T>> matchSentences<T>(List<Word<T>> alist, Vocabulary<ObjectTypeId> vocabulary) where T : INameable
     {
-        if (alist.FindAll(x => vocabulary.Verbs.Contains(x.Name)).Count > 1) return null;
+        if (alist.FindAll(x => vocabulary.Verbs.Contains(x.Name)).Count < 1) return Array.Empty<Sentence<T>>();
 
-        var verbIndex = alist.FindIndex(0, x => vocabulary.Verbs.Contains(x.Name));
-        if (verbIndex == -1) return null;
+        var clauses = new List<Clause<T>>();
+        var verbs = new List<Word<T>>();
 
         var chain = alist.ToArray();
-        var first = chain[..verbIndex];
-        var second = chain[(verbIndex + 1)..];
-        if (matchClause(first, new(), vocabulary) is Clause<T> m1 && matchClause(second, vocabulary.Relations, vocabulary) is Clause<T> m2)
+
+        var lastIndex = 0;
+        int verbIndex;
+
+        while ((verbIndex = alist.FindIndex(lastIndex, x => vocabulary.Verbs.Contains(x.Name))) != -1)
         {
-            return new(m1, chain[verbIndex], m2);
+            var clauseWords = chain[lastIndex..verbIndex];
+            if (matchClause(clauseWords, vocabulary) is Clause<T> clause)
+            {
+                clauses.Add(clause);
+                verbs.Add(chain[verbIndex]);
+            }
+            else
+                return Array.Empty<Sentence<T>>();
+            lastIndex = verbIndex + 1;
         }
-        return null;
+
+        if (matchClause(chain[lastIndex..], vocabulary) is Clause<T> dclause)
+        {
+            clauses.Add(dclause);
+        }
+
+        return clauses.ZipThree(verbs, clauses.Skip(1)).Select(triple => new Sentence<T>(triple.Item1, triple.Item2, triple.Item3)).ToList();
     }
 }

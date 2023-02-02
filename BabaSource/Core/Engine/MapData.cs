@@ -21,6 +21,9 @@ namespace Core.Engine
         public short upLayer;
         public short region;
 
+        public short width;
+        public short height;
+
         public string Name = string.Empty;
 
         public MapData()
@@ -40,7 +43,7 @@ namespace Core.Engine
             if (obj is MapData map)
                 return WorldObjects.Compare(map.WorldObjects) && MapId == map.MapId && northNeighbor == map.northNeighbor && 
                     westNeighbor == map.westNeighbor && map.eastNeighbor == eastNeighbor && southNeighbor == map.southNeighbor && 
-                    upLayer == map.upLayer && region == map.region && Name == map.Name;
+                    upLayer == map.upLayer && region == map.region && Name == map.Name && map.width == width && map.height == height;
             return base.Equals(obj);
         }
 
@@ -51,14 +54,16 @@ namespace Core.Engine
 
         public override string ToString() => $$"""
             new MapData(new ObjectData[] { {{string.Join(",\n", WorldObjects.Select(x => "\n" + x.ToString().Indent(1)))}} }) {
-                MapId = {{MapId}},
-                Name = "{{Name}}",
-                northNeighbor = {{northNeighbor}},
-                southNeighbor = {{southNeighbor}},
-                eastNeighbor = {{eastNeighbor}},
-                westNeighbor = {{westNeighbor}},
-                upLayer = {{upLayer}},
-                region = {{region}},
+                {{nameof(MapId)}} = {{MapId}},
+                {{nameof(Name)}} = "{{Name}}",
+                {{nameof(northNeighbor)}} = {{northNeighbor}},
+                {{nameof(southNeighbor)}} = {{southNeighbor}},
+                {{nameof(eastNeighbor)}} = {{eastNeighbor}},
+                {{nameof(westNeighbor)}} = {{westNeighbor}},
+                {{nameof(upLayer)}} = {{upLayer}},
+                {{nameof(region)}} = {{region}},
+                {{nameof(width)}} = {{width}},
+                {{nameof(height)}} = {{height}},
             }
             """;
 

@@ -40,6 +40,8 @@ namespace Editor.Saves
                 }).ToArray())
                 {
                     MapId = mapTempId++,
+                    width = (short)layer.width,
+                    height = (short)layer.height,
                 };
                 return md;
             }

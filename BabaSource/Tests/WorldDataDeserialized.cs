@@ -51,6 +51,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 18, 
+            height = 18,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -79,6 +81,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 10,
+            height = 10,
         },
         new MapData(new ObjectData[] {  }) {
             MapId = 3,
@@ -89,6 +93,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 18,
+            height = 18,
         },
         new MapData(new ObjectData[] {  }) {
             MapId = 4,
@@ -99,6 +105,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 18,
+            height = 18,
         },
         new MapData(new ObjectData[] {  }) {
             MapId = 5,
@@ -109,6 +117,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -167,6 +177,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -189,6 +201,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 7,
             region = 3,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -217,6 +231,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -239,6 +255,8 @@ public class WorldDataDeserialized
             westNeighbor = 1,
             upLayer = 9,
             region = 3,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -267,6 +285,8 @@ public class WorldDataDeserialized
             westNeighbor = 0,
             upLayer = 0,
             region = 0,
+            width = 15,
+            height = 15,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -319,6 +339,8 @@ public class WorldDataDeserialized
             westNeighbor = 8,
             upLayer = 11,
             region = 1,
+            width = 15,
+            height = 15,
         } },
         Regions = new() {
         new RegionData() {

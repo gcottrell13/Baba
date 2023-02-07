@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using System;
 using Core.Configuration;
 using Core.Content;
 using Core.Events;
@@ -18,8 +18,7 @@ namespace Core.Bootstrap
         protected static int MAX_HEIGHT = 720;
 
         protected GameEntryPoint EntryPoint { get; }
-
-        //private LoadingScreen loadingScreen = new();
+        private LoadingScreen? loader;
 
         public GameSetup(GameEntryPoint entryPoint)
         {
@@ -27,6 +26,7 @@ namespace Core.Bootstrap
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             EntryPoint = entryPoint;
+            loader = new LoadingScreen(TimeSpan.FromSeconds(6), afterLoad);
         }
 
         protected override void Initialize()
@@ -87,34 +87,25 @@ namespace Core.Bootstrap
             return scale;
         }
 
+        private void afterLoad()
+        {
+            EntryPoint.Initialize();
+            EntryPoint.AfterInitialize();
+            loader = null;
+        }
+
         protected override void LoadContent()
         {
             ContentLoader.LoadContent(GraphicsDevice);
-            EntryPoint.Initialize();
-            EntryPoint.AfterInitialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            //var pct = ContentLoader.LoadedContent?.PercentLoaded ?? 0;
-            //if (pct < 100)
-            //{
-            //    loadingScreen.SetPercent(pct);
-            //    loadingScreen.Tick(gameTime);
-            //    base.Update(gameTime);
-            //    return;
-            //}
-            //else if (!ReferenceEquals(currentDisplay, EntryPoint))
-            //{
-            //    EntryPoint.Initialize();
-            //    EntryPoint.AfterInitialize();
-            //    currentDisplay = EntryPoint;
-            //}
-
             CoreKeyboard.PollState();
             CoreMouse.PollState();
 
-            EntryPoint.EntryTick(gameTime);
+            if (loader != null) loader.Tick(gameTime);
+            else EntryPoint.EntryTick(gameTime);
 
             EventManager.SendAsyncMessages();
             base.Update(gameTime);
@@ -124,7 +115,10 @@ namespace Core.Bootstrap
         {
             GraphicsDevice.Clear(Color.Black);
             Scene.Begin();
-            EntryPoint.Graphics.Draw();
+
+            if (loader != null) loader.Graphics.Draw();
+            else EntryPoint.Graphics.Draw();
+
             Scene.End();
 
             _spriteBatch?.Begin();

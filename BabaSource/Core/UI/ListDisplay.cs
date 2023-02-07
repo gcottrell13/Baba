@@ -42,6 +42,8 @@ public class ListDisplay<T> : GameObject
     private List<T> filteredChildren = new();
     private Color highlightColor = Color.Brown;
 
+    private Text countDisplay = new();
+
     private const string baseFilterDisplayText = "select";
     private readonly TextInputBox filterDisplay = new() { TextFilterRegex = new System.Text.RegularExpressions.Regex(@"^[^\n\[\]\t]{0,10}$") };
 
@@ -73,6 +75,8 @@ public class ListDisplay<T> : GameObject
         itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 2;
         Graphics.AddChild(itemDisplay);
         AddChild(filterDisplay);
+        AddChild(countDisplay, false);
+        itemDisplay.AddChild(countDisplay.Graphics);
         SetDisplayTypeName("", false);
         SetFilter("");
 
@@ -162,6 +166,9 @@ public class ListDisplay<T> : GameObject
             child.Graphics.alpha = 1f;
             y += 24;
         }
+
+        countDisplay.SetText($"{sid + 1}/{filteredChildren.Count}");
+        countDisplay.Graphics.y = 24 * (maxDisplay + 1);
     }
 
     private PickerState Cancel()
@@ -272,7 +279,7 @@ public class ListDisplay<T> : GameObject
                 var longestDisplay = items.Count > 0 ? items.Select(x => display(x)).MaxBy(s => s.Length) ?? "" : "";
 
                 var maxSize = Text.ParseText(longestDisplay).TextCharLength() + 2;
-                outline.SetText(" ".Repeat(maxSize) + "\n".Repeat(maxDisplay + 2), new() { backgroundColor = Color.Black });
+                outline.SetText(" ".Repeat(maxSize) + "\n".Repeat(maxDisplay + 2 + 1), new() { backgroundColor = Color.Black });
                 outline.Graphics.x = -Text.DEFAULT_LINE_HEIGHT;
                 AddChild(outline, index: 0);
                 itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * 3;

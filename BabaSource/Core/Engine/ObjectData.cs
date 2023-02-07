@@ -9,7 +9,7 @@ public enum ObjectKind
     Text,
 }
 
-public struct ObjectData : INameable
+public class ObjectData : INameable
 {
     public bool Deleted;
     public short Color;

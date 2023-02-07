@@ -91,6 +91,7 @@ namespace Core.Engine
             pointer = currentObjects.Length;
             WorldObjects[pointer] = obj;
             obj.index = pointer;
+            obj.Deleted = false;
             currentObjects.CopyTo(WorldObjects, 0);
             return pointer;
         }

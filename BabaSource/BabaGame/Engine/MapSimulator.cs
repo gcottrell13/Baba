@@ -23,19 +23,32 @@ public class RuleDict : Dictionary<ObjectTypeId, List<Rule<ObjectData>>>
 public class MapSimulator
 {
     private readonly BabaWorld world;
-    private readonly RegionData? region;
+    public readonly RegionData? region;
 
     private readonly MapData map;
+
+    private MapSimulator? north;
+    private MapSimulator? south;
+    private MapSimulator? east;
+    private MapSimulator? west;
 
 
     public MapSimulator(BabaWorld world, short mapId)
 	{
         this.world = world;
-        map = world.Maps[mapId];
+        map = world.MapDatas[mapId];
         region = world.Regions.TryGetValue(map.region, out var r) ? r : null;
     }
 
-    public void Step(Direction input, List<Rule<ObjectData>> rulesFromAbove, int playerNumber)
+    public void GetNeighbors()
+    {
+        world.Simulators.TryGetValue(map.northNeighbor, out north);
+        world.Simulators.TryGetValue(map.southNeighbor, out south);
+        world.Simulators.TryGetValue(map.westNeighbor, out west);
+        world.Simulators.TryGetValue(map.eastNeighbor, out east);
+    }
+
+    public void Step(Direction input, RuleDict rulesFromAbove, int playerNumber)
     {
         var all = new HashSet<ObjectTypeId>(map.WorldObjects.Select(x => x.Name));
 
@@ -47,6 +60,8 @@ public class MapSimulator
 
     private void doMovement(Direction input, RuleDict allRules, int playerNumber)
     {
+        var movingObjects = new List<(ObjectData obj, int dx, int dy)>();
+
         if (input != Direction.None)
         {
             // you and you2
@@ -55,36 +70,47 @@ public class MapSimulator
                 2 => ObjectTypeId.you2, 
                 _ => throw new InvalidOperationException(), 
             };
-            findObjectsThatAre(youRule, allRules);
-
+            var you = findObjectsThatAre(youRule, allRules);
+            var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
+            movingObjects.AddRange(you.Select(i => (i, dx, dy)));
+        }
+        else
+        {
+            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill, allRules).Select(i => (i, 1, 0)));
         }
 
+        foreach (var (obj, dx, dy) in movingObjects)
+        {
+            if (push(obj.x, obj.y, dx, dy, allRules))
+                pull(obj.x, obj.y, dx, dy, allRules);
+        }
     }
 
-    public RuleDict parseRules(List<Rule<ObjectData>> rulesFromAbove)
+    public RuleDict parseRules(RuleDict rulesFromAbove)
     {
         var mapRules = SemanticFilter.FindRulesAndFilterInvalid(map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList());
         var dict = new RuleDict();
 
-        addRules(dict, rulesFromAbove);
+        foreach (var rule in rulesFromAbove) dict.Add(rule.Key, rule.Value);
+
         addRules(dict, mapRules);
 
-        void addRules(RuleDict dict, List<Rule<ObjectData>> rules)
-        {
-            foreach (var rule in rules)
-            {
-                var na = rule.LHS as NounAdjective<ObjectData>;
-                na ??= (rule.LHS as NA_WithRelationship<ObjectData>)!.Target;
+        return dict;
+    }
 
-                dict[na.Value.Name].Add(rule);
-                if (rule.RHS is NounAdjective<ObjectData> rhs)
-                {
-                    dict[rhs.Value.Name].Add(rule);
-                }
+    public static void addRules(RuleDict dict, List<Rule<ObjectData>> rules)
+    {
+        foreach (var rule in rules)
+        {
+            var na = rule.LHS as NounAdjective<ObjectData>;
+            na ??= (rule.LHS as NA_WithRelationship<ObjectData>)!.Target;
+
+            dict[na.Value.Name].Add(rule);
+            if (rule.RHS is NounAdjective<ObjectData> rhs)
+            {
+                dict[rhs.Value.Name].Add(rule);
             }
         }
-
-        return dict;
     }
 
     public IEnumerable<ObjectData> findObjectsThatAre(ObjectTypeId property, RuleDict allRules)
@@ -134,4 +160,118 @@ public class MapSimulator
         }
         throw new Exception();
     }
+
+    public bool push(int x, int y, int dx, int dy, RuleDict allRules)
+    {
+        var allObjects = new List<ObjectData>();
+        ObjectData[] inFront;
+        while ((inFront = objectsAt(x + dx, y + dy)).Length > 0)
+        {
+            if (inFront.Any(x => x.Name == mapBorderTypeId || isObject(x, ObjectTypeId.stop, allRules))) return false;
+            allObjects.AddRange(inFront);
+            x += dx;
+            y += dy;
+        }
+        foreach (var obj in allObjects)
+        {
+            moveObjectTo(obj, obj.x + dx, obj.y + dy);
+        }
+        return true;
+    }
+
+    public void pull(int x, int y, int dx, int dy, RuleDict allRules)
+    {
+        var allObjects = new List<ObjectData>();
+        ObjectData[] behind;
+        while ((behind = objectsAt(x - dx, y - dy)).Length > 0)
+        {
+            var pullObjects = behind.Where(x => isObject(x, ObjectTypeId.pull, allRules)).ToList();
+            if (pullObjects.Count == 0) break;
+            allObjects.AddRange(pullObjects);
+            x -= dx;
+            y -= dy;
+        }
+        foreach (var obj in allObjects)
+        {
+            moveObjectTo(obj, obj.x + dx, obj.y + dy);
+        }
+    }
+
+    public bool moveObjectTo(ObjectData obj, int x, int y)
+    {
+        if (x < 0)
+        {
+            obj.Present = false;
+            return west?.addObjectAt(obj, west.map.width + x, (int)(y * west.map.height / (float)map.height)) ?? false;
+        }
+        if (y < 0)
+        {
+            obj.Present = false;
+            return north?.addObjectAt(obj, (int)(x * north.map.width / (float)map.width), north.map.height + y) ?? false;
+        }
+        if (x >= map.width)
+        {
+            obj.Present = false;
+            return east?.addObjectAt(obj, x - map.width, (int)(y * east.map.height / (float)map.height)) ?? false;
+        }
+        if (y >= map.height)
+        {
+            obj.Present = false;
+            return south?.addObjectAt(obj, (int)(x * south.map.width / (float)map.width), y - map.height) ?? false;
+        }
+        obj.x = x;
+        obj.y = y;
+        return true;
+    }
+
+    public bool addObjectAt(ObjectData obj, int x, int y)
+    {
+        obj.x = x;
+        obj.y = y;
+        map.AddObject(new()
+        {
+            Name = obj.Name,
+            Present =true,
+            y=y,
+            x=x,
+            Color=obj.Color,
+            Facing=obj.Facing,
+            Kind=obj.Kind,
+            OriginX = obj.OriginX,
+            OriginY = obj.OriginY,
+            MapOfOrigin =obj.MapOfOrigin,
+        });
+        return true;
+    }
+
+    public bool removeObject(ObjectData obj)
+    {
+        obj.Deleted = true;
+        return true;
+    }
+
+    public const ObjectTypeId mapBorderTypeId = ObjectTypeId.nnope;
+    private static readonly ObjectData[] mapBorder = new[] { new ObjectData() { Name = mapBorderTypeId } };
+
+    public ObjectData[] objectsAt(int x, int y)
+    {
+        if (x < 0)
+        {
+            return west?.objectsAt(west.map.width + x, (int)(y * west.map.height / (float)map.height)) ?? mapBorder;
+        }
+        if (y < 0)
+        {
+            return north?.objectsAt((int)(x * north.map.width / (float)map.width), north.map.height + y) ?? mapBorder;
+        }
+        if (x >= map.width)
+        {
+            return east?.objectsAt(x - map.width, (int)(y * east.map.height / (float)map.height)) ?? mapBorder;
+        }
+        if (y >= map.height)
+        {
+            return south?.objectsAt((int)(x * south.map.width / (float)map.width), y - map.height) ?? mapBorder;
+        }
+        return map.WorldObjects.Where(obj => obj.x == x && obj.y == y).ToArray();
+    }
+
 }

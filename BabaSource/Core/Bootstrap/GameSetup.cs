@@ -26,7 +26,6 @@ namespace Core.Bootstrap
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             EntryPoint = entryPoint;
-            loader = new LoadingScreen(TimeSpan.FromSeconds(6), afterLoad);
         }
 
         protected override void Initialize()
@@ -97,6 +96,7 @@ namespace Core.Bootstrap
         protected override void LoadContent()
         {
             ContentLoader.LoadContent(GraphicsDevice);
+            loader = new LoadingScreen(TimeSpan.FromSeconds(6), afterLoad);
         }
 
         protected override void Update(GameTime gameTime)

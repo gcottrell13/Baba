@@ -1,4 +1,5 @@
-﻿using Core.UI;
+﻿using Core.Content;
+using Core.UI;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using System;
@@ -18,12 +19,23 @@ namespace Core.Bootstrap
 
         public LoadingScreen(TimeSpan loadingLength, Action onComplete)
         {
-            var loadingScreens = new Func<BaseLoadingScreen>[]
+
+            var name = new[]
             {
-                () => new LS1(),
-            };
-            var n = DateTime.Now.Second % loadingScreens.Length;
-            screen = loadingScreens[n]();
+                "baba",
+                "baba",
+                "baba",
+                "baba",
+                "baba",
+                "jiji",
+                "robot",
+            }.RandomElement();
+
+            screen = new Func<BaseLoadingScreen>[]
+            {
+                () => new StringOfBaba(name),
+                () => new LongBaba(name),
+            }.RandomElement()();
             AddChild(screen);
             this.loadingLength = loadingLength;
             this.onComplete = onComplete;
@@ -38,28 +50,52 @@ namespace Core.Bootstrap
                 onComplete();
             }
 
-            screen.SetPercent((int)(percent * 100));
+            screen.SetPercent(percent);
         }
 
         private abstract class BaseLoadingScreen : GameObject
         {
-            public abstract void SetPercent(int percent);
+            public abstract void SetPercent(double percent);
         }
 
-        private class LS1 : BaseLoadingScreen
+        private class StringOfBaba : BaseLoadingScreen
         {
+            private readonly string name;
             private Text text = new();
-            public LS1()
+            public StringOfBaba(string name)
             {
                 AddChild(text);
+                this.name = name;
             }
 
-            public override void SetPercent(int percent)
+            public override void SetPercent(double percent)
             {
-                var n = Math.Clamp(percent / 9, 0, 10);
-                text.SetText("[baba]".Repeat(n) + "[gray]" + "[baba]".Repeat(10 - n));
+                var p = (int)(percent * 100);
+                var n = Math.Clamp(p / 9, 0, 10);
+                text.SetText($"[{name}]".Repeat(n) + "[gray]" + $"[{name}]".Repeat(10 - n));
                 text.Graphics.x = ScreenWidth / 2 - 5 * 24;
                 text.Graphics.y = ScreenHeight / 2 - 12;
+            }
+        }
+
+        private class LongBaba : BaseLoadingScreen
+        {
+            private Text text = new();
+            public LongBaba(string name)
+            {
+                AddChild(text);
+                var color = ThemeInfo.GetObjectColor("default", name).ToHexTriple();
+                text.SetText($"{color}[{name}]");
+            }
+
+            public override void SetPercent(double percent)
+            {
+                var xscale = (ScreenWidth / 2) / 12 * (float)percent;
+                var yscale = (ScreenHeight / 2) / 12 * (float)percent;
+                text.Graphics.xscale = xscale;
+                text.Graphics.yscale = yscale;
+                text.Graphics.x = ScreenWidth / 2 - 12 * xscale;
+                text.Graphics.y = ScreenHeight / 2 - 12 * yscale;
             }
         }
     }

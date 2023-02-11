@@ -32,7 +32,7 @@ public class MapSimulatorTests
         var givenRules = global.parseRules(new());
         var allRules = sim.parseRules(givenRules);
 
-        var stopObjects = sim.findObjectsThatAre(ObjectTypeId.stop, allRules).ToList();
+        var stopObjects = sim.findObjectsThatAre(ObjectTypeId.stop).ToList();
         Assert.AreEqual(expectedStopObjects, stopObjects);
     }
 
@@ -164,11 +164,53 @@ public class MapSimulatorTests
         });
 
         var global = babaWorld.Simulators[0].parseRules(new());
-
-        babaWorld.Simulators[1].pull(1, 3, 0, 1, global);
+        var sim = babaWorld.Simulators[1];
+        sim.parseRules(global);
+        sim.pull(1, 3, 0, 1);
         Assert.AreEqual(new ObjectData[]
         {
             new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 3, index = 1 },
         }, babaWorld.Simulators[1].objectsAt(1, 3));
+    }
+
+    [Test]
+    public void move_between_maps()
+    {
+        var babaWorld = new BabaWorld(new()
+        {
+            GlobalWordMapId = 0,
+            Maps = new()
+            {
+                new(new ObjectData[]
+                {
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 0, index = 1 },
+                }) { MapId = 1, width = 10, height = 10, northNeighbor=2 },
+                new(new ObjectData[]
+                {
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 14, index = 1 },
+                }) { MapId = 2, width = 15, height = 15, southNeighbor=1 },
+                new(new ObjectData[]
+                {
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1, index = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2, index = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3, index = 1 },
+                }) { MapId = 0, width = 15, height = 15 },
+            }
+        });
+
+        var global = babaWorld.Simulators[0].parseRules(new());
+        babaWorld.Simulators[2].parseRules(global);
+        var sim = babaWorld.Simulators[1];
+        sim.parseRules(global);
+        sim.pull(1, 1, 0, 1);
+        Assert.AreEqual(new ObjectData[]
+        {
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 1, index = 1 },
+        }, sim.objectsAt(1, 1));
+        Assert.AreEqual(new ObjectData[]
+        {
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 0, y = 0, index = 1 },
+        }, sim.objectsAt(0, 0));
+        Assert.AreEqual(Array.Empty<ObjectData>(), babaWorld.Simulators[2].objectsAt(1, 14));
     }
 }

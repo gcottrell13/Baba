@@ -32,6 +32,13 @@ public class MapSimulator
     private MapSimulator? east;
     private MapSimulator? west;
 
+    private Dictionary<int, int> convertToNorth = new();
+    private Dictionary<int, int> convertToSouth = new();
+    private Dictionary<int, int> convertToEast = new();
+    private Dictionary<int, int> convertToWest = new();
+
+    private RuleDict allRules = new();
+
 
     public MapSimulator(BabaWorld world, short mapId)
 	{
@@ -42,23 +49,38 @@ public class MapSimulator
 
     public void GetNeighbors()
     {
-        world.Simulators.TryGetValue(map.northNeighbor, out north);
-        world.Simulators.TryGetValue(map.southNeighbor, out south);
-        world.Simulators.TryGetValue(map.westNeighbor, out west);
-        world.Simulators.TryGetValue(map.eastNeighbor, out east);
+        if (world.Simulators.TryGetValue(map.northNeighbor, out north)) setupConvertCoordinates(map.width, north.map.width, out convertToNorth);
+        if (world.Simulators.TryGetValue(map.southNeighbor, out south)) setupConvertCoordinates(map.width, south.map.width, out convertToSouth);
+        if (world.Simulators.TryGetValue(map.westNeighbor, out west)) setupConvertCoordinates(map.height, west.map.height, out convertToWest);
+        if (world.Simulators.TryGetValue(map.eastNeighbor, out east)) setupConvertCoordinates(map.height, east.map.height, out convertToEast);
+    }
+
+    /// <summary>
+    /// cache the math needed to move objects between maps
+    /// </summary>
+    /// <param name="thisDim"></param>
+    /// <param name="otherDim"></param>
+    /// <param name="dict"></param>
+    private void setupConvertCoordinates(int thisDim, int otherDim, out Dictionary<int, int> dict)
+    {
+        dict = new();
+        for (var i = 0; i < thisDim; i++)
+        {
+            dict[i] = (int)(otherDim * (float)i / thisDim);
+        }
     }
 
     public void Step(Direction input, RuleDict rulesFromAbove, int playerNumber)
     {
         var all = new HashSet<ObjectTypeId>(map.WorldObjects.Select(x => x.Name));
 
-        var rules = parseRules(rulesFromAbove);
+        parseRules(rulesFromAbove);
 
-        doMovement(input, rules, playerNumber);
+        doMovement(input, playerNumber);
 
     }
 
-    private void doMovement(Direction input, RuleDict allRules, int playerNumber)
+    private void doMovement(Direction input, int playerNumber)
     {
         var movingObjects = new List<(ObjectData obj, int dx, int dy)>();
 
@@ -70,19 +92,19 @@ public class MapSimulator
                 2 => ObjectTypeId.you2, 
                 _ => throw new InvalidOperationException(), 
             };
-            var you = findObjectsThatAre(youRule, allRules);
+            var you = findObjectsThatAre(youRule);
             var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
             movingObjects.AddRange(you.Select(i => (i, dx, dy)));
         }
         else
         {
-            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill, allRules).Select(i => (i, 1, 0)));
+            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).Select(i => (i, 1, 0)));
         }
 
         foreach (var (obj, dx, dy) in movingObjects)
         {
-            if (push(obj.x, obj.y, dx, dy, allRules))
-                pull(obj.x, obj.y, dx, dy, allRules);
+            if (push(obj.x, obj.y, dx, dy))
+                pull(obj.x, obj.y, dx, dy);
         }
     }
 
@@ -94,7 +116,7 @@ public class MapSimulator
         foreach (var rule in rulesFromAbove) dict.Add(rule.Key, rule.Value);
 
         addRules(dict, mapRules);
-
+        allRules = dict;
         return dict;
     }
 
@@ -113,15 +135,15 @@ public class MapSimulator
         }
     }
 
-    public IEnumerable<ObjectData> findObjectsThatAre(ObjectTypeId property, RuleDict allRules)
+    public IEnumerable<ObjectData> findObjectsThatAre(ObjectTypeId property)
     {
         var rules = allRules[property];
         if (rules.Count == 0) return Array.Empty<ObjectData>();
 
-        return map.WorldObjects.Where(x => isObject(x, property, allRules));
+        return map.WorldObjects.Where(x => isObject(x, property));
     }
 
-    public bool isObject(ObjectData obj, ObjectTypeId property, RuleDict allRules)
+    public bool isObject(ObjectData obj, ObjectTypeId property)
     {
         if (obj.Name == property) return true;
 
@@ -136,42 +158,51 @@ public class MapSimulator
             }
             else if (rule.LHS is NA_WithRelationship<ObjectData> wr && (wr.Target.Value.Name == obj.Name) != wr.Target.Not)
             {
-                if (relation(obj, wr, allRules)) return true;
+                if (relation(obj, wr)) return true;
             }
         }
         return false;
     }
 
-    private bool relation(ObjectData obj, NA_WithRelationship<ObjectData> wr, RuleDict allRules)
+    private bool relation(ObjectData obj, NA_WithRelationship<ObjectData> wr)
     {
         if (wr.Relation.Name == ObjectTypeId.on)
         {
             if (wr.RelatedTo is NA_WithRelationship<ObjectData> relatedTo)
-                return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && relation(other, relatedTo, allRules) != relatedTo.Not);
+                return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && relation(other, relatedTo) != relatedTo.Not);
             else if (wr.RelatedTo is NounAdjective<ObjectData> na) 
-                return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && isObject(other, na.Value.Name, allRules) != na.Not);
+                return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && isObject(other, na.Value.Name) != na.Not);
         }
         else if (wr.Relation.Name == ObjectTypeId.feeling)
         {
             if (wr.RelatedTo is NounAdjective<ObjectData> relatedToNa)
             {
-                return isObject(obj, relatedToNa.Value.Name, allRules) != relatedToNa.Not;
+                return isObject(obj, relatedToNa.Value.Name) != relatedToNa.Not;
             }
         }
         throw new Exception();
     }
 
-    public bool push(int x, int y, int dx, int dy, RuleDict allRules)
+    public bool push(int x, int y, int dx, int dy)
     {
         var allObjects = new List<ObjectData>();
-        ObjectData[] inFront;
-        while ((inFront = objectsAt(x + dx, y + dy)).Length > 0)
+        while (x >= 0 && x < map.width && y >= 0 && y < map.height)
         {
-            if (inFront.Any(x => x.Name == mapBorderTypeId || isObject(x, ObjectTypeId.stop, allRules))) return false;
+            var inFront = objectsAt(x + dx, y + dy);
+            if (inFront.Any(x => x.Name == mapBorderTypeId || isObject(x, ObjectTypeId.stop))) return false;
             allObjects.AddRange(inFront);
             x += dx;
             y += dy;
         }
+
+        var canMove = true;
+        if (x < 0) canMove = west!.push(west.map.width, convertToWest[y], dx, dy);
+        if (y < 0) canMove = north!.push(convertToNorth[x], north.map.height, dx, dy);
+        if (x >= map.width) canMove = east!.push(0, convertToEast[y], dx, dy);
+        if (y >= map.height) canMove = south!.push(convertToSouth[x], 0, dx, dy);
+
+        if (!canMove) return false;
+
         foreach (var obj in allObjects)
         {
             moveObjectTo(obj, obj.x + dx, obj.y + dy);
@@ -179,13 +210,12 @@ public class MapSimulator
         return true;
     }
 
-    public void pull(int x, int y, int dx, int dy, RuleDict allRules)
+    public void pull(int x, int y, int dx, int dy)
     {
         var allObjects = new List<ObjectData>();
-        ObjectData[] behind;
-        while ((behind = objectsAt(x - dx, y - dy)).Length > 0)
+        while (x >= dx && x < map.width + dx && y >= dy && y < map.height + dy)
         {
-            var pullObjects = behind.Where(x => isObject(x, ObjectTypeId.pull, allRules)).ToList();
+            var pullObjects = objectsAt(x - dx, y - dy).Where(x => isObject(x, ObjectTypeId.pull)).ToList();
             if (pullObjects.Count == 0) break;
             allObjects.AddRange(pullObjects);
             x -= dx;
@@ -195,6 +225,14 @@ public class MapSimulator
         {
             moveObjectTo(obj, obj.x + dx, obj.y + dy);
         }
+
+        x -= dx;
+        y -= dy;
+
+        if (x < 0) west?.pull(west.map.width, convertToWest[y], dx, dy);
+        if (y < 0) north?.pull(convertToNorth[x], north.map.height, dx, dy);
+        if (x >= map.width) east?.pull(0, convertToEast[y], dx, dy);
+        if (y >= map.height) south?.pull(convertToSouth[x], 0, dx, dy);
     }
 
     public bool moveObjectTo(ObjectData obj, int x, int y)
@@ -202,22 +240,22 @@ public class MapSimulator
         if (x < 0)
         {
             obj.Present = false;
-            return west?.addObjectAt(obj, west.map.width + x, (int)(y * west.map.height / (float)map.height)) ?? false;
+            return west?.addObjectAt(obj, west.map.width + x, convertToWest[y]) ?? false;
         }
         if (y < 0)
         {
             obj.Present = false;
-            return north?.addObjectAt(obj, (int)(x * north.map.width / (float)map.width), north.map.height + y) ?? false;
+            return north?.addObjectAt(obj, convertToNorth[x], north.map.height + y) ?? false;
         }
         if (x >= map.width)
         {
             obj.Present = false;
-            return east?.addObjectAt(obj, x - map.width, (int)(y * east.map.height / (float)map.height)) ?? false;
+            return east?.addObjectAt(obj, x - map.width, convertToEast[y]) ?? false;
         }
         if (y >= map.height)
         {
             obj.Present = false;
-            return south?.addObjectAt(obj, (int)(x * south.map.width / (float)map.width), y - map.height) ?? false;
+            return south?.addObjectAt(obj, convertToSouth[x], y - map.height) ?? false;
         }
         obj.x = x;
         obj.y = y;
@@ -257,19 +295,19 @@ public class MapSimulator
     {
         if (x < 0)
         {
-            return west?.objectsAt(west.map.width + x, (int)(y * west.map.height / (float)map.height)) ?? mapBorder;
+            return west?.objectsAt(west.map.width + x, convertToWest[y]) ?? mapBorder;
         }
         if (y < 0)
         {
-            return north?.objectsAt((int)(x * north.map.width / (float)map.width), north.map.height + y) ?? mapBorder;
+            return north?.objectsAt(convertToNorth[x], north.map.height + y) ?? mapBorder;
         }
         if (x >= map.width)
         {
-            return east?.objectsAt(x - map.width, (int)(y * east.map.height / (float)map.height)) ?? mapBorder;
+            return east?.objectsAt(x - map.width, convertToEast[y]) ?? mapBorder;
         }
         if (y >= map.height)
         {
-            return south?.objectsAt((int)(x * south.map.width / (float)map.width), y - map.height) ?? mapBorder;
+            return south?.objectsAt(convertToSouth[x], y - map.height) ?? mapBorder;
         }
         return map.WorldObjects.Where(obj => obj.x == x && obj.y == y).ToArray();
     }

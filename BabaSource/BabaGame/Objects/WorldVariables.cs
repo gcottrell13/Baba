@@ -19,14 +19,6 @@ namespace BabaGame.Objects
         public static float InputDelaySeconds = 0.02f;
         public static float MoveAnimationSeconds = 0.2f;
 
-        public const int MapWidth = 24;
-        public const int MapHeight = 18;
-
-        public static int MapWidthPixels => MapWidth * TileWidth;
-        public static int MapHeightPixels => MapHeight * TileHeight;
-
-        public static string Palette = "default";
-
         public static (float x, float y) GameCoordToScreenCoord(int x, int y)
         {
             return (
@@ -40,13 +32,6 @@ namespace BabaGame.Objects
             var sx = Margin * 2 + TileWidth * x + Padding * (x - 1);
             var sy = Margin * 2 + TileHeight * y + Padding * (y - 1);
             return ((int)(sx * Scale), (int)(sy * Scale));
-        }
-
-        public static (int x, int y) TileCoordinateRebaseToNewMap(int mapX, int mapY, int x, int y)
-        {
-            return (
-                x % MapWidth + mapX * MapWidth,
-                y % MapHeight + mapY * MapHeight);
         }
     }
 }

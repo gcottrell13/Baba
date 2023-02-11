@@ -1,5 +1,4 @@
 ﻿using BabaGame.Events;
-using BabaGame.Resources;
 using Core.Bootstrap;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -28,10 +27,6 @@ namespace BabaGame
         {
             public override void Initialize()
             {
-                AllMaps.LoadMaps();
-                AllMaps.LoadWorlds();
-                ObjectSprites.LoadTextures();
-
                //  AddChild(new World("world1"), true);
                 AddCallbackRunner();
 

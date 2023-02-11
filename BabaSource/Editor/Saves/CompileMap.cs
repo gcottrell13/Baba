@@ -37,6 +37,7 @@ namespace Editor.Saves
                     y = x.y,
                     Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
                     Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
+                    Text = x.text,
                 }).ToArray())
                 {
                     MapId = mapTempId++,

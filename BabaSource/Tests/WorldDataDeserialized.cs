@@ -63,6 +63,9 @@ public class WorldDataDeserialized
                 x = 2,
                 y = 2,
                 Kind = ObjectKind.Object,
+                Text = """
+                this is a boat
+                """,
             },
             new ObjectData() {
                 Deleted = false,

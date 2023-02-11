@@ -1,4 +1,5 @@
 ﻿using Core.Content;
+using Core.Utils;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Core.Engine;
@@ -33,6 +34,8 @@ public class ObjectData : INameable
     // if the object is not present, act like it doesn't exist
     public bool Present;
 
+    public string? Text;
+
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
         if (obj is ObjectData w)
@@ -42,9 +45,12 @@ public class ObjectData : INameable
         return base.Equals(obj);
     }
 
+    private string textToString => string.IsNullOrEmpty(Text) ? "\"\"" : "\"\"\"\n\t" + Text.Indent(1) + "\n\t\"\"\"";
+
     public override string ToString() => $$"""
         new ObjectData() {
             {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}}, {{nameof(Color)}} = {{Color}}, {{nameof(Facing)}} = {{Facing}}, {{nameof(x)}} = {{x}}, {{nameof(y)}} = {{y}}, {{nameof(Name)}} = "{{Name}}", {{nameof(Kind)}} = ObjectKind.{{Kind}},
+            {{nameof(Text)}} = {{textToString}},
         }
         """;
 

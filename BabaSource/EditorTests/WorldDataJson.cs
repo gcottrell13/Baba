@@ -26,7 +26,7 @@ public static class WorldDataJson
         			"musicName": "editorsong",
         			"regionObjectLayer": {
         				"objects": [
-        					{"x":2,"y":2,"name":"boat","state":4,"color":49,"text":"","original":null},
+        					{"x":2,"y":2,"name":"boat","state":4,"color":49,"text":"this is a boat","original":null},
         					{"x":5,"y":4,"name":"boat","state":1,"color":49,"text":"","original":null}
         				],
         				"width": 10,

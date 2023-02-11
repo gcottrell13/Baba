@@ -14,9 +14,9 @@ namespace Tests.Engine
     {
         [Test]
         [TestCaseSource(nameof(_serializeTestCases))]
-        public void WorldData_Serialize(ObjectData[] input)
+        public void WorldData_Serialize(List<ObjectData> input)
         {
-            var data = new MapData(input);
+            var data = new MapData(input.ToArray());
 
             var serialized = data.Serialize();
             var deserialized = MapData.Deserialize(serialized).WorldObjects;
@@ -25,22 +25,22 @@ namespace Tests.Engine
 
         static IEnumerable<TestCaseData> _serializeTestCases => _serializeCaseGenerator.Select(x => new TestCaseData(x.input).SetName(x.name));
 
-        static IEnumerable<(string name, ObjectData[] input)> _serializeCaseGenerator { get
+        static IEnumerable<(string name, List<ObjectData> input)> _serializeCaseGenerator { get
         {
                 yield return (
                     "empty",
-                    Array.Empty<ObjectData>()
+                    new()
                 );
                 yield return (
                     "one",
-                    new[]
+                    new()
                     {
                         new ObjectData() { Deleted= true, Color=2, Name=ObjectTypeId.amongi },
                     }
                 );
                 yield return (
                     "three",
-                    new[]
+                    new()
                     {
                         new ObjectData() { Deleted= true, Color=2, Name=ObjectTypeId.amongi },
                         new ObjectData() { Deleted= true, Color=1, Name=ObjectTypeId.badbad, x=10, y=15 },

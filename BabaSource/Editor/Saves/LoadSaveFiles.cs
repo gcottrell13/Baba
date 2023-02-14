@@ -1,4 +1,5 @@
 ﻿using Core.Content;
+using Core.Engine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,6 +64,11 @@ namespace Editor.Saves
             save.fileName ??= save.worldName;
             var text = SaveFormatSerializer.Serialize(save);
             File.WriteAllText(editorFilesDirectory + $"{save.fileName}.json", text);
+        }
+
+        public static void SaveCompiledMap(WorldData worldData, string saveFileName)
+        {
+            File.WriteAllText(editorFilesDirectory + $"{saveFileName}.0.sav", worldData.Serialize());
         }
     }
 

@@ -103,6 +103,9 @@ namespace Editor.Editors
         public void saveWorld()
         {
             LoadSaveFiles.SaveAll(save);
+            
+            var compiled = CompileMap.CompileWorld(save);
+            LoadSaveFiles.SaveCompiledMap(compiled, save.fileName ?? "compiled");
         }
 
         public void setPickedMap(SaveMapData? map)

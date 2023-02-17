@@ -19,7 +19,9 @@ namespace Editor
         {
             public override void Initialize()
             {
-                var saveFiles = LoadSaveFiles.LoadAllWorlds();
+                base.Initialize();
+
+                var saveFiles = LoadEditorSaveFiles.LoadAllWorlds();
 
                 var mapStack = new ScreenStack();
                 PlaySound.PlayMusic("editorsong");

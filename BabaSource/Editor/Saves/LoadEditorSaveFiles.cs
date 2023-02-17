@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Editor.Saves
 {
-    public static class LoadSaveFiles
+    public static class LoadEditorSaveFiles
     {
         private const string editorFilesDirectory = ContentDirectory.contentDirectory + "/editorSaves/";
 
@@ -64,11 +64,6 @@ namespace Editor.Saves
             save.fileName ??= save.worldName;
             var text = SaveFormatSerializer.Serialize(save);
             File.WriteAllText(editorFilesDirectory + $"{save.fileName}.json", text);
-        }
-
-        public static void SaveCompiledMap(WorldData worldData, string saveFileName)
-        {
-            File.WriteAllText(editorFilesDirectory + $"{saveFileName}.0.sav", worldData.Serialize());
         }
     }
 

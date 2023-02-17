@@ -9,7 +9,7 @@ namespace Editor
 {
     internal class Editor
     {
-        public static readonly Editor EDITOR = new(LoadSaveFiles.LoadAllWorlds());
+        public static readonly Editor EDITOR = new(LoadEditorSaveFiles.LoadAllWorlds());
 
         private readonly ReadonlySavesList savesList;
         public SaveFormatWorld? currentWorld { get; private set; }
@@ -28,14 +28,14 @@ namespace Editor
         public void SaveAll()
         {
             if (currentWorld == null) return;
-            LoadSaveFiles.SaveAll(currentWorld);
+            LoadEditorSaveFiles.SaveAll(currentWorld);
         }
 
         public SaveFormatWorld NewWorld()
         {
             var newWorld = new SaveFormatWorld() { worldName = $"new world {savesList.Count + 1}" };
-            LoadSaveFiles.AddNewSave(newWorld);
-            LoadSaveFiles.SaveAll(newWorld);
+            LoadEditorSaveFiles.AddNewSave(newWorld);
+            LoadEditorSaveFiles.SaveAll(newWorld);
             return newWorld;
         }
 
@@ -44,7 +44,7 @@ namespace Editor
             var maxId = mapDatas.Count > 0 ? mapDatas.Max(x => x.id) : 0;
             var newMap = new SaveMapData() { name = $"new map {mapDatas.Count + 1}", id = maxId + 1 };
             currentWorld!.MapDatas.Add(newMap);
-            LoadSaveFiles.SaveAll(currentWorld);
+            LoadEditorSaveFiles.SaveAll(currentWorld);
             return newMap;
         }
 
@@ -53,7 +53,7 @@ namespace Editor
             var maxId = regions.Count > 0 ? regions.Max(x => x.id) : 0;
             var newRegion = new SaveRegion() { name = $"new region {maxId + 1}", id = maxId + 1 };
             currentWorld!.Regions.Add(newRegion);
-            LoadSaveFiles.SaveAll(currentWorld);
+            LoadEditorSaveFiles.SaveAll(currentWorld);
             return newRegion;
         }
 

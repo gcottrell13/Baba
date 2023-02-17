@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Engine;
 
 namespace Editor.Editors
 {
@@ -102,10 +103,10 @@ namespace Editor.Editors
 
         public void saveWorld()
         {
-            LoadSaveFiles.SaveAll(save);
+            LoadEditorSaveFiles.SaveAll(save);
             
             var compiled = CompileMap.CompileWorld(save);
-            LoadSaveFiles.SaveCompiledMap(compiled, save.fileName ?? "compiled");
+            LoadGameSaveFiles.SaveCompiledMap(compiled, save.fileName ?? "compiled");
         }
 
         public void setPickedMap(SaveMapData? map)

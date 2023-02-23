@@ -266,7 +266,7 @@ public class ListDisplay<T> : GameObject
 
     public void SetDisplayTypeName(string typeName, bool withBackground)
     {
-        var pre = $"{baseFilterDisplayText} {typeName}: {{0}} :\n".Trim();
+        var pre = $"{baseFilterDisplayText} {typeName}: {{0}}\n".Trim();
         
         if (withBackground)
         {

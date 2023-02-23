@@ -126,7 +126,7 @@ namespace Core.Screens
         {
         }
 
-        protected void SetDisplayTypeName(string typeName)
+        public void SetDisplayTypeName(string typeName)
         {
             listDisplay.SetDisplayTypeName(typeName, withBackground: Transparent);
         }

@@ -1,4 +1,4 @@
-﻿using Core.Engine;
+using Core.Engine;
 using Core.Screens;
 using Core.UI;
 using System;
@@ -28,6 +28,7 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
     public override BabaGameState Handle(KeyPress ev) => filtererModal.Handle(ev) switch
     {
         PickerState.ClosePick => BabaGameState.PickingSaveFile,
+        PickerState.CloseCancel => BabaGameState.Exit,
         _ => BabaGameState.None,
     };
 

@@ -108,6 +108,9 @@ namespace Core.Bootstrap
             else EntryPoint.EntryTick(gameTime);
 
             EventManager.SendAsyncMessages();
+
+            if (GameObject.EXIT) Exit();
+
             base.Update(gameTime);
         }
 

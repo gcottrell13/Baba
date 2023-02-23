@@ -175,5 +175,9 @@ namespace Core
             CoreEventChannels.KeyEvent.Subscribe(_processKeyEvent);
             return () => CoreEventChannels.KeyEvent.Unsubscribe(_processKeyEvent);
         }
+
+
+        public static bool EXIT { get; private set; } = false;
+        public void Exit() { EXIT = true; }
     }
 }

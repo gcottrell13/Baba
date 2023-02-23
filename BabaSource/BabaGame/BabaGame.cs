@@ -1,4 +1,4 @@
-﻿using BabaGame.Events;
+using BabaGame.Events;
 using BabaGame.Screens;
 using Core.Bootstrap;
 using Core.Engine;
@@ -68,7 +68,8 @@ public class BabaGame : GameSetup
                         {
 
                         })
-                );
+                )
+                .State(BabaGameState.Exit, e => BabaGameState.None, def => def.AddOnEnter(() => Exit()));
 
             stateMachine.Initialize(BabaGameState.PickingWorld);
 
@@ -81,6 +82,7 @@ public class BabaGame : GameSetup
 internal enum BabaGameState
 {
     None,
+    Exit,
 
     PickingWorld,
     PickingSaveFile,

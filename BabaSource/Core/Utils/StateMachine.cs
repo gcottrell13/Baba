@@ -36,21 +36,31 @@ namespace Core.Utils
 
             var resultState = currentState.OnAction(action);
 
+            return switchToState(resultState);
+        }
+
+        private TState switchToState(TState resultState)
+        {
+            if (currentState == null) throw new Exception("State machine was not initialized");
+
             if (Equals(resultState, noOpState))
                 return resultState;
 
             var isDifferent = !Equals(resultState, currentState.State);
             if (isDifferent)
             {
-                currentState.OnLeave(resultState);
-
                 if (states.TryGetValue(resultState, out var newState))
                 {
+                    if (newState.ShortCircuit != null && newState.ShortCircuit.Invoke() is TState shortCircuitState && !Equals(shortCircuitState, noOpState))
+                        return switchToState(shortCircuitState);
+
+                    currentState.OnLeave(resultState);
                     newState.OnEnter(currentState.State);
                     currentState = newState;
                 }
                 else
                 {
+                    currentState.OnLeave(resultState);
                     currentState = null;
                 }
             }
@@ -61,7 +71,13 @@ namespace Core.Utils
         public void Initialize(TState state)
         {
             currentState ??= states.TryGetValue(state, out var newState) ? newState : throw new ArgumentException($"State {state} does not exist");
-            currentState?.OnEnter(default!);
+
+            if (currentState?.ShortCircuit != null && currentState.ShortCircuit.Invoke() is TState shortCircuitState && !Equals(shortCircuitState, noOpState) && !Equals(shortCircuitState, state))
+            {
+                Initialize(shortCircuitState);
+            }
+            else
+                currentState?.OnEnter(default!);
         }
 
         public void Dispose()
@@ -81,11 +97,18 @@ namespace Core.Utils
         public delegate void EventHandler(object sender, TState state);
         private event EventHandler? OnEnterEvent;
         private event EventHandler? OnLeaveEvent;
+        internal Func<TState>? ShortCircuit;
 
         public StateDefinition(TState state, Func<TAction, TState> theSwitch)
         {
             State = state;
             TheSwitch = theSwitch;
+        }
+
+        public StateDefinition<TState, TAction> SetShortCircuit(Func<TState> shortCircuit)
+        {
+            ShortCircuit = shortCircuit;
+            return this;
         }
 
         public StateDefinition<TState, TAction> AddOnEnter<T>(Func<TState, T> action)

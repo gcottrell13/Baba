@@ -62,7 +62,6 @@ public class ListDisplay<T> : GameObject
         filteredChildren = items.ToList();
         this.maxDisplay = maxDisplay;
         filterDisplay.SetOptions(new() { background = Color.Black });
-        _setSelected(Math.Max(0, filteredChildren.IndexOf(currentValue!)));
 
         for (var i = 0; i < maxDisplay; i++)
         {
@@ -120,6 +119,8 @@ public class ListDisplay<T> : GameObject
                 c => throwClosedError()
             );
         statemachine.Initialize(PickerState.Selecting);
+
+        _setSelected(Math.Max(0, filteredChildren.IndexOf(currentValue!)));
     }
 
     private PickerState throwClosedError() => throw new InvalidOperationException("Must create a new filter modal. This one is closed");
@@ -293,6 +294,6 @@ public class ListDisplay<T> : GameObject
         }
 
         filterDisplay.SetFormat(pre);
-        _afterSetFilter();
+        _drawChildren();
     }
 }

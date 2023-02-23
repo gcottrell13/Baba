@@ -1,37 +1,90 @@
 ﻿using BabaGame.Events;
+using BabaGame.Screens;
 using Core.Bootstrap;
+using Core.Engine;
+using Core.Screens;
+using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
-namespace BabaGame
+namespace BabaGame;
+
+public class BabaGame : GameSetup
 {
-    public class BabaGame : GameSetup
+    public BabaGame() : base(new BabaGameEntryPoint())
     {
-        public BabaGame() : base(new BabaGameEntryPoint())
+        MAX_WIDTH = 1080;
+        MAX_HEIGHT = 720;
+    }
+
+    private class BabaGameEntryPoint : GameEntryPoint
+    {
+        public override void Initialize()
         {
-            MAX_WIDTH = 1080;
-            MAX_HEIGHT = 720;
-        }
+            base.Initialize();
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // TODO: also get built-in main game
+            SaveFile? saveFile = null;
 
-            base.Update(gameTime);
+            var saveFiles = LoadGameSaveFiles.LoadAllCompiledMaps().ToList();
 
-            // TODO: Add your update logic here
-        }
+            WorldSelectScreen? worldSelectScreen = null;
+            SaveFileSelectScreen? saveFileSelectScreen = null;
 
-        private class BabaGameEntryPoint : GameEntryPoint
-        {
-            public override void Initialize()
-            {
-               //  AddChild(new World("world1"), true);
-                AddCallbackRunner();
+            var stack = new ScreenStack();
 
-                EventChannels.MapChange.SendAsyncMessage(new MapChange { X = 22, Y = 26 });
-            }
+            var stateMachine = new StateMachine<BabaGameState, KeyPress>("babaGame", BabaGameState.None)
+                .State(BabaGameState.PickingSaveFile,
+                    @event => saveFileSelectScreen!.Handle(@event),
+                    def => def
+                        .AddOnEnter(() =>
+                        {
+                            saveFileSelectScreen = new(saveFile!, wd => {
+                                saveFile!.SetSave(wd);
+                                LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, saveFile.SaveFiles.Count.ToString());
+                            });
+                            stack.Add(saveFileSelectScreen);
+                        })
+                        .AddOnLeave(() => stack.Pop())
+                )
+                .State(BabaGameState.PickingWorld,
+                    @event => worldSelectScreen!.Handle(@event),
+                    def => def
+                        .AddOnEnter(() =>
+                        {
+                            worldSelectScreen = new(saveFiles, s => {
+                                saveFile = s;
+                            });
+                            stack.Add(worldSelectScreen);
+                        })
+                        .AddOnLeave(() => stack.Pop())
+                        .SetShortCircuit(() => saveFiles.Count == 0 ? BabaGameState.PickingSaveFile : BabaGameState.None)
+                )
+                .State(BabaGameState.PlayingGame,
+                    @event => BabaGameState.None,
+                    def => def
+                        .AddOnEnter(() =>
+                        {
+
+                        })
+                );
+
+            stateMachine.Initialize(BabaGameState.PickingWorld);
+
+            onKeyPress(ev => stateMachine.SendAction(ev));
+            AddChild(stack);
         }
     }
+}
+
+internal enum BabaGameState
+{
+    None,
+
+    PickingWorld,
+    PickingSaveFile,
+    PlayingGame,
+
+
 }

@@ -18,12 +18,10 @@ namespace Core.Bootstrap
             Tick(gameTime);
         }
 
-        protected void AddCallbackRunner()
+        public virtual void Initialize()
         {
             AddChild(new CallbackRunner(CoreEventChannels.ScheduledCallback.Subscribe, CoreEventChannels.ScheduledCallback.Unsubscribe));
         }
-
-        public abstract void Initialize();
     }
 
 }

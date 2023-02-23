@@ -15,15 +15,25 @@ public class LoadGameSaveFiles
 
     public static void SaveCompiledMap(WorldData worldData, string saveFileName, string version = "0")
     {
+        if (!Directory.Exists(filesDirectory)) 
+        { 
+            Directory.CreateDirectory(filesDirectory);
+        }
+
         File.WriteAllText(filesDirectory + $"{saveFileName.Replace(".", "_")}.{version.Replace(".", "_")}.sav", worldData.Serialize());
     }
 
     public static IEnumerable<string> GetCompiledMaps()
     {
+        if (!Directory.Exists(filesDirectory))
+        {
+            Directory.CreateDirectory(filesDirectory);
+        }
+
         foreach (var file in Directory.EnumerateFiles(filesDirectory))
         {
             var n = Path.GetFileName(file);
-            yield return n[..n.LastIndexOf('.')];
+            yield return n;
         }
     }
 
@@ -36,10 +46,10 @@ public class LoadGameSaveFiles
             if (group.Key == "") 
                 continue;
             var saveFileNames = group.ToDictionary(name => regexp.Match(name).Groups[2].Value);
-            var savesFiles = saveFileNames.ToDictionary(k => k.Key, k => WorldData.Deserialize(File.ReadAllText(k.Value)));
+            var savesFiles = saveFileNames.ToDictionary(k => k.Key, k => WorldData.Deserialize(File.ReadAllText(filesDirectory + k.Value)));
             var initial = savesFiles["0"];
             savesFiles.Remove("0");
-            yield return new SaveFile(initial, savesFiles);
+            yield return new SaveFile(group.Key, initial, savesFiles);
         }
     }
 }

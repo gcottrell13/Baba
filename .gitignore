@@ -18,3 +18,5 @@ pipeline/modules/env.py
 .idea
 
 *.ogg
+
+*.sav

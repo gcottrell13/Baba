@@ -10,10 +10,18 @@ public class SaveFile
 {
     public WorldData InitialContent;
     public Dictionary<string, WorldData> SaveFiles;
+    public string Name { get; }
 
-    public SaveFile(WorldData initial, Dictionary<string, WorldData> saves)
+    public SaveFile(string name, WorldData initial, Dictionary<string, WorldData> saves)
     {
+        Name = name;
         InitialContent = initial;
         SaveFiles = saves;
+    }
+
+
+    public void SetSave(WorldData save)
+    {
+        SaveFiles[save.Name] = save;
     }
 }

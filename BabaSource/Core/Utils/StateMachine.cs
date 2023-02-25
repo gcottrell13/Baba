@@ -70,7 +70,8 @@ namespace Core.Utils
 
         public void Initialize(TState state)
         {
-            currentState ??= states.TryGetValue(state, out var newState) ? newState : throw new ArgumentException($"State {state} does not exist");
+            if (!states.TryGetValue(state, out currentState))
+                throw new ArgumentException($"State {state} does not exist");
 
             if (currentState?.ShortCircuit != null && currentState.ShortCircuit.Invoke() is TState shortCircuitState && !Equals(shortCircuitState, noOpState) && !Equals(shortCircuitState, state))
             {

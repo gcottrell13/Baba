@@ -1,4 +1,4 @@
-﻿using Core.Content;
+using Core.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,19 +37,21 @@ public class LoadGameSaveFiles
         }
     }
 
-    public static IEnumerable<SaveFile> LoadAllCompiledMaps()
+    public static Dictionary<string, SaveFile> LoadAllCompiledMaps()
     {
         var regexp = new Regex(@"([^.]+)\.([^.]+)\.sav");
         var groups = GetCompiledMaps().GroupBy(x => regexp.Match(x) is Match m ? m.Groups[1].Value : "");
+        var d = new Dictionary<string, SaveFile>();
         foreach (var group in groups)
         {
             if (group.Key == "") 
                 continue;
             var saveFileNames = group.ToDictionary(name => regexp.Match(name).Groups[2].Value);
             var savesFiles = saveFileNames.ToDictionary(k => k.Key, k => WorldData.Deserialize(File.ReadAllText(filesDirectory + k.Value)));
-            var initial = savesFiles["0"];
-            savesFiles.Remove("0");
-            yield return new SaveFile(group.Key, initial, savesFiles);
+            var initial = savesFiles.Remove("0", out var zero) ? zero : new();
+            d[group.Key] = new SaveFile(group.Key, initial, savesFiles);
         }
+
+        return d;
     }
 }

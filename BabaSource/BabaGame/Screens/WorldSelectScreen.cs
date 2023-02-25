@@ -1,4 +1,4 @@
-using Core.Engine;
+﻿using Core.Engine;
 using Core.Screens;
 using Core.UI;
 using System;
@@ -13,9 +13,9 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
 {
     private readonly FiltererModal<SaveFile> filtererModal;
 
-    public WorldSelectScreen(List<SaveFile> saveFiles, Action<SaveFile> onSelect)
+    public WorldSelectScreen(List<SaveFile> saveFiles, SaveFile? current, Action<SaveFile> onSelect)
     {
-        filtererModal = new(saveFiles, 10, displaySaveFile)
+        filtererModal = new(saveFiles, 10, displaySaveFile, currentValue: current)
         {
             OnSelect = onSelect,
         };
@@ -27,8 +27,8 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
 
     public override BabaGameState Handle(KeyPress ev) => filtererModal.Handle(ev) switch
     {
-        ListState.ClosePick => BabaGameState.PickingSaveFile,
-        ListState.CloseCancel => BabaGameState.Exit,
+        PickerState.ClosePick => BabaGameState.PickingSaveFile,
+        PickerState.CloseCancel => BabaGameState.Exit,
         _ => BabaGameState.None,
     };
 

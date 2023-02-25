@@ -1,4 +1,4 @@
-using BabaGame.Events;
+﻿using BabaGame.Events;
 using BabaGame.Screens;
 using Core.Bootstrap;
 using Core.Engine;
@@ -24,10 +24,9 @@ public class BabaGame : GameSetup
         {
             base.Initialize();
 
-            // TODO: also get built-in main game
             SaveFile? saveFile = null;
 
-            var saveFiles = LoadGameSaveFiles.LoadAllCompiledMaps().ToList();
+            var saveFiles = LoadGameSaveFiles.LoadAllCompiledMaps();
 
             WorldSelectScreen? worldSelectScreen = null;
             SaveFileSelectScreen? saveFileSelectScreen = null;
@@ -40,7 +39,8 @@ public class BabaGame : GameSetup
                     def => def
                         .AddOnEnter(() =>
                         {
-                            saveFileSelectScreen = new(saveFile!, wd => {
+                            saveFile ??= saveFiles.Values.First();
+                            saveFileSelectScreen = new(saveFile, wd => {
                                 saveFile!.SetSave(wd);
                                 LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, saveFile.SaveFiles.Count.ToString());
                             });
@@ -53,13 +53,13 @@ public class BabaGame : GameSetup
                     def => def
                         .AddOnEnter(() =>
                         {
-                            worldSelectScreen = new(saveFiles, s => {
+                            worldSelectScreen = new(saveFiles.Values.ToList(), saveFile, s => {
                                 saveFile = s;
                             });
                             stack.Add(worldSelectScreen);
                         })
                         .AddOnLeave(() => stack.Pop())
-                        .SetShortCircuit(() => saveFiles.Count == 0 ? BabaGameState.PickingSaveFile : BabaGameState.None)
+                        .SetShortCircuit(() => saveFiles.Count == 1 ? BabaGameState.PickingSaveFile : BabaGameState.None)
                 )
                 .State(BabaGameState.PlayingGame,
                     @event => BabaGameState.None,

@@ -6,6 +6,7 @@ using Core.Screens;
 using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Linq;
 
 namespace BabaGame;
@@ -42,7 +43,7 @@ public class BabaGame : GameSetup
                             saveFile ??= saveFiles.Values.First();
                             saveFileSelectScreen = new(saveFile, wd => {
                                 saveFile!.SetSave(wd);
-                                LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, saveFile.SaveFiles.Count.ToString());
+                                LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
                             });
                             stack.Add(saveFileSelectScreen);
                         })

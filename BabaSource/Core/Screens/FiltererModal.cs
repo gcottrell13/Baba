@@ -28,6 +28,8 @@ namespace Core.Screens
 
         protected ListDisplay<T> listDisplay;
 
+        private PickerState state = PickerState.Open;
+
         public FiltererModal(
             IEnumerable<T> items,
             int maxDisplay,
@@ -51,18 +53,23 @@ namespace Core.Screens
             AddChild(listDisplay);
         }
 
-
         public override PickerState Handle(KeyPress ev)
         {
             var r = listDisplay.Handle(ev);
             refreshCommands();
-            return r;
+
+            if (r == ListState.Selecting && ev.KeyPressed == Keys.Escape)
+            {
+                return PickerState.CloseCancel;
+            }
+
+            return state;
         }
 
         protected Dictionary<string, string> GetCommands() => listDisplay.statemachine.CurrentState switch
         {
-            PickerState.Filtering => filteringCommands(),
-            PickerState.Selecting => selectingCommands(),
+            ListState.Filtering => filteringCommands(),
+            ListState.Selecting => selectingCommands(),
             _ => new(),
         };
 
@@ -99,24 +106,28 @@ namespace Core.Screens
 
         private void onAdd()
         {
+            state = PickerState.CloseAdd;
             OnAdd?.Invoke();
             refreshCommands();
         }
 
         private void onEdit(T item)
         {
+            state = PickerState.CloseEdit;
             OnEdit?.Invoke(item);
             refreshCommands();
         }
 
         private void onRemove(T item)
         {
+            state = PickerState.CloseRemove;
             OnRemove?.Invoke(item);
             refreshCommands();
         }
 
         private void onSelect(T item)
         {
+            state = PickerState.ClosePick;
             OnSelect?.Invoke(item);
             refreshCommands();
         }
@@ -132,4 +143,15 @@ namespace Core.Screens
         }
     }
 
+}
+
+
+public enum PickerState
+{
+    Open,
+    CloseAdd,
+    ClosePick,
+    CloseCancel,
+    CloseEdit,
+    CloseRemove,
 }

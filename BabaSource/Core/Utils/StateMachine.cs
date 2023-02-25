@@ -44,7 +44,7 @@ namespace Core.Utils
             if (currentState == null) throw new Exception("State machine was not initialized");
 
             if (Equals(resultState, noOpState))
-                return resultState;
+                return currentState.State;
 
             var isDifferent = !Equals(resultState, currentState.State);
             if (isDifferent)

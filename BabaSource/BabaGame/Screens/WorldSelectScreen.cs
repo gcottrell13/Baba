@@ -27,8 +27,8 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
 
     public override BabaGameState Handle(KeyPress ev) => filtererModal.Handle(ev) switch
     {
-        PickerState.ClosePick => BabaGameState.PickingSaveFile,
-        PickerState.CloseCancel => BabaGameState.Exit,
+        ListState.ClosePick => BabaGameState.PickingSaveFile,
+        ListState.CloseCancel => BabaGameState.Exit,
         _ => BabaGameState.None,
     };
 

@@ -7,23 +7,18 @@ using System.Linq;
 
 namespace Core.UI;
 
-public enum PickerState
+public enum ListState
 {
     None,
     Selecting,
     Filtering,
-    CloseAdd,
-    ClosePick,
-    CloseCancel,
-    CloseEdit,
-    CloseRemove,
 }
 
 public class ListDisplay<T> : GameObject
     where T : class
 {
 
-    public StateMachine<PickerState, KeyPress> statemachine { get; }
+    public StateMachine<ListState, KeyPress> statemachine { get; }
 
     public T? Selected { get; private set; }
     private readonly List<T> items;
@@ -79,15 +74,14 @@ public class ListDisplay<T> : GameObject
         SetDisplayTypeName("", false);
         SetFilter("");
 
-        statemachine = new StateMachine<PickerState, KeyPress>("filter modal", PickerState.None)
+        statemachine = new StateMachine<ListState, KeyPress>("filter modal", ListState.None)
             .State(
-                PickerState.Selecting,
+                ListState.Selecting,
                 c => c.KeyPressed switch
                 {
-                    Keys.F => PickerState.Filtering,
+                    Keys.F => ListState.Filtering,
                     Keys.Up => Up(),
                     Keys.Down => Down(),
-                    Keys.Escape => Cancel(),
                     Keys.Enter => Pick(),
                     Keys.E => Edit(),
                     Keys.A => Add(),
@@ -95,35 +89,18 @@ public class ListDisplay<T> : GameObject
                     _ => 0,
                 }
             ).State(
-                PickerState.Filtering,
+                ListState.Filtering,
                 c => c switch
                 {
-                    KeyPress { KeyPressed: Keys.Escape } => PickerState.Selecting,
+                    KeyPress { KeyPressed: Keys.Escape } => ListState.Selecting,
                     KeyPress { KeyPressed: Keys.Enter } => Pick(),
                     KeyPress k => addCharToFilter(k),
                 }
-            ).State(
-                PickerState.CloseCancel,
-                c => throwClosedError()
-            ).State(
-                PickerState.ClosePick,
-                c => throwClosedError()
-            ).State(
-                PickerState.CloseEdit,
-                c => throwClosedError()
-            ).State(
-                PickerState.CloseAdd,
-                c => throwClosedError()
-            ).State(
-                PickerState.CloseRemove,
-                c => throwClosedError()
             );
-        statemachine.Initialize(PickerState.Selecting);
+        statemachine.Initialize(ListState.Selecting);
 
         _setSelected(Math.Max(0, filteredChildren.IndexOf(currentValue!)));
     }
-
-    private PickerState throwClosedError() => throw new InvalidOperationException("Must create a new filter modal. This one is closed");
 
     private void _setSelected(int newSelected)
     {
@@ -172,76 +149,61 @@ public class ListDisplay<T> : GameObject
         countDisplay.Graphics.y = 24 * (maxDisplay + 1);
     }
 
-    private PickerState Cancel()
-    {
-        Selected = null;
-        return PickerState.CloseCancel;
-    }
-
-    private PickerState Up()
+    private ListState Up()
     {
         var sid = getSelectedItemIndex() ?? 0;
         _setSelected(Math.Max(sid - 1, 0));
-        return PickerState.Selecting;
+        return ListState.Selecting;
     }
 
-    private PickerState Down()
+    private ListState Down()
     {
         var sid = getSelectedItemIndex() ?? 0;
         _setSelected(Math.Min(sid + 1, filteredChildren.Count - 1));
-        return PickerState.Selecting;
+        return ListState.Selecting;
     }
 
-    private PickerState Pick()
+    private ListState Pick()
     {
-        if (Selected == null)
-            return PickerState.None;
-        if (OnSelect != null)
+        if (Selected != null && OnSelect != null)
             OnSelect(Selected);
-        return PickerState.ClosePick;
+        return ListState.None;
     }
 
-    private PickerState Edit()
+    private ListState Edit()
     {
-        if (Selected == null)
-            return PickerState.None;
-        if (OnEdit != null)
+        if (Selected != null && OnEdit != null)
         {
             OnEdit(Selected);
-            return PickerState.CloseEdit;
         }
-        return PickerState.None;
+        return ListState.None;
     }
 
-    private PickerState Add()
+    private ListState Add()
     {
         if (OnAdd != null)
         {
             OnAdd();
-            return PickerState.CloseAdd;
         }
-        return PickerState.None;
+        return ListState.None;
     }
 
-    private PickerState Remove()
+    private ListState Remove()
     {
-        if (Selected == null)
-            return PickerState.None;
-        if (OnRemove != null)
+        if (Selected != null && OnRemove != null)
         {
             OnRemove(Selected);
-            return PickerState.CloseRemove;
         }
-        return PickerState.None;
+        return ListState.None;
     }
 
-    public PickerState Handle(KeyPress ev) => statemachine.SendAction(ev);
+    public ListState Handle(KeyPress ev) => statemachine.SendAction(ev);
 
-    private PickerState addCharToFilter(KeyPress c)
+    private ListState addCharToFilter(KeyPress c)
     {
         filterDisplay.HandleInput(c);
         _afterSetFilter();
-        return PickerState.Filtering;
+        return ListState.Filtering;
     }
 
     public void SetFilter(string f)

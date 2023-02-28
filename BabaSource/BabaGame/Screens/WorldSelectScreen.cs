@@ -25,11 +25,7 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
         };
         filtererModal.SetDisplayTypeName("World");
         AddChild(filtererModal);
-        SetCommands(new()
-        {
-            { CommonStrings.UD_ARROW, "move cursor" },
-            { CommonStrings.ENTER, "select" },
-        });
+        SetCommands(BasicMenu);
     }
 
     private Func<SaveFile, PickerState> select(Action<SaveFile> saveFile) => save =>

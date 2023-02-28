@@ -26,12 +26,19 @@ public class BabaGame : GameSetup
             base.Initialize();
 
             SaveFile? saveFile = null;
+            WorldData? selectedWorld = null;
+
+            void select(WorldData wd)
+            {
+                selectedWorld = wd;
+            }
 
             var saveFiles = LoadGameSaveFiles.LoadAllCompiledMaps();
 
             WorldSelectScreen? worldSelectScreen = null;
             SaveFileSelectScreen? saveFileSelectScreen = null;
             MainMenuScreen? mainMenuScreen = null;
+            MainGamePlayScreen? mainGamePlayScreen = null;
 
             var stack = new ScreenStack();
 
@@ -43,9 +50,12 @@ public class BabaGame : GameSetup
                         .AddOnEnter(() =>
                         {
                             saveFile ??= saveFiles.Values.First();
-                            saveFileSelectScreen = new(saveFile, wd => {
-                                saveFile!.SetSave(wd);
-                                LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
+                            saveFileSelectScreen = new(saveFile, select, () =>
+                            {
+                                var newSave = WorldData.Deserialize(saveFile.InitialContent.Serialize());
+                                newSave.Name = $"Save {(char)(saveFile.SaveFiles.Count + 'a')}";
+                                LoadGameSaveFiles.SaveCompiledMap(newSave, saveFile.Name, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
+                                select(newSave);
                             });
                             stack.Add(saveFileSelectScreen);
                         })
@@ -67,12 +77,15 @@ public class BabaGame : GameSetup
                 )
                 .State(
                     BabaGameState.PlayingGame,
-                    @event => BabaGameState.None,
+                    @event => mainGamePlayScreen!.Handle(@event),
                     def => def
                         .AddOnEnter(() =>
                         {
-
+                            mainGamePlayScreen = new(stack);
+                            stack.Add(mainGamePlayScreen);
+                            mainGamePlayScreen.init();
                         })
+                        .AddOnLeave(() => stack.Pop())
                 )
                 .State(
                     BabaGameState.MainMenu,

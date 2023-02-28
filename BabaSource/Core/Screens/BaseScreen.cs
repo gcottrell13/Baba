@@ -122,5 +122,12 @@ namespace Core.Screens
             public const string NAME_CHARS = "a-z0-9_";
             public const string ENTER = "enter";
         }
+
+        public static readonly Dictionary<string, string> BasicMenu = new()
+        {
+            { CommonStrings.UD_ARROW, "move cursor" },
+            { CommonStrings.ENTER, "select" },
+            { CommonStrings.ESCAPE, "back" },
+        };
     }
 }

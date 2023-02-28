@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Autofac.Features.OwnedInstances;
+using Core.Engine;
 using Core.Screens;
 using Core.UI;
 using System;
@@ -14,8 +15,9 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
     private readonly FiltererModal<WorldData> filtererModal;
     private readonly SaveFile saveFile;
     private readonly Action<WorldData> onSelect;
+    private readonly Action onNew;
 
-    public SaveFileSelectScreen(SaveFile saveFile, Action<WorldData> onSelect)
+    public SaveFileSelectScreen(SaveFile saveFile, Action<WorldData> onSelect, Action onNew)
 	{
         filtererModal = new(saveFile.SaveFiles.Values.Append(new()).ToList(), 10, display: displayWorldData, canCancel: false)
         {
@@ -25,15 +27,15 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
         AddChild(filtererModal);
         this.saveFile = saveFile;
         this.onSelect = onSelect;
-	}
+        this.onNew = onNew;
+        SetCommands(BasicMenu);
+    }
 
     private void OnSelect(WorldData data)
     {
         if (string.IsNullOrWhiteSpace(data.Name))
         {
-            var newSave = WorldData.Deserialize(saveFile.InitialContent.Serialize());
-            newSave.Name = $"Save {(char)(saveFile.SaveFiles.Count + 'a')}";
-            onSelect(newSave);
+            onNew();
         }
         else
         {

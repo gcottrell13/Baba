@@ -26,16 +26,20 @@ namespace Core.Screens
         public Action<T>? OnRemove { get => _onRemove; set { _onRemove = value; refreshCommands(); } }
         public Action<T>? OnSelect { get => _onSelect; set { _onSelect = value; refreshCommands(); } }
 
+        private bool canFilter;
+
         protected ListDisplay<T> listDisplay;
 
-        private PickerState state = PickerState.Open;
+        private CallbackCollector<PickerState> callbackCollector = new(PickerState.Open);
+        private readonly bool canCancel;
 
         public FiltererModal(
             IEnumerable<T> items,
             int maxDisplay,
             Func<T, string> display,
             Func<T, string>? filterBy = null,
-            T? currentValue = null)
+            T? currentValue = null,
+            bool canCancel = true)
         {
             listDisplay = new(
                 items,
@@ -45,11 +49,13 @@ namespace Core.Screens
                 currentValue
             )
             {
-                OnAdd=onAdd,
-                OnEdit=onEdit,
-                OnRemove=onRemove,
-                OnSelect=onSelect,
+                OnAdd=callbackCollector.cb(onAdd),
+                OnEdit=callbackCollector.cb<T>(onEdit),
+                OnRemove=callbackCollector.cb<T>(onRemove),
+                OnSelect=callbackCollector.cb<T>(onSelect),
             };
+            canFilter = filterBy != null;
+            this.canCancel = canCancel;
             AddChild(listDisplay);
         }
 
@@ -63,7 +69,7 @@ namespace Core.Screens
                 return PickerState.CloseCancel;
             }
 
-            return state;
+            return callbackCollector.latestReturn;
         }
 
         protected Dictionary<string, string> GetCommands() => listDisplay.statemachine.CurrentState switch
@@ -78,13 +84,13 @@ namespace Core.Screens
             var d = new Dictionary<string, string>()
             {
                 { CommonStrings.UD_ARROW, "move cursor" },
-                { "f", "filter" },
-                { CommonStrings.ESCAPE, "go back" },
             };
+            if (canFilter) d.Add("f", "filter");
             if (OnSelect != null) d.Add(CommonStrings.ENTER, "select");
             if (OnEdit != null) d.Add("e", "edit");
             if (OnAdd != null) d.Add("a", "add");
             if (OnRemove != null) d.Add("d", "remove");
+            if (canCancel) d.Add(CommonStrings.ESCAPE, "go back");
             return d;
         }
 
@@ -104,32 +110,32 @@ namespace Core.Screens
             SetCommands(GetCommands());
         }
 
-        private void onAdd()
+        private PickerState onAdd()
         {
-            state = PickerState.CloseAdd;
             OnAdd?.Invoke();
             refreshCommands();
+            return PickerState.CloseAdd;
         }
 
-        private void onEdit(T item)
+        private PickerState onEdit(T item)
         {
-            state = PickerState.CloseEdit;
             OnEdit?.Invoke(item);
             refreshCommands();
+            return PickerState.CloseEdit;
         }
 
-        private void onRemove(T item)
+        private PickerState onRemove(T item)
         {
-            state = PickerState.CloseRemove;
             OnRemove?.Invoke(item);
             refreshCommands();
+            return PickerState.CloseRemove;
         }
 
-        private void onSelect(T item)
+        private PickerState onSelect(T item)
         {
-            state = PickerState.ClosePick;
             OnSelect?.Invoke(item);
             refreshCommands();
+            return PickerState.ClosePick;
         }
 
 
@@ -139,7 +145,8 @@ namespace Core.Screens
 
         public void SetDisplayTypeName(string typeName)
         {
-            listDisplay.SetDisplayTypeName(typeName, withBackground: Transparent);
+            listDisplay.SetShowBackground(Transparent);
+            listDisplay.SetDisplayTypeName(typeName);
         }
     }
 

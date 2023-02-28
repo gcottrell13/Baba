@@ -17,7 +17,7 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
 
     public SaveFileSelectScreen(SaveFile saveFile, Action<WorldData> onSelect)
 	{
-        filtererModal = new(saveFile.SaveFiles.Values.Append(new()).ToList(), 10, displayWorldData)
+        filtererModal = new(saveFile.SaveFiles.Values.Append(new()).ToList(), 10, display: displayWorldData, canCancel: false)
         {
             OnSelect = OnSelect,
         };
@@ -53,7 +53,7 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
     public override BabaGameState Handle(KeyPress ev) => filtererModal.Handle(ev) switch
     {
         PickerState.ClosePick => BabaGameState.PlayingGame,
-        PickerState.CloseCancel => BabaGameState.PickingWorld,
+        PickerState.CloseCancel => BabaGameState.MainMenu,
         _ => BabaGameState.None,
     };
 

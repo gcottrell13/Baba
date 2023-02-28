@@ -77,7 +77,7 @@ namespace Editor.Screens
                     def => def
                         .AddOnEnter(() =>
                         {
-                            objectPicker = new(mapLayerEditor.ObjectAtCursor()?.name)
+                            objectPicker = new(mapLayerEditor.ObjectAtCursor()?.name ?? mapLayerEditor.currentObject?.name)
                             {
                                 OnSelect=(obj) =>
                                 {

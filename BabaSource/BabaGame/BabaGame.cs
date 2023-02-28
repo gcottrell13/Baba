@@ -31,11 +31,13 @@ public class BabaGame : GameSetup
 
             WorldSelectScreen? worldSelectScreen = null;
             SaveFileSelectScreen? saveFileSelectScreen = null;
+            MainMenuScreen? mainMenuScreen = null;
 
             var stack = new ScreenStack();
 
             var stateMachine = new StateMachine<BabaGameState, KeyPress>("babaGame", BabaGameState.None)
-                .State(BabaGameState.PickingSaveFile,
+                .State(
+                    BabaGameState.PickingSaveFile,
                     @event => saveFileSelectScreen!.Handle(@event),
                     def => def
                         .AddOnEnter(() =>
@@ -49,7 +51,8 @@ public class BabaGame : GameSetup
                         })
                         .AddOnLeave(() => stack.Pop())
                 )
-                .State(BabaGameState.PickingWorld,
+                .State(
+                    BabaGameState.PickingWorld,
                     @event => worldSelectScreen!.Handle(@event),
                     def => def
                         .AddOnEnter(() =>
@@ -62,7 +65,8 @@ public class BabaGame : GameSetup
                         .AddOnLeave(() => stack.Pop())
                         .SetShortCircuit(() => saveFiles.Count == 1 ? BabaGameState.PickingSaveFile : BabaGameState.None)
                 )
-                .State(BabaGameState.PlayingGame,
+                .State(
+                    BabaGameState.PlayingGame,
                     @event => BabaGameState.None,
                     def => def
                         .AddOnEnter(() =>
@@ -70,9 +74,20 @@ public class BabaGame : GameSetup
 
                         })
                 )
+                .State(
+                    BabaGameState.MainMenu,
+                    ev => mainMenuScreen!.Handle(ev),
+                    def => def
+                        .AddOnEnter(() =>
+                        {
+                            mainMenuScreen = new();
+                            stack.Add(mainMenuScreen);
+                        })
+                        .AddOnLeave(() => stack.Pop())
+                )
                 .State(BabaGameState.Exit, e => BabaGameState.None, def => def.AddOnEnter(() => Exit()));
 
-            stateMachine.Initialize(BabaGameState.PickingWorld);
+            stateMachine.Initialize(BabaGameState.MainMenu);
 
             onKeyPress(ev => stateMachine.SendAction(ev));
             AddChild(stack);
@@ -84,6 +99,9 @@ internal enum BabaGameState
 {
     None,
     Exit,
+
+    MainMenu,
+    SettingsMenu,
 
     PickingWorld,
     PickingSaveFile,

@@ -67,6 +67,7 @@ namespace Core.UI
                 "/" => "text_fwslash",
                 "-" => "text_hyphen",
                 "\"" => "text_quote",
+                "." => "text_period",
                 "'" => "text_apos",
                 ":" => "text_colon",
                 "[" => "text_lsqbr",

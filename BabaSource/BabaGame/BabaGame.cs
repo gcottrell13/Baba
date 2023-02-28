@@ -1,6 +1,7 @@
 ﻿using BabaGame.Events;
 using BabaGame.Screens;
 using Core.Bootstrap;
+using Core.Content;
 using Core.Engine;
 using Core.Screens;
 using Core.Utils;
@@ -39,6 +40,8 @@ public class BabaGame : GameSetup
             SaveFileSelectScreen? saveFileSelectScreen = null;
             MainMenuScreen? mainMenuScreen = null;
             MainGamePlayScreen? mainGamePlayScreen = null;
+
+            PlaySound.PlayMusic("menu");
 
             var stack = new ScreenStack();
 

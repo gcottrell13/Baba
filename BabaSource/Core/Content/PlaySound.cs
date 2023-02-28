@@ -145,17 +145,24 @@ public static class PlaySound
     public static void PlayMusic(string name)
     {
         if (currentMusicName == name) return;
-        if (currentMusic != null)
-        {
-            currentMusic.Stop();
-            currentMusic.Dispose();
-        }
-
-        currentMusicName = name;
-        currentMusic = null;
         Task.Run(async () =>
         {
-            currentMusic = await PlaySoundFile(name, true);
+            try
+            {
+                var newMusic = await PlaySoundFile(name, true);
+
+                if (currentMusic != null)
+                {
+                    currentMusic.Stop();
+                    currentMusic.Dispose();
+                }
+                currentMusicName = name;
+                currentMusic = newMusic;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return;
+            }
         });
     }
 }

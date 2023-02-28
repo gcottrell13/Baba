@@ -180,5 +180,19 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_nnope"
+  },
+  "poop": {
+    "color": [ 6, 0 ],
+    "color_active": [ 6, 0 ],
+    "layer": 10,
+    "unittype": "object",
+    "sprite": "poop"
+  },
+  "text_poop": {
+    "color": [ 6, 0 ],
+    "color_active": [ 6, 1 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_poop"
   }
 }

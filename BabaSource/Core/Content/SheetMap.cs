@@ -1183,6 +1183,7 @@ namespace Core.Content {
 	new Wobbler("plank.dlr", new[] { new Point(4, 5), new Point(5, 5), new Point(6, 5) }, new Point(24, 24), sheets["plank"]), 
 	new Wobbler("plank.udl", new[] { new Point(0, 6), new Point(1, 6), new Point(2, 6) }, new Point(24, 24), sheets["plank"]), 
 	new Wobbler("plank.udlr", new[] { new Point(3, 6), new Point(4, 6), new Point(5, 6) }, new Point(24, 24), sheets["plank"]) }) },
+			{ "poop", new Wobbler("poop", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["poop"]) },
 			{ "potato", new Wobbler("potato", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["potato"]) },
 			{ "pumpkin", new FacingOnMove(
                 name: "pumpkin", 
@@ -1646,6 +1647,7 @@ namespace Core.Content {
 			{ "text_plank", new Wobbler("text_plank", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_plank"]) },
 			{ "text_play", new Wobbler("text_play", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_play"]) },
 			{ "text_plus", new Wobbler("text_plus", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_plus"]) },
+			{ "text_poop", new Wobbler("text_poop", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_poop"]) },
 			{ "text_potato", new Wobbler("text_potato", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_potato"]) },
 			{ "text_power", new Wobbler("text_power", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_power"]) },
 			{ "text_power2", new Wobbler("text_power2", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_power2"]) },

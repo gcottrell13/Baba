@@ -12,15 +12,15 @@ namespace BabaGame.Screens.GamePlay;
 
 internal class PlayerSelectScreen : BaseScreen<MainGameState>
 {
-    private readonly ListDisplay<string> filtererModal;
+    private readonly ListDisplay<PlayerNumber> filtererModal;
     private CallbackCollector<MainGameState> callbackCollector = new(MainGameState.Noop);
 
-    public PlayerSelectScreen(Action<string> onSelect)
+    public PlayerSelectScreen(Action<PlayerNumber> onSelect)
     {
         filtererModal = new(new[]
         {
-            "one",
-            "two",
+            PlayerNumber.One,
+            PlayerNumber.Two,
         }, 2, display, showCount: false)
         {
             OnSelect = callbackCollector.cb(select(onSelect)),
@@ -30,14 +30,14 @@ internal class PlayerSelectScreen : BaseScreen<MainGameState>
         SetCommands(BasicMenu);
     }
 
-    private string display(string item) => item switch
+    private string display(PlayerNumber item) => item.Name switch
     {
-        "one" => "Player [text_you]",
-        "two" => "player [text_you2]",
+        1 => "Player [text_you]",
+        2 => "player [text_you2]",
         _ => "?",
     };
 
-    private Func<string, MainGameState> select(Action<string> onSelect) => s =>
+    private Func<PlayerNumber, MainGameState> select(Action<PlayerNumber> onSelect) => s =>
     {
         onSelect(s);
         return MainGameState.PlayingGame;
@@ -51,5 +51,20 @@ internal class PlayerSelectScreen : BaseScreen<MainGameState>
 
     protected override void OnDispose()
     {
+    }
+}
+
+
+internal class PlayerNumber
+{
+
+    public static PlayerNumber One = new(1);
+    public static PlayerNumber Two = new(2);
+
+    public int Name { get; }
+        
+    public PlayerNumber(int name)
+    {
+        Name = name;
     }
 }

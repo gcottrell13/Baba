@@ -213,7 +213,7 @@
 					{"x":7,"y":10,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":6,"y":9,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":9,"y":7,"name":"tree","state":1,"color":42,"text":"","original":null},
-					{"x":10,"y":5,"name":"tree","state":1,"color":42,"text":"","original":null},
+					{"x":10,"y":5,"name":"poop","state":1,"color":42,"text":"this is some poop","original":"tree"},
 					{"x":6,"y":2,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":4,"y":4,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":2,"y":12,"name":"tree","state":1,"color":42,"text":"","original":null},
@@ -253,9 +253,9 @@
 					{"x":10,"y":4,"name":"grass","state":1,"color":40,"text":"","original":null},
 					{"x":11,"y":4,"name":"grass","state":1,"color":40,"text":"","original":null},
 					{"x":3,"y":8,"name":"grass","state":1,"color":40,"text":"","original":null},
-					{"x":3,"y":7,"name":"grass","state":1,"color":40,"text":"","original":null},
 					{"x":3,"y":6,"name":"grass","state":1,"color":40,"text":"","original":null},
-					{"x":2,"y":2,"name":"fire","state":1,"color":19,"text":"","original":null}
+					{"x":2,"y":2,"name":"fire","state":1,"color":19,"text":"","original":null},
+					{"x":3,"y":7,"name":"grass","state":1,"color":40,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15

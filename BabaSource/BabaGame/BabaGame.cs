@@ -1,4 +1,5 @@
-﻿using BabaGame.Events;
+﻿using BabaGame.Engine;
+using BabaGame.Events;
 using BabaGame.Screens;
 using Core.Bootstrap;
 using Core.Content;
@@ -84,7 +85,7 @@ public class BabaGame : GameSetup
                     def => def
                         .AddOnEnter(() =>
                         {
-                            mainGamePlayScreen = new(stack);
+                            mainGamePlayScreen = new(stack, new BabaWorld(selectedWorld!));
                             stack.Add(mainGamePlayScreen);
                             mainGamePlayScreen.init();
                         })

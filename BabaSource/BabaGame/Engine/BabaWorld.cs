@@ -29,7 +29,14 @@ public class BabaWorld
         }
 	}
 
-	public void Step(short[] mapIds, Direction direction, int playerNumber)
+
+    public short[] mapsWithYou()
+    {
+		// where would we be without YOU?
+		return Array.Empty<short>();
+    }
+
+    public void Step(short[] mapIds, Direction direction, int playerNumber)
 	{
 		var globalRules = Simulators[GlobalWords.MapId].parseRules(new());
 		foreach (var id in mapIds)

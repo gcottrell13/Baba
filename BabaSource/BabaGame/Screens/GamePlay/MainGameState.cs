@@ -13,8 +13,6 @@ internal enum MainGameState
 
     Exit,
 
-    PlayerSelect,
-
     PlayingGame,
 
     PauseMenu,

@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using Core.Utils;
 using System;
 using System.Collections.Generic;
@@ -30,23 +31,59 @@ public class BabaWorld
 	}
 
 
-    public short[] mapsWithYou()
+    public short[] mapsWithYou(ObjectTypeId you)
     {
-		// where would we be without YOU?
-		return Array.Empty<short>();
+        parseMapRules(Simulators.Values.Select(s => s.MapId).ToArray());
+        return Simulators.Values.Where(s => s.findObjectsThatAre(you).Any()).Select(s => s.MapId).ToArray();
     }
 
-    public void Step(short[] mapIds, Direction direction, int playerNumber)
+	private void parseMapRules(short[] mapIds)
 	{
-		var globalRules = Simulators[GlobalWords.MapId].parseRules(new());
+		var dict = new Dictionary<short, RuleDict>();
+
+        var globalRules = _parseAndApplyToAll(new RuleDict(), new[] { GlobalWords.MapId });
+
+        var regionRules = Regions.ToDictionary(s => s.Key, s => _parseAndApplyToAll(globalRules, new[] { s.Value.WordLayerId }));
+
 		foreach (var id in mapIds)
 		{
 			var map = Simulators[id];
-
-			if (map.region != null)
-                globalRules = Simulators[map.region.RegionId].parseRules(globalRules);
-
-            map.Step(direction, globalRules, playerNumber);
+			var rules = map.region != null ? regionRules[map.region.RegionId] : globalRules;
+            dict[id] = map.parseRules(rules);
 		}
 	}
+
+    RuleDict _parseAndApplyToAll(RuleDict startingRules, short[] ids)
+    {
+        var rules = startingRules;
+        foreach (var id in ids)
+        {
+            rules = Simulators[id].parseRules(rules);
+        }
+        foreach (var id in ids)
+        {
+            Simulators[id].setAllRules(rules);
+        }
+        return rules;
+    }
+
+    public void Step(short currentMap, short[] mapIds, Direction direction, ObjectTypeId playerNumber)
+    {
+        var sims = mapIds.Select(id => Simulators[id]);
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.doMovement(map.MapId == currentMap ? direction : Direction.None, playerNumber);
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.transform();
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.moveblock();
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.fallblock();
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.statusblock();
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.interactionblock();
+        parseMapRules(mapIds);
+        foreach (var map in sims) map.collisionCheck();
+        parseMapRules(mapIds);
+    }
 }

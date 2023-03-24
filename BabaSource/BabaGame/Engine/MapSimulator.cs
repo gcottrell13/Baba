@@ -38,11 +38,14 @@ public class MapSimulator
     private Dictionary<int, int> convertToWest = new();
 
     private RuleDict allRules = new();
+    private RuleDict cachedRulesFromAbove = new();
+    private RuleDict cachedParsedRules = new();
 
 
     public MapSimulator(BabaWorld world, short mapId)
 	{
         this.world = world;
+        MapId = mapId;
         map = world.MapDatas[mapId];
         region = world.Regions.TryGetValue(map.region, out var r) ? r : null;
     }
@@ -70,29 +73,13 @@ public class MapSimulator
         }
     }
 
-    public void Step(Direction input, RuleDict rulesFromAbove, int playerNumber)
-    {
-        var all = new HashSet<ObjectTypeId>(map.WorldObjects.Select(x => x.Name));
-
-        parseRules(rulesFromAbove);
-
-        doMovement(input, playerNumber);
-
-    }
-
-    private void doMovement(Direction input, int playerNumber)
+    public void doMovement(Direction input, ObjectTypeId playerNumber)
     {
         var movingObjects = new List<(ObjectData obj, int dx, int dy)>();
 
         if (input != Direction.None)
         {
-            // you and you2
-            var youRule = playerNumber switch { 
-                1 => ObjectTypeId.you, 
-                2 => ObjectTypeId.you2, 
-                _ => throw new InvalidOperationException(), 
-            };
-            var you = findObjectsThatAre(youRule);
+            var you = findObjectsThatAre(playerNumber);
             var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
             movingObjects.AddRange(you.Select(i => (i, dx, dy)));
         }
@@ -108,16 +95,77 @@ public class MapSimulator
         }
     }
 
+    public void transform()
+    {
+
+    }
+
+    public void moveblock()
+    {
+
+    }
+
+    public void fallblock()
+    {
+
+    }
+
+    public void statusblock()
+    {
+
+    }
+
+    public void interactionblock()
+    {
+
+    }
+
+    public void collisionCheck()
+    {
+
+    }
+
+    public void setAllRules(RuleDict rules)
+    {
+        allRules = rules;
+    }
+
     public RuleDict parseRules(RuleDict rulesFromAbove)
     {
-        var mapRules = SemanticFilter.FindRulesAndFilterInvalid(map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList());
-        var dict = new RuleDict();
+        var dict = allRules;
+        if (hasChanged())
+        {
+            var rules = SemanticFilter.FindRulesAndFilterInvalid(map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList());
+            dict = new RuleDict();
+            addRules(dict, rules);
+            cachedParsedRules = dict;
+            goto applyRulesFromAbove;
+        }
 
+        if (rulesFromAbove.Equals(cachedRulesFromAbove))
+        {
+            goto theReturn;
+        }
+        else
+        {
+            dict = cachedParsedRules;
+            goto applyRulesFromAbove;
+        }
+
+        applyRulesFromAbove:
+        cachedRulesFromAbove = rulesFromAbove;
         foreach (var rule in rulesFromAbove) dict.Add(rule.Key, rule.Value);
+        setAllRules(dict);
 
-        addRules(dict, mapRules);
-        allRules = dict;
+        theReturn:
         return dict;
+    }
+
+    public bool hasChanged()
+    {
+        // TODO: implement
+        // use some sort of hashing function on the contents of this map
+        return true;
     }
 
     public static void addRules(RuleDict dict, List<Rule<ObjectData>> rules)
@@ -290,6 +338,8 @@ public class MapSimulator
 
     public const ObjectTypeId mapBorderTypeId = ObjectTypeId.nnope;
     private static readonly ObjectData[] mapBorder = new[] { new ObjectData() { Name = mapBorderTypeId } };
+
+    public short MapId { get; }
 
     public ObjectData[] objectsAt(int x, int y)
     {

@@ -16,7 +16,7 @@ internal class MainGamePlayScreen : BaseScreen<BabaGameState>
 
     public MainGamePlayScreen(ScreenStack stack, BabaWorld worldData)
     {
-        PlayerNumber? playerNumber = PlayerNumber.One;
+        PlayerNumber playerNumber = PlayerNumber.One;
 
         stateMachine = new StateMachine<MainGameState, KeyPress>("main game play", MainGameState.Noop)
             .State(
@@ -49,7 +49,7 @@ internal class MainGamePlayScreen : BaseScreen<BabaGameState>
                     .AddOnLeave(() => stack.Pop())
                     .SetShortCircuit(() =>
                     {
-                        if (worldData.mapsWithYou().Length == 0) return MainGameState.NoPlayersFound;
+                        if (worldData.mapsWithYou(playerNumber.Name).Length == 0) return MainGameState.NoPlayersFound;
                         else return MainGameState.PlayingGame;
                     })
                 );

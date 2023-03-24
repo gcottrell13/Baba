@@ -1,4 +1,5 @@
 ﻿using BabaGame.Engine;
+using Core.Content;
 using Core.Engine;
 using Core.Screens;
 using Core.Utils;
@@ -14,10 +15,10 @@ namespace BabaGame.Screens.GamePlay;
 internal class GameViewScreen : BaseScreen<MainGameState>
 {
     private StateMachine<MainGameState, KeyPress> stateMachine;
-    private readonly PlayerNumber? playerNumber;
+    private readonly PlayerNumber playerNumber;
     private readonly BabaWorld worldData;
 
-    public GameViewScreen(ScreenStack stack, PlayerNumber? playerNumber, BabaWorld worldData)
+    public GameViewScreen(ScreenStack stack, PlayerNumber playerNumber, BabaWorld worldData)
     {
         this.playerNumber = playerNumber;
         this.worldData = worldData;
@@ -27,7 +28,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
                 MainGameState.SelectingMap,
                 ev => MainGameState.Noop,
                 def => def
-                    .SetShortCircuit(() => worldData.mapsWithYou().Length switch
+                    .SetShortCircuit(() => worldData.mapsWithYou(playerNumber.Name).Length switch
                     {
                         0 => MainGameState.NoPlayersFound,
                         1 => MainGameState.PlayingMap,
@@ -62,7 +63,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
 
     private MainGameState handlePlayingMap(KeyPress ev)
     {
-        worldData.Step(Array.Empty<short>(), Direction.None, playerNumber.Name);
+        worldData.Step(0, Array.Empty<short>(), Direction.None, playerNumber.Name);
         return MainGameState.Noop;
     }
 

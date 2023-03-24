@@ -1,4 +1,5 @@
-﻿using Core.Engine;
+﻿using Core.Content;
+using Core.Engine;
 using Core.Screens;
 using Core.UI;
 using Core.Utils;
@@ -32,8 +33,8 @@ internal class PlayerSelectScreen : BaseScreen<MainGameState>
 
     private string display(PlayerNumber item) => item.Name switch
     {
-        1 => "Player [text_you]",
-        2 => "player [text_you2]",
+        ObjectTypeId.you => "Player [text_you]",
+        ObjectTypeId.you2 => "player [text_you2]",
         _ => "?",
     };
 
@@ -58,12 +59,12 @@ internal class PlayerSelectScreen : BaseScreen<MainGameState>
 internal class PlayerNumber
 {
 
-    public static PlayerNumber One = new(1);
-    public static PlayerNumber Two = new(2);
+    public static PlayerNumber One = new(ObjectTypeId.you);
+    public static PlayerNumber Two = new(ObjectTypeId.you2);
 
-    public int Name { get; }
+    public ObjectTypeId Name { get; }
         
-    public PlayerNumber(int name)
+    public PlayerNumber(ObjectTypeId name)
     {
         Name = name;
     }

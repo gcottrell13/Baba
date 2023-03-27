@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Configuration;
+using Core.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,12 @@ namespace Core.Content
         private ContentLoader(GraphicsDevice graphicsDevice)
         {
             var sheets = Sheets.GetSheets(graphicsDevice);
-            SpriteValues = SheetMap.GetSpriteInfo(sheets);
+            SpriteValues = SheetMap.GetSpriteInfo(sheets.ToDictionary(k => k.Key, k =>
+            {
+                var handle = new ResourceHandle<Texture2D>(k.Key);
+                handle.SetValue(k.Value);
+                return handle;
+            }));
         }
     }
 }

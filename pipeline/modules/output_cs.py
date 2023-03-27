@@ -286,15 +286,16 @@ using Core.Utils;
 using Microsoft.Xna.Framework.Graphics; 
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Core.Configuration;
 
-namespace {NAMESPACE} {{
-    public static class SheetMap {{
-        public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {{
-            return new Dictionary<string, SpriteValues>() {{
+namespace {NAMESPACE};
+public static class SheetMap {{
+    public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, ResourceHandle<Texture2D>> sheets) {{
+        return new Dictionary<string, SpriteValues>() {{
 {lines_text}
-            }};
-        }}
+        }};
     }}
 }}
-""",
+
+""".strip(),
     })

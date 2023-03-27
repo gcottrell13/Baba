@@ -1,13 +1,13 @@
-
 using Core.Utils; 
 using Microsoft.Xna.Framework.Graphics; 
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Core.Configuration;
 
-namespace Core.Content {
-    public static class SheetMap {
-        public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, Texture2D> sheets) {
-            return new Dictionary<string, SpriteValues>() {
+namespace Core.Content;
+public static class SheetMap {
+    public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, ResourceHandle<Texture2D>> sheets) {
+        return new Dictionary<string, SpriteValues>() {
 			{ "algae", new Wobbler("algae", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["algae"]) },
 			{ "amongi", new FacingOnMove(
                 name: "amongi", 
@@ -1935,7 +1935,6 @@ namespace Core.Content {
 				sleep_right: new AnimateOnMove("worm", new Wobbler[] {
 	new Wobbler("worm.sleep_right.0", new[] { new Point(1, 7), new Point(2, 7), new Point(3, 7) }, new Point(24, 24), sheets["worm"]) })
 ) }
-            };
-        }
+        };
     }
 }

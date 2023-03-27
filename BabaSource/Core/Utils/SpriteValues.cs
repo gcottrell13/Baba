@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Configuration;
+using Core.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -19,13 +20,13 @@ namespace Core.Utils
         public string Name { get; }
         public string RestName { get; }
 
-        public abstract Wobbler GetInitial(int d);
+        public abstract Wobbler GetInitial(Direction d);
     }
 
     [DebuggerDisplay("Wobbler {Name,nq} {RestName,nq}")]
     public class Wobbler : SpriteValues
     {
-        public Wobbler(string name, Point[] positions, Point size, Texture2D tex) : base(name)
+        public Wobbler(string name, Point[] positions, Point size, ResourceHandle<Texture2D> tex) : base(name)
         {
             Rectangles = positions.Select(p => new Rectangle(p * size, size)).ToArray();
             Size = size;
@@ -34,7 +35,7 @@ namespace Core.Utils
 
         public Rectangle[] Rectangles { get; }
         public Point Size { get; }
-        public Texture2D Texture { get; }
+        public ResourceHandle<Texture2D> Texture { get; }
 
         public Rectangle GetPosition(ref int step)
         {
@@ -42,30 +43,25 @@ namespace Core.Utils
             return Rectangles[step];
         }
 
-        public override Wobbler GetInitial(int d) => this;
+        public override Wobbler GetInitial(Direction d) => this;
     }
 
     [DebuggerDisplay("Joinable {Name,nq} {RestName,nq}")]
     public class Joinable : SpriteValues
     {
-        public const int Up = 0b10;
-        public const int Down = 0b1000;
-        public const int Left = 0b100;
-        public const int Right = 0b1;
+        public const Direction LR = Direction.Left | Direction.Right;
+        public const Direction UD = Direction.Up | Direction.Down;
+        public const Direction UR = Direction.Up | Direction.Right;
+        public const Direction UL = Direction.Up | Direction.Left;
+        public const Direction DR = Direction.Down | Direction.Right;
+        public const Direction DL = Direction.Down | Direction.Left;
 
-        public const int LR = Left + Right;
-        public const int UD = Up + Down;
-        public const int UR = Up + Right;
-        public const int UL = Up + Left;
-        public const int DR = Down + Right;
-        public const int DL = Down + Left;
+        public const Direction URL = Direction.Up | LR;
+        public const Direction UDL = Direction.Up | DL;
+        public const Direction UDR = Direction.Up | DR;
+        public const Direction DRL = Direction.Down | LR;
 
-        public const int URL = Up + LR;
-        public const int UDL = Up + DL;
-        public const int UDR = Up + DR;
-        public const int DRL = Down + LR;
-
-        public const int UDRL = LR + UD;
+        public const Direction UDRL = LR | UD;
 
         public Joinable(string name, Wobbler[] wobblers) : base(name)
         {
@@ -74,11 +70,11 @@ namespace Core.Utils
 
         public Wobbler[] Wobblers { get; }
 
-        public override Wobbler GetInitial(int d) => Wobblers[d];
+        public override Wobbler GetInitial(Direction d) => Wobblers[(int)d];
 
-        public Wobbler Join(int direction)
+        public Wobbler Join(Direction direction)
         {
-            return Wobblers[direction];
+            return Wobblers[(int)direction];
         }
     }
 
@@ -92,7 +88,7 @@ namespace Core.Utils
 
         public Wobbler[] Frames { get; }
 
-        public override Wobbler GetInitial(int d) => Frames.First();
+        public override Wobbler GetInitial(Direction d) => Frames.First();
 
         public Wobbler Move(ref int step)
         {
@@ -137,7 +133,7 @@ namespace Core.Utils
         public AnimateOnMove? SleepDown { get; }
         public AnimateOnMove? SleepRight { get; }
 
-        public override Wobbler GetInitial(int d) => d switch
+        public override Wobbler GetInitial(Direction d) => (int)d switch
         {
             (int)Direction.Up => Up.GetInitial(d),
             (int)Direction.Down => Down.GetInitial(d),

@@ -34,7 +34,16 @@ public class BabaWorld
     public short[] mapsWithYou(ObjectTypeId you)
     {
         parseMapRules(Simulators.Values.Select(s => s.MapId).ToArray());
-        return Simulators.Values.Where(s => s.findObjectsThatAre(you).Any()).Select(s => s.MapId).ToArray();
+        var mapIds = new List<short>();
+        foreach (var sim in Simulators.Values)
+        {
+            var objs = sim.findObjectsThatAre(you).ToList();
+            if (objs.Any())
+            {
+                mapIds.Add(sim.MapId);
+            }
+        }
+        return mapIds.ToArray();
     }
 
 	private void parseMapRules(short[] mapIds)

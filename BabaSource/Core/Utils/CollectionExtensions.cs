@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Core.Utils;
 public static class CollectionExtension
 {
-    private static Random rng = new Random();
+    public static readonly Random rng = new Random();
 
     public static T RandomElement<T>(this IList<T> list)
     {

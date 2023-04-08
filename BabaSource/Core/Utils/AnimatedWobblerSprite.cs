@@ -7,20 +7,16 @@ namespace Core.Utils
 {
     public sealed class AnimatedWobblerSprite : Sprite
     {
-        private readonly SpriteValues sprite;
-
         private int currentWobbleFrame = 0;
-        private int currentAnimateFrame = 0;
 
         private double? _lastWobble = null;
 
         public Wobbler CurrentWobbler { get; private set; }
 
-        public AnimatedWobblerSprite(SpriteValues? sprite, int initialState) : base(new ResourceHandle<Texture2D>(sprite?.Name))
+        public AnimatedWobblerSprite(SpriteValues? sprite, Direction initialState) : base(new ResourceHandle<Texture2D>(sprite?.Name))
         {
             if (sprite == null) throw new ArgumentNullException(nameof(sprite));
 
-            this.sprite = sprite;
             CurrentWobbler = sprite.GetInitial(initialState) ?? throw new NullReferenceException("sprite returned a null initial state");
             _setWobbler(CurrentWobbler);
         }
@@ -28,19 +24,7 @@ namespace Core.Utils
         private void _setWobbler(Wobbler wobbler)
         {
             CurrentWobbler = wobbler;
-            graphicsResource.SetValue(wobbler.Texture);
-        }
-
-        public void Move(Direction d, bool isAsleep=false)
-        {
-            if (sprite is AnimateOnMove a)
-            {
-                _setWobbler(a.Move(ref currentAnimateFrame));
-            }
-            else if (sprite is FacingOnMove f)
-            {
-                _setWobbler(isAsleep ? f.Sleep(d, ref currentAnimateFrame) : f.Move(d, ref currentAnimateFrame));
-            }
+            graphicsResource = wobbler.Texture;
         }
 
         public void Update(GameTime gameTime)

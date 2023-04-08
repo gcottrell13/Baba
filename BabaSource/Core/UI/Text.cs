@@ -46,7 +46,7 @@ namespace Core.UI
             }
         }
 
-        private static bool _tryGetObject(string name, out string compoundName, out int state, out SpriteValues? textSprite)
+        private static bool _tryGetObject(string name, out string compoundName, out Direction state, out SpriteValues? textSprite)
         {
             compoundName = "";
             state = 0;
@@ -58,7 +58,7 @@ namespace Core.UI
             {
                 var items = name.Split(':');
                 name = items[0];
-                state = int.TryParse(items[1], out var _s) ? _s : 0;
+                state = int.TryParse(items[1], out var _s) ? (Direction)_s : 0;
             }
 
             var entityName = name switch
@@ -128,7 +128,7 @@ namespace Core.UI
         public static ListOfTextChar ParseText(string str)
         {
             string compoundName;
-            int state;
+            Direction state;
             SpriteValues? textSprite;
             string? parsingItem = null;
 

@@ -194,5 +194,19 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_poop"
+  },
+  "mano": {
+    "color": [ 1, 2 ],
+    "color_active": [ 1, 2 ],
+    "layer": 10,
+    "unittype": "object",
+    "sprite": "mano"
+  },
+  "text_mano": {
+    "color": [ 1, 1 ],
+    "color_active": [ 1, 2 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_mano"
   }
 }

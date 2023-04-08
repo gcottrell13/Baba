@@ -7,6 +7,7 @@ using Core.Engine;
 using Core.Screens;
 using Core.Utils;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
@@ -15,10 +16,19 @@ namespace BabaGame;
 
 public class BabaGame : GameSetup
 {
+    private Effect? blurEffect;
+
     public BabaGame() : base(new BabaGameEntryPoint())
     {
         MAX_WIDTH = 1080;
         MAX_HEIGHT = 720;
+
+    }
+
+    protected override void LoadContent()
+    {
+        blurEffect = Content.Load<Effect>("blur");
+        base.LoadContent();
     }
 
     private class BabaGameEntryPoint : GameEntryPoint

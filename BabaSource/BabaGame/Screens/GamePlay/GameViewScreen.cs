@@ -12,16 +12,23 @@ using System.Threading.Tasks;
 
 namespace BabaGame.Screens.GamePlay;
 
+/// <summary>
+/// when the playing field is in view
+/// </summary>
 internal class GameViewScreen : BaseScreen<MainGameState>
 {
     private StateMachine<MainGameState, KeyPress> stateMachine;
     private readonly PlayerNumber playerNumber;
     private readonly BabaWorld worldData;
+    private readonly MapViewWindow mapViewWindow;
 
     public GameViewScreen(ScreenStack stack, PlayerNumber playerNumber, BabaWorld worldData)
     {
         this.playerNumber = playerNumber;
         this.worldData = worldData;
+        mapViewWindow = new(worldData);
+        short currentMapId = 0;
+        AddChild(mapViewWindow);
 
         stateMachine = new StateMachine<MainGameState, KeyPress>("game view screen", MainGameState.Noop)
             .State(
@@ -43,7 +50,14 @@ internal class GameViewScreen : BaseScreen<MainGameState>
                 MainGameState.PlayingMap,
                 handlePlayingMap,
                 def => def
-                    .AddOnEnter(() => { })
+                    .AddOnEnter(() => { 
+                        if (currentMapId == 0)
+                        {
+                            currentMapId = worldData.mapsWithYou(playerNumber.Name).First();
+                        }
+                        mapViewWindow.LoadMap(currentMapId);
+                        AddChild(mapViewWindow);
+                    })
                     .AddOnLeave(() => { })
                 )
             .State(

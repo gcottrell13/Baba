@@ -41,6 +41,11 @@ public class MapSimulator
     private RuleDict cachedRulesFromAbove = new();
     private RuleDict cachedParsedRules = new();
 
+    public short? NorthNeighbor => north?.MapId;
+    public short? EastNeighbor => east?.MapId;
+    public short? WestNeighbor => west?.MapId;
+    public short? SouthNeighbor => south?.MapId;
+
 
     public MapSimulator(BabaWorld world, short mapId)
 	{
@@ -56,6 +61,11 @@ public class MapSimulator
         if (world.Simulators.TryGetValue(map.southNeighbor, out south)) setupConvertCoordinates(map.width, south.map.width, out convertToSouth);
         if (world.Simulators.TryGetValue(map.westNeighbor, out west)) setupConvertCoordinates(map.height, west.map.height, out convertToWest);
         if (world.Simulators.TryGetValue(map.eastNeighbor, out east)) setupConvertCoordinates(map.height, east.map.height, out convertToEast);
+    }
+
+    public bool HasNeighbor(short mapId)
+    {
+        return north?.MapId == mapId || south?.MapId == mapId || west?.MapId == mapId || east?.MapId == mapId;
     }
 
     /// <summary>
@@ -154,7 +164,7 @@ public class MapSimulator
 
         applyRulesFromAbove:
         cachedRulesFromAbove = rulesFromAbove;
-        foreach (var rule in rulesFromAbove) dict.Add(rule.Key, rule.Value);
+        foreach (var rule in rulesFromAbove) dict[rule.Key] = dict.ContainsKey(rule.Key) ? dict[rule.Key].Concat(rule.Value).ToList() : rule.Value;
         setAllRules(dict);
 
         theReturn:
@@ -193,7 +203,7 @@ public class MapSimulator
 
     public bool isObject(ObjectData obj, ObjectTypeId property)
     {
-        if (obj.Name == property) return true;
+        if (obj.Name == property && obj.Kind == ObjectKind.Object) return true;
 
         foreach (var rule in allRules[property])
         {
@@ -201,6 +211,7 @@ public class MapSimulator
 
             if (rule.LHS is NounAdjective<ObjectData> na && (na.Value.Name == obj.Name) != na.Not)
             {
+                if ((na.Value.Name == ObjectTypeId.text) != (obj.Kind == ObjectKind.Text)) continue;
                 if (rule.RHS is NounAdjective<ObjectData> rhs) 
                     return (rhs.Value.Name == property) != rhs.Not;
             }

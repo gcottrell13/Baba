@@ -13,9 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Segoe_UI_15_Bold.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:Segoe_UI_15_Bold.spritefont
+#begin blur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:blur.fx
 

@@ -1028,6 +1028,24 @@ public static class SheetMap {
 ) },
 			{ "lock", new Wobbler("lock", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["lock"]) },
 			{ "love", new Wobbler("love", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["love"]) },
+			{ "mano", new FacingOnMove(
+                name: "mano", 
+				up: new AnimateOnMove("mano", new Wobbler[] {
+	new Wobbler("mano.up.0", new[] { new Point(0, 0) }, new Point(24, 24), sheets["mano"]), 
+	new Wobbler("mano.up.1", new[] { new Point(1, 0) }, new Point(24, 24), sheets["mano"]), 
+	new Wobbler("mano.up.2", new[] { new Point(2, 0) }, new Point(24, 24), sheets["mano"]), 
+	new Wobbler("mano.up.3", new[] { new Point(3, 0) }, new Point(24, 24), sheets["mano"]) }), 
+				sleep_up: null, 
+				left: new AnimateOnMove("mano", new Wobbler[] {
+	new Wobbler("mano.left.0", new[] { new Point(0, 1), new Point(1, 1), new Point(2, 1) }, new Point(24, 24), sheets["mano"]) }), 
+				sleep_left: null, 
+				down: new AnimateOnMove("mano", new Wobbler[] {
+	new Wobbler("mano.down.0", new[] { new Point(3, 1) }, new Point(24, 24), sheets["mano"]) }), 
+				sleep_down: null, 
+				right: new AnimateOnMove("mano", new Wobbler[] {
+	new Wobbler("mano.right.0", new[] { new Point(0, 2), new Point(1, 2), new Point(2, 2) }, new Point(24, 24), sheets["mano"]) }), 
+				sleep_right: null
+) },
 			{ "me", new FacingOnMove(
                 name: "me", 
 				up: new AnimateOnMove("me", new Wobbler[] {
@@ -1601,6 +1619,7 @@ public static class SheetMap {
 			{ "text_lsqbr", new Wobbler("text_lsqbr", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_lsqbr"]) },
 			{ "text_m", new Wobbler("text_m", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_m"]) },
 			{ "text_make", new Wobbler("text_make", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_make"]) },
+			{ "text_mano", new Wobbler("text_mano", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_mano"]) },
 			{ "text_me", new Wobbler("text_me", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_me"]) },
 			{ "text_melt", new Wobbler("text_melt", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_melt"]) },
 			{ "text_mimic", new Wobbler("text_mimic", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_mimic"]) },

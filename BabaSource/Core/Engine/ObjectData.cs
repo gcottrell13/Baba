@@ -14,7 +14,7 @@ public class ObjectData : INameable
 {
     public bool Deleted;
     public short Color;
-    public int Facing;
+    public Direction Facing;
     public int x;
     public int y;
     public int index;

@@ -46,6 +46,9 @@ public class MapSimulator
     public short? WestNeighbor => west?.MapId;
     public short? SouthNeighbor => south?.MapId;
 
+    public short Width => map.width;
+    public short Height => map.height;
+
 
     public MapSimulator(BabaWorld world, short mapId)
 	{

@@ -20,21 +20,30 @@ internal class MapViewer : GameObject
 		{
 			if (obj == null) continue;
 			obj.index = index;
-			obj.Present = true;
 			var sprite = new ObjectSprite(obj);
             sprites.Add(index, sprite);
 			AddChild(sprite);
             sprite.Graphics.xscale = 1f / 24;
             sprite.Graphics.yscale = 1f / 24;
-            sprite.MoveSpriteNoAnimate();
 		}
-	}
+        MapData = mapData;
+    }
 
-	public void Load()
+    public MapData MapData { get; }
+
+    public void Load()
 	{
 		foreach (var sprite in sprites.Values)
 		{
 			sprite.MoveSpriteNoAnimate();
+		}
+	}
+
+	public void onMove()
+	{
+		foreach (var sprite in sprites.Values)
+		{
+			sprite.OnMove(false);
 		}
 	}
 }

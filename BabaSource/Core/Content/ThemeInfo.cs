@@ -41,6 +41,11 @@ namespace Core.Content
             return PaletteInfo.Palettes[theme][ColorNameMap[name]];
         }
 
+        public static Color GetColor(string theme, short colorId)
+        {
+            return PaletteInfo.Palettes[theme][colorId];
+        }
+
         public static Color GetObjectColor(string theme, string name)
         {
             return PaletteInfo.Palettes[theme][ObjectInfo.Info[name].color_active];

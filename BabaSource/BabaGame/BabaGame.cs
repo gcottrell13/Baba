@@ -20,8 +20,8 @@ public class BabaGame : GameSetup
 
     public BabaGame() : base(new BabaGameEntryPoint())
     {
-        MAX_WIDTH = 1080;
-        MAX_HEIGHT = 720;
+        MAX_WIDTH = 1024;
+        MAX_HEIGHT = 1024;
 
     }
 

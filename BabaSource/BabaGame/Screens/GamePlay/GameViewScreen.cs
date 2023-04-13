@@ -26,7 +26,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
     {
         this.playerNumber = playerNumber;
         this.worldData = worldData;
-        mapViewWindow = new(worldData);
+        mapViewWindow = new MapViewWindow(worldData, ScreenWidth, ScreenHeight);
         short currentMapId = 0;
         AddChild(mapViewWindow);
 

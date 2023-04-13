@@ -17,13 +17,16 @@ namespace BabaGame.Screens.GamePlay;
 internal class MapViewWindow : GameObject
 {
     private readonly BabaWorld babaWorld;
+    private readonly int viewportWidth;
+    private readonly int viewportHeight;
     private Dictionary<short?, MapViewer> mapViewers = new();
     private short currentMapId = 0;
 
-    public MapViewWindow(BabaWorld babaWorld)
+    public MapViewWindow(BabaWorld babaWorld, int viewportWidth, int viewportHeight)
     {
         this.babaWorld = babaWorld;
-        
+        this.viewportWidth = viewportWidth;
+        this.viewportHeight = viewportHeight;
         foreach (var (mapId, map) in babaWorld.MapDatas)
         {
             var mv = new MapViewer(map);
@@ -34,9 +37,15 @@ internal class MapViewWindow : GameObject
     public void LoadMap(short mapId)
     {
         _loadMap(mapId);
+        var scale = _getMapScale(mapId);
+
         if (babaWorld.Simulators.ContainsKey(currentMapId) == false) 
         {
             // no animation
+            Graphics.xscale = scale;
+            Graphics.yscale = scale;
+            Graphics.x = scale;
+            Graphics.y = scale;
         }
         else if (babaWorld.Simulators[currentMapId].HasNeighbor(mapId))
         {
@@ -53,17 +62,20 @@ internal class MapViewWindow : GameObject
     {
         RemoveAllChildren();
         var sim = babaWorld.Simulators[mapId];
-        //if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) AddChild(neighbor);
-        //if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) AddChild(neighbor);
-        //if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) AddChild(neighbor);
-        //if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) AddChild(neighbor);
-        if (_tryGetMapViewer(mapId, out var mp))
-        {
-            AddChild(mp);
-            mp.Load();
-            mp.Graphics.xscale = 24;
-            mp.Graphics.yscale = 24;
-        }
+        if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
+
+        if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
+        if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) _addMapAndScale(neighbor, 0, sim.Height);
+        if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
+        if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) _addMapAndScale(neighbor, sim.Width, 0);
+    }
+
+    private void _addMapAndScale(MapViewer mp, int x, int y)
+    {
+        AddChild(mp);
+        mp.Load();
+        mp.Graphics.x = x;
+        mp.Graphics.y = y;
     }
 
     private bool _tryGetMapViewer(short? mapId, out MapViewer mapViewer)
@@ -74,5 +86,16 @@ internal class MapViewWindow : GameObject
             return false;
         }
         return mapViewers.TryGetValue(mapId, out mapViewer);
+    }
+
+    private float _getMapScale(short mapId)
+    {
+        var map = babaWorld.Simulators[mapId];
+
+        var xscale = viewportWidth / (map.Width + 2);
+        var yscale = viewportHeight / (map.Height + 2);
+
+        var smallerSide = Math.Min(xscale, yscale);
+        return smallerSide;
     }
 }

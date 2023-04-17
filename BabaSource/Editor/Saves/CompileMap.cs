@@ -2,6 +2,7 @@
 using Core.Engine;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,13 @@ namespace Editor.Saves
 {
     public static class CompileMap
     {
+        [DebuggerDisplay("{originalMapId} -> {data.MapId}: {x} {y}")]
         private class MapTemp
         {
             internal int x;
             internal int y;
             internal MapData data;
+            internal int originalMapId;
 
             public MapTemp(MapData data)
             {
@@ -28,7 +31,7 @@ namespace Editor.Saves
 
             short mapTempId = 1;
 
-            MapData fromMapLayer(SaveMapLayer layer)
+            MapTemp fromMapLayer(SaveMapLayer layer, int x, int y, int id)
             {
                 var md = new MapData(layer.objects.Select(x => new ObjectData()
                 {
@@ -38,18 +41,24 @@ namespace Editor.Saves
                     Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
                     Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
                     Text = x.text,
+                    Present = true,
                 }).ToArray())
                 {
                     MapId = mapTempId++,
                     width = (short)layer.width,
                     height = (short)layer.height,
                 };
-                return md;
+                return new MapTemp(md)
+                {
+                    x = x,
+                    y = y,
+                    originalMapId = id,
+                };
             }
 
-            var globalLayer = fromMapLayer(world.globalObjectLayer);
-            globalLayer.Name = "global";
-            mapTemps.Add(new(globalLayer));
+            var globalLayer = fromMapLayer(world.globalObjectLayer, -1, -1, 0);
+            globalLayer.data.Name = "global";
+            mapTemps.Add(globalLayer);
 
             var regionMap = new Dictionary<int, short>();
             var regionDatas = new List<RegionData>();
@@ -57,20 +66,16 @@ namespace Editor.Saves
             short regionIds = 0;
             foreach (var region in world.Regions)
             {
-                var md = fromMapLayer(region.regionObjectLayer);
-                md.Name = $"region {regionIds} - {region.name}";
-                var temp = new MapTemp(md) { 
-                    x = -1,
-                    y = -1,
-                };
-                mapTemps.Add(temp);
+                var md = fromMapLayer(region.regionObjectLayer, -1, -1, 0);
+                md.data.Name = $"region {regionIds} - {region.name}";
+                mapTemps.Add(md);
                 regionMap[region.id] = regionIds;
                 regionDatas.Add(new()
                 {
                     Music=region.musicName,
                     RegionId=regionIds++,
                     Theme=region.theme,
-                    WordLayerId=md.MapId,
+                    WordLayerId=md.data.MapId,
                     Name=region.name,
                 });
             }
@@ -80,24 +85,16 @@ namespace Editor.Saves
                 var data = world.MapDatas.FirstOrDefault(x => x.id == instance.mapDataId);
                 if (data == null) continue;
 
-                var md = fromMapLayer(data.layer1);
-                var wordLayer = fromMapLayer(data.layer2);
-                wordLayer.Name = $"{md.MapId} uplayer - {data.name}";
-                mapTemps.Add(new(wordLayer)
-                {
-                    x = -1,
-                    y = -1,
-                });
+                var md = fromMapLayer(data.layer1, instance.x, instance.y, instance.mapDataId);
+                var wordLayer = fromMapLayer(data.layer2, -1, -1, -1);
+                wordLayer.data.Name = $"{md.data.MapId} uplayer - {data.name}";
+                mapTemps.Add(wordLayer);
 
-                md.region = regionMap.TryGetValue(data.regionId, out var regionMapTemp) ? regionMapTemp : (short)0;
-                md.Name = data.name;
-                md.upLayer = wordLayer.MapId;
+                md.data.region = regionMap.TryGetValue(data.regionId, out var regionMapTemp) ? regionMapTemp : (short)0;
+                md.data.Name = data.name;
+                md.data.upLayer = wordLayer.data.MapId;
 
-                mapTemps.Add(new(md)
-                {
-                    x = instance.x,
-                    y = instance.y,
-                });
+                mapTemps.Add(md);
 
             }
 
@@ -111,16 +108,16 @@ namespace Editor.Saves
                 mapTemp.data.westNeighbor = findNeighbor(mapTemps, world, x, y, -1, 0)?.data.MapId ?? 0;
             }
 
-            globalLayer.eastNeighbor = 0;
-            globalLayer.westNeighbor = 0;
-            globalLayer.northNeighbor = 0;
-            globalLayer.southNeighbor = 0;
+            globalLayer.data.eastNeighbor = 0;
+            globalLayer.data.westNeighbor = 0;
+            globalLayer.data.northNeighbor = 0;
+            globalLayer.data.southNeighbor = 0;
 
             return new WorldData()
             {
                 Maps = mapTemps.Select(x => x.data).ToList(),
                 Regions = regionDatas,
-                GlobalWordMapId = globalLayer.MapId,
+                GlobalWordMapId = globalLayer.data.MapId,
                 Name = world.worldName,
             };
         }

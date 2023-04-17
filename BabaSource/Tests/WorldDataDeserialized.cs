@@ -255,7 +255,7 @@ public class WorldDataDeserialized
             northNeighbor = 0,
             southNeighbor = 0,
             eastNeighbor = 10,
-            westNeighbor = 1,
+            westNeighbor = 6,
             upLayer = 9,
             region = 3,
             width = 15,

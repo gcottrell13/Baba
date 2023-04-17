@@ -44,7 +44,7 @@ namespace Tests.Engine
                     {
                         new ObjectData() { Deleted= true, Color=2, Name=ObjectTypeId.amongi },
                         new ObjectData() { Deleted= true, Color=1, Name=ObjectTypeId.badbad, x=10, y=15 },
-                        new ObjectData() { Deleted= true, Color=3, Name=ObjectTypeId.rubble, Facing=(int)Core.Utils.Direction.Left, Kind=ObjectKind.Text },
+                        new ObjectData() { Deleted= true, Color=3, Name=ObjectTypeId.rubble, Facing=Core.Utils.Direction.Left, Kind=ObjectKind.Text },
                     }
                 );
             } 

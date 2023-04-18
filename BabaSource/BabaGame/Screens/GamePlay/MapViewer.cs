@@ -19,13 +19,8 @@ internal class MapViewer : GameObject
 		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
 		{
 			if (obj == null) continue;
-			obj.index = index;
-			var sprite = new ObjectSprite(obj);
-            sprites.Add(index, sprite);
-			AddChild(sprite);
-            sprite.Graphics.xscale = 1f / 24;
-            sprite.Graphics.yscale = 1f / 24;
-		}
+			addSprite(obj, index);
+        }
         MapData = mapData;
     }
 
@@ -33,6 +28,15 @@ internal class MapViewer : GameObject
 
     public void Load()
 	{
+		foreach (var obj in MapData.WorldObjects)
+		{
+			if (!sprites.ContainsKey(obj.index))
+			{
+				addSprite(obj, obj.index);
+            }
+		}
+
+		// TODO: add and remove sprites
 		foreach (var sprite in sprites.Values)
 		{
 			sprite.MoveSpriteNoAnimate();
@@ -46,4 +50,13 @@ internal class MapViewer : GameObject
 			sprite.OnMove(false);
 		}
 	}
+
+	private void addSprite(ObjectData obj, int index)
+	{
+        var sprite = new ObjectSprite(obj);
+        sprites.Add(index, sprite);
+        AddChild(sprite);
+        sprite.Graphics.xscale = 1f / 24;
+        sprite.Graphics.yscale = 1f / 24;
+    }
 }

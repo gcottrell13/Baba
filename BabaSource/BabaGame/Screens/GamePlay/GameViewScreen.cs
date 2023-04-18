@@ -1,4 +1,5 @@
 ﻿using BabaGame.Engine;
+using BabaGame.Events;
 using Core.Content;
 using Core.Engine;
 using Core.Screens;
@@ -48,7 +49,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
                 )
             .State(
                 MainGameState.PlayingMap,
-                handlePlayingMap,
+                ev => handlePlayingMap(ev, currentMapId),
                 def => def
                     .AddOnEnter(() => { 
                         if (currentMapId == 0)
@@ -63,6 +64,11 @@ internal class GameViewScreen : BaseScreen<MainGameState>
             .State(
                 MainGameState.MapTransition,
                 ev => MainGameState.Noop);
+        EventChannels.MapChange.Subscribe(e =>
+        {
+            currentMapId = e.MapId;
+            mapViewWindow.LoadMap(e.MapId);
+        });
     }
 
     public void init()
@@ -70,14 +76,30 @@ internal class GameViewScreen : BaseScreen<MainGameState>
         stateMachine.Initialize(MainGameState.SelectingMap);
     }
 
-    public override MainGameState Handle(KeyPress ev)
+    public override MainGameState Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
     {
-        throw new NotImplementedException();
-    }
+        MainGameState.PlayingGame => MainGameState.Noop,
+        _ => MainGameState.Noop,
+    };
 
-    private MainGameState handlePlayingMap(KeyPress ev)
+    private MainGameState handlePlayingMap(KeyPress ev, short currentMapId)
     {
-        worldData.Step(0, Array.Empty<short>(), Direction.None, playerNumber.Name);
+        Direction? dir = ev.KeyPressed switch
+        {
+            Keys.Up => Direction.Up,
+            Keys.Down => Direction.Down,
+            Keys.Left => Direction.Left,
+            Keys.Right => Direction.Right,
+            Keys.Space => Direction.None,
+            _ => null,
+        };
+
+        if (dir is Direction d)
+        {
+            var mapIds = new[] { currentMapId };
+            worldData.Step(currentMapId, mapIds, d, playerNumber.Name);
+            mapViewWindow.OnMove(mapIds);
+        }
         return MainGameState.Noop;
     }
 

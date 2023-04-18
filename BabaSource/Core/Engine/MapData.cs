@@ -10,8 +10,8 @@ namespace Core.Engine
 {
     public class MapData
     {
-        public ObjectData[] WorldObjects { get; private set; }
-        private Stack<int> pointers = new();
+        public List<ObjectData> WorldObjects { get; private set; }
+
         public short MapId;
         public short northNeighbor;
         public short eastNeighbor;
@@ -28,14 +28,13 @@ namespace Core.Engine
 
         public MapData()
         {
-            WorldObjects = Array.Empty<ObjectData>();
+            WorldObjects = new List<ObjectData>();
         }
 
 
         public MapData(ObjectData[] data)
         {
-            WorldObjects = data;
-            pointers.Push(0);
+            WorldObjects = data.ToList();
         }
 
         public override bool Equals(object? obj)
@@ -67,33 +66,21 @@ namespace Core.Engine
             }
             """;
 
-        public int AddObject(ObjectData obj)
+        public void AddObject(ObjectData obj)
         {
-            var initialPointer = pointers.Pop();
-            var pointer = initialPointer;
-            while (pointers.Count > 0)
-            {
-                if (!WorldObjects[pointer].Deleted)
-                {
-                    WorldObjects[pointer] = obj;
-                    obj.Deleted = true;
-                    obj.index = pointer;
-                    return pointer;
-                }
+            if (obj.index != -1)
+                throw new InvalidOperationException();
+            obj.index = WorldObjects.Count;
+            WorldObjects.Add(obj);
+        }
 
-                pointer = (pointer + 1) % WorldObjects.Length;
-                if (pointers.Contains(pointer)) pointers.TryPop(out pointer);
-            }
-
-            // ran out of space, allocate more
-            var currentObjects = WorldObjects;
-            WorldObjects = new ObjectData[currentObjects.Length * 2];
-            pointer = currentObjects.Length;
-            WorldObjects[pointer] = obj;
-            obj.index = pointer;
-            obj.Deleted = false;
-            currentObjects.CopyTo(WorldObjects, 0);
-            return pointer;
+        public void RemoveObject(ObjectData obj)
+        {
+            var last = WorldObjects.Last();
+            WorldObjects[obj.index] = last;
+            last.index = obj.index;
+            obj.index = -1;
+            obj.Deleted = true;
         }
 
         public string Serialize()
@@ -107,7 +94,12 @@ namespace Core.Engine
             var map = SerializeBytes.DeserializeObjects<MapData>(parts[0])[0];
             var data = SerializeBytes.DeserializeObjects<ObjectData>(parts[1]);
 
-            map.WorldObjects = data.ToArray();
+            map.WorldObjects = data.ToList();
+
+            foreach (var (obj, index) in map.WorldObjects.Select((x, i) => (x, i)))
+            {
+                obj.index = index;
+            }
 
             return map;
         }

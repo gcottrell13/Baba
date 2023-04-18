@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Core.Events
@@ -17,7 +18,7 @@ namespace Core.Events
 
         public static void SendAsyncMessages()
         {
-            foreach (var channel in eventChannels)
+            foreach (var channel in eventChannels.ToList())
             {
                 channel.SendAsyncMessages();
             }

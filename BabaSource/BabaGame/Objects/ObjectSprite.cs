@@ -24,6 +24,7 @@ internal class ObjectSprite : GameObject
     private ObjectTypeId previousName;
     private int previousX = 0;
     private int previousY = 0;
+    private Direction previousFacing = Direction.None;
     private short previousColor = 0;
 
     private SpriteValues? spriteValue;
@@ -47,6 +48,7 @@ internal class ObjectSprite : GameObject
         previousName = objectData.Name;
         previousX = objectData.X;
         previousY = objectData.Y;
+        previousFacing = objectData.Facing;
         Graphics.x = objectData.x;
         Graphics.y = objectData.y;
         previousColor = objectData.Color;
@@ -99,11 +101,15 @@ internal class ObjectSprite : GameObject
             previousName = objectData.Name;
         }
 
-        if (previousX != objectData.x || previousY != objectData.y)
+        if (previousX != objectData.x || previousY != objectData.y || previousFacing != objectData.Facing)
         {
             // TODO: animate a move
             Graphics.x = objectData.x;
             Graphics.y = objectData.y;
+
+            previousX = objectData.x;
+            previousY = objectData.y;
+            previousFacing = objectData.Facing;
 
             // if the sprite allows, animate it
             switch (spriteValue)
@@ -127,9 +133,6 @@ internal class ObjectSprite : GameObject
                         break;
                     }
             }
-
-            previousX = objectData.x;
-            previousY = objectData.y;
         }
 
         if (objectData.Color != previousColor)

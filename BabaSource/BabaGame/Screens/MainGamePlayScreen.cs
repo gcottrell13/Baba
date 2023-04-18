@@ -38,11 +38,11 @@ internal class MainGamePlayScreen : BaseScreen<BabaGameState>
                 )
             .State(
                 MainGameState.PlayingGame,
-                ev => MainGameState.Noop,
+                ev => gameViewScreen!.Handle(ev),
                 def => def
                     .AddOnEnter(() =>
                     {
-                        gameViewScreen = new(stack, playerNumber, worldData);
+                        gameViewScreen = new GameViewScreen(stack, playerNumber, worldData);
                         stack.Add(gameViewScreen);
                         gameViewScreen.init();
                     })
@@ -64,6 +64,7 @@ internal class MainGamePlayScreen : BaseScreen<BabaGameState>
     public override BabaGameState Handle(KeyPress ev) => stateMachine.SendAction(ev) switch
     {
         MainGameState.Exit => BabaGameState.MainMenu,
+        MainGameState.PlayingGame => BabaGameState.None,
         _ => BabaGameState.None,
     };
 

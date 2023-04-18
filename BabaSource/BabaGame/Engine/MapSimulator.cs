@@ -1,4 +1,5 @@
-﻿using Core.Content;
+﻿using BabaGame.Events;
+using Core.Content;
 using Core.Engine;
 using Core.Utils;
 using Newtonsoft.Json.Linq;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BabaGame.Engine;
@@ -50,6 +52,12 @@ public class MapSimulator
     public short Height => map.height;
 
 
+    public const ObjectTypeId mapBorderTypeId = ObjectTypeId.nnope;
+    private static readonly ObjectData[] mapBorder = new[] { new ObjectData() { Name = mapBorderTypeId } };
+
+    public short MapId { get; }
+
+
     public MapSimulator(BabaWorld world, short mapId)
 	{
         this.world = world;
@@ -86,7 +94,7 @@ public class MapSimulator
         }
     }
 
-    public void doMovement(Direction input, ObjectTypeId playerNumber)
+    public bool doMovement(Direction input, ObjectTypeId playerNumber)
     {
         var movingObjects = new List<(ObjectData obj, int dx, int dy)>();
 
@@ -101,11 +109,25 @@ public class MapSimulator
             movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).Select(i => (i, 1, 0)));
         }
 
+        var didAnyMove = false;
+
         foreach (var (obj, dx, dy) in movingObjects)
         {
             if (push(obj.x, obj.y, dx, dy))
+            {
                 pull(obj.x, obj.y, dx, dy);
+                moveObjectTo(obj, obj.x + dx, obj.y + dy);
+                if (obj.Present == false)
+                {
+                    // switch map
+                    EventChannels.MapChange.SendAsyncMessage(new() { MapId = obj.CurrentMapId });
+                }
+                didAnyMove = true;
+            }
+            if (input != Direction.None)
+                obj.Facing = input;
         }
+        return didAnyMove;
     }
 
     public void transform()
@@ -207,6 +229,7 @@ public class MapSimulator
     public bool isObject(ObjectData obj, ObjectTypeId property)
     {
         if (obj.Name == property && obj.Kind == ObjectKind.Object) return true;
+        if (obj.Present == false || obj.Deleted) return false;
 
         foreach (var rule in allRules[property])
         {
@@ -255,6 +278,7 @@ public class MapSimulator
             allObjects.AddRange(inFront);
             x += dx;
             y += dy;
+            if (inFront.Length == 0) break;
         }
 
         var canMove = true;
@@ -302,23 +326,35 @@ public class MapSimulator
         if (x < 0)
         {
             obj.Present = false;
-            return west?.addObjectAt(obj, west.map.width + x, convertToWest[y]) ?? false;
+            return west != null && moveObjectToMap(west, obj, west.map.width + x, convertToWest[y]);
         }
         if (y < 0)
         {
             obj.Present = false;
-            return north?.addObjectAt(obj, convertToNorth[x], north.map.height + y) ?? false;
+            return north != null && moveObjectToMap(north, obj, convertToNorth[x], north.map.height + y);
         }
         if (x >= map.width)
         {
             obj.Present = false;
-            return east?.addObjectAt(obj, x - map.width, convertToEast[y]) ?? false;
+            return moveObjectToMap(east, obj, x - map.width, convertToEast[y]);
         }
         if (y >= map.height)
         {
             obj.Present = false;
-            return south?.addObjectAt(obj, convertToSouth[x], y - map.height) ?? false;
+            return moveObjectToMap(south, obj, convertToSouth[x], y - map.height);
         }
+
+        var dx = x - obj.x;
+        var dy = y - obj.y;
+        if (Math.Abs(dx) > Math.Abs(dy))
+        {
+            obj.Facing = dx < 0 ? Direction.Left : Direction.Right;
+        }
+        else
+        {
+            obj.Facing = dy < 0 ? Direction.Up : Direction.Down;
+        }
+
         obj.x = x;
         obj.y = y;
         return true;
@@ -326,8 +362,6 @@ public class MapSimulator
 
     public bool addObjectAt(ObjectData obj, int x, int y)
     {
-        obj.x = x;
-        obj.y = y;
         map.AddObject(new()
         {
             Name = obj.Name,
@@ -340,20 +374,21 @@ public class MapSimulator
             OriginX = obj.OriginX,
             OriginY = obj.OriginY,
             MapOfOrigin =obj.MapOfOrigin,
+            index=-1,
         });
         return true;
     }
 
-    public bool removeObject(ObjectData obj)
+    private bool moveObjectToMap(MapSimulator? m, ObjectData obj, int x, int y)
     {
-        obj.Deleted = true;
-        return true;
+        if (m is MapSimulator otherMap && otherMap.addObjectAt(obj, x, y))
+        {
+            this.map.RemoveObject(obj);
+            obj.CurrentMapId = otherMap.MapId;
+            return true;
+        }
+        return false;
     }
-
-    public const ObjectTypeId mapBorderTypeId = ObjectTypeId.nnope;
-    private static readonly ObjectData[] mapBorder = new[] { new ObjectData() { Name = mapBorderTypeId } };
-
-    public short MapId { get; }
 
     public ObjectData[] objectsAt(int x, int y)
     {

@@ -1,11 +1,8 @@
 ﻿using Core.Utils;
 
-namespace BabaGame.Events
+namespace BabaGame.Events;
+
+public class MapChange
 {
-    public class MapChange
-    {
-        public int X;
-        public int Y;
-        public Direction? Direction;
-    }
+    public short MapId;
 }

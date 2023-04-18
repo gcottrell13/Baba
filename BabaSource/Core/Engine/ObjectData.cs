@@ -34,6 +34,8 @@ public class ObjectData : INameable
     // if the object is not present, act like it doesn't exist
     public bool Present;
 
+    public short CurrentMapId;
+
     public string? Text;
 
     public override bool Equals([NotNullWhen(true)] object? obj)

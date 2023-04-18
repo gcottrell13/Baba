@@ -80,7 +80,16 @@ public class BabaWorld
     {
         var sims = mapIds.Select(id => Simulators[id]);
         parseMapRules(mapIds);
-        foreach (var map in sims) map.doMovement(map.MapId == currentMap ? direction : Direction.None, playerNumber);
+
+        var didAnyMove = false;
+        foreach (var map in sims)
+        {
+            if (map.doMovement(map.MapId == currentMap ? direction : Direction.None, playerNumber)) 
+                didAnyMove = true;
+        }
+
+        if (!didAnyMove) return;
+
         parseMapRules(mapIds);
         foreach (var map in sims) map.transform();
         parseMapRules(mapIds);

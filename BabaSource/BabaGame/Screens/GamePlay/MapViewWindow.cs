@@ -49,11 +49,19 @@ internal class MapViewWindow : GameObject
         }
         else if (babaWorld.Simulators[currentMapId].HasNeighbor(mapId))
         {
-            // animate transition
+            // TODO: animate transition
+            Graphics.xscale = scale;
+            Graphics.yscale = scale;
+            Graphics.x = scale;
+            Graphics.y = scale;
         }
         else
         {
             // no animation
+            Graphics.xscale = scale;
+            Graphics.yscale = scale;
+            Graphics.x = scale;
+            Graphics.y = scale;
         }
     }
 
@@ -68,6 +76,7 @@ internal class MapViewWindow : GameObject
         if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) _addMapAndScale(neighbor, 0, sim.Height);
         if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
         if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) _addMapAndScale(neighbor, sim.Width, 0);
+        currentMapId = mapId;
     }
 
     private void _addMapAndScale(MapViewer mp, int x, int y)
@@ -97,5 +106,16 @@ internal class MapViewWindow : GameObject
 
         var smallerSide = Math.Min(xscale, yscale);
         return smallerSide;
+    }
+
+    public void OnMove(short[] mapIds)
+    {
+        foreach (var mapId in mapIds)
+        {
+            if (_tryGetMapViewer(mapId, out var mp))
+            {
+                mp.onMove();
+            }
+        }
     }
 }

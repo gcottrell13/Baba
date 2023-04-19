@@ -12,14 +12,14 @@ namespace BabaGame.Screens.GamePlay;
 
 internal class MapViewer : GameObject
 {
-	private Dictionary<int, ObjectSprite> sprites = new();
+	private Dictionary<uint, ObjectSprite> sprites = new();
 
 	public MapViewer(MapData mapData)
 	{
 		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
 		{
 			if (obj == null) continue;
-			addSprite(obj, index);
+			addSprite((uint)index);
         }
         MapData = mapData;
     }
@@ -28,32 +28,42 @@ internal class MapViewer : GameObject
 
     public void Load()
 	{
-		foreach (var obj in MapData.WorldObjects)
+        ensureSprites();
+        foreach (var (index, sprite) in sprites)
 		{
-			if (!sprites.ContainsKey(obj.index))
-			{
-				addSprite(obj, obj.index);
-            }
-		}
-
-		// TODO: add and remove sprites
-		foreach (var sprite in sprites.Values)
-		{
-			sprite.MoveSpriteNoAnimate();
+			sprite.MoveSpriteNoAnimate(MapData.WorldObjects[(int)index]);
 		}
 	}
 
 	public void onMove()
 	{
-		foreach (var sprite in sprites.Values)
-		{
-			sprite.OnMove(false);
-		}
-	}
+        ensureSprites();
+        foreach (var (index, sprite) in sprites)
+        {
+            sprite.OnMove(MapData.WorldObjects[(int)index], false);
+        }
+    }
 
-	private void addSprite(ObjectData obj, int index)
+	private void ensureSprites()
+    {
+        foreach (var obj in MapData.WorldObjects)
+        {
+            if (obj.index >= 0 && !sprites.ContainsKey((uint)obj.index))
+            {
+                addSprite((uint)obj.index);
+            }
+        }
+
+        for (var i = MapData.WorldObjects.Count; i < sprites.Count; i++)
+        {
+            RemoveChild(sprites[(uint)i]);
+            sprites.Remove((uint)i);
+        }
+    }
+
+	private void addSprite(uint index)
 	{
-        var sprite = new ObjectSprite(obj);
+        var sprite = new ObjectSprite();
         sprites.Add(index, sprite);
         AddChild(sprite);
         sprite.Graphics.xscale = 1f / 24;

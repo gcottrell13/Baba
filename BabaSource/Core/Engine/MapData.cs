@@ -77,10 +77,16 @@ namespace Core.Engine
         public void RemoveObject(ObjectData obj)
         {
             var last = WorldObjects.Last();
+            WorldObjects.RemoveAt(last.index);
+
+            obj.Deleted = true;
+
+            if (last.index == obj.index) return;
+
             WorldObjects[obj.index] = last;
             last.index = obj.index;
+
             obj.index = -1;
-            obj.Deleted = true;
         }
 
         public string Serialize()

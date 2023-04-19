@@ -19,8 +19,6 @@ namespace BabaGame.Objects;
 /// </summary>
 internal class ObjectSprite : GameObject
 {
-    private readonly ObjectData objectData;
-
     private ObjectTypeId previousName;
     private int previousX = 0;
     private int previousY = 0;
@@ -34,16 +32,15 @@ internal class ObjectSprite : GameObject
     private double wobbleTimer = 0;
     private double maxWobbleTimer = 0;
 
-    public ObjectSprite(ObjectData objectData)
+    public ObjectSprite()
 	{
-        this.objectData = objectData;
         maxWobbleTimer = CollectionExtension.rng.NextDouble() * 300 + 200;
     }
 
     /// <summary>
     /// used for initialization, and when reloading a map
     /// </summary>
-    public void MoveSpriteNoAnimate()
+    public void MoveSpriteNoAnimate(ObjectData objectData)
     {
         previousName = objectData.Name;
         previousX = objectData.X;
@@ -55,6 +52,7 @@ internal class ObjectSprite : GameObject
 
         Name = $"{objectData.Kind}-{objectData.Name}";
         setSprite(previousName, objectData.Facing);
+        _afterOnMoveAnimation(objectData);
     }
 
     private void setSprite(ObjectTypeId name, Direction d)
@@ -92,8 +90,10 @@ internal class ObjectSprite : GameObject
     /// <summary>
     /// for when something happened to the game state
     /// </summary>
-    public void OnMove(bool isSleeping)
+    public void OnMove(ObjectData objectData, bool isSleeping)
     {
+        Name = $"{objectData.Kind}-{objectData.Name}";
+
         if (objectData.Name != previousName)
         {
             // TODO: animate a changing sprite
@@ -140,9 +140,11 @@ internal class ObjectSprite : GameObject
             Graphics.SetColor(ThemeInfo.GetColor("default", objectData.Color));
             previousColor = objectData.Color;
         }
+
+        _afterOnMoveAnimation(objectData);
     }
 
-    private void _afterOnMoveAnimation()
+    private void _afterOnMoveAnimation(ObjectData objectData)
     {
 
         if (objectData.Deleted)

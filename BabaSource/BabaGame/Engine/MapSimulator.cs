@@ -282,8 +282,8 @@ public class MapSimulator
         }
 
         var canMove = true;
-        if (x < 0) canMove = west!.push(west.map.width, convertToWest[y], dx, dy);
-        if (y < 0) canMove = north!.push(convertToNorth[x], north.map.height, dx, dy);
+        if (x < 0) canMove = west!.push(west.map.width - 1, convertToWest[y], dx, dy);
+        if (y < 0) canMove = north!.push(convertToNorth[x], north.map.height - 1, dx, dy);
         if (x >= map.width) canMove = east!.push(0, convertToEast[y], dx, dy);
         if (y >= map.height) canMove = south!.push(convertToSouth[x], 0, dx, dy);
 

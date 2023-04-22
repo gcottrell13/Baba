@@ -228,9 +228,12 @@ public class MapSimulator
 
     public bool isObject(ObjectData obj, ObjectTypeId property)
     {
-        if (obj.Name == property && obj.Kind == ObjectKind.Object) return true;
+        // some quick checks before we get into rule checking
+        if (obj.Name == property) return obj.Kind == ObjectKind.Object; // text objects don't count as instances of the object
         if (obj.Present == false || obj.Deleted) return false;
+        if (property == ObjectTypeId.text) return obj.Kind == ObjectKind.Text; // this is different from "X is WORD", we want only literal text objects
 
+        // rule checking
         foreach (var rule in allRules[property])
         {
             if (rule.Verb.Name != ObjectTypeId.@is) continue;
@@ -245,6 +248,12 @@ public class MapSimulator
             {
                 if (relation(obj, wr)) return true;
             }
+        }
+
+        if (impliedBy.ContainsKey(property))
+        {
+            if (impliedBy[property].Any(otherProp => isObject(obj, otherProp))) 
+                return true;
         }
         return false;
     }
@@ -275,10 +284,11 @@ public class MapSimulator
         {
             var inFront = objectsAt(x + dx, y + dy);
             if (inFront.Any(x => x.Name == mapBorderTypeId || isObject(x, ObjectTypeId.stop))) return false;
-            allObjects.AddRange(inFront);
+            inFront = inFront.Where(x => isObject(x, ObjectTypeId.push)).ToArray();
             x += dx;
             y += dy;
             if (inFront.Length == 0) break;
+            allObjects.AddRange(inFront);
         }
 
         var canMove = true;
@@ -411,4 +421,10 @@ public class MapSimulator
         return map.WorldObjects.Where(obj => obj.x == x && obj.y == y).ToArray();
     }
 
+
+    private static Dictionary<ObjectTypeId, ObjectTypeId[]> impliedBy = new()
+    {
+        { ObjectTypeId.stop, /* implied by */ new[] { ObjectTypeId.you, ObjectTypeId.you2 } },
+        { ObjectTypeId.push, new[] { ObjectTypeId.text } },  
+    };
 }

@@ -12,27 +12,27 @@ public class WorldDataSerialized
     public const string expectedSerialized = """
         # world new [baba] city
         ---- BEGIN WORLD ----
-        AQAPAAAAbmV3IFtiYWJhXSBjaXR5
+        AQAAAAEADwAAAG5ldyBbYmFiYV0gY2l0eQ==
         ---- END WORLD ----
 
         # 0 autumnregion
         ---- BEGIN REGION ----
-        AAACAAYAAABhdXR1bW4KAAAAZWRpdG9yc29uZwwAAABhdXR1bW5yZWdpb24=
+        AAABAAAAAgAGAAAAYXV0dW1uCgAAAGVkaXRvcnNvbmcMAAAAYXV0dW1ucmVnaW9u
         ---- END REGION ----
 
         # 1 region 2
         ---- BEGIN REGION ----
-        AQADAAYAAABnYXJkZW4HAAAAZGVmYXVsdAgAAAByZWdpb24gMg==
+        AQABAAAAAwAGAAAAZ2FyZGVuBwAAAGRlZmF1bHQIAAAAcmVnaW9uIDI=
         ---- END REGION ----
 
         # 2 new region 2
         ---- BEGIN REGION ----
-        AgAEAAUAAABzd2FtcAcAAABkZWZhdWx0DAAAAG5ldyByZWdpb24gMg==
+        AgABAAAABAAFAAAAc3dhbXAHAAAAZGVmYXVsdAwAAABuZXcgcmVnaW9uIDI=
         ---- END REGION ----
 
         # 3 starting region
         ---- BEGIN REGION ----
-        AwAFAAYAAABnYXJkZW4HAAAAZGVmYXVsdA8AAABzdGFydGluZyByZWdpb24=
+        AwABAAAABQAGAAAAZ2FyZGVuBwAAAGRlZmF1bHQPAAAAc3RhcnRpbmcgcmVnaW9u
         ---- END REGION ----
 
         # 1 global

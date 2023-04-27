@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autofac;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,11 +17,11 @@ public class SerializeBytes
 {
     private static readonly Dictionary<Type, Func<object?, byte[]>> serializers = new()
     {
-        { typeof(int),  getSerializerMethod<int>() },
-        { typeof(short),  getSerializerMethod<short>() },
-        { typeof(long),  getSerializerMethod<long>() },
-        { typeof(bool),  getSerializerMethod<bool>() },
-        { typeof(string),  getSerializerMethod<string>() },
+        { typeof(int),  makeSerializerMethod<int>() },
+        { typeof(short),  makeSerializerMethod<short>() },
+        { typeof(long),  makeSerializerMethod<long>() },
+        { typeof(bool),  makeSerializerMethod<bool>() },
+        { typeof(string),  makeSerializerMethod<string>() },
     };
     private static readonly Dictionary<Type, Func<Enumerator<byte>, object>> deserializers = new()
     {
@@ -27,9 +29,10 @@ public class SerializeBytes
         { typeof(short),  (Enumerator<byte> x) => BitConverter.ToInt16(take(x, 2)) },
         { typeof(long),  (Enumerator<byte> x) => BitConverter.ToInt64(take(x, 8)) },
         { typeof(bool),  (Enumerator<byte> x) => BitConverter.ToBoolean(take(x, 1)) },
+        { typeof(string), deserializeString },
     };
 
-    private static Func<object?, byte[]> getSerializerMethod<T>()
+    private static Func<object?, byte[]> makeSerializerMethod<T>()
     {
         if (typeof(T) == typeof(string))
         {
@@ -41,12 +44,68 @@ public class SerializeBytes
 
     private static byte[] serializeString(string? str) => str == null ? BitConverter.GetBytes((int)0) : BitConverter.GetBytes(str.Length).Concat(Encoding.UTF8.GetBytes(str)).ToArray();
 
+    private static byte[] serializeArray(ICollection objects, Func<object?, byte[]> serializer)
+    {
+        var bytes = BitConverter.GetBytes(objects.Count).ToList();
+        foreach (var obj in objects)
+        {
+            bytes.AddRange(serializer(obj));
+        }
+        return bytes.ToArray();
+    }
+
     private static string? deserializeString(Enumerator<byte> input)
     {
         var len = BitConverter.ToInt32(take(input, 4));
         if (len == 0) return null;
         var bytes = take(input, len);
         return Encoding.UTF8.GetString(bytes);
+    }
+
+    private static ICollection deserializeArray(Enumerator<byte> input, Func<Enumerator<byte>, object> deserializer)
+    {
+        var len = BitConverter.ToInt32(take(input, 4));
+        if (len == 0) return Array.Empty<object>();
+        var output = new List<object>();
+        for (var i = 0; i < len; i++)
+        {
+            output.Add(deserializer(input));
+        }
+        return output;
+    }
+
+    private static bool getDeserializerMethod(Type t, out Func<Enumerator<byte>, object> deserializer)
+    {
+        if (deserializers.TryGetValue(_underlying(t), out deserializer))
+            return true;
+        if (t.IsArray && getDeserializerMethod(t.GetElementType(), out var arraydeserializer))
+        {
+            deserializer = x => JArray.FromObject(deserializeArray(x, arraydeserializer)).ToObject(t);
+            return true;
+        }
+        if (t.IsAssignableTo(typeof(IEnumerable)) && getDeserializerMethod(t.GenericTypeArguments[0], out var innerDeserializer))
+        {
+            deserializer = x => JArray.FromObject(deserializeArray(x, innerDeserializer)).ToObject(t);
+            return true;
+        }
+        return false;
+    }
+
+    private static bool getSerializerMethod(Type t, out Func<object?, byte[]> serializer)
+    {
+        if (serializers.TryGetValue(_underlying(t), out serializer))
+            return true;
+        if (t.IsArray && getSerializerMethod(t.GetElementType(), out var arraySerializer))
+        {
+            serializer = x => serializeArray(x as ICollection, arraySerializer);
+            return true;
+        }
+        if (t.IsAssignableTo(typeof(IEnumerable)) && getSerializerMethod(t.GenericTypeArguments[0], out var innerSerializer))
+        {
+            serializer = x => serializeArray(x as ICollection, innerSerializer);
+            return true;
+        }
+        return false;
     }
 
     private static T[] take<T>(Enumerator<T> enumerator, int count)
@@ -78,12 +137,12 @@ public class SerializeBytes
         {
             foreach (var field in fields)
             {
-                if (serializers.TryGetValue(_underlying(field.FieldType), out var serializer))
+                if (getSerializerMethod(field.FieldType, out var serializer))
                     bytes.AddRange(serializer(field.GetValue(obj)));
             }
             foreach (var prop in props)
             {
-                if (serializers.TryGetValue(_underlying(prop.PropertyType), out var serializer))
+                if (getSerializerMethod(prop.PropertyType, out var serializer))
                     bytes.AddRange(serializer(prop.GetValue(obj)));
             }
         }
@@ -128,13 +187,9 @@ public class SerializeBytes
             foreach (var field in fields)
             {
                 object? value;
-                if (deserializers.TryGetValue(_underlying(field.FieldType), out var deserializer))
+                if (getDeserializerMethod(field.FieldType, out var deserializer))
                 {
                     value = deserializer(enumerator);
-                }
-                else if (field.FieldType == typeof(string))
-                {
-                    value = deserializeString(enumerator);
                 }
                 else
                     continue;
@@ -143,13 +198,9 @@ public class SerializeBytes
             foreach (var prop in props)
             {
                 object? value;
-                if (deserializers.TryGetValue(_underlying(prop.PropertyType), out var deserializer))
+                if (getDeserializerMethod(prop.PropertyType, out var deserializer))
                 {
                     value = deserializer(enumerator);
-                }
-                else if (prop.PropertyType == typeof(string))
-                {
-                    value = deserializeString(enumerator);
                 }
                 else
                     continue;

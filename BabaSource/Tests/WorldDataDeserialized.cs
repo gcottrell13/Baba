@@ -12,7 +12,7 @@ public class WorldDataDeserialized
 {
     public static WorldData expectedCompiledMap = new WorldData()
     {
-        GlobalWordMapId = 1,
+        GlobalWordMapIds = new short[] { 1 },
         Name = "new [baba] city",
         Maps = new() {
         new MapData(new ObjectData[] {
@@ -348,28 +348,28 @@ public class WorldDataDeserialized
         Regions = new() {
         new RegionData() {
             RegionId = 0,
-            WordLayerId = 2,
+            WordLayerIds = new short[] { 2 },
             Theme = "autumn",
             Music = "editorsong",
             Name = "autumnregion"
         },
         new RegionData() {
             RegionId = 1,
-            WordLayerId = 3,
+            WordLayerIds = new short[] { 3 },
             Theme = "garden",
             Music = "default",
             Name = "region 2"
         },
         new RegionData() {
             RegionId = 2,
-            WordLayerId = 4,
+            WordLayerIds = new short[] { 4 },
             Theme = "swamp",
             Music = "default",
             Name = "new region 2"
         },
         new RegionData() {
             RegionId = 3,
-            WordLayerId = 5,
+            WordLayerIds = new short[] { 5 },
             Theme = "garden",
             Music = "default",
             Name = "starting region"

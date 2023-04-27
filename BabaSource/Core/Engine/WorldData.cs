@@ -11,8 +11,13 @@ public class WorldData
 {
     public List<RegionData> Regions = new();
     public List<MapData> Maps = new();
-    public short GlobalWordMapId;
+    public short[] GlobalWordMapIds;
     public string Name = string.Empty;
+
+    public WorldData()
+    {
+        GlobalWordMapIds = Array.Empty<short>(); 
+    }
 
     public string Serialize()
     {
@@ -28,7 +33,7 @@ public class WorldData
     public override bool Equals(object? obj)
     {
         if (obj is WorldData world)
-            return Regions.Compare(world.Regions) && Maps.Compare(world.Maps) && world.GlobalWordMapId == GlobalWordMapId && world.Name == Name;
+            return Regions.Compare(world.Regions) && Maps.Compare(world.Maps) && world.GlobalWordMapIds.Compare(GlobalWordMapIds) && world.Name == Name;
         return base.Equals(obj);
     }
 
@@ -39,7 +44,7 @@ public class WorldData
 
     public override string ToString() => $$"""
         new WorldData() {
-            GlobalWordMapId = {{GlobalWordMapId}},
+            GlobalWordMapIds = new short[] { {{ string.Join(", ", GlobalWordMapIds) }} },
             Name = "{{Name}}",
             Maps = new() { {{string.Join(",", Maps.Select(x => "\n" + x.ToString().Indent(2)))}} },
             Regions = new() { {{string.Join(",", Regions.Select(x => "\n" + x.ToString().Indent(2)))}} }

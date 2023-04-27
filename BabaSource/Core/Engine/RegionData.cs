@@ -1,13 +1,20 @@
-﻿
+﻿using System;
+using Core.Utils;
+
 namespace Core.Engine;
 
 public class RegionData
 {
     public short RegionId;
-    public short WordLayerId;
+    public short[] WordLayerIds;
     public string Theme = string.Empty;
     public string Music = string.Empty;
     public string Name = string.Empty;
+
+    public RegionData()
+    {
+        WordLayerIds = Array.Empty<short>();
+    }
 
     public string Serialize()
     {
@@ -22,17 +29,17 @@ public class RegionData
     public override bool Equals(object? obj)
     {
         if (obj is RegionData r) 
-            return r.RegionId == RegionId && r.WordLayerId == WordLayerId && r.Theme == Theme && r.Music == Music;
+            return r.RegionId == RegionId && r.WordLayerIds.Compare(WordLayerIds) && r.Theme == Theme && r.Music == Music;
         return base.Equals(obj);
     }
 
     public override string ToString() => $$"""
         new RegionData() {
-            RegionId = {{RegionId}},
-            WordLayerId = {{WordLayerId}},
-            Theme = "{{Theme}}",
-            Music = "{{Music}}",
-            Name = "{{Name}}"
+            {{nameof(RegionId)}} = {{RegionId}},
+            {{nameof(WordLayerIds)}} = {{ string.Join(", ", WordLayerIds) }},
+            {{nameof(Theme)}} = "{{Theme}}",
+            {{nameof(Music)}} = "{{Music}}",
+            {{nameof(Name)}} = "{{Name}}"
         }
         """;
 

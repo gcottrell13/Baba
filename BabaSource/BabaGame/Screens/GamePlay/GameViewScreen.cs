@@ -96,7 +96,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
 
         if (dir is Direction d)
         {
-            var mapIds = new[] { currentMapId };
+            var mapIds = mapViewWindow.GetVisibleMaps();
             worldData.Step(currentMapId, mapIds, d, playerNumber.Name);
             mapViewWindow.OnMove(mapIds);
         }

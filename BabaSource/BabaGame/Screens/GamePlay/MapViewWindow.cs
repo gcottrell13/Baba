@@ -22,6 +22,8 @@ internal class MapViewWindow : GameObject
     private Dictionary<short?, MapViewer> mapViewers = new();
     private short currentMapId = 0;
 
+    private List<short> visibleMaps = new();
+
     public MapViewWindow(BabaWorld babaWorld, int viewportWidth, int viewportHeight)
     {
         this.babaWorld = babaWorld;
@@ -70,6 +72,10 @@ internal class MapViewWindow : GameObject
     {
         RemoveAllChildren();
         var sim = babaWorld.Simulators[mapId];
+
+        var previousVisibleMaps = visibleMaps.ToArray();
+        visibleMaps.Clear();
+
         if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
 
         if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
@@ -83,6 +89,7 @@ internal class MapViewWindow : GameObject
     {
         AddChild(mp);
         mp.Load();
+        visibleMaps.Add(mp.MapData.MapId);
         mp.Graphics.x = x;
         mp.Graphics.y = y;
     }
@@ -106,6 +113,11 @@ internal class MapViewWindow : GameObject
 
         var smallerSide = Math.Min(xscale, yscale);
         return smallerSide;
+    }
+
+    public short[] GetVisibleMaps()
+    {
+        return visibleMaps.ToArray();
     }
 
     public void OnMove(short[] mapIds)

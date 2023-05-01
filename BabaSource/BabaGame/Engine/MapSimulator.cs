@@ -229,7 +229,16 @@ public class MapSimulator
     public bool isObject(ObjectData obj, ObjectTypeId property)
     {
         // some quick checks before we get into rule checking
-        if (property == ObjectTypeId.push && obj.Name == ObjectTypeId.push) return true;
+        if (property switch
+        {
+            ObjectTypeId.push => obj.Name,
+            ObjectTypeId.shift => obj.Name,
+            ObjectTypeId.pull => obj.Name,
+            ObjectTypeId.@float => obj.Name,
+            ObjectTypeId.hide => obj.Name,
+            _ => ObjectTypeId.a
+        } == property) return true;
+
         if (obj.Name == property) return obj.Kind == ObjectKind.Object; // text objects don't count as instances of the object
         if (obj.Present == false || obj.Deleted) return false;
         if (property == ObjectTypeId.text) return obj.Kind == ObjectKind.Text; // this is different from "X is WORD", we want only literal text objects

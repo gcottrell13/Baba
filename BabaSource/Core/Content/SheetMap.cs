@@ -1302,6 +1302,7 @@ public static class SheetMap {
 	new Wobbler("rubble.dlr", new[] { new Point(4, 5), new Point(5, 5), new Point(6, 5) }, new Point(24, 24), sheets["rubble"]), 
 	new Wobbler("rubble.udl", new[] { new Point(0, 6), new Point(1, 6), new Point(2, 6) }, new Point(24, 24), sheets["rubble"]), 
 	new Wobbler("rubble.udlr", new[] { new Point(3, 6), new Point(4, 6), new Point(5, 6) }, new Point(24, 24), sheets["rubble"]) }) },
+			{ "save", new Wobbler("save", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["save"]) },
 			{ "sax", new FacingOnMove(
                 name: "sax", 
 				up: new AnimateOnMove("sax", new Wobbler[] {
@@ -1698,6 +1699,7 @@ public static class SheetMap {
 			{ "text_s", new Wobbler("text_s", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_s"]) },
 			{ "text_sad", new Wobbler("text_sad", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_sad"]) },
 			{ "text_safe", new Wobbler("text_safe", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_safe"]) },
+			{ "text_save", new Wobbler("text_save", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_save"]) },
 			{ "text_sax", new Wobbler("text_sax", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_sax"]) },
 			{ "text_scissors", new Wobbler("text_scissors", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_scissors"]) },
 			{ "text_seed", new Wobbler("text_seed", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_seed"]) },

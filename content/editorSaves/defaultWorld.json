@@ -2,7 +2,7 @@
 	"WorldLayout": [
 		{"x":0,"y":0,"mapDataId":4,"instanceId":0},
 		{"x":1,"y":0,"mapDataId":5,"instanceId":1},
-		{"x":2,"y":0,"mapDataId":3,"instanceId":2},
+		{"x":2,"y":0,"mapDataId":7,"instanceId":2},
 		{"x":0,"y":1,"mapDataId":1,"instanceId":30},
 		{"x":1,"y":1,"mapDataId":1,"instanceId":31}
 	],
@@ -283,13 +283,56 @@
 					{"x":14,"y":9,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":8,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":7,"name":"tree","state":1,"color":42,"text":"","original":null},
-					{"x":14,"y":6,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":5,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":4,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":3,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":2,"name":"tree","state":1,"color":42,"text":"","original":null},
 					{"x":14,"y":1,"name":"tree","state":1,"color":42,"text":"","original":null},
-					{"x":3,"y":4,"name":"text_back","state":1,"color":33,"text":"","original":null}
+					{"x":3,"y":4,"name":"text_back","state":1,"color":33,"text":"","original":null},
+					{"x":5,"y":5,"name":"rock","state":1,"color":50,"text":"","original":null},
+					{"x":6,"y":5,"name":"rock","state":1,"color":50,"text":"","original":null},
+					{"x":7,"y":5,"name":"rock","state":1,"color":50,"text":"","original":null},
+					{"x":8,"y":5,"name":"rock","state":1,"color":50,"text":"","original":null},
+					{"x":9,"y":5,"name":"rock","state":1,"color":50,"text":"","original":null}
+				],
+				"width": 15,
+				"height": 15
+			},
+			"layer2": {
+				"objects": [],
+				"width": 15,
+				"height": 15
+			}
+		},
+		{
+			"id": 6,
+			"name": "new map 6",
+			"regionId": 0,
+			"resetWhenInactive": false,
+			"layer1": {
+				"objects": [],
+				"width": 15,
+				"height": 15
+			},
+			"layer2": {
+				"objects": [],
+				"width": 15,
+				"height": 15
+			}
+		},
+		{
+			"id": 7,
+			"name": "global [baba][text_is][text_you]",
+			"regionId": 0,
+			"resetWhenInactive": false,
+			"layer1": {
+				"objects": [
+					{"x":2,"y":1,"name":"text_baba","state":1,"color":33,"text":"","original":null},
+					{"x":3,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":4,"y":1,"name":"text_you","state":1,"color":33,"text":"","original":null},
+					{"x":2,"y":4,"name":"text_rock","state":1,"color":49,"text":"","original":null},
+					{"x":3,"y":4,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":4,"y":4,"name":"text_push","state":1,"color":49,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
@@ -301,6 +344,6 @@
 			}
 		}
 	],
-	"globalObjectInstanceIds": [1,2],
+	"globalObjectInstanceIds": [2],
 	"worldName": "new [baba] city"
 }

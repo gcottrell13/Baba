@@ -61,10 +61,11 @@ namespace Core.Screens
 
         public override PickerState Handle(KeyPress ev)
         {
+            var current = listDisplay.statemachine.CurrentState;
             var r = listDisplay.Handle(ev);
             refreshCommands();
 
-            if (r == ListState.Selecting && ev.KeyPressed == Keys.Escape)
+            if (current == ListState.Selecting && ev.KeyPressed == Keys.Escape)
             {
                 return PickerState.CloseCancel;
             }

@@ -18,6 +18,7 @@ namespace Editor.Saves
             internal int y;
             internal MapData data;
             internal int originalMapId;
+            internal int originalRegionId;
 
             public MapTemp(MapData data)
             {
@@ -28,74 +29,45 @@ namespace Editor.Saves
         public static WorldData CompileWorld(SaveFormatWorld world)
         {
             var mapTemps = new List<MapTemp>();
-
-            short mapTempId = 1;
-
-            MapTemp fromMapLayer(SaveMapLayer layer, int x, int y, int id)
-            {
-                var md = new MapData(layer.objects.Select(x => new ObjectData()
-                {
-                    Color = (short)x.color,
-                    x = x.x,
-                    y = x.y,
-                    Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
-                    Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
-                    Text = x.text,
-                    Present = true,
-                }).ToArray())
-                {
-                    MapId = mapTempId++,
-                    width = (short)layer.width,
-                    height = (short)layer.height,
-                };
-                return new MapTemp(md)
-                {
-                    x = x,
-                    y = y,
-                    originalMapId = id,
-                };
-            }
-
-            var globalLayer = fromMapLayer(world.globalObjectLayer, -1, -1, 0);
-            globalLayer.data.Name = "global";
-            mapTemps.Add(globalLayer);
-
+            var mapMap = new Dictionary<int, short>();
             var regionMap = new Dictionary<int, short>();
             var regionDatas = new List<RegionData>();
 
-            short regionIds = 0;
-            foreach (var region in world.Regions)
-            {
-                var md = fromMapLayer(region.regionObjectLayer, -1, -1, 0);
-                md.data.Name = $"region {regionIds} - {region.name}";
-                mapTemps.Add(md);
-                regionMap[region.id] = regionIds;
-                regionDatas.Add(new()
-                {
-                    Music=region.musicName,
-                    RegionId=regionIds++,
-                    Theme=region.theme,
-                    WordLayerId=md.data.MapId,
-                    Name=region.name,
-                });
-            }
+            short mapTempId = 1;
 
             foreach (var instance in world.WorldLayout)
             {
                 var data = world.MapDatas.FirstOrDefault(x => x.id == instance.mapDataId);
                 if (data == null) continue;
 
-                var md = fromMapLayer(data.layer1, instance.x, instance.y, instance.mapDataId);
-                var wordLayer = fromMapLayer(data.layer2, -1, -1, -1);
+                var md = fromMapLayer(data.layer1, instance.x, instance.y, instance.mapDataId, ref mapTempId);
+                var wordLayer = fromMapLayer(data.layer2, -1, -1, -1, ref mapTempId);
                 wordLayer.data.Name = $"{md.data.MapId} uplayer - {data.name}";
                 mapTemps.Add(wordLayer);
-
-                md.data.region = regionMap.TryGetValue(data.regionId, out var regionMapTemp) ? regionMapTemp : (short)0;
-                md.data.Name = data.name;
-                md.data.upLayer = wordLayer.data.MapId;
-
                 mapTemps.Add(md);
 
+                md.data.Name = data.name;
+                md.data.upLayer = wordLayer.data.MapId;
+                md.originalRegionId = data.regionId;
+
+                mapMap[instance.instanceId] = md.data.MapId;
+            }
+
+            var globalMapIds = world.globalObjectInstanceIds.Where(mapMap.ContainsKey).Select(x => mapMap[x]);
+
+            short regionIds = 0;
+            foreach (var region in world.Regions)
+            {
+                var mapIds = region.regionObjectInstanceIds.Where(mapMap.ContainsKey).Select(x => mapMap[x]);
+                regionMap[region.id] = regionIds;
+                regionDatas.Add(new()
+                {
+                    Music = region.musicName,
+                    RegionId = regionIds++,
+                    Theme = region.theme,
+                    WordLayerIds = mapIds.ToArray(),
+                    Name = region.name,
+                });
             }
 
             foreach (var mapTemp in mapTemps)
@@ -106,18 +78,15 @@ namespace Editor.Saves
                 mapTemp.data.southNeighbor = findNeighbor(mapTemps, world, x, y, 0, 1)?.data.MapId ?? 0;
                 mapTemp.data.eastNeighbor = findNeighbor(mapTemps, world, x, y, 1, 0)?.data.MapId ?? 0;
                 mapTemp.data.westNeighbor = findNeighbor(mapTemps, world, x, y, -1, 0)?.data.MapId ?? 0;
-            }
 
-            globalLayer.data.eastNeighbor = 0;
-            globalLayer.data.westNeighbor = 0;
-            globalLayer.data.northNeighbor = 0;
-            globalLayer.data.southNeighbor = 0;
+                mapTemp.data.region = regionMap.TryGetValue(mapTemp.originalRegionId, out var regionId) ? regionId : (short)0;
+            }
 
             return new WorldData()
             {
                 Maps = mapTemps.Select(x => x.data).ToList(),
                 Regions = regionDatas,
-                GlobalWordMapId = globalLayer.data.MapId,
+                GlobalWordMapIds = globalMapIds.ToArray(),
                 Name = world.worldName,
             };
         }
@@ -153,5 +122,32 @@ namespace Editor.Saves
         {
             return maps.FirstOrDefault(w => w.x == x && w.y == y);
         }
+
+
+        private static MapTemp fromMapLayer(SaveMapLayer layer, int x, int y, int id, ref short mapTempId)
+        {
+            var md = new MapData(layer.objects.Select(x => new ObjectData()
+            {
+                Color = (short)x.color,
+                x = x.x,
+                y = x.y,
+                Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
+                Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
+                Text = x.text,
+                Present = true,
+            }).ToArray())
+            {
+                MapId = mapTempId++,
+                width = (short)layer.width,
+                height = (short)layer.height,
+            };
+            return new MapTemp(md)
+            {
+                x = x,
+                y = y,
+                originalMapId = id,
+            };
+        }
+
     }
 }

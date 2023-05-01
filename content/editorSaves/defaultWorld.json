@@ -1,10 +1,10 @@
 {
 	"WorldLayout": [
-		{"x":0,"y":0,"mapDataId":4},
-		{"x":1,"y":0,"mapDataId":5},
-		{"x":2,"y":0,"mapDataId":3},
-		{"x":0,"y":1,"mapDataId":1},
-		{"x":1,"y":1,"mapDataId":1}
+		{"x":0,"y":0,"mapDataId":4,"instanceId":0},
+		{"x":1,"y":0,"mapDataId":5,"instanceId":1},
+		{"x":2,"y":0,"mapDataId":3,"instanceId":2},
+		{"x":0,"y":1,"mapDataId":1,"instanceId":30},
+		{"x":1,"y":1,"mapDataId":1,"instanceId":31}
 	],
 	"Warps": [
 		{"x1":0,"y1":2,"x2":4,"y2":0,"name":"","r":234,"g":168,"b":229}
@@ -15,55 +15,28 @@
 			"name": "autumnregion",
 			"theme": "autumn",
 			"musicName": "editorsong",
-			"regionObjectLayer": {
-				"objects": [
-					{"x":2,"y":2,"name":"boat","state":4,"color":49,"text":"","original":null},
-					{"x":5,"y":4,"name":"boat","state":1,"color":49,"text":"","original":null}
-				],
-				"width": 10,
-				"height": 10
-			}
+			"regionObjectInstanceIds": []
 		},
 		{
 			"id": 1,
 			"name": "region 2",
 			"theme": "garden",
 			"musicName": "default",
-			"regionObjectLayer": {
-				"objects": [],
-				"width": 18,
-				"height": 18
-			}
+			"regionObjectInstanceIds": []
 		},
 		{
 			"id": 2,
 			"name": "new region 2",
 			"theme": "swamp",
 			"musicName": "default",
-			"regionObjectLayer": {
-				"objects": [],
-				"width": 18,
-				"height": 18
-			}
+			"regionObjectInstanceIds": []
 		},
 		{
 			"id": 3,
 			"name": "starting region",
 			"theme": "garden",
 			"musicName": "rain",
-			"regionObjectLayer": {
-				"objects": [
-					{"x":0,"y":0,"name":"text_tree","state":1,"color":42,"text":"","original":null},
-					{"x":0,"y":1,"name":"text_trees","state":1,"color":42,"text":"","original":null},
-					{"x":1,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
-					{"x":1,"y":0,"name":"text_is","state":1,"color":3,"text":"","original":null},
-					{"x":2,"y":0,"name":"text_stop","state":1,"color":41,"text":"","original":null},
-					{"x":2,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null},
-					{"x":5,"y":7,"name":"text_not","state":1,"color":18,"text":"","original":null}
-				],
-				"width": 15,
-				"height": 15
-			}
+			"regionObjectInstanceIds": []
 		}
 	],
 	"MapDatas": [
@@ -328,14 +301,6 @@
 			}
 		}
 	],
-	"globalObjectLayer": {
-		"objects": [
-			{"x":4,"y":5,"name":"text_baba","state":1,"color":33,"text":"","original":null},
-			{"x":5,"y":5,"name":"text_is","state":1,"color":3,"text":"","original":null},
-			{"x":6,"y":5,"name":"text_you","state":1,"color":33,"text":"","original":null}
-		],
-		"width": 18,
-		"height": 18
-	},
+	"globalObjectInstanceIds": [1,2],
 	"worldName": "new [baba] city"
 }

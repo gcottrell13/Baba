@@ -150,7 +150,10 @@ public class ListDisplay<T> : GameObject
     private ListState Pick()
     {
         if (Selected != null && OnSelect != null)
+        {
             OnSelect(Selected);
+            _drawChildren();
+        }
         return ListState.None;
     }
 
@@ -168,6 +171,7 @@ public class ListDisplay<T> : GameObject
         if (OnAdd != null)
         {
             OnAdd();
+            _drawChildren();
         }
         return ListState.None;
     }
@@ -177,6 +181,7 @@ public class ListDisplay<T> : GameObject
         if (Selected != null && OnRemove != null)
         {
             OnRemove(Selected);
+            _drawChildren();
         }
         return ListState.None;
     }

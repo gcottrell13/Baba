@@ -1,5 +1,7 @@
 ﻿using Core.Utils;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,7 @@ namespace Editor.Saves
             SaveRegion s => Serialize(s, indent + 1),
             SaveObjectData s => Serialize(s, indent + 1),
             string s => s,
-            _ => obj?.ToString() ?? "",
+            _ => JsonConvert.SerializeObject(obj),
         };
 
         public static string Serialize(SaveFormatWorld save, int indent) => Serialize(save);
@@ -28,12 +30,12 @@ namespace Editor.Saves
         {
             IEnumerable<string> lines()
             {
-                yield return $"\"WorldLayout\": {slist(save.WorldLayout, 0)}";
-                yield return $"\"Warps\": {slist(save.Warps, 0)}";
-                yield return $"\"Regions\": {slist(save.Regions, 0)}";
-                yield return $"\"MapDatas\": {slist(save.MapDatas, 0)}";
-                yield return $"\"globalObjectLayer\": {serialize(save.globalObjectLayer, 0)}";
-                yield return $"\"worldName\": \"{save.worldName}\"";
+                yield return $"\"{nameof(save.WorldLayout)}\": {slist(save.WorldLayout, 0)}";
+                yield return $"\"{nameof(save.Warps)}\": {slist(save.Warps, 0)}";
+                yield return $"\"{nameof(save.Regions)}\": {slist(save.Regions, 0)}";
+                yield return $"\"{nameof(save.MapDatas)}\": {slist(save.MapDatas, 0)}";
+                yield return $"\"{nameof(save.globalObjectInstanceIds)}\": {serialize(save.globalObjectInstanceIds, 0)}";
+                yield return $"\"{nameof(save.worldName)}\": \"{save.worldName}\"";
             }
             return formatLines(lines(), 0, "{", "}");
         }
@@ -52,11 +54,11 @@ namespace Editor.Saves
         {
             IEnumerable<string> lines()
             {
-                yield return $"\"id\": {region.id}";
-                yield return $"\"name\": \"{region.name}\"";
-                yield return $"\"theme\": \"{region.theme}\"";
-                yield return $"\"musicName\": \"{region.musicName}\"";
-                yield return $"\"regionObjectLayer\": {serialize(region.regionObjectLayer, indent)}";
+                yield return $"\"{nameof(region.id)}\": {region.id}";
+                yield return $"\"{nameof(region.name)}\": \"{region.name}\"";
+                yield return $"\"{nameof(region.theme)}\": \"{region.theme}\"";
+                yield return $"\"{nameof(region.musicName)}\": \"{region.musicName}\"";
+                yield return $"\"{nameof(region.regionObjectInstanceIds)}\": {serialize(region.regionObjectInstanceIds, indent)}";
             }
             return formatLines(lines(), indent, "{", "}");
         }
@@ -65,9 +67,9 @@ namespace Editor.Saves
         {
             IEnumerable<string> lines()
             {
-                yield return $"\"objects\": {slist(map.objects, indent)}";
-                yield return $"\"width\": {map.width}";
-                yield return $"\"height\": {map.height}";
+                yield return $"\"{nameof(map.objects)}\": {slist(map.objects, indent)}";
+                yield return $"\"{nameof(map.width)}\": {map.width}";
+                yield return $"\"{nameof(map.height)}\": {map.height}";
             }
             return formatLines(lines(), indent, "{", "}");
         }
@@ -76,12 +78,12 @@ namespace Editor.Saves
         {
             IEnumerable<string> lines()
             {
-                yield return $"\"id\": {map.id}";
-                yield return $"\"name\": \"{map.name}\"";
-                yield return $"\"regionId\": {map.regionId}";
-                yield return $"\"resetWhenInactive\": {map.resetWhenInactive.ToString().ToLower()}";
-                yield return $"\"layer1\": {serialize(map.layer1, indent)}";
-                yield return $"\"layer2\": {serialize(map.layer2, indent)}";
+                yield return $"\"{nameof(map.id)}\": {map.id}";
+                yield return $"\"{nameof(map.name)}\": \"{map.name}\"";
+                yield return $"\"{nameof(map.regionId)}\": {map.regionId}";
+                yield return $"\"{nameof(map.resetWhenInactive)}\": {map.resetWhenInactive.ToString().ToLower()}";
+                yield return $"\"{nameof(map.layer1)}\": {serialize(map.layer1, indent)}";
+                yield return $"\"{nameof(map.layer2)}\": {serialize(map.layer2, indent)}";
             }
             return formatLines(lines(), indent, "{", "}");
         }

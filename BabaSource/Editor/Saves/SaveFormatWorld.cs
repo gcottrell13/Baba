@@ -16,7 +16,7 @@ public class SaveFormatWorld
 
     public List<SaveMapData> MapDatas { get; set; } = new();
 
-    public SaveMapLayer globalObjectLayer { get; set; } = new();
+    public List<int> globalObjectInstanceIds { get; set; } = new();
 
     public int width = 30;
     public int height = 30;
@@ -25,6 +25,13 @@ public class SaveFormatWorld
 
     public string? fileName = null;
 
+    public SaveMapData? SaveMapDataByInstanceId(int instanceId)
+    {
+        var instance = WorldLayout.FirstOrDefault(x => x.instanceId == instanceId);
+        if (instance == null)
+            return null;
+        return MapDatas.FirstOrDefault(x => x.id == instance.mapDataId);
+    }
 }
 
 public class SaveMapInstance
@@ -32,7 +39,7 @@ public class SaveMapInstance
     public int x = 0;
     public int y = 0;
     public int mapDataId = 0;
-
+    public int instanceId => x + y * 30;
 }
 
 public class SaveWarp
@@ -53,7 +60,7 @@ public class SaveRegion
     public int id = 0;
     public string name = string.Empty;
     public string theme = "default";
-    public SaveMapLayer regionObjectLayer { get; set; } = new();
+    public List<int> regionObjectInstanceIds { get; set; } = new();
 
     public string musicName = "default";
 }

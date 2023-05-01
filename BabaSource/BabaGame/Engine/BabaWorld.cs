@@ -15,13 +15,13 @@ public class BabaWorld
 	public Dictionary<short, MapData> MapDatas;
 	public Dictionary<short, RegionData> Regions;
 	public Dictionary<short, MapSimulator> Simulators;
-	public MapData GlobalWords;
+	public short[] GlobalWordMapIds;
 
 	public BabaWorld(WorldData data)
 	{
 		MapDatas = data.Maps.ToDictionary(map => map.MapId);
 		Regions = data.Regions.ToDictionary(r => r.RegionId);
-		GlobalWords = MapDatas[data.GlobalWordMapId];
+        GlobalWordMapIds = data.GlobalWordMapIds;
 		Simulators = data.Maps.ToDictionary(map => map.MapId, map => new MapSimulator(this, map.MapId));
 
 		foreach (var sim in Simulators.Values)
@@ -50,9 +50,9 @@ public class BabaWorld
 	{
 		var dict = new Dictionary<short, RuleDict>();
 
-        var globalRules = _parseAndApplyToAll(new RuleDict(), new[] { GlobalWords.MapId });
+        var globalRules = _parseAndApplyToAll(new RuleDict(), GlobalWordMapIds);
 
-        var regionRules = Regions.ToDictionary(s => s.Key, s => _parseAndApplyToAll(globalRules, new[] { s.Value.WordLayerId }));
+        var regionRules = Regions.ToDictionary(s => s.Key, s => _parseAndApplyToAll(globalRules, s.Value.WordLayerIds));
 
 		foreach (var id in mapIds)
 		{

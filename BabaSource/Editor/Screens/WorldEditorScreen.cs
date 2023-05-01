@@ -26,7 +26,7 @@ namespace Editor.Screens
         private RegionPickerScreen? regionPicker;
 
         private WorldEditorDisplay? worldEditorDisplay;
-        private MapLayerEditorScreen? layerEditor;
+        private MapInstancePickerScreen? instancePickerScreen;
 
         private TextInputBox titleText = new(format: "[90,90,ff]World: [white]{}") { Name = "editortitle" };
 
@@ -114,15 +114,21 @@ namespace Editor.Screens
                 )
                 .State(
                     EditorStates.WorldEditorGlobalLayer,
-                    c => layerEditor!.Handle(c),
+                    c => instancePickerScreen!.Handle(c) switch
+                    {
+                        PickerState.CloseCancel => EditorStates.WorldEditor,
+                        _ => EditorStates.None,
+                    },
                     def => def
                         .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
                             // the edit functions make a new screen object
-                            layerEditor = new("global layer", stack, editor!.save.globalObjectLayer, EditorStates.WorldEditor, "default");
-                            stack.Add(layerEditor);
-                            layerEditor.init();
+                            instancePickerScreen = new(editor.save.WorldLayout, 10, editor.save, x => editor.save.globalObjectInstanceIds.Contains(x.instanceId))
+                            {
+                                OnSelect = onAddInstanceToGlobal,
+                            };
+                            stack.Add(instancePickerScreen);
                         })
                 )
                 .State(
@@ -195,7 +201,7 @@ namespace Editor.Screens
                         .AddOnLeave(() => stack.Pop().Dispose())
                         .AddOnEnter(() =>
                         {
-                            regionEditorScreen = new(stack, Editor.EDITOR.currentRegion!);
+                            regionEditorScreen = new(stack, Editor.EDITOR.currentRegion!, Editor.EDITOR.currentWorld);
                             stack.Add(regionEditorScreen);
                             regionEditorScreen.init();
                         })
@@ -268,6 +274,18 @@ namespace Editor.Screens
             }
 
             SetCommands(d);
+        }
+
+        public void onAddInstanceToGlobal(SaveMapInstance saveMapInstance)
+        {
+            if (editor.save.globalObjectInstanceIds.Contains(saveMapInstance.instanceId))
+            {
+                editor.save.globalObjectInstanceIds.Remove(saveMapInstance.instanceId);
+            }
+            else
+            {
+                editor.save.globalObjectInstanceIds.Add(saveMapInstance.instanceId);
+            }
         }
 
         public override EditorStates Handle(KeyPress key) => stateMachine.SendAction(key) switch

@@ -51,15 +51,18 @@ internal class ObjectSprite : GameObject
         previousColor = objectData.Color;
 
         Name = $"{objectData.Kind}-{objectData.Name}";
-        setSprite(previousName, objectData.Facing);
+        setSprite(previousName, objectData.Kind, objectData.Facing);
         _afterOnMoveAnimation(objectData);
     }
 
-    private void setSprite(ObjectTypeId name, Direction d)
+    private void setSprite(ObjectTypeId name, ObjectKind kind, Direction d)
     {
-        spriteValue = ContentLoader.LoadedContent!.SpriteValues[ObjectInfo.IdToName[name]];
+        var strname = ObjectInfo.IdToName[name];
+        if (kind == ObjectKind.Text && !strname.StartsWith("text_")) strname = $"text_{strname}";
+
+        spriteValue = ContentLoader.LoadedContent!.SpriteValues[strname];
         setWobbler(spriteValue.GetInitial(d));
-        Graphics.SetColor(ThemeInfo.GetObjectColor("default", ObjectInfo.IdToName[name]));
+        Graphics.SetColor(ThemeInfo.GetObjectColor("default", strname));
     }
 
     private void setWobbler(Wobbler wobbler)
@@ -97,7 +100,7 @@ internal class ObjectSprite : GameObject
         if (objectData.Name != previousName)
         {
             // TODO: animate a changing sprite
-            setSprite(objectData.Name, objectData.Facing);
+            setSprite(objectData.Name, objectData.Kind, objectData.Facing);
             previousName = objectData.Name;
         }
 

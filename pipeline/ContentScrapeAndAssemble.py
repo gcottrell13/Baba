@@ -20,4 +20,5 @@ if __name__ == "__main__":
         'poop',
         'mano',
         'save',
+        'text_disk'
     ])

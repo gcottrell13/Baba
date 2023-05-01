@@ -222,5 +222,12 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_save"
+  },
+  "text_disk": {
+    "color": [2, 3],
+    "color_active": [3, 4],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_disk"
   }
 }

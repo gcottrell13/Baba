@@ -138,10 +138,15 @@ internal class ObjectSprite : GameObject
             }
         }
 
-        if (objectData.Color != previousColor)
+        var info = ObjectInfo.Info[ObjectInfo.IdToName[objectData.Name]];
+        var color = objectData.Color == info.color || objectData.Color == info.color_active
+            ? (objectData.Active ? info.color_active : info.color) 
+            : objectData.Color;
+
+        if (color != previousColor)
         {
-            Graphics.SetColor(ThemeInfo.GetColor("default", objectData.Color));
-            previousColor = objectData.Color;
+            Graphics.SetColor(ThemeInfo.GetColor("default", color));
+            previousColor = color;
         }
 
         _afterOnMoveAnimation(objectData);

@@ -35,6 +35,10 @@ namespace Core.Engine
         public MapData(ObjectData[] data)
         {
             WorldObjects = data.ToList();
+            foreach (var (obj, index) in WorldObjects.Select((x, i) => (x, i))) 
+            {
+                obj.index = index;
+            }
         }
 
         public override bool Equals(object? obj)

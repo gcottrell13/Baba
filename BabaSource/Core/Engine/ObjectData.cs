@@ -1,5 +1,6 @@
 ﻿using Core.Content;
 using Core.Utils;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Core.Engine;
@@ -32,11 +33,13 @@ public class ObjectData : INameable
     public short OriginY;
 
     // if the object is not present, act like it doesn't exist
-    public bool Present;
+    public bool Present = true;
 
     public short CurrentMapId;
 
     public string? Text;
+
+    public bool Active;
 
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
@@ -51,7 +54,9 @@ public class ObjectData : INameable
 
     public override string ToString() => $$"""
         new ObjectData() {
-            {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}}, {{nameof(Color)}} = {{Color}}, {{nameof(Facing)}} = {{Facing}}, {{nameof(x)}} = {{x}}, {{nameof(y)}} = {{y}}, {{nameof(Name)}} = "{{Name}}", {{nameof(Kind)}} = ObjectKind.{{Kind}},
+            {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}}, {{nameof(Color)}} = {{Color}}, {{nameof(Facing)}} = {{nameof(Direction)}}.{{Facing}}, 
+            {{nameof(x)}} = {{x}}, {{nameof(y)}} = {{y}}, {{nameof(Name)}} = {{nameof(ObjectTypeId)}}.@{{Enum.GetName(Name)}}, {{nameof(Kind)}} = {{nameof(ObjectKind)}}.{{Kind}},
+            {{nameof(Active)}} = {{Active}},
             {{nameof(Text)}} = {{textToString}},
         }
         """;

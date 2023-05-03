@@ -72,6 +72,8 @@ public interface ISpecifier<T>
 {
     bool Not { get; set; }
     Word<T>? Modifier { get; set; }
+
+    IEnumerable<T> GetSentenceMembers();
 }
 
 public class NounAdjective<T> : ISpecifier<T>
@@ -98,6 +100,15 @@ public class NounAdjective<T> : ISpecifier<T>
     public override int GetHashCode() => ToString().GetHashCode();
 
     private string _not() => Not ? "not" : "";
+
+    public IEnumerable<T> GetSentenceMembers()
+    {
+        foreach (var u in Value.Objects)
+            yield return u;
+        if (Modifier != null)
+            foreach (var u in Modifier.Objects)
+                yield return u;
+    }
 }
 
 public class NA_WithRelationship<T> : ISpecifier<T>
@@ -128,6 +139,19 @@ public class NA_WithRelationship<T> : ISpecifier<T>
     public override string ToString() => string.Join(" ", $"{Target} {_not()} {Modifier} {Relation} {RelatedTo}".Split(" ", System.StringSplitOptions.RemoveEmptyEntries));
 
     public override int GetHashCode() => ToString().GetHashCode();
+
+    public IEnumerable<T> GetSentenceMembers()
+    {
+        foreach (var u in Target.GetSentenceMembers())
+            yield return u;
+        if (Modifier != null)
+            foreach (var u in Modifier.Objects)
+                yield return u;
+        foreach (var u in Relation.Objects)
+            yield return u;
+        foreach (var u in RelatedTo.GetSentenceMembers())
+            yield return u;
+    }
 }
 
 public class Conjunction<T> where T : INameable

@@ -1,4 +1,4 @@
-﻿using BabaGame.Engine;
+using BabaGame.Engine;
 using Core.Content;
 using Core.Engine;
 using NUnit.Framework;
@@ -19,7 +19,7 @@ public class MapSimulatorTests
     public void test_on_is_stop(List<string> strRules, List<ObjectData> objects, List<ObjectData> expectedStopObjects)
     {
         var babaWorld = new BabaWorld(new() {
-            GlobalWordMapId = 0,
+            GlobalWordMapIds = new short[] { 0 },
             Maps = new()
             {
                 new(objects.ToArray()) { MapId=1 },
@@ -119,26 +119,26 @@ public class MapSimulatorTests
     {
         var babaWorld = new BabaWorld(new()
         {
-            GlobalWordMapId = 0,
+            GlobalWordMapIds = new short[] { 0 },
             Maps = new()
             {
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2 },
                 }) { MapId = 1, width = 15, height = 15 },
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 1, y = 2, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.you, x = 1, y = 3, index = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 1, y = 2 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.you, x = 1, y = 3 },
                 }) { MapId = 0, width = 15, height = 15 },
             }
         });
         var actual = babaWorld.Simulators[1].objectsAt(1, 1);
         Assert.AreEqual(new ObjectData[]
         {
-            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
         }, actual);
     }
 
@@ -147,18 +147,18 @@ public class MapSimulatorTests
     {
         var babaWorld = new BabaWorld(new()
         {
-            GlobalWordMapId = 0,
+            GlobalWordMapIds = new short[] { 0 },
             Maps = new()
             {
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2 },
                 }) { MapId = 1, width = 15, height = 15 },
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3, index = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3 },
                 }) { MapId = 0, width = 15, height = 15 },
             }
         });
@@ -169,7 +169,7 @@ public class MapSimulatorTests
         sim.pull(1, 3, 0, 1);
         Assert.AreEqual(new ObjectData[]
         {
-            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 3, index = 1 },
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 3, Facing=Core.Utils.Direction.Down },
         }, babaWorld.Simulators[1].objectsAt(1, 3));
     }
 
@@ -178,22 +178,22 @@ public class MapSimulatorTests
     {
         var babaWorld = new BabaWorld(new()
         {
-            GlobalWordMapId = 0,
+            GlobalWordMapIds = new short[] { 0 },
             Maps = new()
             {
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 0, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 0 },
                 }) { MapId = 1, width = 10, height = 10, northNeighbor=2 },
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 14, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 14 },
                 }) { MapId = 2, width = 15, height = 15, southNeighbor=1 },
                 new(new ObjectData[]
                 {
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2, index = 1 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3, index = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3 },
                 }) { MapId = 0, width = 15, height = 15 },
             }
         });
@@ -205,11 +205,11 @@ public class MapSimulatorTests
         sim.pull(1, 1, 0, 1);
         Assert.AreEqual(new ObjectData[]
         {
-            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 1, index = 1 },
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 1, Facing=Core.Utils.Direction.Down },
         }, sim.objectsAt(1, 1));
         Assert.AreEqual(new ObjectData[]
         {
-            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 0, y = 0, index = 1 },
+            new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 0, y = 0, Facing=Core.Utils.Direction.Down },
         }, sim.objectsAt(0, 0));
         Assert.AreEqual(Array.Empty<ObjectData>(), babaWorld.Simulators[2].objectsAt(1, 14));
     }

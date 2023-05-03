@@ -13,7 +13,8 @@ public static class WorldDataJson
         	"WorldLayout": [
         		{"x":0,"y":0,"mapDataId":4},
         		{"x":1,"y":0,"mapDataId":5},
-        		{"x":2,"y":0,"mapDataId":3}
+        		{"x":2,"y":0,"mapDataId":3},
+        		{"x":3,"y":0,"mapDataId":1}
         	],
         	"Warps": [
         		{"x1":0,"y1":2,"x2":4,"y2":0,"name":"","r":234,"g":168,"b":229}
@@ -24,47 +25,28 @@ public static class WorldDataJson
         			"name": "autumnregion",
         			"theme": "autumn",
         			"musicName": "editorsong",
-        			"regionObjectLayer": {
-        				"objects": [
-        					{"x":2,"y":2,"name":"boat","state":4,"color":49,"text":"this is a boat","original":null},
-        					{"x":5,"y":4,"name":"boat","state":1,"color":49,"text":"","original":null}
-        				],
-        				"width": 10,
-        				"height": 10
-        			}
+        			"regionObjectInstanceIds": [3]
         		},
         		{
         			"id": 1,
         			"name": "region 2",
         			"theme": "garden",
         			"musicName": "default",
-        			"regionObjectLayer": {
-        				"objects": [],
-        				"width": 18,
-        				"height": 18
-        			}
+        			"regionObjectInstanceIds": []
         		},
         		{
         			"id": 2,
         			"name": "new region 2",
         			"theme": "swamp",
         			"musicName": "default",
-        			"regionObjectLayer": {
-        				"objects": [],
-        				"width": 18,
-        				"height": 18
-        			}
+        			"regionObjectInstanceIds": []
         		},
         		{
         			"id": 3,
         			"name": "starting region",
         			"theme": "garden",
         			"musicName": "default",
-        			"regionObjectLayer": {
-        				"objects": [],
-        				"width": 15,
-        				"height": 15
-        			}
+        			"regionObjectInstanceIds": []
         		}
         	],
         	"MapDatas": [
@@ -197,15 +179,7 @@ public static class WorldDataJson
         			}
         		}
         	],
-        	"globalObjectLayer": {
-        		"objects": [
-        			{"x":4,"y":5,"name":"text_baba","state":1,"color":33,"text":"","original":null},
-        			{"x":5,"y":5,"name":"text_is","state":1,"color":3,"text":"","original":null},
-        			{"x":6,"y":5,"name":"text_you","state":1,"color":33,"text":"","original":null}
-        		],
-        		"width": 18,
-        		"height": 18
-        	},
+        	"globalObjectInstanceIds": [ 1 ],
         	"startMapX": 0,
         	"startMapY": 0,
         	"worldName": "new [baba] city"

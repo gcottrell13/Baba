@@ -170,6 +170,16 @@ namespace Core.Engine
             return !(left == right);
         }
 
+        public IEnumerable<T> GetSentenceMembers()
+        {
+            foreach (var item in LHS.GetSentenceMembers())
+                yield return item;
+            foreach (var item in Verb.Objects)
+                yield return item;
+            foreach (var item in RHS.GetSentenceMembers())
+                yield return item;
+        }
+
         public override int GetHashCode() => ToString().GetHashCode();
 
         public override string ToString() => $"{LHS} {Verb} {RHS}";

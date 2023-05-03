@@ -36,7 +36,7 @@ public class RegionData
     public override string ToString() => $$"""
         new RegionData() {
             {{nameof(RegionId)}} = {{RegionId}},
-            {{nameof(WordLayerIds)}} = {{ string.Join(", ", WordLayerIds) }},
+            {{nameof(WordLayerIds)}} = new {{WordLayerIds.GetType().Name}} { {{ string.Join(", ", WordLayerIds) }} },
             {{nameof(Theme)}} = "{{Theme}}",
             {{nameof(Music)}} = "{{Music}}",
             {{nameof(Name)}} = "{{Name}}"

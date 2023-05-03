@@ -16,8 +16,8 @@ public class CompileMapTests
         var editorFormat = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveFormatWorld>(WorldDataJson.saveFile)!;
         var compiledTest = CompileMap.CompileWorld(editorFormat);
 
-        Assert.AreEqual(WorldDataDeserialized.expectedCompiledMap.ToString(), compiledTest.ToString());
         Assert.AreEqual(WorldDataDeserialized.expectedCompiledMap, compiledTest);
+        Assert.AreEqual(WorldDataDeserialized.expectedCompiledMap.ToString(), compiledTest.ToString());
     }
 
 

@@ -170,7 +170,15 @@ public class MapSimulator
         var dict = allRules;
         if (hasChanged())
         {
-            var rules = SemanticFilter.FindRulesAndFilterInvalid(map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList());
+            var texts = map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList();
+            var rules = SemanticFilter.FindRulesAndFilterInvalid(texts);
+
+            foreach (var t in texts)
+                t.Active = false;
+            foreach (var rule in rules)
+                foreach (var member in rule.GetSentenceMembers())
+                    member.Active = true;
+
             dict = new RuleDict();
             addRules(dict, rules);
             cachedParsedRules = dict;
@@ -309,8 +317,10 @@ public class MapSimulator
 
         if (!canMove) return false;
 
+        var dir = DirectionExtensions.DirectionFromDelta((dx, dy));
         foreach (var obj in allObjects)
         {
+            obj.Facing = dir;
             moveObjectTo(obj, obj.x + dx, obj.y + dy);
         }
         return true;
@@ -327,8 +337,11 @@ public class MapSimulator
             x -= dx;
             y -= dy;
         }
+
+        var dir = DirectionExtensions.DirectionFromDelta((dx, dy));
         foreach (var obj in allObjects)
         {
+            obj.Facing = dir;
             moveObjectTo(obj, obj.x + dx, obj.y + dy);
         }
 

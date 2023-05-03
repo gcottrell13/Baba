@@ -6,8 +6,8 @@ using System.Linq;
 namespace Core.Content;
 
 public class ObjectInfoItem {
-    public int color;
-    public int color_active;
+    public short color;
+    public short color_active;
     public string sprite = string.Empty;
     public int layer;
     public string unittype = string.Empty;

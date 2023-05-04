@@ -1,25 +1,26 @@
 ﻿using Core.Content;
+using Core.Engine;
 using Core.Utils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Core.Engine;
+namespace BabaGame.Engine;
 
-public enum ObjectKind
+public class BabaObject : INameable
 {
-    Object,
-    Text,
-}
 
-public class ObjectData : INameable
-{
     public bool Deleted;
     public short Color;
     public Direction Facing;
     public int x;
     public int y;
+    public int index;
     public ObjectKind Kind;
-    
+
     public ObjectTypeId Name { get; set; }
 
     public int X => x;
@@ -38,9 +39,32 @@ public class ObjectData : INameable
 
     public string? Text;
 
+    public bool Active;
+
+    public static implicit operator BabaObject(ObjectData obj)
+    {
+        return new BabaObject()
+        {
+            Name = obj.Name,
+            Color = obj.Color,
+            Facing = obj.Facing,
+            Active = false,
+            x = obj.X,
+            y = obj.Y,
+            Kind = obj.Kind,
+            MapOfOrigin = obj.MapOfOrigin,
+            OriginX = obj.OriginX,
+            OriginY = obj.OriginY,
+            Present = obj.Present,
+            CurrentMapId = obj.CurrentMapId,
+            Text = obj.Text,
+            index = -1,
+        };
+    }
+
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (obj is ObjectData w)
+        if (obj is BabaObject w)
         {
             return w.Deleted == Deleted && w.Color == Color && w.Facing == Facing && w.x == x && w.y == y && w.Name == Name && w.Kind == Kind;
         }

@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 namespace BabaGame.Engine;
 
 
-public class RuleDict : Dictionary<ObjectTypeId, List<Rule<ObjectData>>>
+public class RuleDict : Dictionary<ObjectTypeId, List<Rule<BabaObject>>>
 {
-    public new List<Rule<ObjectData>> this[ObjectTypeId key]
+    public new List<Rule<BabaObject>> this[ObjectTypeId key]
     {
         get => this.ConstructDefaultValue(key); set => TryAdd(key, value);
     }
@@ -27,7 +27,7 @@ public class MapSimulator
     private readonly BabaWorld world;
     public readonly RegionData? region;
 
-    private readonly MapData map;
+    private readonly BabaMap map;
 
     private MapSimulator? north;
     private MapSimulator? south;
@@ -53,7 +53,7 @@ public class MapSimulator
 
 
     public const ObjectTypeId mapBorderTypeId = ObjectTypeId.nnope;
-    private static readonly ObjectData[] mapBorder = new[] { new ObjectData() { Name = mapBorderTypeId } };
+    private static readonly BabaObject[] mapBorder = new[] { new BabaObject() { Name = mapBorderTypeId } };
 
     public short MapId { get; }
 
@@ -96,7 +96,7 @@ public class MapSimulator
 
     public bool doMovement(Direction input, ObjectTypeId playerNumber)
     {
-        var movingObjects = new List<(ObjectData obj, int dx, int dy)>();
+        var movingObjects = new List<(BabaObject obj, int dx, int dy)>();
 
         if (input != Direction.None)
         {
@@ -211,30 +211,30 @@ public class MapSimulator
         return true;
     }
 
-    public static void addRules(RuleDict dict, List<Rule<ObjectData>> rules)
+    public static void addRules(RuleDict dict, List<Rule<BabaObject>> rules)
     {
         foreach (var rule in rules)
         {
-            var na = rule.LHS as NounAdjective<ObjectData>;
-            na ??= (rule.LHS as NA_WithRelationship<ObjectData>)!.Target;
+            var na = rule.LHS as NounAdjective<BabaObject>;
+            na ??= (rule.LHS as NA_WithRelationship<BabaObject>)!.Target;
 
             dict[na.Value.Name].Add(rule);
-            if (rule.RHS is NounAdjective<ObjectData> rhs)
+            if (rule.RHS is NounAdjective<BabaObject> rhs)
             {
                 dict[rhs.Value.Name].Add(rule);
             }
         }
     }
 
-    public IEnumerable<ObjectData> findObjectsThatAre(ObjectTypeId property)
+    public IEnumerable<BabaObject> findObjectsThatAre(ObjectTypeId property)
     {
         var rules = allRules[property];
-        if (rules.Count == 0) return Array.Empty<ObjectData>();
+        if (rules.Count == 0) return Array.Empty<BabaObject>();
 
         return map.WorldObjects.Where(x => isObject(x, property));
     }
 
-    public bool isObject(ObjectData obj, ObjectTypeId property)
+    public bool isObject(BabaObject obj, ObjectTypeId property)
     {
         // some quick checks before we get into rule checking
         if (property switch
@@ -256,13 +256,13 @@ public class MapSimulator
         {
             if (rule.Verb.Name != ObjectTypeId.@is) continue;
 
-            if (rule.LHS is NounAdjective<ObjectData> na && (na.Value.Name == obj.Name) != na.Not)
+            if (rule.LHS is NounAdjective<BabaObject> na && (na.Value.Name == obj.Name) != na.Not)
             {
                 if ((na.Value.Name == ObjectTypeId.text) != (obj.Kind == ObjectKind.Text)) continue;
-                if (rule.RHS is NounAdjective<ObjectData> rhs) 
+                if (rule.RHS is NounAdjective<BabaObject> rhs) 
                     return (rhs.Value.Name == property) != rhs.Not;
             }
-            else if (rule.LHS is NA_WithRelationship<ObjectData> wr && (wr.Target.Value.Name == obj.Name) != wr.Target.Not)
+            else if (rule.LHS is NA_WithRelationship<BabaObject> wr && (wr.Target.Value.Name == obj.Name) != wr.Target.Not)
             {
                 if (relation(obj, wr)) return true;
             }
@@ -276,18 +276,18 @@ public class MapSimulator
         return false;
     }
 
-    private bool relation(ObjectData obj, NA_WithRelationship<ObjectData> wr)
+    private bool relation(BabaObject obj, NA_WithRelationship<BabaObject> wr)
     {
         if (wr.Relation.Name == ObjectTypeId.on)
         {
-            if (wr.RelatedTo is NA_WithRelationship<ObjectData> relatedTo)
+            if (wr.RelatedTo is NA_WithRelationship<BabaObject> relatedTo)
                 return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && relation(other, relatedTo) != relatedTo.Not);
-            else if (wr.RelatedTo is NounAdjective<ObjectData> na) 
+            else if (wr.RelatedTo is NounAdjective<BabaObject> na) 
                 return map.WorldObjects.Any(other => other.index != obj.index && (other.X == obj.X && other.Y == obj.Y) != wr.Not && isObject(other, na.Value.Name) != na.Not);
         }
         else if (wr.Relation.Name == ObjectTypeId.feeling)
         {
-            if (wr.RelatedTo is NounAdjective<ObjectData> relatedToNa)
+            if (wr.RelatedTo is NounAdjective<BabaObject> relatedToNa)
             {
                 return isObject(obj, relatedToNa.Value.Name) != relatedToNa.Not;
             }
@@ -297,7 +297,7 @@ public class MapSimulator
 
     public bool push(int x, int y, int dx, int dy)
     {
-        var allObjects = new List<ObjectData>();
+        var allObjects = new List<BabaObject>();
         while (x >= 0 && x < map.width && y >= 0 && y < map.height)
         {
             var inFront = objectsAt(x + dx, y + dy);
@@ -328,7 +328,7 @@ public class MapSimulator
 
     public void pull(int x, int y, int dx, int dy)
     {
-        var allObjects = new List<ObjectData>();
+        var allObjects = new List<BabaObject>();
         while (x >= dx && x < map.width + dx && y >= dy && y < map.height + dy)
         {
             var pullObjects = objectsAt(x - dx, y - dy).Where(x => isObject(x, ObjectTypeId.pull)).ToList();
@@ -354,7 +354,7 @@ public class MapSimulator
         if (y >= map.height) south?.pull(convertToSouth[x], 0, dx, dy);
     }
 
-    public bool moveObjectTo(ObjectData obj, int x, int y)
+    public bool moveObjectTo(BabaObject obj, int x, int y)
     {
         if (x < 0)
         {
@@ -393,7 +393,7 @@ public class MapSimulator
         return true;
     }
 
-    public bool addObjectAt(ObjectData obj, int x, int y)
+    public bool addObjectAt(BabaObject obj, int x, int y)
     {
         map.AddObject(new()
         {
@@ -412,7 +412,7 @@ public class MapSimulator
         return true;
     }
 
-    private bool moveObjectToMap(MapSimulator? m, ObjectData obj, int x, int y)
+    private bool moveObjectToMap(MapSimulator? m, BabaObject obj, int x, int y)
     {
         if (m is MapSimulator otherMap && otherMap.addObjectAt(obj, x, y))
         {
@@ -423,7 +423,7 @@ public class MapSimulator
         return false;
     }
 
-    public ObjectData[] objectsAt(int x, int y)
+    public BabaObject[] objectsAt(int x, int y)
     {
         if (x < 0)
         {

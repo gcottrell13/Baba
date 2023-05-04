@@ -16,7 +16,7 @@ namespace Tests.Engine
         [TestCaseSource(nameof(_serializeTestCases))]
         public void WorldData_Serialize(List<ObjectData> input)
         {
-            var data = new MapData(input.ToArray());
+            var data = new MapData(input);
 
             var serialized = data.Serialize();
             var deserialized = MapData.Deserialize(serialized).WorldObjects;

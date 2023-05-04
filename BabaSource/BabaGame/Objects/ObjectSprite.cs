@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using BabaGame.Engine;
+using Core;
 using Core.Configuration;
 using Core.Content;
 using Core.Engine;
@@ -40,7 +41,7 @@ internal class ObjectSprite : GameObject
     /// <summary>
     /// used for initialization, and when reloading a map
     /// </summary>
-    public void MoveSpriteNoAnimate(ObjectData objectData)
+    public void MoveSpriteNoAnimate(BabaObject objectData)
     {
         previousName = objectData.Name;
         previousX = objectData.X;
@@ -93,7 +94,7 @@ internal class ObjectSprite : GameObject
     /// <summary>
     /// for when something happened to the game state
     /// </summary>
-    public void OnMove(ObjectData objectData, bool isSleeping)
+    public void OnMove(BabaObject objectData, bool isSleeping)
     {
         Name = $"{objectData.Kind}-{objectData.Name}";
 
@@ -152,7 +153,7 @@ internal class ObjectSprite : GameObject
         _afterOnMoveAnimation(objectData);
     }
 
-    private void _afterOnMoveAnimation(ObjectData objectData)
+    private void _afterOnMoveAnimation(BabaObject objectData)
     {
 
         if (objectData.Deleted)

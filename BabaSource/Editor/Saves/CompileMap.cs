@@ -126,7 +126,13 @@ namespace Editor.Saves
 
         private static MapTemp fromMapLayer(SaveMapLayer layer, int x, int y, int id, ref short mapTempId)
         {
-            var md = new MapData(layer.objects.Select(x => new ObjectData()
+            var md = new MapData()
+            {
+                MapId = mapTempId++,
+                width = (short)layer.width,
+                height = (short)layer.height,
+            };
+            md.WorldObjects.AddRange(layer.objects.Select(x => new ObjectData()
             {
                 Color = (short)x.color,
                 x = x.x,
@@ -135,12 +141,7 @@ namespace Editor.Saves
                 Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
                 Text = x.text,
                 Present = true,
-            }).ToArray())
-            {
-                MapId = mapTempId++,
-                width = (short)layer.width,
-                height = (short)layer.height,
-            };
+            }).ToArray());
             return new MapTemp(md)
             {
                 x = x,

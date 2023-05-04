@@ -10,7 +10,7 @@ namespace Core.Engine
 {
     public class MapData
     {
-        public List<ObjectData> WorldObjects { get; private set; }
+        public List<ObjectData> WorldObjects { get; private set; } = new();
 
         public short MapId;
         public short northNeighbor;
@@ -26,19 +26,13 @@ namespace Core.Engine
 
         public string Name = string.Empty;
 
-        public MapData()
+        public MapData(IEnumerable<ObjectData> objectDatas)
         {
-            WorldObjects = new List<ObjectData>();
+            WorldObjects.AddRange(objectDatas);
         }
 
-
-        public MapData(ObjectData[] data)
+        public MapData()
         {
-            WorldObjects = data.ToList();
-            foreach (var (obj, index) in WorldObjects.Select((x, i) => (x, i))) 
-            {
-                obj.index = index;
-            }
         }
 
         public override bool Equals(object? obj)
@@ -70,28 +64,6 @@ namespace Core.Engine
             }
             """;
 
-        public void AddObject(ObjectData obj)
-        {
-            if (obj.index != -1)
-                throw new InvalidOperationException();
-            obj.index = WorldObjects.Count;
-            WorldObjects.Add(obj);
-        }
-
-        public void RemoveObject(ObjectData obj)
-        {
-            var last = WorldObjects.Last();
-            WorldObjects.RemoveAt(last.index);
-
-            obj.Deleted = true;
-
-            if (last.index == obj.index) return;
-
-            WorldObjects[obj.index] = last;
-            last.index = obj.index;
-
-            obj.index = -1;
-        }
 
         public string Serialize()
         {
@@ -105,11 +77,6 @@ namespace Core.Engine
             var data = SerializeBytes.DeserializeObjects<ObjectData>(parts[1]);
 
             map.WorldObjects = data.ToList();
-
-            foreach (var (obj, index) in map.WorldObjects.Select((x, i) => (x, i)))
-            {
-                obj.index = index;
-            }
 
             return map;
         }

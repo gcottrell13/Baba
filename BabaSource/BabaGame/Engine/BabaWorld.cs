@@ -12,14 +12,14 @@ namespace BabaGame.Engine;
 public class BabaWorld
 {
 
-	public Dictionary<short, MapData> MapDatas;
+	public Dictionary<short, BabaMap> MapDatas;
 	public Dictionary<short, RegionData> Regions;
 	public Dictionary<short, MapSimulator> Simulators;
 	public short[] GlobalWordMapIds;
 
 	public BabaWorld(WorldData data)
 	{
-		MapDatas = data.Maps.ToDictionary(map => map.MapId);
+		MapDatas = data.Maps.ToDictionary(map => map.MapId, map => (BabaMap)map);
 		Regions = data.Regions.ToDictionary(r => r.RegionId);
         GlobalWordMapIds = data.GlobalWordMapIds;
 		Simulators = data.Maps.ToDictionary(map => map.MapId, map => new MapSimulator(this, map.MapId));

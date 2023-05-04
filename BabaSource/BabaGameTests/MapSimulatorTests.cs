@@ -16,7 +16,7 @@ public class MapSimulatorTests
 {
     [Test]
     [TestCaseSource(nameof(_test_on_is_stop_cases))]
-    public void test_on_is_stop(List<string> strRules, List<ObjectData> objects, List<ObjectData> expectedStopObjects)
+    public void test_on_is_stop(List<string> strRules, List<ObjectData> objects, List<BabaObject> expectedStopObjects)
     {
         var babaWorld = new BabaWorld(new() {
             GlobalWordMapIds = new short[] { 0 },
@@ -38,13 +38,13 @@ public class MapSimulatorTests
 
     public static IEnumerable<TestCaseData> _test_on_is_stop_cases => _test_on_is_stop_test_cases.Select(x => new TestCaseData(x.strRules, x.objects, x.expected).SetName($"ON - {x.name}"));
 
-    public static IEnumerable<(string name, List<string> strRules, List<ObjectData> objects, List<ObjectData> expected)> _test_on_is_stop_test_cases { get
+    public static IEnumerable<(string name, List<string> strRules, List<ObjectData> objects, List<BabaObject> expected)> _test_on_is_stop_test_cases { get
         {
             yield return (
                 "object cannot trigger ON by itself",
                 new() { "baba on baba is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
                 },
                 new() { }
             );
@@ -52,8 +52,8 @@ public class MapSimulatorTests
                 "ON triggered by two of same objects",
                 new() { "baba on baba is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 2 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
                 },
                 new() {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
@@ -64,8 +64,8 @@ public class MapSimulatorTests
                 "NOT ON not triggered when on top",
                 new() { "baba not on tile is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 1, index = 2 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 1 },
                 },
                 new()
                 {
@@ -75,37 +75,37 @@ public class MapSimulatorTests
                 "NOT ON triggered when not on top",
                 new() { "baba not on tile is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 2, index = 2 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 2 },
                 },
                 new()
                 {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
                 }
             );
             yield return (
                 "not baba not on not tile is stop",
                 new() { "not baba not on not tile is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 3 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 2, index = 2 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 3, index = 4 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 2 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 3 },
                 },
                 new()
                 {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 2 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 3, index = 4 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 3 },
                 }
             );
             yield return (
                 "recursive ON - disallowed by semantic filter",
                 new() { "rock not on baba on tile is stop" },
                 new() {
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1, index = 1 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.rock, x = 1, y = 1, index = 3 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.rock, x = 1, y = 2, index = 2 },
-                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 1, index = 4 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.rock, x = 1, y = 1 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.rock, x = 1, y = 2 },
+                    new() { Kind=ObjectKind.Object, Name=ObjectTypeId.tile, x = 1, y = 1 },
                 },
                 new()
                 {
@@ -136,7 +136,7 @@ public class MapSimulatorTests
             }
         });
         var actual = babaWorld.Simulators[1].objectsAt(1, 1);
-        Assert.AreEqual(new ObjectData[]
+        Assert.AreEqual(new BabaObject[]
         {
             new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
         }, actual);
@@ -167,7 +167,7 @@ public class MapSimulatorTests
         var sim = babaWorld.Simulators[1];
         sim.parseRules(global);
         sim.pull(1, 3, 0, 1);
-        Assert.AreEqual(new ObjectData[]
+        Assert.AreEqual(new BabaObject[]
         {
             new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 3, Facing=Core.Utils.Direction.Down },
         }, babaWorld.Simulators[1].objectsAt(1, 3));
@@ -203,14 +203,14 @@ public class MapSimulatorTests
         var sim = babaWorld.Simulators[1];
         sim.parseRules(global);
         sim.pull(1, 1, 0, 1);
-        Assert.AreEqual(new ObjectData[]
+        Assert.AreEqual(new BabaObject[]
         {
             new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 1, Facing=Core.Utils.Direction.Down },
         }, sim.objectsAt(1, 1));
-        Assert.AreEqual(new ObjectData[]
+        Assert.AreEqual(new BabaObject[]
         {
             new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 0, y = 0, Facing=Core.Utils.Direction.Down },
         }, sim.objectsAt(0, 0));
-        Assert.AreEqual(Array.Empty<ObjectData>(), babaWorld.Simulators[2].objectsAt(1, 14));
+        Assert.AreEqual(Array.Empty<BabaObject>(), babaWorld.Simulators[2].objectsAt(1, 14));
     }
 }

@@ -1,4 +1,5 @@
-﻿using BabaGame.Objects;
+﻿using BabaGame.Engine;
+using BabaGame.Objects;
 using Core;
 using Core.Engine;
 using Core.UI;
@@ -14,7 +15,7 @@ internal class MapViewer : GameObject
 {
 	private Dictionary<uint, ObjectSprite> sprites = new();
 
-	public MapViewer(MapData mapData)
+	public MapViewer(BabaMap mapData)
 	{
 		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
 		{
@@ -24,7 +25,7 @@ internal class MapViewer : GameObject
         MapData = mapData;
     }
 
-    public MapData MapData { get; }
+    public BabaMap MapData { get; }
 
     public void Load()
 	{

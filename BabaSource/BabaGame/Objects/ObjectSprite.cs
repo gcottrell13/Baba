@@ -139,23 +139,11 @@ internal class ObjectSprite : GameObject
             }
         }
 
-        var info = ObjectInfo.Info[ObjectInfo.IdToName[objectData.Name]];
-        var color = objectData.Color == info.color || objectData.Color == info.color_active
-            ? (objectData.Active ? info.color_active : info.color) 
-            : objectData.Color;
-
-        if (color != previousColor)
-        {
-            Graphics.SetColor(ThemeInfo.GetColor("default", color));
-            previousColor = color;
-        }
-
         _afterOnMoveAnimation(objectData);
     }
 
     private void _afterOnMoveAnimation(BabaObject objectData)
     {
-
         if (objectData.Deleted)
         {
             Parent?.RemoveChild(this);
@@ -164,6 +152,17 @@ internal class ObjectSprite : GameObject
         if (!objectData.Present)
         {
             Graphics.alpha = 0;
+        }
+
+        var (colorInactive, colorActive) = ThemeInfo.GetColorsByKind("default", objectData.Name, objectData.Kind);
+        var color = objectData.Color == colorInactive || objectData.Color == colorActive
+            ? (objectData.Active ? colorActive : colorInactive)
+            : objectData.Color;
+
+        if (color != previousColor)
+        {
+            Graphics.SetColor(ThemeInfo.GetColor("default", color));
+            previousColor = color;
         }
     }
 }

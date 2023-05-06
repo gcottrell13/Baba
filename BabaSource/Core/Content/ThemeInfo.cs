@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Engine;
+using Core.Utils;
 using g3;
 using Microsoft.Xna.Framework;
 using System;
@@ -34,6 +35,15 @@ namespace Core.Content
         public static List<string> ThemeNames()
         {
             return PaletteInfo.Palettes.Keys.ToList();
+        }
+
+        public static (short color, short colorActive) GetColorsByKind(string theme, ObjectTypeId name, ObjectKind kind)
+        {
+            var strName = name.ToString();
+            if (kind == ObjectKind.Text) strName = $"text_{strName}";
+            var info = ObjectInfo.Info[strName];
+            var palette = PaletteInfo.Palettes[theme];
+            return (info.color, info.color_active);
         }
 
         public static Color GetColorByName(string theme, string name)

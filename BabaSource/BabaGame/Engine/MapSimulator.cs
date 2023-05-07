@@ -267,7 +267,7 @@ public class MapSimulator
         return false;
     }
 
-    private Dictionary<ObjectTypeId, int> doesObjectNeedAnything(BabaObject obj)
+    public Dictionary<ObjectTypeId, int> doesObjectNeedAnything(BabaObject obj)
     {
         var name = obj.Name;
         if (obj.Kind == ObjectKind.Text) name = ObjectTypeId.text;
@@ -478,7 +478,7 @@ public class MapSimulator
         var multiplier = 0;
         while (current != null)
         {
-            var count = current.Name - ObjectTypeId._0;
+            var count = current.Name - ObjectTypeId.zero;
             if (count < 0 || count > 9) return multiplier;
 
             multiplier *= 10;
@@ -490,19 +490,13 @@ public class MapSimulator
         return multiplier;
     }
 
-    private static ObjectTypeId[] digits = new[]
+    public IEnumerable<BabaObject> GetNeighbors(BabaObject obj)
     {
-        ObjectTypeId._0,
-        ObjectTypeId._1,
-        ObjectTypeId._2,
-        ObjectTypeId._3,
-        ObjectTypeId._4,
-        ObjectTypeId._5,
-        ObjectTypeId._6,
-        ObjectTypeId._7,
-        ObjectTypeId._8,
-        ObjectTypeId._9,
-    };
+        foreach (var north in objectsAt(obj.x, obj.y - 1)) yield return north;
+        foreach (var south in objectsAt(obj.x, obj.y + 1)) yield return south;
+        foreach (var east in objectsAt(obj.x + 1, obj.y)) yield return east;
+        foreach (var west in objectsAt(obj.x - 1, obj.y)) yield return west;
+    }
 
     private static Dictionary<ObjectTypeId, ObjectTypeId[]> impliedBy = new()
     {

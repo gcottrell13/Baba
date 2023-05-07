@@ -1,8 +1,10 @@
 ﻿using BabaGame.Engine;
 using BabaGame.Objects;
 using Core;
+using Core.Content;
 using Core.Engine;
 using Core.UI;
+using Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +16,12 @@ namespace BabaGame.Screens.GamePlay;
 internal class MapViewer : GameObject
 {
 	private Dictionary<uint, ObjectSprite> sprites = new();
+    private readonly MapSimulator simulator;
+    private readonly TextOverlay textOverlay = new();
 
-	public MapViewer(BabaMap mapData)
+    public BabaMap MapData { get; }
+
+    public MapViewer(BabaMap mapData, MapSimulator simulator)
 	{
 		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
 		{
@@ -23,9 +29,11 @@ internal class MapViewer : GameObject
 			addSprite((uint)index);
         }
         MapData = mapData;
-    }
+        this.simulator = simulator;
 
-    public BabaMap MapData { get; }
+        textOverlay.Graphics.zindex = 1000;
+        AddChild(textOverlay);
+    }
 
     public void Load()
 	{
@@ -42,6 +50,15 @@ internal class MapViewer : GameObject
         foreach (var (index, sprite) in sprites)
         {
             sprite.OnMove(MapData.WorldObjects[(int)index], false);
+        }
+
+        textOverlay.RemoveAllText();
+        foreach (var you in simulator.findObjectsThatAre(ObjectTypeId.you))
+        {
+            foreach (var neighbor in simulator.GetNeighbors(you))
+            {
+                doTextOverlay(neighbor);
+            }
         }
     }
 
@@ -67,5 +84,32 @@ internal class MapViewer : GameObject
         var sprite = new ObjectSprite();
         sprites.Add(index, sprite);
         AddChild(sprite);
+    }
+
+    private void doTextOverlay(BabaObject obj)
+    {
+        var message = "";
+        if (!string.IsNullOrWhiteSpace(obj.Text)) 
+            message = obj.Text;
+
+        if (simulator.isObject(obj, ObjectTypeId.disk))
+        {
+            message += "\nStep on this to \nsave your game";
+        }
+
+        if (simulator.doesObjectNeedAnything(obj) is Dictionary<ObjectTypeId, int> needs && needs.Count > 0)
+        {
+            message += "\nRequires:\n";
+            foreach (var (reagent, count) in needs)
+            {
+                var color = ThemeInfo.GetColorsByKind(reagent, ObjectKind.Text);
+                var activeColor = PaletteInfo.Palettes["default"][color.colorActive].ToHexTriple();
+                message += $"\n {activeColor}{reagent} [{reagent}][white] x{count}";
+            }
+        }
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            textOverlay.AddText(message.Trim(), obj.x, obj.y, 1f / 60);
+        }
     }
 }

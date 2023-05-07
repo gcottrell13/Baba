@@ -156,7 +156,7 @@ internal class ObjectSprite : GameObject
             Graphics.alpha = 0;
         }
 
-        var (colorInactive, colorActive) = ThemeInfo.GetColorsByKind("default", objectData.Name, objectData.Kind);
+        var (colorInactive, colorActive) = ThemeInfo.GetColorsByKind(objectData.Name, objectData.Kind);
         var color = objectData.Color == colorInactive || objectData.Color == colorActive
             ? (objectData.Active ? colorActive : colorInactive)
             : objectData.Color;

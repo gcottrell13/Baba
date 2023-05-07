@@ -1,4 +1,4 @@
-using Core;
+﻿using Core;
 using Core.Content;
 using Core.Utils;
 using Microsoft.Xna.Framework;
@@ -28,7 +28,7 @@ namespace Core.UI
 
         public RectangleSprite? background { get; private set; }
 
-        public ListOfTextChar CurrentText { get; private set; } = new();
+        protected ListOfTextChar CurrentText { get; set; } = new();
         public string EffectiveName => Name ?? CurrentText.ToString();
 
         public Text(string text = "", TextOptions? options = null)
@@ -335,6 +335,18 @@ namespace Core.UI
             }
 
             CurrentOptions = options;
+        }
+
+        /// <summary>
+        /// the pixel width and height of this text block
+        /// </summary>
+        /// <returns></returns>
+        public virtual (float width, float height) TextFinalDimensions()
+        {
+            return (
+                Graphics.children.Select(item => item.x).Max() + CurrentOptions?.blockWidth ?? 0,
+                Graphics.children.Select(item => item.y).Max() + CurrentOptions?.lineHeight ?? 0
+            );
         }
 
         public class TextOptions

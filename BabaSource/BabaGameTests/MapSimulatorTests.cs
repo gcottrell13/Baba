@@ -213,4 +213,32 @@ public class MapSimulatorTests
         }, sim.objectsAt(0, 0));
         Assert.AreEqual(Array.Empty<BabaObject>(), babaWorld.Simulators[2].objectsAt(1, 14));
     }
+
+    [Test]
+    public void parse_multiplier()
+    {
+        var babaWorld = new BabaWorld(new()
+        {
+            GlobalWordMapIds = new short[] { 0 },
+            Maps = new()
+            {
+                new(new ObjectData[]
+                {
+                    // this door needs 21 rocks in order to unlock
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.door, x = 2, y = 1 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.need, x = 2, y = 2 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.rock, x = 2, y = 3 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.x, x = 2, y = 4 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId._2, x = 2, y = 5 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId._1, x = 2, y = 6 },
+                }) { MapId = 0, width = 15, height = 15 },
+            }
+        });
+
+        var global = babaWorld.Simulators[0].parseRules(new());
+        var doorNeedRockMembers = global[ObjectTypeId.door][0].GetSentenceMembers().ToList();
+
+        var count = babaWorld.Simulators[0].parseMultiplier(doorNeedRockMembers);
+        Assert.AreEqual(21, count);
+    }
 }

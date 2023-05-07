@@ -30,24 +30,21 @@ public class Word<T> where T : INameable
         Name = id;
     }
 
-    public Word(T value, string name) : this(name)
-    {
-        Value = value;
-    }
-
-    public Word(IEnumerable<T> values, string name) : this(name)
-    {
-        Characters = values.ToArray();
-    }
-
     public Word(T value) : this(value.Name)
     {
         Value = value;
     }
 
-    public Word(IEnumerable<T> values) : this(string.Join("", values.Select(x => x.Name)))
+    private Word(IEnumerable<T> values, string name) : this(name)
     {
         Characters = values.ToArray();
+    }
+
+    public static Word<T>? TryParseCharacters(IEnumerable<T> values)
+    {
+        var name = string.Join("", values.Select(x => x.Name));
+        if (Enum.TryParse<ObjectTypeId>(name, out var typeId)) return new Word<T>(values, name);
+        return null;
     }
 
     public IEnumerable<T> Objects => Characters ?? new[] { Value! };
@@ -282,8 +279,12 @@ internal class ConsumeCharacters<T> where T : INameable
     private IEnumerable<T> getNextWord()
     {
         if (index >= chain.Length) yield break;
+        var first = chain[index++];
+        yield return first;
 
-        yield return chain[index++];
+        // we don't want to try to consume characters if this first object was a full word on its own
+        if (vocabulary.Characters.ContainsKey(first.Name) == false) yield break;
+
         while (index < chain.Length && vocabulary.Characters.ContainsKey(chain[index].Name))
         {
             yield return chain[index++];
@@ -295,7 +296,7 @@ internal class ConsumeCharacters<T> where T : INameable
         var word = getNextWord().ToArray();
         if (word.Length == 0) return null;
         if (word.Length == 1) return new(word[0]);
-        return new(word);
+        return Word<T>.TryParseCharacters(word);
     }
 
     public IEnumerable<Word<T>> ParseAll()

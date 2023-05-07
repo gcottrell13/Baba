@@ -236,33 +236,24 @@ public class MapSimulator
 
     public bool isObject(BabaObject obj, ObjectTypeId property)
     {
-        // some quick checks before we get into rule checking
-        if (property switch
-        {
-            ObjectTypeId.push => obj.Name,
-            ObjectTypeId.shift => obj.Name,
-            ObjectTypeId.pull => obj.Name,
-            ObjectTypeId.@float => obj.Name,
-            ObjectTypeId.hide => obj.Name,
-            _ => ObjectTypeId.a
-        } == property) return true;
+        // all text objects are treated as the same kind of object
+        var name = obj.Kind == ObjectKind.Text ? ObjectTypeId.text : obj.Name;
 
-        if (obj.Name == property) return obj.Kind == ObjectKind.Object; // text objects don't count as instances of the object
+        if (name == property) return true;
         if (obj.Present == false || obj.Deleted) return false;
-        if (property == ObjectTypeId.text) return obj.Kind == ObjectKind.Text; // this is different from "X is WORD", we want only literal text objects
 
         // rule checking
         foreach (var rule in allRules[property])
         {
             if (rule.Verb.Name != ObjectTypeId.@is) continue;
 
-            if (rule.LHS is NounAdjective<BabaObject> na && (na.Value.Name == obj.Name) != na.Not)
+            if (rule.LHS is NounAdjective<BabaObject> na && (na.Value.Name == name) != na.Not)
             {
                 if ((na.Value.Name == ObjectTypeId.text) != (obj.Kind == ObjectKind.Text)) continue;
                 if (rule.RHS is NounAdjective<BabaObject> rhs) 
                     return (rhs.Value.Name == property) != rhs.Not;
             }
-            else if (rule.LHS is NA_WithRelationship<BabaObject> wr && (wr.Target.Value.Name == obj.Name) != wr.Target.Not)
+            else if (rule.LHS is NA_WithRelationship<BabaObject> wr && (wr.Target.Value.Name == name) != wr.Target.Not)
             {
                 if (relation(obj, wr)) return true;
             }
@@ -274,6 +265,26 @@ public class MapSimulator
                 return true;
         }
         return false;
+    }
+
+    private Dictionary<ObjectTypeId, int> doesObjectNeedAnything(BabaObject obj)
+    {
+        var name = obj.Name;
+        if (obj.Kind == ObjectKind.Text) name = ObjectTypeId.text;
+
+        var dict = new Dictionary<ObjectTypeId, int>();
+
+        foreach (var rule in allRules[name])
+        {
+            if (rule.Verb.Name == ObjectTypeId.need && rule.RHS is NounAdjective<BabaObject> na)
+            {
+                var count = parseMultiplier(rule.GetSentenceMembers().ToList());
+                if (dict.ContainsKey(na.Value.Name)) dict[na.Value.Name] += count;
+                else dict[na.Value.Name] = count;
+            }
+        }
+
+        return dict;
     }
 
     private bool relation(BabaObject obj, NA_WithRelationship<BabaObject> wr)
@@ -444,6 +455,54 @@ public class MapSimulator
         return map.WorldObjects.Where(obj => obj.x == x && obj.y == y).ToArray();
     }
 
+    public int parseMultiplier(List<BabaObject> ruleMembers)
+    {
+        var dx = Math.Sign(ruleMembers.Last().x - ruleMembers.First().x);
+        var dy = Math.Sign(ruleMembers.Last().y - ruleMembers.First().y);
+
+        if (dx == dy) return 1; // this shouldn't happen though
+
+        var x = ruleMembers.Select(item => item.x).Max();
+        var y = ruleMembers.Select(item => item.y).Max();
+
+        x += dx;
+        y += dy;
+        var current = objectsAt(x, y).FirstOrDefault();
+
+        if (current == null || current.Name != ObjectTypeId.x)
+            return 1;
+
+        x += dx;
+        y += dy;
+        current = objectsAt(x, y).FirstOrDefault();
+        var multiplier = 0;
+        while (current != null)
+        {
+            var count = current.Name - ObjectTypeId._0;
+            if (count < 0 || count > 9) return multiplier;
+
+            multiplier *= 10;
+            multiplier += count;
+            x += dx;
+            y += dy;
+            current = objectsAt(x, y).FirstOrDefault();
+        }
+        return multiplier;
+    }
+
+    private static ObjectTypeId[] digits = new[]
+    {
+        ObjectTypeId._0,
+        ObjectTypeId._1,
+        ObjectTypeId._2,
+        ObjectTypeId._3,
+        ObjectTypeId._4,
+        ObjectTypeId._5,
+        ObjectTypeId._6,
+        ObjectTypeId._7,
+        ObjectTypeId._8,
+        ObjectTypeId._9,
+    };
 
     private static Dictionary<ObjectTypeId, ObjectTypeId[]> impliedBy = new()
     {

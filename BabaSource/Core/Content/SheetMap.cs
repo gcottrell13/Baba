@@ -1633,6 +1633,7 @@ public static class SheetMap {
 			{ "text_move", new Wobbler("text_move", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_move"]) },
 			{ "text_n", new Wobbler("text_n", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_n"]) },
 			{ "text_near", new Wobbler("text_near", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_near"]) },
+			{ "text_need", new Wobbler("text_need", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_need"]) },
 			{ "text_nextto", new Wobbler("text_nextto", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nextto"]) },
 			{ "text_nnope", new Wobbler("text_nnope", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nnope"]) },
 			{ "text_nonono", new Wobbler("text_nonono", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_nonono"]) },

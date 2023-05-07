@@ -20,7 +20,7 @@ namespace Core.Engine
         public static HashSet<ObjectTypeId> AppendText_ToNames(IEnumerable<string> values) => new(values.Select(AppendText_ToName));
 
         public static readonly HashSet<ObjectTypeId> relations = AppendText_ToNames(new[] { "on", "nextto", "feeling", "above", "below" });
-        public static readonly HashSet<ObjectTypeId> verbs = AppendText_ToNames(new[] { "is", "has", "make", "write", "fear", "eat", "follow", "mimic" });
+        public static readonly HashSet<ObjectTypeId> verbs = AppendText_ToNames(new[] { "is", "has", "make", "write", "fear", "eat", "follow", "mimic", "need" });
         public static readonly HashSet<ObjectTypeId> conjunctions = AppendText_ToNames(new[] { "and" });
         public static readonly HashSet<ObjectTypeId> modifiers = AppendText_ToNames(new[] { "not", "lonely", "idle", "powered", "powered2", "powered3" });
 
@@ -40,11 +40,19 @@ namespace Core.Engine
 
         public static readonly HashSet<ObjectTypeId> nouns = AppendText_ToNames(ObjectInfo.Info.Keys.Where(x => !x.StartsWith("text_")).Append("all"));
 
-        private static readonly HashSet<ObjectTypeId> nounOnlyVerbs = AppendText_ToNames(new[] { "eat", "has", "make", "mimic", "follow", "fear" });
+        // verbs that only make sense with a noun as the right hand side
+        private static readonly HashSet<ObjectTypeId> nounOnlyVerbs = AppendText_ToNames(new[] { "eat", "has", "make", "mimic", "follow", "fear", "need" });
+
+        // relations that can only be applied with nouns, due to the spatial implications
         private static readonly HashSet<ObjectTypeId> nounOnlyRelations = AppendText_ToNames(new[] { "on", "nextto", "above", "below" });
 
+        // verbs that can have a complex subject (a subject with a relational condition).
+        // BABA EAT FLOWER NOT ON ROAD makes sense
+        // BABA IS STOP NOT ON ROAD does not make sense since the NOT ON ROAD would apply to STOP, not BABA. instead, use BABA NOT ON ROAD IS STOP
         private static readonly HashSet<ObjectTypeId> complexSubjectNouns = AppendText_ToNames(new[] { "eat", "fear", "follow" });
-        private static readonly HashSet<ObjectTypeId> subjectCannotBeNegatedNouns = AppendText_ToNames(new[] { "has", "make" });
+
+        // verbs where the subject cannot be NOT'ed knotted
+        private static readonly HashSet<ObjectTypeId> subjectCannotBeNegatedNouns = AppendText_ToNames(new[] { "has", "make", "need" });
 
         /// <summary>
         /// 

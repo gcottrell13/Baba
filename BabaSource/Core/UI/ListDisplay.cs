@@ -291,7 +291,8 @@ public class ListDisplay<T> : GameObject
                 var maxSize = Text.ParseText(longestDisplay).TextCharLength() + 2;
                 outline.SetText(" ".Repeat(maxSize) + "\n".Repeat(maxDisplay + countBg + titleBg), new() { backgroundColor = Color.Black });
                 outline.Graphics.x = -Text.DEFAULT_LINE_HEIGHT;
-                AddChild(outline, index: 0);
+                outline.Graphics.zindex = -100;
+                AddChild(outline);
                 itemDisplay.y = Text.DEFAULT_LINE_HEIGHT * (titleBg + 1);
                 filterDisplay.Graphics.y = Text.DEFAULT_LINE_HEIGHT;
             }

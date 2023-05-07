@@ -67,7 +67,5 @@ internal class MapViewer : GameObject
         var sprite = new ObjectSprite();
         sprites.Add(index, sprite);
         AddChild(sprite);
-        sprite.Graphics.xscale = 1f / 24;
-        sprite.Graphics.yscale = 1f / 24;
     }
 }

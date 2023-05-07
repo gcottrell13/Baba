@@ -62,6 +62,8 @@ internal class ObjectSprite : GameObject
         if (kind == ObjectKind.Text && !strname.StartsWith("text_")) strname = $"text_{strname}";
 
         spriteValue = ContentLoader.LoadedContent!.SpriteValues[strname];
+
+        Graphics.zindex = ObjectInfo.Info[strname].layer;
         setWobbler(spriteValue.GetInitial(d));
         Graphics.SetColor(ThemeInfo.GetObjectColor("default", strname));
     }
@@ -71,7 +73,7 @@ internal class ObjectSprite : GameObject
         if (currentSprite?.wobbler != wobbler)
         {
             Graphics.RemoveChild(currentSprite);
-            currentSprite = new(wobbler);
+            currentSprite = new ObjectSpriteContainer(wobbler);
             Graphics.AddChild(currentSprite);
         }
     }
@@ -195,6 +197,8 @@ internal class ObjectSpriteContainer : Sprite
     public override void Draw()
     {
         var rect = wobbler.GetPosition(ref step);
+        xscale = 1f / wobbler.Size.X;
+        yscale = 1f / wobbler.Size.Y;
         draw(rect);
     }
 }

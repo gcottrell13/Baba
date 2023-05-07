@@ -26,16 +26,9 @@ namespace Core.Utils
             }
         }
 
-        public void AddChild(BaseSprite child, int index = -1)
+        public void AddChild(BaseSprite child)
         {
-            if (index < 0)
-            {
-                children.Add(child);
-            }
-            else
-            {
-                children.Insert(index, child);
-            }
+            children.Add(child);
             child.parent = this;
             ReorderChildren();
         }

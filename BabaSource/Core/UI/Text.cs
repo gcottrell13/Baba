@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Core.Content;
 using Core.Utils;
 using Microsoft.Xna.Framework;
@@ -75,6 +75,16 @@ namespace Core.UI
                 "," => "text_comma",
                 "+" => "text_plus",
                 "_" => "text_underscore",
+                "0" => "text_zero",
+                "1" => "text_one",
+                "2" => "text_two",
+                "3" => "text_three",
+                "4" => "text_four",
+                "5" => "text_five",
+                "6" => "text_six",
+                "7" => "text_seven",
+                "8" => "text_eight",
+                "9" => "text_nine",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}:{state}";

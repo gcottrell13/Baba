@@ -27,7 +27,7 @@ namespace Core.Engine
         public static readonly Dictionary<ObjectTypeId, string> text_characters = new[]
         {
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-            "_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7", "_8", "_9",
+            "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
             "apos", "comma", "colon", "hyphen", "fwslash", "plus", "underscore", "rsqbr", "lsqbr", "quote", "period",
         }.ToDictionary(AppendText_ToName);
 

@@ -4,7 +4,7 @@
 		{"x":1,"y":0,"mapDataId":5,"instanceId":1},
 		{"x":2,"y":0,"mapDataId":7,"instanceId":2},
 		{"x":0,"y":1,"mapDataId":1,"instanceId":30},
-		{"x":1,"y":1,"mapDataId":1,"instanceId":31}
+		{"x":4,"y":1,"mapDataId":3,"instanceId":34}
 	],
 	"Warps": [
 		{"x1":0,"y1":2,"x2":4,"y2":0,"name":"","r":234,"g":168,"b":229}
@@ -47,13 +47,19 @@
 			"resetWhenInactive": false,
 			"layer1": {
 				"objects": [
-					{"x":0,"y":0,"name":"skull","state":4,"color":17,"text":"heloo\nthere [baba]\nssslfsjd","original":{"name":"arm","state":0,"color":25}},
 					{"x":4,"y":2,"name":"bolt","state":1,"color":42,"text":"","original":null},
 					{"x":5,"y":2,"name":"bolt","state":4,"color":42,"text":"","original":null},
 					{"x":4,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
 					{"x":6,"y":4,"name":"bolt","state":1,"color":42,"text":"","original":null},
 					{"x":5,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
-					{"x":8,"y":6,"name":"text_dog","state":1,"color":2,"text":"this is dog","original":null}
+					{"x":8,"y":6,"name":"text_dog","state":1,"color":2,"text":"this is dog","original":null},
+					{"x":3,"y":9,"name":"text_skull","state":1,"color":17,"text":"","original":null},
+					{"x":4,"y":9,"name":"text_need","state":1,"color":34,"text":"","original":null},
+					{"x":5,"y":9,"name":"text_fish","state":1,"color":11,"text":"","original":null},
+					{"x":6,"y":9,"name":"text_x","state":1,"color":3,"text":"","original":null},
+					{"x":7,"y":9,"name":"text_two","state":1,"color":3,"text":"","original":null},
+					{"x":8,"y":9,"name":"text_two","state":1,"color":3,"text":"","original":null},
+					{"x":4,"y":6,"name":"skull","state":1,"color":17,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
@@ -165,7 +171,6 @@
 					{"x":1,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
 					{"x":2,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
 					{"x":3,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
-					{"x":4,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
 					{"x":5,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
 					{"x":6,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
 					{"x":7,"y":14,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},

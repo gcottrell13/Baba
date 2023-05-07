@@ -1,10 +1,9 @@
 import base64
-from io import BytesIO
 from typing import Iterable
 
 from modules.formats import ObjectSprites, Joinable, FacingOnMove, AnimateOnMove, Wobbler
 from modules.imagesToSpritesheet import create_sheet
-from modules.utils import output_directory_structure
+from modules.utils import output_directory_structure, digit_names
 
 from modules.vars import OUTPUT_DIRECTORY, VISUAL_OUTPUT_DIRECTORY
 from modules.load_object_information import load_information, all_palettes
@@ -16,12 +15,24 @@ csharp_keywords = [
 ]
 
 
+def transform_sprite_name(name: str):
+    text = name.startswith('text_')
+    name = name.removeprefix('text_')
+    if name in digit_names:
+        name = digit_names[name]
+    if text:
+        name = f'text_{name}'
+    return name
+
+
 def save_object_info():
     info, colors = load_information()
 
     def mapitem(name, item):
         colorx, colory = item['color']
         coloractx, coloracty = item['color_active']
+
+        name = transform_sprite_name(name)
 
         fields = [
             f'color = ({colorx} << shift) + {colory}',
@@ -38,10 +49,10 @@ def save_object_info():
         for name, item in info.items()
     ])
 
-    def transform_name(name: str):
+    def transform_enum_name(name: str):
         name = name.removeprefix('text_')
-        if ord('0') <= ord(name[0]) <= ord('9'):
-            name = "_" + name
+        if name in digit_names:
+            name = digit_names[name]
         if name in csharp_keywords:
             name = "@" + name
         return name
@@ -53,16 +64,16 @@ def save_object_info():
     ]
 
     enum_values = ",\n".join(
-        f"\t{transform_name(key)} = {index}"
+        f"\t{transform_enum_name(key)} = {index}"
         for index, key in enumerate(keyIndex)
     )
 
     id_to_name = ",\n".join(
-        f"\t\t{{ ObjectTypeId.{transform_name(key)}, \"{key}\" }}"
+        f"\t\t{{ ObjectTypeId.{transform_enum_name(key)}, \"{transform_sprite_name(key)}\" }}"
         for key in keyIndex
     )
     name_to_id = ",\n".join(
-        f"\t\t{{ \"{key}\", ObjectTypeId.{transform_name(key)} }}"
+        f"\t\t{{ \"{transform_sprite_name(key)}\", ObjectTypeId.{transform_enum_name(key)} }}"
         for key in keyIndex
     )
 
@@ -131,27 +142,27 @@ def save_palette_info():
         for name in palettes
     ])
 
-    color_name_map_items = {
-        'red': coord_to_intrep((2, 1)),
-        'blue': coord_to_intrep((3, 3)),
-        'yellow': coord_to_intrep((2, 4)),
-        'orange': coord_to_intrep((2, 2)),
-        'green': coord_to_intrep((5, 2)),
-        'cyan': coord_to_intrep((1, 4)),
-        'lime': coord_to_intrep((5, 3)),
-        'purple': coord_to_intrep((3, 0)),
-        'pink': coord_to_intrep((4, 1)),
-        'rosy': coord_to_intrep((4, 2)),
-        'grey': coord_to_intrep((0, 1)),
-        'black': coord_to_intrep((0, 0)),
-        'silver': coord_to_intrep((0, 2)),
-        'white': coord_to_intrep((0, 3)),
-        'brown': coord_to_intrep((6, 1)),
-    }
-    color_name_map = ',\n\t\t\t'.join(
-        f'{{ "{name}", {v} }}'
-        for name, v in color_name_map_items.items()
-    )
+    # color_name_map_items = {
+    #     'red': coord_to_intrep((2, 1)),
+    #     'blue': coord_to_intrep((3, 3)),
+    #     'yellow': coord_to_intrep((2, 4)),
+    #     'orange': coord_to_intrep((2, 2)),
+    #     'green': coord_to_intrep((5, 2)),
+    #     'cyan': coord_to_intrep((1, 4)),
+    #     'lime': coord_to_intrep((5, 3)),
+    #     'purple': coord_to_intrep((3, 0)),
+    #     'pink': coord_to_intrep((4, 1)),
+    #     'rosy': coord_to_intrep((4, 2)),
+    #     'grey': coord_to_intrep((0, 1)),
+    #     'black': coord_to_intrep((0, 0)),
+    #     'silver': coord_to_intrep((0, 2)),
+    #     'white': coord_to_intrep((0, 3)),
+    #     'brown': coord_to_intrep((6, 1)),
+    # }
+    # color_name_map = ',\n\t\t\t'.join(
+    #     f'{{ "{name}", {v} }}'
+    #     for name, v in color_name_map_items.items()
+    # )
 
     output_directory_structure(OUTPUT_DIRECTORY, {
         'Content/PaletteInfo.cs': f"""
@@ -178,7 +189,8 @@ def output_spritesheets(data: dict[str, ObjectSprites]):
 
     def wobbler(wobbler: Wobbler, positions: list[tuple[int, int]]):
         w, h = wobbler.largest_dimensions()
-        return f'new Wobbler("{wobbler}", new[] {{ {joinmap(vec2, positions)} }}, new Point({w}, {h}), sheets["{wobbler.name}"])'
+        return f'new Wobbler("{wobbler}", new[] {{ {joinmap(vec2, positions)} }}, ' \
+               f'new Point({w}, {h}), sheets["{transform_sprite_name(wobbler.name)}"])'
 
     def joinmap(fn, alist: Iterable, indent=0):
         i = '\t' * indent
@@ -235,10 +247,12 @@ def output_spritesheets(data: dict[str, ObjectSprites]):
     lines: list[str] = []
     sheets: list[str] = []
 
-    longest_name_size = max(map(len, data.keys()))
+    # longest_name_size = max(map(len, data.keys()))
 
     for name, info in data.items():
         sheet, mapping = create_sheet(list(info))
+
+        name = transform_sprite_name(name)
 
         match info:
             case Joinable() as j:

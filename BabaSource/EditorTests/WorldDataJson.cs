@@ -63,7 +63,8 @@ public static class WorldDataJson
         					{"x":4,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
         					{"x":6,"y":4,"name":"bolt","state":1,"color":42,"text":"","original":null},
         					{"x":5,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
-        					{"x":8,"y":6,"name":"text_dog","state":1,"color":2,"text":"","original":null}
+        					{"x":8,"y":6,"name":"text_dog","state":1,"color":2,"text":"","original":null},
+        					{"x":10,"y":6,"name":"text_two","state":1,"color":2,"text":"","original":null},
         				],
         				"width": 15,
         				"height": 15

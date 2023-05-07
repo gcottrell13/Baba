@@ -259,6 +259,11 @@ public class WorldDataDeserialized
                 Deleted = false, Color = 2, Facing = Direction.None,
                 x = 8, y = 6, Name = ObjectTypeId.@dog, Kind = ObjectKind.Text,
                 Text = "",
+            },
+            new ObjectData() {
+                Deleted = false, Color = 2, Facing = Direction.None,
+                x = 10, y = 6, Name = ObjectTypeId.@two, Kind = ObjectKind.Text,
+                Text = "",
             } }) {
             MapId = 7,
             Name = "single [skull:8] and [algae]",

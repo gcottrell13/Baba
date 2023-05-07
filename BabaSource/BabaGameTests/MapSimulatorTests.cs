@@ -229,8 +229,8 @@ public class MapSimulatorTests
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.need, x = 2, y = 2 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.rock, x = 2, y = 3 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.x, x = 2, y = 4 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId._2, x = 2, y = 5 },
-                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId._1, x = 2, y = 6 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.two, x = 2, y = 5 },
+                    new() { Kind=ObjectKind.Text, Name=ObjectTypeId.one, x = 2, y = 6 },
                 }) { MapId = 0, width = 15, height = 15 },
             }
         });

@@ -181,12 +181,8 @@ internal class ObjectSpriteContainer : Sprite
     public ObjectSpriteContainer(Wobbler wobbler) : base(wobbler.GetInitial(Direction.None).Texture)
     {
         this.wobbler = wobbler;
-    }
-
-    public void SetWobbler(Wobbler w)
-    {
-        wobbler = w;
-
+        xscale = 1f / wobbler.Size.X;
+        yscale = 1f / wobbler.Size.Y;
     }
 
     public void Step()
@@ -197,8 +193,6 @@ internal class ObjectSpriteContainer : Sprite
     public override void Draw()
     {
         var rect = wobbler.GetPosition(ref step);
-        xscale = 1f / wobbler.Size.X;
-        yscale = 1f / wobbler.Size.Y;
         draw(rect);
     }
 }

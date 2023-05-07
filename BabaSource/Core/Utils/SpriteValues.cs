@@ -156,7 +156,7 @@ namespace Core.Utils
                 Direction.Right => Right,
                 Direction.Up => Up,
                 Direction.Down => Down,
-                _ => throw new NotImplementedException()
+                Direction.None => Right,
             };
             return dir.Move(ref step);
         }
@@ -169,7 +169,7 @@ namespace Core.Utils
                 Direction.Right => Right,
                 Direction.Up => Up,
                 Direction.Down => Down,
-                _ => throw new NotImplementedException()
+                Direction.None => Right,
             };
             return dir.Move(ref step);
         }

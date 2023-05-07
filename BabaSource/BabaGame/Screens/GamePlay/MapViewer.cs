@@ -94,7 +94,7 @@ internal class MapViewer : GameObject
 
         if (simulator.isObject(obj, ObjectTypeId.disk))
         {
-            message += "\nStep on this to \nsave your game";
+            message += $"\nStep on this [{obj.Name}]\nsave your game";
         }
 
         if (simulator.doesObjectNeedAnything(obj) is Dictionary<ObjectTypeId, int> needs && needs.Count > 0)

@@ -65,6 +65,7 @@ public class BabaMap
             region = map.region,
             width = map.width,
             height = map.height,
+            Name = map.Name,
         };
 
         foreach (var obj in map.WorldObjects)
@@ -72,5 +73,21 @@ public class BabaMap
             babaMap.AddObject(obj);
         }
         return babaMap;
+    }
+
+    public MapData ToMapData()
+    {
+        return new MapData(WorldObjects.Select(x => x.ToObjectData())) 
+        {
+            MapId = MapId,
+            northNeighbor = northNeighbor,
+            eastNeighbor = eastNeighbor,
+            southNeighbor = southNeighbor,
+            westNeighbor = westNeighbor,
+            region = region,
+            width = width,
+            height = height,
+            Name = Name,
+        };
     }
 }

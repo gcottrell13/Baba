@@ -16,9 +16,11 @@ public class BabaWorld
 	public Dictionary<short, RegionData> Regions;
 	public Dictionary<short, MapSimulator> Simulators;
 	public short[] GlobalWordMapIds;
+    private string name;
 
 	public BabaWorld(WorldData data)
 	{
+        name = data.Name;
 		MapDatas = data.Maps.ToDictionary(map => map.MapId, map => (BabaMap)map);
 		Regions = data.Regions.ToDictionary(r => r.RegionId);
         GlobalWordMapIds = data.GlobalWordMapIds;
@@ -29,6 +31,18 @@ public class BabaWorld
 			sim.GetNeighbors();
         }
 	}
+
+    public WorldData ToWorldData()
+    {
+        var data = new WorldData
+        {
+            Maps = MapDatas.Values.Select(x => x.ToMapData()).ToList(),
+            Regions = Regions.Values.ToList(),
+            GlobalWordMapIds = GlobalWordMapIds,
+            Name = name
+        };
+        return data;
+    }
 
 
     public short[] mapsWithYou(ObjectTypeId you)

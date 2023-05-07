@@ -48,7 +48,6 @@ public class BabaObject : INameable
             Name = obj.Name,
             Color = obj.Color,
             Facing = obj.Facing,
-            Active = false,
             x = obj.X,
             y = obj.Y,
             Kind = obj.Kind,
@@ -58,7 +57,28 @@ public class BabaObject : INameable
             Present = obj.Present,
             CurrentMapId = obj.CurrentMapId,
             Text = obj.Text,
+
+            Active = false,
             index = -1,
+        };
+    }
+
+    public ObjectData ToObjectData()
+    {
+        return new ObjectData()
+        {
+            Name = Name,
+            Color = Color,
+            Facing = Facing,
+            MapOfOrigin = MapOfOrigin,
+            OriginX = OriginX,
+            OriginY = OriginY,
+            Present = Present,
+            CurrentMapId = CurrentMapId,
+            Text = Text,
+            Kind = Kind,
+            x = X,
+            y = Y,
         };
     }
 

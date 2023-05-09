@@ -25,6 +25,7 @@ internal class ObjectSprite : GameObject
     private int previousY = 0;
     private Direction previousFacing = Direction.None;
     private short previousColor = 0;
+    private ObjectKind previousKind;
 
     private SpriteValues? spriteValue;
     private ObjectSpriteContainer? currentSprite;
@@ -47,6 +48,7 @@ internal class ObjectSprite : GameObject
         previousX = objectData.X;
         previousY = objectData.Y;
         previousFacing = objectData.Facing;
+        previousKind = objectData.Kind;
         Graphics.x = objectData.x;
         Graphics.y = objectData.y;
         previousColor = objectData.Color;
@@ -100,11 +102,12 @@ internal class ObjectSprite : GameObject
     {
         Name = $"{objectData.Kind}-{objectData.Name}";
 
-        if (objectData.Name != previousName)
+        if (objectData.Name != previousName || objectData.Kind != previousKind)
         {
             // TODO: animate a changing sprite
             setSprite(objectData.Name, objectData.Kind, objectData.Facing);
             previousName = objectData.Name;
+            previousKind = objectData.Kind;
         }
 
         if (previousX != objectData.x || previousY != objectData.y || previousFacing != objectData.Facing)

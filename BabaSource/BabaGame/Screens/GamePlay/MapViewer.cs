@@ -16,12 +16,13 @@ namespace BabaGame.Screens.GamePlay;
 internal class MapViewer : GameObject
 {
 	private Dictionary<uint, ObjectSprite> sprites = new();
+    private readonly BabaWorld world;
     private readonly MapSimulator simulator;
     private readonly TextOverlay textOverlay = new();
 
     public BabaMap MapData { get; }
 
-    public MapViewer(BabaMap mapData, MapSimulator simulator)
+    public MapViewer(BabaMap mapData, BabaWorld world, MapSimulator simulator)
 	{
 		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
 		{
@@ -29,6 +30,7 @@ internal class MapViewer : GameObject
 			addSprite((uint)index);
         }
         MapData = mapData;
+        this.world = world;
         this.simulator = simulator;
 
         textOverlay.Graphics.zindex = 1000;
@@ -104,7 +106,11 @@ internal class MapViewer : GameObject
             {
                 var color = ThemeInfo.GetColorsByKind(reagent, ObjectKind.Text);
                 var activeColor = PaletteInfo.Palettes["default"][color.colorActive].ToHexTriple();
-                message += $"\n {activeColor}{reagent} [{reagent}][white] x{count}";
+
+                world.Inventory.TryGetValue(reagent, out int hasCount);
+                var hasColor = hasCount >= count ? "[44,ff,44]" : "[white]";
+
+                message += $"\n {activeColor}{reagent} [{reagent}] {hasColor}{hasCount}/{count}";
             }
         }
         if (!string.IsNullOrWhiteSpace(message))

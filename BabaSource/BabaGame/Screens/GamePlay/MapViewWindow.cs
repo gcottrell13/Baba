@@ -31,7 +31,7 @@ internal class MapViewWindow : GameObject
         this.viewportHeight = viewportHeight;
         foreach (var (mapId, map) in babaWorld.MapDatas)
         {
-            var mv = new MapViewer(map, babaWorld.Simulators[mapId]);
+            var mv = new MapViewer(map, babaWorld, babaWorld.Simulators[mapId]);
             mapViewers[mapId] = mv;
         }
     }

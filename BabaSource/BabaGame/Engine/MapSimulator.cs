@@ -28,6 +28,7 @@ public class MapSimulator
     public readonly RegionData? region;
 
     private readonly BabaMap map;
+    private readonly BabaMap? upLayer;
 
     private MapSimulator? north;
     private MapSimulator? south;
@@ -63,6 +64,7 @@ public class MapSimulator
         this.world = world;
         MapId = mapId;
         map = world.MapDatas[mapId];
+        upLayer = world.MapDatas.TryGetValue(map.upLayer, out var layer) ? layer : null;
         region = world.Regions.TryGetValue(map.region, out var r) ? r : null;
     }
 
@@ -102,13 +104,12 @@ public class MapSimulator
         }
     }
 
-    public bool doMovement(Direction input, ObjectTypeId playerNumber)
+    public bool doMovement(Direction input, BabaObject[] you)
     {
         var movingObjects = new List<(BabaObject obj, int dx, int dy)>();
 
         if (input != Direction.None)
         {
-            var you = findObjectsThatAre(playerNumber);
             var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
             movingObjects.AddRange(you.Select(i => (i, dx, dy)));
         }
@@ -121,6 +122,7 @@ public class MapSimulator
 
         foreach (var (obj, dx, dy) in movingObjects)
         {
+            TryRemoveObjectsAt(obj.x + dx, obj.y + dy);
             if (push(obj.x, obj.y, dx, dy))
             {
                 pull(obj.x, obj.y, dx, dy);
@@ -163,9 +165,19 @@ public class MapSimulator
 
     }
 
-    public void collisionCheck()
+    public void collisionCheck(BabaObject[] yous)
     {
-
+        foreach (var grab in findObjectsThatAre(ObjectTypeId.grab).ToList())
+        {
+            foreach (var you in yous)
+            {
+                if (you.x == grab.x  && you.y == grab.y)
+                {
+                    world.AddToInventory(grab.Name, 1);
+                    map.RemoveObject(grab);
+                }
+            }
+        }
     }
 
     public void setAllRules(RuleDict rules)
@@ -178,17 +190,27 @@ public class MapSimulator
         var dict = allRules;
         if (hasChanged())
         {
-            var texts = map.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList();
-            var rules = SemanticFilter.FindRulesAndFilterInvalid(texts);
+            RuleDict parseMap(BabaMap thismap)
+            {
+                var texts = thismap.WorldObjects.Where(x => x.Kind == ObjectKind.Text).ToList();
+                var rules = SemanticFilter.FindRulesAndFilterInvalid(texts);
 
-            foreach (var t in texts)
-                t.Active = false;
-            foreach (var rule in rules)
-                foreach (var member in rule.GetSentenceMembers())
-                    member.Active = true;
+                foreach (var t in texts)
+                    t.Active = false;
+                foreach (var rule in rules)
+                    foreach (var member in rule.GetSentenceMembers())
+                        member.Active = true;
 
-            dict = new RuleDict();
-            addRules(dict, rules);
+                var dict = new RuleDict();
+                addRules(dict, rules);
+                return dict;
+            }
+            dict = parseMap(map);
+            if (upLayer != null)
+            {
+                var upLayerRules = parseMap(upLayer);
+                addRules(dict, upLayerRules.Values.SelectMany(x => x).ToList());
+            }
             cachedParsedRules = dict;
             goto applyRulesFromAbove;
         }
@@ -284,7 +306,7 @@ public class MapSimulator
 
         foreach (var rule in allRules[name])
         {
-            if (rule.Verb.Name == ObjectTypeId.need && rule.RHS is NounAdjective<BabaObject> na)
+            if (rule.Verb.Name == ObjectTypeId.need && rule.LHS is NounAdjective<BabaObject> lhs && lhs.Value.Name == name && rule.RHS is NounAdjective<BabaObject> na)
             {
                 var count = parseMultiplier(rule.GetSentenceMembers().ToList());
                 if (dict.ContainsKey(na.Value.Name)) dict[na.Value.Name] += count;
@@ -293,6 +315,28 @@ public class MapSimulator
         }
 
         return dict;
+    }
+
+    public void TryRemoveObjectsAt(int x, int y)
+    {
+        bool needsFulfilled(BabaObject obj, out Dictionary<ObjectTypeId, int> needs)
+        {
+            needs = doesObjectNeedAnything(obj);
+            if (needs != null && needs.Count > 0)
+            {
+                return world.TestInventory(needs);
+            }
+            return false;
+        }
+
+        foreach (var obj in objectsAt(x, y))
+        {
+            if (needsFulfilled(obj, out var needs))
+            {
+                world.ConsumeFromInventory(needs);
+                map.RemoveObject(obj);
+            }
+        }
     }
 
     private bool relation(BabaObject obj, NA_WithRelationship<BabaObject> wr)

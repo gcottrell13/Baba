@@ -59,14 +59,27 @@
 					{"x":6,"y":9,"name":"text_x","state":1,"color":3,"text":"","original":null},
 					{"x":7,"y":9,"name":"text_two","state":1,"color":3,"text":"","original":null},
 					{"x":8,"y":9,"name":"text_two","state":1,"color":3,"text":"","original":null},
-					{"x":4,"y":6,"name":"skull","state":1,"color":17,"text":"","original":null}
+					{"x":4,"y":6,"name":"skull","state":1,"color":17,"text":"","original":null},
+					{"x":12,"y":2,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":3,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":4,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":5,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":6,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":7,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":8,"name":"fish","state":8,"color":11,"text":"","original":null},
+					{"x":12,"y":9,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":10,"name":"fish","state":1,"color":11,"text":"","original":null},
+					{"x":12,"y":11,"name":"fish","state":8,"color":11,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15
 			},
 			"layer2": {
 				"objects": [
-					{"x":2,"y":2,"name":"text_baba","state":1,"color":33,"text":"","original":null}
+					{"x":2,"y":2,"name":"text_baba","state":1,"color":33,"text":"","original":null},
+					{"x":3,"y":3,"name":"text_fish","state":1,"color":11,"text":"","original":null},
+					{"x":4,"y":3,"name":"text_is","state":1,"color":3,"text":"","original":null},
+					{"x":5,"y":3,"name":"text_grab","state":1,"color":12,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 15

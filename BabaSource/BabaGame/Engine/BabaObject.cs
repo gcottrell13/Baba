@@ -41,6 +41,10 @@ public class BabaObject : INameable
 
     public bool Active;
 
+    // only objects with samefloat can interact
+    public bool FloatStatus;
+
+
     public static implicit operator BabaObject(ObjectData obj)
     {
         return new BabaObject()

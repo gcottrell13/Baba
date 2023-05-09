@@ -17,6 +17,7 @@ public class BabaWorld
 	public Dictionary<short, MapSimulator> Simulators;
 	public short[] GlobalWordMapIds;
     private string name;
+    public readonly Dictionary<ObjectTypeId, int> Inventory;
 
 	public BabaWorld(WorldData data)
 	{
@@ -25,6 +26,7 @@ public class BabaWorld
 		Regions = data.Regions.ToDictionary(r => r.RegionId);
         GlobalWordMapIds = data.GlobalWordMapIds;
 		Simulators = data.Maps.ToDictionary(map => map.MapId, map => new MapSimulator(this, map.MapId));
+        Inventory = data.Inventory;
 
 		foreach (var sim in Simulators.Values)
 		{
@@ -39,7 +41,8 @@ public class BabaWorld
             Maps = MapDatas.Values.Select(x => x.ToMapData()).ToList(),
             Regions = Regions.Values.ToList(),
             GlobalWordMapIds = GlobalWordMapIds,
-            Name = name
+            Name = name,
+            Inventory = Inventory,
         };
         return data;
     }
@@ -92,13 +95,17 @@ public class BabaWorld
 
     public void Step(short currentMap, short[] mapIds, Direction direction, ObjectTypeId playerNumber)
     {
-        var sims = mapIds.Select(id => Simulators[id]);
+        var sims = mapIds.Select(id => Simulators[id]).ToList();
+
+        // this should be recalculated at all points where it's possible to change, like in transform() or interactionblock()
+        var yous = mapIds.ToDictionary(id => id, id => Simulators[id].findObjectsThatAre(playerNumber).ToArray());
+
         parseMapRules(mapIds);
 
         var didAnyMove = false;
         foreach (var map in sims)
         {
-            if (map.doMovement(map.MapId == currentMap ? direction : Direction.None, playerNumber)) 
+            if (map.doMovement(map.MapId == currentMap ? direction : Direction.None, yous[map.MapId])) 
                 didAnyMove = true;
         }
 
@@ -115,7 +122,34 @@ public class BabaWorld
         parseMapRules(mapIds);
         foreach (var map in sims) map.interactionblock();
         parseMapRules(mapIds);
-        foreach (var map in sims) map.collisionCheck();
+        foreach (var map in sims) map.collisionCheck(yous[map.MapId]);
         parseMapRules(mapIds);
+    }
+
+    public bool TestInventory(Dictionary<ObjectTypeId, int> needs)
+    {
+        foreach (var (reagent, count) in needs)
+        {
+            if (!Inventory.TryGetValue(reagent, out var has) || has < count)
+                return false;
+        }
+        return true;
+    }
+
+    public bool ConsumeFromInventory(Dictionary<ObjectTypeId, int> needs)
+    {
+        if (!TestInventory(needs)) return false;
+
+        foreach (var (reagent, count) in needs)
+        {
+            Inventory[reagent] -= count;
+        }
+        return true;
+    }
+
+    public bool AddToInventory(ObjectTypeId id, int amount)
+    {
+        Inventory[id] = Inventory.TryGetValue(id, out var current) ? current + amount : amount;
+        return true;
     }
 }

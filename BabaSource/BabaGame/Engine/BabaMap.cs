@@ -41,6 +41,7 @@ public class BabaMap
         width = map.width;
         height = map.height;
         Name = map.Name;
+        upLayer = map.upLayer;
         ResetOnUnload = map.ResetOnUnload;
         foreach (var obj in map.WorldObjects)
         {
@@ -106,6 +107,7 @@ public class BabaMap
             height = height,
             Name = Name,
             ResetOnUnload = ResetOnUnload,
+            upLayer = upLayer,
         };
     }
 }

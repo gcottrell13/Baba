@@ -73,16 +73,25 @@ internal class MapViewWindow : GameObject
         RemoveAllChildren();
         var sim = babaWorld.Simulators[mapId];
 
-        var previousVisibleMaps = visibleMaps.ToArray();
+        var previousVisibleMaps = visibleMaps.ToList();
         visibleMaps.Clear();
 
         if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
+
+        currentMapId = mapId;
 
         if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
         if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) _addMapAndScale(neighbor, 0, sim.Height);
         if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
         if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) _addMapAndScale(neighbor, sim.Width, 0);
-        currentMapId = mapId;
+
+        var removedMaps = previousVisibleMaps.Except(visibleMaps);
+        //var addedMaps = visibleMaps.Except(previousVisibleMaps);
+
+        foreach (var removedMapId in removedMaps)
+        {
+            babaWorld.Simulators[removedMapId].OnUnload();
+        }
     }
 
     private void _addMapAndScale(MapViewer mp, int x, int y)

@@ -41,16 +41,21 @@ namespace Editor.Saves
                 if (data == null) continue;
 
                 var md = fromMapLayer(data.layer1, instance.x, instance.y, instance.mapDataId, ref mapTempId);
-                var wordLayer = fromMapLayer(data.layer2, -1, -1, -1, ref mapTempId);
-                wordLayer.data.Name = $"{md.data.MapId} uplayer - {data.name}";
-                mapTemps.Add(wordLayer);
-                mapTemps.Add(md);
 
                 md.data.Name = data.name;
-                md.data.upLayer = wordLayer.data.MapId;
                 md.originalRegionId = data.regionId;
+                md.data.ResetOnUnload = data.resetWhenInactive;
 
                 mapMap[instance.instanceId] = md.data.MapId;
+
+                if (data.layer2.objects.Count > 0)
+                {
+                    var wordLayer = fromMapLayer(data.layer2, -1, -1, -1, ref mapTempId);
+                    wordLayer.data.Name = $"{md.data.MapId} uplayer - {data.name}";
+                    mapTemps.Add(wordLayer);
+                    md.data.upLayer = wordLayer.data.MapId;
+                }
+                mapTemps.Add(md);
             }
 
             var globalMapIds = world.globalObjectInstanceIds.Where(mapMap.ContainsKey).Select(x => mapMap[x]);

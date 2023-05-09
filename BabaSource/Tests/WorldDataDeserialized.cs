@@ -205,23 +205,6 @@ public class WorldDataDeserialized
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
-                Deleted = false, Color = 33, Facing = Direction.None,
-                x = 2, y = 2, Name = ObjectTypeId.@baba, Kind = ObjectKind.Text,
-                Text = "",
-            } }) {
-            MapId = 8,
-            Name = "7 uplayer - single [skull:8] and [algae]",
-            northNeighbor = 0,
-            southNeighbor = 0,
-            eastNeighbor = 0,
-            westNeighbor = 0,
-            upLayer = 0,
-            region = 0,
-            width = 15,
-            height = 15,
-        },
-        new MapData(new ObjectData[] {
-            new ObjectData() {
                 Deleted = false, Color = 17, Facing = Direction.None,
                 x = 0, y = 0, Name = ObjectTypeId.@skull, Kind = ObjectKind.Object,
                 Text = """
@@ -271,7 +254,7 @@ public class WorldDataDeserialized
             southNeighbor = 0,
             eastNeighbor = 0,
             westNeighbor = 5,
-            upLayer = 8,
+            upLayer = 0,
             region = 2,
             width = 15,
             height = 15,

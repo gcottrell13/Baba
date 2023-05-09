@@ -66,6 +66,14 @@ public class MapSimulator
         region = world.Regions.TryGetValue(map.region, out var r) ? r : null;
     }
 
+    public void OnUnload()
+    {
+        if (map.ResetOnUnload)
+        {
+            map.ResetToOriginalState();
+        }
+    }
+
     public void GetNeighbors()
     {
         if (world.Simulators.TryGetValue(map.northNeighbor, out north)) setupConvertCoordinates(map.width, north.map.width, out convertToNorth);

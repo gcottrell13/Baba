@@ -71,7 +71,6 @@ public static class WorldDataJson
         			},
         			"layer2": {
         				"objects": [
-        					{"x":2,"y":2,"name":"text_baba","state":1,"color":33,"text":"","original":null}
         				],
         				"width": 15,
         				"height": 15

@@ -11,6 +11,8 @@ public class BabaMap
 {
     public List<BabaObject> WorldObjects { get; private set; } = new();
 
+    private List<BabaObject>? originalState;
+
     public short MapId;
     public short northNeighbor;
     public short eastNeighbor;
@@ -25,9 +27,34 @@ public class BabaMap
 
     public string Name = string.Empty;
 
+    public bool ResetOnUnload;
 
-    public BabaMap()
+
+    public BabaMap(MapData map)
     {
+        MapId = map.MapId;
+        northNeighbor = map.northNeighbor;
+        eastNeighbor = map.eastNeighbor;
+        southNeighbor = map.southNeighbor;
+        westNeighbor = map.westNeighbor;
+        region = map.region;
+        width = map.width;
+        height = map.height;
+        Name = map.Name;
+        ResetOnUnload = map.ResetOnUnload;
+        foreach (var obj in map.WorldObjects)
+        {
+            AddObject(obj);
+        }
+
+        if (ResetOnUnload)
+        {
+            originalState = new();
+            foreach (var obj in map.WorldObjects)
+            {
+                originalState.Add(obj);
+            }
+        }
     }
 
     public void AddObject(BabaObject obj)
@@ -53,31 +80,21 @@ public class BabaMap
         obj.index = -1;
     }
 
-    public static implicit operator BabaMap(MapData map)
-    {
-        var babaMap = new BabaMap()
-        {
-            MapId = map.MapId,
-            northNeighbor = map.northNeighbor,
-            eastNeighbor = map.eastNeighbor,
-            southNeighbor = map.southNeighbor,
-            westNeighbor = map.westNeighbor,
-            region = map.region,
-            width = map.width,
-            height = map.height,
-            Name = map.Name,
-        };
+    public static implicit operator BabaMap(MapData map) => new BabaMap(map);
 
-        foreach (var obj in map.WorldObjects)
+    public void ResetToOriginalState()
+    {
+        if (!ResetOnUnload || originalState == null) return;
+        WorldObjects.Clear();
+        foreach (var original in originalState)
         {
-            babaMap.AddObject(obj);
+            AddObject(original);
         }
-        return babaMap;
     }
 
     public MapData ToMapData()
     {
-        return new MapData(WorldObjects.Select(x => x.ToObjectData())) 
+        return new MapData((originalState ?? WorldObjects).Select(x => x.ToObjectData())) 
         {
             MapId = MapId,
             northNeighbor = northNeighbor,
@@ -88,6 +105,7 @@ public class BabaMap
             width = width,
             height = height,
             Name = Name,
+            ResetOnUnload = ResetOnUnload,
         };
     }
 }

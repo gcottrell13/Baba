@@ -25,6 +25,7 @@ namespace Core.Engine
         public short height;
 
         public string Name = string.Empty;
+        public bool ResetOnUnload;
 
         public MapData(IEnumerable<ObjectData> objectDatas)
         {
@@ -40,7 +41,7 @@ namespace Core.Engine
             if (obj is MapData map)
                 return WorldObjects.Compare(map.WorldObjects) && MapId == map.MapId && northNeighbor == map.northNeighbor && 
                     westNeighbor == map.westNeighbor && map.eastNeighbor == eastNeighbor && southNeighbor == map.southNeighbor && 
-                    upLayer == map.upLayer && region == map.region && Name == map.Name && map.width == width && map.height == height;
+                    upLayer == map.upLayer && region == map.region && Name == map.Name && map.width == width && map.height == height && map.ResetOnUnload == ResetOnUnload;
             return base.Equals(obj);
         }
 
@@ -61,6 +62,7 @@ namespace Core.Engine
                 {{nameof(region)}} = {{region}},
                 {{nameof(width)}} = {{width}},
                 {{nameof(height)}} = {{height}},
+                {{nameof(ResetOnUnload)}} = {{ResetOnUnload}},
             }
             """;
 

@@ -83,6 +83,21 @@ public class SerializeBytes
             deserializer = x => JArray.FromObject(deserializeArray(x, arraydeserializer)).ToObject(t);
             return true;
         }
+        if (t.IsAssignableTo(typeof(IDictionary)) && getDeserializerMethod(t.GenericTypeArguments[0], out var keyDeserializer) && getDeserializerMethod(t.GenericTypeArguments[1], out var valueDeserializer))
+        {
+            deserializer = x =>
+            {
+                var keys = JArray.FromObject(deserializeArray(x, keyDeserializer));
+                var values = JArray.FromObject(deserializeArray(x, valueDeserializer));
+                var dict = new JObject();
+                foreach (var (key, value) in keys.Zip(values))
+                {
+                    dict[key.ToString()] = value;
+                }
+                return dict.ToObject(t);
+            };
+            return true;
+        }
         if (t.IsAssignableTo(typeof(IEnumerable)) && getDeserializerMethod(t.GenericTypeArguments[0], out var innerDeserializer))
         {
             deserializer = x => JArray.FromObject(deserializeArray(x, innerDeserializer)).ToObject(t);
@@ -98,6 +113,16 @@ public class SerializeBytes
         if (t.IsArray && getSerializerMethod(t.GetElementType(), out var arraySerializer))
         {
             serializer = x => serializeArray(x as ICollection, arraySerializer);
+            return true;
+        }
+        if (t.IsAssignableTo(typeof(IDictionary)) && getSerializerMethod(t.GenericTypeArguments[0], out var keySerializer) && getSerializerMethod(t.GenericTypeArguments[1], out var valueSerializer))
+        {
+            serializer = x =>
+            {
+                var keys = serializeArray((x as IDictionary).Keys, keySerializer);
+                var values = serializeArray((x as IDictionary).Values, valueSerializer);
+                return keys.Concat(values).ToArray();
+            };
             return true;
         }
         if (t.IsAssignableTo(typeof(IEnumerable)) && getSerializerMethod(t.GenericTypeArguments[0], out var innerSerializer))

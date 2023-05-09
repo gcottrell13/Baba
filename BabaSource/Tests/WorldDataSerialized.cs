@@ -12,7 +12,8 @@ public class WorldDataSerialized
     public const string expectedSerialized = """
         # world new [baba] city
         ---- BEGIN WORLD ----
-        AQAAAAMADwAAAG5ldyBbYmFiYV0gY2l0eQ==
+        AQAAAAMADwAAAG5ldyBbYmFiYV0gY2l0eQIAAABUAAAAOQAAAAIAAAAKAAAAFgAA
+        AA==
         ---- END WORLD ----
 
         # 0 autumnregion

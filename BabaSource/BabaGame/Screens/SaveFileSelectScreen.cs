@@ -18,7 +18,7 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
     private readonly Action onNew;
 
     public SaveFileSelectScreen(SaveFile saveFile, Action<WorldData> onSelect, Action onNew)
-	{
+    {
         filtererModal = new(saveFile.SaveFiles.Values.Append(new()).ToList(), 10, display: displayWorldData, canCancel: false)
         {
             OnSelect = OnSelect,

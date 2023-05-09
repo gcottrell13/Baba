@@ -1,4 +1,5 @@
-﻿using Core.Utils;
+﻿using Core.Content;
+using Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ public class WorldData
     public List<MapData> Maps = new();
     public short[] GlobalWordMapIds;
     public string Name = string.Empty;
+    public Dictionary<ObjectTypeId, int> Inventory = new();
 
     public WorldData()
     {
@@ -33,7 +35,7 @@ public class WorldData
     public override bool Equals(object? obj)
     {
         if (obj is WorldData world)
-            return Regions.Compare(world.Regions) && Maps.Compare(world.Maps) && world.GlobalWordMapIds.Compare(GlobalWordMapIds) && world.Name == Name;
+            return Regions.Compare(world.Regions) && Maps.Compare(world.Maps) && world.GlobalWordMapIds.Compare(GlobalWordMapIds) && world.Name == Name && Inventory.Compare(world.Inventory);
         return base.Equals(obj);
     }
 

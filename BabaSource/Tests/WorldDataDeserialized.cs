@@ -13,6 +13,11 @@ public class WorldDataDeserialized
 {
     public static WorldData expectedCompiledMap = new WorldData()
     {
+        Inventory = new()
+        {
+            { ObjectTypeId.key, 10 },
+            { ObjectTypeId.fish, 22 },
+        },
         GlobalWordMapIds = new short[] { 3 },
         Name = "new [baba] city",
         Maps = new() {

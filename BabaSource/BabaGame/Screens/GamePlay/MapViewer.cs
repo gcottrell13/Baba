@@ -109,7 +109,7 @@ internal class MapViewer : GameObject
                 var activeColor = PaletteInfo.Palettes["default"][color.colorActive].ToHexTriple();
 
                 world.Inventory.TryGetValue(reagent, out int hasCount);
-                var hasColor = hasCount >= count ? "[44,ff,44]" : "[white]";
+                var hasColor = hasCount >= count ? "[44,ff,44]" : "[gray]";
 
                 message += $"\n {activeColor}{reagent} [{reagent}] {hasColor}{hasCount}/{count}";
             }

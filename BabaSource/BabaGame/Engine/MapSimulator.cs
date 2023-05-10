@@ -198,8 +198,14 @@ public class MapSimulator
                 foreach (var t in texts)
                     t.Active = false;
                 foreach (var rule in rules)
+                {
+                    if (rule.Verb.Name == ObjectTypeId.need)
+                    {
+                        parseMultiplier(rule.GetSentenceMembers().ToList());
+                    }
                     foreach (var member in rule.GetSentenceMembers())
                         member.Active = true;
+                }
 
                 var dict = new RuleDict();
                 addRules(dict, rules);
@@ -519,19 +525,21 @@ public class MapSimulator
 
         x += dx;
         y += dy;
-        var current = objectsAt(x, y).FirstOrDefault();
+        var theX = objectsAt(x, y).FirstOrDefault();
 
-        if (current == null || current.Name != ObjectTypeId.x)
+        if (theX == null || theX.Name != ObjectTypeId.x)
             return 1;
 
         x += dx;
         y += dy;
-        current = objectsAt(x, y).FirstOrDefault();
+        var current = objectsAt(x, y).FirstOrDefault();
         var multiplier = 0;
         while (current != null)
         {
             var count = current.Name - ObjectTypeId.zero;
-            if (count < 0 || count > 9) return multiplier;
+            if (count < 0 || count > 9) 
+                break;
+            current.Active = true;
 
             multiplier *= 10;
             multiplier += count;
@@ -539,6 +547,8 @@ public class MapSimulator
             y += dy;
             current = objectsAt(x, y).FirstOrDefault();
         }
+        if (multiplier > 1) 
+            theX.Active = true;
         return multiplier;
     }
 

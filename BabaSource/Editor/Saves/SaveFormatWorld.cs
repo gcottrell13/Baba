@@ -89,7 +89,7 @@ public class SaveObjectData
     public int x = 0;
     public int y = 0;
     public string name = string.Empty;
-    public uint state = 1;
+    public uint state = 0;
     public int color;
     public string text = string.Empty;
     public SaveOriginalObjectData? original = null;

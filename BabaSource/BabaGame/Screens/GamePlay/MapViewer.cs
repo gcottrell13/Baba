@@ -101,7 +101,8 @@ internal class MapViewer : GameObject
 
         if (simulator.doesObjectNeedAnything(obj) is Dictionary<ObjectTypeId, int> needs && needs.Count > 0)
         {
-            message += "\nRequires:\n";
+            var objColor = PaletteInfo.Palettes["default"][obj.Color].ToHexTriple();
+            message += $"\n{objColor}[{obj.Name}:{(int)obj.Facing}][white] Requires:\n";
             foreach (var (reagent, count) in needs)
             {
                 var color = ThemeInfo.GetColorsByKind(reagent, ObjectKind.Text);

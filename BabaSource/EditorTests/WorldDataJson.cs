@@ -63,8 +63,8 @@ public static class WorldDataJson
         					{"x":4,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
         					{"x":6,"y":4,"name":"bolt","state":1,"color":42,"text":"","original":null},
         					{"x":5,"y":4,"name":"bolt","state":8,"color":42,"text":"","original":null},
-        					{"x":8,"y":6,"name":"text_dog","state":1,"color":2,"text":"","original":null},
-        					{"x":10,"y":6,"name":"text_two","state":1,"color":2,"text":"","original":null},
+        					{"x":8,"y":6,"name":"text_dog","state":0,"color":2,"text":"","original":null},
+        					{"x":10,"y":6,"name":"text_two","state":0,"color":2,"text":"","original":null},
         				],
         				"width": 15,
         				"height": 15
@@ -136,7 +136,7 @@ public static class WorldDataJson
         			"resetWhenInactive": false,
         			"layer1": {
         				"objects": [
-        					{"x":0,"y":0,"name":"tree","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
+        					{"x":0,"y":0,"name":"tree","state":0,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
         					{"x":1,"y":0,"name":"baba","state":1,"color":42,"text":"","original":{"name":"wall","state":1,"color":9}},
         				],
         				"width": 15,
@@ -144,12 +144,12 @@ public static class WorldDataJson
         			},
         			"layer2": {
         				"objects": [
-        					{"x":0,"y":0,"name":"text_tree","state":1,"color":42,"text":"","original":null},
-        					{"x":1,"y":0,"name":"text_is","state":1,"color":3,"text":"","original":null},
-        					{"x":2,"y":0,"name":"text_stop","state":1,"color":41,"text":"","original":null},
-        					{"x":0,"y":1,"name":"text_trees","state":1,"color":42,"text":"","original":null},
-        					{"x":1,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
-        					{"x":2,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
+        					{"x":0,"y":0,"name":"text_tree","state":0,"color":42,"text":"","original":null},
+        					{"x":1,"y":0,"name":"text_is","state":0,"color":3,"text":"","original":null},
+        					{"x":2,"y":0,"name":"text_stop","state":0,"color":41,"text":"","original":null},
+        					{"x":0,"y":1,"name":"text_trees","state":0,"color":42,"text":"","original":null},
+        					{"x":1,"y":1,"name":"text_is","state":0,"color":3,"text":"","original":null},
+        					{"x":2,"y":1,"name":"text_stop","state":0,"color":41,"text":"","original":null}
         				],
         				"width": 15,
         				"height": 15
@@ -162,7 +162,7 @@ public static class WorldDataJson
         			"resetWhenInactive": false,
         			"layer1": {
         				"objects": [
-        					{"x":0,"y":0,"name":"tree","state":1,"color":42,"text":"","original":{"name":"tree","state":1,"color":42}},
+        					{"x":0,"y":0,"name":"tree","state":0,"color":42,"text":"","original":{"name":"tree","state":1,"color":42}},
         					{"x":1,"y":0,"name":"amongi","state":1,"color":42,"text":"","original":{"name":"tree","state":1,"color":42}},
         				],
         				"width": 15,
@@ -170,9 +170,9 @@ public static class WorldDataJson
         			},
         			"layer2": {
         				"objects": [
-        					{"x":2,"y":1,"name":"text_tree","state":1,"color":42,"text":"","original":null},
-        					{"x":3,"y":1,"name":"text_is","state":1,"color":3,"text":"","original":null},
-        					{"x":4,"y":1,"name":"text_stop","state":1,"color":41,"text":"","original":null}
+        					{"x":2,"y":1,"name":"text_tree","state":0,"color":42,"text":"","original":null},
+        					{"x":3,"y":1,"name":"text_is","state":0,"color":3,"text":"","original":null},
+        					{"x":4,"y":1,"name":"text_stop","state":0,"color":41,"text":"","original":null}
         				],
         				"width": 15,
         				"height": 15

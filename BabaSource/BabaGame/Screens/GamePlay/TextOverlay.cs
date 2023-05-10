@@ -20,8 +20,8 @@ internal class TextOverlay : GameObject
             backgroundColor = Color.Black,
         });
         var (width, height) = display.TextFinalDimensions();
-        display.Graphics.x = x - width * scale / 2; 
-        display.Graphics.y = y - height * scale;
+        display.Graphics.x = Math.Clamp(x - width * scale / 2 + 0.5f, 0, ScreenWidth - width); 
+        display.Graphics.y = Math.Clamp(y - height * scale, 0, ScreenHeight - height);
         display.Graphics.xscale = scale;
         display.Graphics.yscale = scale;
         AddChild(display);

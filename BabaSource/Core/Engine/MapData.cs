@@ -62,7 +62,7 @@ namespace Core.Engine
                 {{nameof(region)}} = {{region}},
                 {{nameof(width)}} = {{width}},
                 {{nameof(height)}} = {{height}},
-                {{nameof(ResetOnUnload)}} = {{ResetOnUnload}},
+                {{nameof(ResetOnUnload)}} = {{ResetOnUnload.ToString().ToLower()}},
             }
             """;
 

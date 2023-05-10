@@ -1,5 +1,6 @@
 ﻿using Core.Content;
 using Core.Engine;
+using Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -146,6 +147,7 @@ namespace Editor.Saves
                 Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
                 Text = x.text,
                 Present = true,
+                Facing = (Direction)x.state,
             }).ToArray());
             return new MapTemp(md)
             {

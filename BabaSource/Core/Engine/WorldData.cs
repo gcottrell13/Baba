@@ -49,7 +49,14 @@ public class WorldData
             GlobalWordMapIds = new short[] { {{ string.Join(", ", GlobalWordMapIds) }} },
             Name = "{{Name}}",
             Maps = new() { {{string.Join(",", Maps.Select(x => "\n" + x.ToString().Indent(2)))}} },
-            Regions = new() { {{string.Join(",", Regions.Select(x => "\n" + x.ToString().Indent(2)))}} }
+            Regions = new() { {{string.Join(",", Regions.Select(x => "\n" + x.ToString().Indent(2)))}} },
+            Inventory = new() {{{
+        (Inventory.Count > 0 ? (
+            " \n" + string.Join(",\n", 
+                Inventory.Select(x => "{ ObjectTypeId." + x.Key.ToString() + ", " + x.Value.ToString() + " }")
+            ).Indent(2) + "\n"
+        ) : "")
+        }} },
         }
         """;
 

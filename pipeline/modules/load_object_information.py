@@ -89,6 +89,9 @@ def load_information() -> tuple[ObjectInformationCollection, ColorsFormat]:
         for obj, attrs in d.items():
             if 'name' not in attrs:
                 continue
+            if attrs['name'].lower() == 'text_3d':
+                continue
+
             OBJECT_INFO[attrs['name']] = {
                 'color': attrs['colour'],
                 'color_active': attrs.get('colour_active', attrs['colour']),

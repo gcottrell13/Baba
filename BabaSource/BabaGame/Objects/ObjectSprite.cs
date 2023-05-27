@@ -67,7 +67,6 @@ internal class ObjectSprite : GameObject
 
         Graphics.zindex = ObjectInfo.Info[strname].layer;
         setWobbler(spriteValue.GetInitial(d));
-        Graphics.SetColor(ThemeInfo.GetObjectColor("default", strname));
     }
 
     private void setWobbler(Wobbler wobbler)
@@ -76,6 +75,7 @@ internal class ObjectSprite : GameObject
         {
             Graphics.RemoveChild(currentSprite);
             currentSprite = new ObjectSpriteContainer(wobbler);
+            currentSprite.SetColor(ThemeInfo.GetColor("default", previousColor));
             Graphics.AddChild(currentSprite);
         }
     }

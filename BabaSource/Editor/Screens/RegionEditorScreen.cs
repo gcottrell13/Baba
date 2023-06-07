@@ -27,6 +27,7 @@ internal class RegionEditorScreen : BaseScreen<EditorStates>
         bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
         bg.xscale = ScreenWidth;
         bg.yscale = ScreenHeight;
+        this.world = world;
 
         stateMachine = new StateMachine<EditorStates, KeyPress>("region editor", EditorStates.None)
             .State(
@@ -126,7 +127,6 @@ internal class RegionEditorScreen : BaseScreen<EditorStates>
         Graphics.AddChild(bg);
         AddChild(titleText);
         refreshText();
-        this.world = world;
     }
 
 

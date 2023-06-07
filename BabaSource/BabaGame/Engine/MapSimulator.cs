@@ -17,7 +17,8 @@ public class RuleDict : Dictionary<ObjectTypeId, List<Rule<BabaObject>>>
 {
     public new List<Rule<BabaObject>> this[ObjectTypeId key]
     {
-        get => this.ConstructDefaultValue(key); set => TryAdd(key, value);
+        get => this.ConstructDefaultValue(key); 
+        set => TryAdd(key, value);
     }
 }
 
@@ -233,7 +234,10 @@ public class MapSimulator
 
         applyRulesFromAbove:
         cachedRulesFromAbove = rulesFromAbove;
-        foreach (var rule in rulesFromAbove) dict[rule.Key] = dict.ContainsKey(rule.Key) ? dict[rule.Key].Concat(rule.Value).ToList() : rule.Value;
+        foreach (var (key, value) in rulesFromAbove)
+        {
+            dict[key].AddRange(value);
+        }
         setAllRules(dict);
 
         theReturn:

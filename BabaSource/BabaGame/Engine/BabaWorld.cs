@@ -71,8 +71,12 @@ public class BabaWorld
 
         var regionRules = Regions.ToDictionary(s => s.Key, s => _parseAndApplyToAll(globalRules, s.Value.WordLayerIds));
 
+        var alreadyProcessed = GlobalWordMapIds.Concat(Regions.SelectMany(x => x.Value.WordLayerIds)).ToList();
+
 		foreach (var id in mapIds)
 		{
+            if (alreadyProcessed.Contains(id)) continue;
+
 			var map = Simulators[id];
 			var rules = map.region != null ? regionRules[map.region.RegionId] : globalRules;
             dict[id] = map.parseRules(rules);

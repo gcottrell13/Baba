@@ -138,7 +138,7 @@ namespace Editor.Saves
                 width = (short)layer.width,
                 height = (short)layer.height,
             };
-            md.WorldObjects.AddRange(layer.objects.Select(x => new ObjectData()
+            md.WorldObjects.AddRange(layer.objects.Where(obj => obj.x < layer.width && obj.y < layer.height).Select(x => new ObjectData()
             {
                 Color = (short)x.color,
                 x = x.x,

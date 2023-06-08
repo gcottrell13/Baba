@@ -33,10 +33,12 @@ internal class ObjectSprite : GameObject
 
     private double wobbleTimer = 0;
     private double maxWobbleTimer = 0;
+    private readonly string theme;
 
-    public ObjectSprite()
+    public ObjectSprite(string theme)
 	{
         maxWobbleTimer = CollectionExtension.rng.NextDouble() * 300 + 200;
+        this.theme = theme;
     }
 
     /// <summary>
@@ -75,7 +77,7 @@ internal class ObjectSprite : GameObject
         {
             Graphics.RemoveChild(currentSprite);
             currentSprite = new ObjectSpriteContainer(wobbler);
-            currentSprite.SetColor(ThemeInfo.GetColor("default", previousColor));
+            currentSprite.SetColor(ThemeInfo.GetColor(theme, previousColor));
             Graphics.AddChild(currentSprite);
         }
     }
@@ -166,7 +168,7 @@ internal class ObjectSprite : GameObject
 
         if (color != previousColor)
         {
-            Graphics.SetColor(ThemeInfo.GetColor("default", color));
+            Graphics.SetColor(ThemeInfo.GetColor(theme, color));
             previousColor = color;
         }
     }

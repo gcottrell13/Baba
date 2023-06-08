@@ -29,6 +29,8 @@ public class BabaMap
 
     public bool ResetOnUnload;
 
+    private int counter = 0;
+
 
     public BabaMap(MapData map)
     {
@@ -60,25 +62,14 @@ public class BabaMap
 
     public void AddObject(BabaObject obj)
     {
-        if (obj.index != -1)
-            throw new InvalidOperationException();
-        obj.index = WorldObjects.Count;
+        obj.index = counter++;
         WorldObjects.Add(obj);
     }
 
     public void RemoveObject(BabaObject obj)
     {
-        var last = WorldObjects.Last();
-        WorldObjects.RemoveAt(last.index);
-
+        WorldObjects.RemoveAll(x => x.index == obj.index);
         obj.Deleted = true;
-
-        if (last.index == obj.index) return;
-
-        WorldObjects[obj.index] = last;
-        last.index = obj.index;
-
-        obj.index = -1;
     }
 
     public static implicit operator BabaMap(MapData map) => new BabaMap(map);

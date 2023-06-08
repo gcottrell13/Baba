@@ -76,14 +76,14 @@ internal class MapViewWindow : GameObject
         var previousVisibleMaps = visibleMaps.ToList();
         visibleMaps.Clear();
 
-        if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
-
         currentMapId = mapId;
 
         if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
         if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) _addMapAndScale(neighbor, 0, sim.Height);
         if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
         if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) _addMapAndScale(neighbor, sim.Width, 0);
+
+        if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
 
         var removedMaps = previousVisibleMaps.Except(visibleMaps);
         //var addedMaps = visibleMaps.Except(previousVisibleMaps);

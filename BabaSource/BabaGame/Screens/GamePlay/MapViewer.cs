@@ -15,43 +15,55 @@ namespace BabaGame.Screens.GamePlay;
 
 internal class MapViewer : GameObject
 {
-	private Dictionary<uint, ObjectSprite> sprites = new();
+	private Dictionary<int, ObjectSprite> sprites = new();
     private readonly BabaWorld world;
     private readonly MapSimulator simulator;
     private readonly TextOverlay textOverlay = new();
+    private string theme;
 
     public BabaMap MapData { get; }
 
     public MapViewer(BabaMap mapData, BabaWorld world, MapSimulator simulator)
-	{
-		foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
-		{
-			if (obj == null) continue;
-			addSprite((uint)index);
-        }
+    {
         MapData = mapData;
         this.world = world;
         this.simulator = simulator;
-
         textOverlay.Graphics.zindex = 1000;
+        theme = world.Regions.TryGetValue(MapData.region, out var region) ? region.Theme ?? "default" : "default";
         AddChild(textOverlay);
+
+        var bgColor = PaletteInfo.Palettes[theme][0];
+
+        var rect = new RectangleSprite();
+        rect.xscale = mapData.width;
+        rect.yscale = mapData.height;
+        rect.SetColor(bgColor);
+        Graphics.AddChild(rect);
+
+        foreach (var (obj, index) in mapData.WorldObjects.Select((x, i) => (x, i)))
+        {
+            if (obj == null) continue;
+            addSprite(index);
+        }
     }
 
     public void Load()
 	{
         ensureSprites();
-        foreach (var (index, sprite) in sprites)
+        foreach (var data in MapData.WorldObjects)
 		{
-			sprite.MoveSpriteNoAnimate(MapData.WorldObjects[(int)index]);
+            var sprite = sprites[data.index];
+			sprite.MoveSpriteNoAnimate(data);
 		}
 	}
 
 	public void onMove()
 	{
         ensureSprites();
-        foreach (var (index, sprite) in sprites)
+        foreach (var data in MapData.WorldObjects)
         {
-            sprite.OnMove(MapData.WorldObjects[(int)index], false);
+            var sprite = sprites[data.index];
+            sprite.OnMove(data, false);
         }
 
         textOverlay.RemoveAllText();
@@ -66,24 +78,27 @@ internal class MapViewer : GameObject
 
 	private void ensureSprites()
     {
+        var indexesToRemove = sprites.Keys.ToList();
+
         foreach (var obj in MapData.WorldObjects)
         {
-            if (obj.index >= 0 && !sprites.ContainsKey((uint)obj.index))
+            if (obj.index >= 0 && !sprites.ContainsKey(obj.index))
             {
-                addSprite((uint)obj.index);
+                addSprite(obj.index);
             }
+            indexesToRemove.Remove(obj.index);
         }
 
-        for (var i = MapData.WorldObjects.Count; i < sprites.Count; i++)
+        foreach (var index in indexesToRemove)
         {
-            RemoveChild(sprites[(uint)i]);
-            sprites.Remove((uint)i);
+            RemoveChild(sprites[index]);
+            sprites.Remove(index);
         }
     }
 
-	private void addSprite(uint index)
+	private void addSprite(int index)
 	{
-        var sprite = new ObjectSprite();
+        var sprite = new ObjectSprite(theme);
         sprites.Add(index, sprite);
         AddChild(sprite);
     }

@@ -18,7 +18,6 @@ public class RuleDict : Dictionary<ObjectTypeId, List<Rule<BabaObject>>>
     public new List<Rule<BabaObject>> this[ObjectTypeId key]
     {
         get => this.ConstructDefaultValue(key); 
-        set => TryAdd(key, value);
     }
 }
 

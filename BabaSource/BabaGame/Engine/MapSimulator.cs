@@ -2,6 +2,7 @@
 using Core.Content;
 using Core.Engine;
 using Core.Utils;
+using MonoGame.Extended;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -106,36 +107,74 @@ public class MapSimulator
 
     public bool doMovement(Direction input, BabaObject[] you)
     {
-        var movingObjects = new List<(BabaObject obj, int dx, int dy)>();
+        var movingObjects = new List<(BabaObject obj, int dx, int dy, ObjectTypeId kind)>();
+
+        {
+            // VERY IMPORTANT: THESE GO FIRST BEFORE "YOU"
+            // otherwise we can't catch the MOVEing things that we need to GRAB
+
+            // chill has a low chance of moving on any turn, and will move in a random direction
+            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).Select(i =>
+            {
+                // TODO: randomly pick CHILL objects to move in a random direction
+                i.Facing = Direction.Right;
+                return (i, 1, 0, ObjectTypeId.chill);
+            }));
+            // Find all MOVE objects and add them with the delta corresponding to their direction
+            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.move).Select(i =>
+            {
+                var (dx, dy) = DirectionExtensions.DeltaFromDirection(i.Facing);
+                return (i, dx, dy, ObjectTypeId.move);
+            }));
+        }
 
         if (input != Direction.None)
         {
             var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
-            movingObjects.AddRange(you.Select(i => (i, dx, dy)));
+            movingObjects.AddRange(you.Select(i =>
+            {
+                i.Facing = input;
+                return (i, dx, dy, ObjectTypeId.you);
+            }));
         }
         else
         {
-            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).Select(i => (i, 1, 0)));
+            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.idle).Select(i =>
+            {
+                var (dx, dy) = DirectionExtensions.DeltaFromDirection(i.Facing);
+                return (i, 1, 0, ObjectTypeId.idle);
+            }));
         }
 
+        // a value to return if any movement happened
         var didAnyMove = false;
 
-        foreach (var (obj, dx, dy) in movingObjects)
+        // helper function (extracted so that MOVE objects can immediately turn around and move when hitting a wall)
+        bool tryMoveObject(BabaObject obj, int dx, int dy, ObjectTypeId kind)
         {
-            TryRemoveObjectsAt(obj.x + dx, obj.y + dy);
-            if (push(obj.x, obj.y, dx, dy))
+            TryRemoveObjectsAt(obj.x + dx, obj.y + dy); // for OPEN/SHUT and NEED
+            if (push(obj.x, obj.y, dx, dy)) // try to move into a space
             {
-                pull(obj.x, obj.y, dx, dy);
-                moveObjectTo(obj, obj.x + dx, obj.y + dy);
-                if (obj.Present == false)
+                pull(obj.x, obj.y, dx, dy); // try to pull objects
+                moveObjectTo(obj, obj.x + dx, obj.y + dy); // move
+                if (obj.Present == false && kind == ObjectTypeId.you)
                 {
                     // switch map
                     EventChannels.MapChange.SendAsyncMessage(new() { MapId = obj.CurrentMapId });
                 }
                 didAnyMove = true;
+                return true;
             }
-            if (input != Direction.None)
-                obj.Facing = input;
+            return false;
+        }
+
+        foreach (var (obj, dx, dy, kind) in movingObjects)
+        {
+            if (!tryMoveObject(obj, dx, dy, kind) && kind == ObjectTypeId.move)
+            {
+                obj.Facing = DirectionExtensions.Opposite(obj.Facing);
+                tryMoveObject(obj, -dx, -dy, kind);
+            }
         }
         return didAnyMove;
     }

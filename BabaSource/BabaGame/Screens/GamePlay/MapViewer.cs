@@ -53,7 +53,7 @@ internal class MapViewer : GameObject
         foreach (var data in MapData.WorldObjects)
 		{
             var sprite = sprites[data.index];
-			sprite.MoveSpriteNoAnimate(data);
+			sprite.OnMove(data, false, false);
 		}
 	}
 
@@ -63,7 +63,7 @@ internal class MapViewer : GameObject
         foreach (var data in MapData.WorldObjects)
         {
             var sprite = sprites[data.index];
-            sprite.OnMove(data, false);
+            sprite.OnMove(data, false, true);
         }
 
         textOverlay.RemoveAllText();

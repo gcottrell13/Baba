@@ -20,7 +20,7 @@ namespace BabaGame.Objects;
 /// </summary>
 internal class ObjectSprite : GameObject
 {
-    private ObjectTypeId previousName;
+    private ObjectTypeId previousName = 0;
     private int previousX = 0;
     private int previousY = 0;
     private Direction previousFacing = Direction.None;
@@ -29,7 +29,7 @@ internal class ObjectSprite : GameObject
 
     private SpriteValues? spriteValue;
     private ObjectSpriteContainer? currentSprite;
-    private int moveStep = 0;
+    private int moveStep = -1;
 
     private double wobbleTimer = 0;
     private double maxWobbleTimer = 0;
@@ -41,25 +41,6 @@ internal class ObjectSprite : GameObject
         this.theme = theme;
     }
 
-    /// <summary>
-    /// used for initialization, and when reloading a map
-    /// </summary>
-    public void MoveSpriteNoAnimate(BabaObject objectData)
-    {
-        previousName = objectData.Name;
-        previousX = objectData.X;
-        previousY = objectData.Y;
-        previousFacing = objectData.Facing;
-        previousKind = objectData.Kind;
-        Graphics.x = objectData.x;
-        Graphics.y = objectData.y;
-        previousColor = objectData.Color;
-
-        Name = $"{objectData.Kind}-{objectData.Name}";
-        setSprite(previousName, objectData.Kind, objectData.Facing);
-        _afterOnMoveAnimation(objectData);
-    }
-
     private void setSprite(ObjectTypeId name, ObjectKind kind, Direction d)
     {
         var strname = ObjectInfo.IdToName[name];
@@ -69,6 +50,7 @@ internal class ObjectSprite : GameObject
 
         Graphics.zindex = ObjectInfo.Info[strname].layer;
         setWobbler(spriteValue.GetInitial(d));
+        moveStep = -1;
     }
 
     private void setWobbler(Wobbler wobbler)
@@ -100,7 +82,7 @@ internal class ObjectSprite : GameObject
     /// <summary>
     /// for when something happened to the game state
     /// </summary>
-    public void OnMove(BabaObject objectData, bool isSleeping)
+    public void OnMove(BabaObject objectData, bool isSleeping, bool animate)
     {
         Name = $"{objectData.Kind}-{objectData.Name}";
 
@@ -166,9 +148,9 @@ internal class ObjectSprite : GameObject
             ? (objectData.Active ? colorActive : colorInactive)
             : objectData.Color;
 
-        if (color != previousColor)
+        if (color != previousColor && currentSprite != null)
         {
-            Graphics.SetColor(ThemeInfo.GetColor(theme, color));
+            currentSprite.SetColor(ThemeInfo.GetColor(theme, color));
             previousColor = color;
         }
     }

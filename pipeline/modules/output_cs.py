@@ -64,7 +64,7 @@ def save_object_info():
     ]
 
     enum_values = ",\n".join(
-        f"\t{transform_enum_name(key)} = {index}"
+        f"\t{transform_enum_name(key)} = {index + 1}"
         for index, key in enumerate(keyIndex)
     )
 

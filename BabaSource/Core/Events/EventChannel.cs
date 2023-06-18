@@ -36,7 +36,7 @@ namespace Core.Events
                 }
                 foreach (var subscriber in taskSubscriptions.ToList())
                 {
-                    subscriber(message).RunSynchronously();
+                    subscriber(message);
                 }
             }
         }

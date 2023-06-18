@@ -22,13 +22,13 @@ internal class GameViewScreen : BaseScreen<MainGameState>
     private readonly PlayerNumber playerNumber;
     private readonly BabaWorld worldData;
     private readonly MapViewWindow mapViewWindow;
+    private short currentMapId = 0;
 
     public GameViewScreen(ScreenStack stack, PlayerNumber playerNumber, BabaWorld worldData)
     {
         this.playerNumber = playerNumber;
         this.worldData = worldData;
         mapViewWindow = new MapViewWindow(worldData, ScreenWidth, ScreenHeight);
-        short currentMapId = 0;
         AddChild(mapViewWindow);
 
         stateMachine = new StateMachine<MainGameState, KeyPress>("game view screen", MainGameState.Noop)
@@ -64,11 +64,19 @@ internal class GameViewScreen : BaseScreen<MainGameState>
             .State(
                 MainGameState.MapTransition,
                 ev => MainGameState.Noop);
-        EventChannels.MapChange.Subscribe(e =>
-        {
-            currentMapId = e.MapId;
-            mapViewWindow.LoadMap(e.MapId);
-        });
+        EventChannels.MapChange.Subscribe(mapChange);
+        EventChannels.SoundPlay.Subscribe(playSound);
+    }
+
+    private async Task playSound(MusicPlay sound)
+    {
+        await PlaySound.PlaySoundFile(sound.TrackName!);
+    }
+
+    private void mapChange(MapChange e)
+    {
+        currentMapId = e.MapId;
+        mapViewWindow.LoadMap(e.MapId);
     }
 
     public void init()
@@ -105,5 +113,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
 
     protected override void OnDispose()
     {
+        EventChannels.MapChange.Unsubscribe(mapChange);
+        EventChannels.SoundPlay.Unsubscribe(playSound);
     }
 }

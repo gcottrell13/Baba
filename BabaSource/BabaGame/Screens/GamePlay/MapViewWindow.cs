@@ -38,20 +38,32 @@ internal class MapViewWindow : GameObject
 
     public void LoadMap(short mapId)
     {
-        _loadMap(mapId);
         var scale = _getMapScale(mapId);
 
-        if (babaWorld.Simulators.ContainsKey(currentMapId) == false) 
+        if (babaWorld.Simulators.TryGetValue(currentMapId, out var sim) == false)
         {
+            _loadMap(mapId);
             // no animation
             Graphics.xscale = scale;
             Graphics.yscale = scale;
             Graphics.x = scale;
             Graphics.y = scale;
         }
-        else if (babaWorld.Simulators[currentMapId].HasNeighbor(mapId))
+        else if (sim.HasNeighbor(mapId))
         {
-            // TODO: animate transition
+            var shortAnimation = visibleMaps.Contains(mapId);
+
+            if (shortAnimation)
+            {
+                _loadMap(mapId);
+                // animate
+            }
+            else
+            {
+                // animate
+                // THEN load
+                _loadMap(mapId);
+            }
             Graphics.xscale = scale;
             Graphics.yscale = scale;
             Graphics.x = scale;
@@ -59,6 +71,7 @@ internal class MapViewWindow : GameObject
         }
         else
         {
+            _loadMap(mapId);
             // no animation
             Graphics.xscale = scale;
             Graphics.yscale = scale;
@@ -78,10 +91,10 @@ internal class MapViewWindow : GameObject
 
         currentMapId = mapId;
 
-        if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor)) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
-        if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor)) _addMapAndScale(neighbor, 0, sim.Height);
-        if (_tryGetMapViewer(sim.WestNeighbor, out neighbor)) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
-        if (_tryGetMapViewer(sim.EastNeighbor, out neighbor)) _addMapAndScale(neighbor, sim.Width, 0);
+        if (_tryGetMapViewer(sim.NorthNeighbor, out var neighbor) && neighbor.MapData.width == sim.Width) _addMapAndScale(neighbor, 0, -neighbor.MapData.height);
+        if (_tryGetMapViewer(sim.SouthNeighbor, out neighbor) && neighbor.MapData.width == sim.Width) _addMapAndScale(neighbor, 0, sim.Height);
+        if (_tryGetMapViewer(sim.WestNeighbor, out neighbor) && neighbor.MapData.height == sim.Height) _addMapAndScale(neighbor, -neighbor.MapData.width, 0);
+        if (_tryGetMapViewer(sim.EastNeighbor, out neighbor) && neighbor.MapData.height == sim.Height) _addMapAndScale(neighbor, sim.Width, 0);
 
         if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
 

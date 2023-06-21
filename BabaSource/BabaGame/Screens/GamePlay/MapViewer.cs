@@ -48,7 +48,8 @@ internal class MapViewer : GameObject
     }
 
     public void Load()
-	{
+    {
+        simulator.doJoinables();
         ensureSprites();
         foreach (var data in MapData.WorldObjects)
 		{

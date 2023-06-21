@@ -128,6 +128,11 @@ public class BabaWorld
         parseMapRules(mapIds);
         foreach (var map in sims) map.collisionCheck(yous[map.MapId]);
         parseMapRules(mapIds);
+        foreach (var map in sims)
+        {
+            map.removeDuplicatesInSamePosition();
+            map.doJoinables();
+        }
     }
 
     public bool TestInventory(Dictionary<ObjectTypeId, int> needs)

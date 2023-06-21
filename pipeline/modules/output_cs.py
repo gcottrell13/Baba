@@ -106,7 +106,6 @@ public static class ObjectInfo {{
     public static readonly Dictionary<string, ObjectTypeId> NameToId = new() {{
 {name_to_id}
     }};
-    
 }}
         """,
         "Content/ObjectTypeId.cs": f"""
@@ -247,6 +246,8 @@ def output_spritesheets(data: dict[str, ObjectSprites]):
     lines: list[str] = []
     sheets: list[str] = []
 
+    joinables = []
+
     # longest_name_size = max(map(len, data.keys()))
 
     for name, info in data.items():
@@ -257,6 +258,7 @@ def output_spritesheets(data: dict[str, ObjectSprites]):
         match info:
             case Joinable() as j:
                 text = joinable(j, mapping)
+                joinables.append(name)
             case Wobbler() as w:
                 text = wobbler(w, mapping)
             case AnimateOnMove() as a:
@@ -281,6 +283,12 @@ new FacingOnMove(
 
     sheet_text = ',\n'.join(sheets)
     lines_text = ',\n'.join(lines)
+
+    joinables_output = ",\n".join(
+        f'\t\tObjectTypeId.{j}'
+        for j in joinables
+    )
+
     output_directory_structure(OUTPUT_DIRECTORY, {
         'Content/Sheets.cs': f"""
 using Microsoft.Xna.Framework.Graphics; 
@@ -304,6 +312,11 @@ using Core.Configuration;
 
 namespace {NAMESPACE};
 public static class SheetMap {{
+    
+    public static readonly ObjectTypeId[] JoinableObjects = new[] {{
+{joinables_output}
+    }};
+    
     public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, ResourceHandle<Texture2D>> sheets) {{
         return new Dictionary<string, SpriteValues>() {{
 {lines_text}

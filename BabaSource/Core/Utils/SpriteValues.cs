@@ -157,6 +157,7 @@ namespace Core.Utils
                 Direction.Up => Up,
                 Direction.Down => Down,
                 Direction.None => Right,
+                _ => Right,
             };
             return dir.Move(ref step);
         }
@@ -170,6 +171,7 @@ namespace Core.Utils
                 Direction.Up => Up,
                 Direction.Down => Down,
                 Direction.None => Right,
+                _ => Right,
             };
             return dir.Move(ref step);
         }

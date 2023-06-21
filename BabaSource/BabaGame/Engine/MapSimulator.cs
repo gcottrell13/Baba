@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -210,12 +211,49 @@ public class MapSimulator
         {
             foreach (var you in yous)
             {
-                if (you.x == grab.x  && you.y == grab.y)
+                if (you.x == grab.x && you.y == grab.y)
                 {
                     EventChannels.SoundPlay.SendMessage(new() { TrackName = "get" }, async: true);
                     world.AddToInventory(grab.Name, 1);
                     map.RemoveObject(grab);
                 }
+            }
+        }
+    }
+
+    public void removeDuplicatesInSamePosition()
+    {
+        void dup(BabaMap thismap)
+        {
+            var positions = new Dictionary<ObjectTypeId, List<(int, int)>>();
+            foreach (var item in thismap.WorldObjects)
+            {
+                var list = positions.ConstructDefaultValue(item.Name);
+                if (list.Contains((item.x, item.y)))
+                    thismap.RemoveObject(item);
+                else
+                    list.Add((item.x, item.y));
+            }
+        }
+        dup(map);
+        //if (upLayer != null) dup(upLayer);
+    }
+
+    public void doJoinables()
+    {
+        foreach (var type in SheetMap.JoinableObjects)
+        {
+            var objects = findObjectsThatAre(type).ToList();
+            var d = objects.Select(x => (x.x, x.y)).ToHashSet();
+
+            foreach (var obj in objects)
+            {
+                var state = Direction.None;
+                if (d.Contains((obj.x - 1, obj.y))) state |= Direction.Left;
+                if (d.Contains((obj.x + 1, obj.y))) state |= Direction.Right;
+                if (d.Contains((obj.x, obj.y - 1))) state |= Direction.Up;
+                if (d.Contains((obj.x, obj.y + 1))) state |= Direction.Down;
+                obj.Facing = state;
             }
         }
     }

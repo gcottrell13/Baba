@@ -122,7 +122,7 @@ internal class ObjectSprite : GameObject
                     }
                 case Joinable j:
                     {
-                        setWobbler(j.Join(Direction.None)); // TODO: get direction
+                        setWobbler(j.Join(objectData.Facing));
                         break;
                     }
             }

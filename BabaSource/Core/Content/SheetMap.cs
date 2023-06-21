@@ -6,6 +6,30 @@ using Core.Configuration;
 
 namespace Core.Content;
 public static class SheetMap {
+    
+    public static readonly ObjectTypeId[] JoinableObjects = new[] {
+		ObjectTypeId.blob,
+		ObjectTypeId.bog,
+		ObjectTypeId.brick,
+		ObjectTypeId.cliff,
+		ObjectTypeId.cloud,
+		ObjectTypeId.fence,
+		ObjectTypeId.fort,
+		ObjectTypeId.grass,
+		ObjectTypeId.hedge,
+		ObjectTypeId.ice,
+		ObjectTypeId.lava,
+		ObjectTypeId.line,
+		ObjectTypeId.pipe,
+		ObjectTypeId.plank,
+		ObjectTypeId.road,
+		ObjectTypeId.rubble,
+		ObjectTypeId.track,
+		ObjectTypeId.vine,
+		ObjectTypeId.wall,
+		ObjectTypeId.water
+    };
+    
     public static Dictionary<string, SpriteValues> GetSpriteInfo(Dictionary<string, ResourceHandle<Texture2D>> sheets) {
         return new Dictionary<string, SpriteValues>() {
 			{ "algae", new Wobbler("algae", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["algae"]) },

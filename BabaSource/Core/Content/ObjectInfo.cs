@@ -1200,6 +1200,5 @@ public static class ObjectInfo {
 		{ "wind", ObjectTypeId.wind },
 		{ "worm", ObjectTypeId.worm }
     };
-    
 }
         

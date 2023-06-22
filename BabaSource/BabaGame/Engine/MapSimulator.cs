@@ -219,6 +219,16 @@ public class MapSimulator
                 }
             }
         }
+        foreach (var save in findObjectsThatAre(ObjectTypeId.save).ToList())
+        {
+            foreach (var you in yous)
+            {
+                if (you.x == save.x && you.y == save.y)
+                {
+                    EventChannels.SaveGame.SendMessage(1, async: true);
+                }
+            }
+        }
     }
 
     public void removeDuplicatesInSamePosition()

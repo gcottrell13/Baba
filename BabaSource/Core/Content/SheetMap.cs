@@ -535,6 +535,7 @@ public static class SheetMap {
 ) },
 			{ "cup", new Wobbler("cup", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["cup"]) },
 			{ "cursor", new Wobbler("cursor", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(32, 32), sheets["cursor"]) },
+			{ "disk", new Wobbler("disk", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["disk"]) },
 			{ "dog", new FacingOnMove(
                 name: "dog", 
 				up: new AnimateOnMove("dog", new Wobbler[] {
@@ -1326,7 +1327,6 @@ public static class SheetMap {
 	new Wobbler("rubble.dlr", new[] { new Point(4, 5), new Point(5, 5), new Point(6, 5) }, new Point(24, 24), sheets["rubble"]), 
 	new Wobbler("rubble.udl", new[] { new Point(0, 6), new Point(1, 6), new Point(2, 6) }, new Point(24, 24), sheets["rubble"]), 
 	new Wobbler("rubble.udlr", new[] { new Point(3, 6), new Point(4, 6), new Point(5, 6) }, new Point(24, 24), sheets["rubble"]) }) },
-			{ "save", new Wobbler("save", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["save"]) },
 			{ "sax", new FacingOnMove(
                 name: "sax", 
 				up: new AnimateOnMove("sax", new Wobbler[] {
@@ -1542,7 +1542,7 @@ public static class SheetMap {
 			{ "text_d", new Wobbler("text_d", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_d"]) },
 			{ "text_defeat", new Wobbler("text_defeat", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_defeat"]) },
 			{ "text_deturn", new Wobbler("text_deturn", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(30, 30), sheets["text_deturn"]) },
-			{ "text_disk", new Wobbler("text_disk", new[] { new Point(0, 0) }, new Point(24, 24), sheets["text_disk"]) },
+			{ "text_disk", new Wobbler("text_disk", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_disk"]) },
 			{ "text_dog", new Wobbler("text_dog", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_dog"]) },
 			{ "text_done", new Wobbler("text_done", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_done"]) },
 			{ "text_donut", new Wobbler("text_donut", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_donut"]) },

@@ -99,6 +99,10 @@ internal class GameViewScreen : BaseScreen<MainGameState>
             Keys.Left => Direction.Left,
             Keys.Right => Direction.Right,
             Keys.Space => Direction.None,
+            Keys.W => Direction.Up,
+            Keys.S => Direction.Down,
+            Keys.A => Direction.Left,
+            Keys.D => Direction.Right,
             _ => null,
         };
 

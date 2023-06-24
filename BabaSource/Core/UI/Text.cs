@@ -331,6 +331,7 @@ namespace Core.UI
                     Name = bgRectName,
                 };
                 background.SetColor(options.background);
+                background.alpha = (options.background?.A ?? 255) / 255f;
                 Graphics.children.Insert(0, background);
             }
 

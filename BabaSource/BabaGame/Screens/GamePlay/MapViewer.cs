@@ -5,6 +5,7 @@ using Core.Content;
 using Core.Engine;
 using Core.UI;
 using Core.Utils;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ internal class MapViewer : GameObject
     private readonly MapSimulator simulator;
     private readonly TextOverlay textOverlay = new();
     private string theme;
+    private Text title = new();
 
     public BabaMap MapData { get; }
 
@@ -31,6 +33,12 @@ internal class MapViewer : GameObject
         textOverlay.Graphics.zindex = 1000;
         theme = world.Regions.TryGetValue(MapData.region, out var region) ? region.Theme ?? "default" : "default";
         AddChild(textOverlay);
+
+        title.Graphics.xscale = 1 / 32f;
+        title.Graphics.yscale = 1 / 32f;
+        title.Graphics.y = -0.8f;
+        title.SetText(mapData.Name, new() { background=new Color(0, 0, 0, 128) });
+        AddChild(title);
 
         var bgColor = PaletteInfo.Palettes[theme][0];
 

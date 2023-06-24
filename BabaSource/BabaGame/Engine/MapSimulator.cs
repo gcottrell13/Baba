@@ -235,14 +235,14 @@ public class MapSimulator
     {
         void dup(BabaMap thismap)
         {
-            var positions = new Dictionary<ObjectTypeId, List<(int, int)>>();
-            foreach (var item in thismap.WorldObjects)
+            var positions = new Dictionary<ObjectTypeId, List<(int, int, Direction)>>();
+            foreach (var item in thismap.WorldObjects.ToList())
             {
                 var list = positions.ConstructDefaultValue(item.Name);
-                if (list.Contains((item.x, item.y)))
+                if (list.Contains((item.x, item.y, item.Facing)))
                     thismap.RemoveObject(item);
                 else
-                    list.Add((item.x, item.y));
+                    list.Add((item.x, item.y, item.Facing));
             }
         }
         dup(map);

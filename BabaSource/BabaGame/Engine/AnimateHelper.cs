@@ -27,5 +27,11 @@ namespace BabaGame.Engine
             });
             return task.Task;
         }
+
+        public static async Task AnimateCubic(float value, float time, float destination, Action<float> setValue, Action? onComplete = null)
+        {
+            await Animate(ref value, time, destination, setValue, f => (float)Math.Pow(f, 0.33f));
+            onComplete?.Invoke();
+        }
     }
 }

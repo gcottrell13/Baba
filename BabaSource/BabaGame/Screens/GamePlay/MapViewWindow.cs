@@ -1,7 +1,10 @@
 ﻿using BabaGame.Engine;
+using BabaGame.Events;
 using Core;
 using Core.Engine;
+using Core.Events;
 using Core.Screens;
+using Core.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,27 +39,51 @@ internal class MapViewWindow : GameObject
         }
     }
 
-    public void LoadMap(short mapId)
+    public async Task LoadMap(short mapId)
     {
-        var scale = _getMapScale(mapId);
+        var newScale = _getMapScale(mapId);
 
         if (babaWorld.Simulators.TryGetValue(currentMapId, out var sim) == false)
         {
             _loadMap(mapId);
             // no animation
-            Graphics.xscale = scale;
-            Graphics.yscale = scale;
-            Graphics.x = scale;
-            Graphics.y = scale;
+            Graphics.xscale = newScale;
+            Graphics.yscale = newScale;
+            Graphics.x = newScale;
+            Graphics.y = newScale;
+            EventChannels.CharacterControl.SendMessage(true);
         }
-        else if (sim.HasNeighbor(mapId))
+        else if (sim.HasNeighbor(mapId, out var dir))
         {
             var shortAnimation = visibleMaps.Contains(mapId);
+            var (dx, dy) = DirectionExtensions.DeltaFromDirection(dir);
 
             if (shortAnimation)
             {
+                // TODO: fix flickering! (possibly only when going from a smaller scale to a larger one)
                 _loadMap(mapId);
                 // animate
+                var currentScale = Graphics.xscale;
+                // TODO: add something for when we are going left/up to ensure that the right/bottom side is visible the whole time
+                var x = dx * sim.Width * currentScale + currentScale;
+                var y = dy * sim.Height * currentScale + currentScale;
+                Graphics.x = x;
+                Graphics.y = y;
+                EventChannels.CharacterControl.SendMessage(false);
+                var time = 0.25f;
+                await Task.WhenAll(
+                    AnimateHelper.AnimateCubic(x, time, newScale, f => Graphics.x = f),
+                    AnimateHelper.AnimateCubic(y, time, newScale, f => Graphics.y = f)
+                );
+                if (currentScale != newScale)
+                {
+                    await Task.WhenAll(
+                        AnimateHelper.AnimateCubic(Graphics.xscale, time, newScale, f => Graphics.xscale = f),
+                        AnimateHelper.AnimateCubic(Graphics.yscale, time, newScale, f => Graphics.yscale = f)
+                        // TODO: add another animation for x and y (again) if we are going left/up
+                    );
+                }
+                EventChannels.CharacterControl.SendMessage(true);
             }
             else
             {
@@ -64,19 +91,19 @@ internal class MapViewWindow : GameObject
                 // THEN load
                 _loadMap(mapId);
             }
-            Graphics.xscale = scale;
-            Graphics.yscale = scale;
-            Graphics.x = scale;
-            Graphics.y = scale;
+            //Graphics.xscale = scale;
+            //Graphics.yscale = scale;
+            //Graphics.x = scale;
+            //Graphics.y = scale;
         }
         else
         {
             _loadMap(mapId);
             // no animation
-            Graphics.xscale = scale;
-            Graphics.yscale = scale;
-            Graphics.x = scale;
-            Graphics.y = scale;
+            Graphics.xscale = newScale;
+            Graphics.yscale = newScale;
+            Graphics.x = newScale;
+            Graphics.y = newScale;
         }
     }
 

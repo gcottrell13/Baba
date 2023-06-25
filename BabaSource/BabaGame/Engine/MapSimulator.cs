@@ -86,9 +86,14 @@ public class MapSimulator
         if (world.Simulators.TryGetValue(map.eastNeighbor, out east)) setupConvertCoordinates(map.height, east.map.height, out convertToEast);
     }
 
-    public bool HasNeighbor(short mapId)
+    public bool HasNeighbor(short mapId, out Direction dir)
     {
-        return north?.MapId == mapId || south?.MapId == mapId || west?.MapId == mapId || east?.MapId == mapId;
+        dir = Direction.None;
+        if (north?.MapId == mapId) dir = Direction.Up;
+        if (south?.MapId == mapId) dir = Direction.Down;
+        if (west?.MapId == mapId) dir = Direction.Left;
+        if (east?.MapId == mapId) dir = Direction.Right;
+        return dir != Direction.None;
     }
 
     /// <summary>

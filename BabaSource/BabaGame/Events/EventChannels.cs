@@ -11,4 +11,5 @@ static class EventChannels
     public static EventChannel<MusicPlay> MusicPlay = EventManager.CreateChannel<MusicPlay>();
     public static EventChannel<MusicPlay> SoundPlay = EventManager.CreateChannel<MusicPlay>();
     public static EventChannel<int> SaveGame = EventManager.CreateChannel<int>();
+    public static EventChannel<bool> CharacterControl = EventManager.CreateChannel<bool>();
 }

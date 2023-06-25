@@ -23,6 +23,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
     private readonly BabaWorld worldData;
     private readonly MapViewWindow mapViewWindow;
     private short currentMapId = 0;
+    private bool controllable = false;
 
     public GameViewScreen(ScreenStack stack, PlayerNumber playerNumber, BabaWorld worldData)
     {
@@ -66,6 +67,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
                 ev => MainGameState.Noop);
         EventChannels.MapChange.Subscribe(mapChange);
         EventChannels.SoundPlay.Subscribe(playSound);
+        EventChannels.CharacterControl.Subscribe(charControl);
     }
 
     private async Task playSound(MusicPlay sound)
@@ -73,10 +75,15 @@ internal class GameViewScreen : BaseScreen<MainGameState>
         await PlaySound.PlaySoundFile(sound.TrackName!);
     }
 
-    private void mapChange(MapChange e)
+    private void charControl(bool control)
+    {
+        controllable = control;
+    }
+
+    private Task mapChange(MapChange e)
     {
         currentMapId = e.MapId;
-        mapViewWindow.LoadMap(e.MapId);
+        return mapViewWindow.LoadMap(e.MapId);
     }
 
     public void init()
@@ -92,6 +99,9 @@ internal class GameViewScreen : BaseScreen<MainGameState>
 
     private MainGameState handlePlayingMap(KeyPress ev, short currentMapId)
     {
+        if (!controllable) 
+            return MainGameState.Noop;
+
         Direction? dir = ev.KeyPressed switch
         {
             Keys.Up => Direction.Up,
@@ -119,5 +129,6 @@ internal class GameViewScreen : BaseScreen<MainGameState>
     {
         EventChannels.MapChange.Unsubscribe(mapChange);
         EventChannels.SoundPlay.Unsubscribe(playSound);
+        EventChannels.CharacterControl.Unsubscribe(charControl);
     }
 }

@@ -25,7 +25,9 @@ namespace Core.Engine
         public short height;
 
         public string Name = string.Empty;
-        public bool ResetOnUnload;
+
+        // has the player seen this map yet?
+        public bool visited = false;
 
         public MapData(IEnumerable<ObjectData> objectDatas)
         {
@@ -40,8 +42,8 @@ namespace Core.Engine
         {
             if (obj is MapData map)
                 return WorldObjects.Compare(map.WorldObjects) && MapId == map.MapId && northNeighbor == map.northNeighbor && 
-                    westNeighbor == map.westNeighbor && map.eastNeighbor == eastNeighbor && southNeighbor == map.southNeighbor && 
-                    upLayer == map.upLayer && region == map.region && Name == map.Name && map.width == width && map.height == height && map.ResetOnUnload == ResetOnUnload;
+                    westNeighbor == map.westNeighbor && map.eastNeighbor == eastNeighbor && southNeighbor == map.southNeighbor && visited == map.visited &&
+                    upLayer == map.upLayer && region == map.region && Name == map.Name && map.width == width && map.height == height;
             return base.Equals(obj);
         }
 
@@ -62,7 +64,7 @@ namespace Core.Engine
                 {{nameof(region)}} = {{region}},
                 {{nameof(width)}} = {{width}},
                 {{nameof(height)}} = {{height}},
-                {{nameof(ResetOnUnload)}} = {{ResetOnUnload.ToString().ToLower()}},
+                {{nameof(visited)}} = {{visited.ToString().ToLower()}},
             }
             """;
 

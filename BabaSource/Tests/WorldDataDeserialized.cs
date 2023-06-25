@@ -57,7 +57,6 @@ public class WorldDataDeserialized
             region = 0,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -80,7 +79,6 @@ public class WorldDataDeserialized
             region = 3,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -108,7 +106,6 @@ public class WorldDataDeserialized
             region = 0,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -131,7 +128,6 @@ public class WorldDataDeserialized
             region = 3,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -159,7 +155,6 @@ public class WorldDataDeserialized
             region = 0,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -207,7 +202,6 @@ public class WorldDataDeserialized
             region = 1,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         },
         new MapData(new ObjectData[] {
             new ObjectData() {
@@ -264,7 +258,6 @@ public class WorldDataDeserialized
             region = 2,
             width = 15,
             height = 15,
-            ResetOnUnload = false,
         } },
         Regions = new() {
         new RegionData() {

@@ -72,10 +72,8 @@ public class MapSimulator
 
     public void OnUnload()
     {
-        if (map.ResetOnUnload)
-        {
-            map.ResetToOriginalState();
-        }
+        // look for LEVEL IS TRANS
+        // call map.ResetToOriginalState()
     }
 
     public void GetNeighbors()

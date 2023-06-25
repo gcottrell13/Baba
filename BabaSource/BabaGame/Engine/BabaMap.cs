@@ -27,9 +27,10 @@ public class BabaMap
 
     public string Name = string.Empty;
 
-    public bool ResetOnUnload;
-
     private int counter = 0;
+
+    // has the player seen this map yet?
+    public bool Visited = false;
 
 
     public BabaMap(MapData map)
@@ -44,19 +45,16 @@ public class BabaMap
         height = map.height;
         Name = map.Name;
         upLayer = map.upLayer;
-        ResetOnUnload = map.ResetOnUnload;
+        Visited = map.visited;
         foreach (var obj in map.WorldObjects)
         {
             AddObject(obj);
         }
 
-        if (ResetOnUnload)
+        originalState = new();
+        foreach (var obj in map.WorldObjects)
         {
-            originalState = new();
-            foreach (var obj in map.WorldObjects)
-            {
-                originalState.Add(obj);
-            }
+            originalState.Add(obj);
         }
     }
 
@@ -76,7 +74,7 @@ public class BabaMap
 
     public void ResetToOriginalState()
     {
-        if (!ResetOnUnload || originalState == null) return;
+        if (originalState == null) return;
         WorldObjects.Clear();
         foreach (var original in originalState)
         {
@@ -97,8 +95,8 @@ public class BabaMap
             width = width,
             height = height,
             Name = Name,
-            ResetOnUnload = ResetOnUnload,
             upLayer = upLayer,
+            visited = Visited,
         };
     }
 }

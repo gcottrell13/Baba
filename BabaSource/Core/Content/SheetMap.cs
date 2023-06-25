@@ -1678,6 +1678,7 @@ public static class SheetMap {
 			{ "text_paper", new Wobbler("text_paper", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_paper"]) },
 			{ "text_party", new Wobbler("text_party", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_party"]) },
 			{ "text_pawn", new Wobbler("text_pawn", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_pawn"]) },
+			{ "text_percent", new Wobbler("text_percent", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_percent"]) },
 			{ "text_period", new Wobbler("text_period", new[] { new Point(0, 0), new Point(1, 0) }, new Point(24, 24), sheets["text_period"]) },
 			{ "text_pet", new Wobbler("text_pet", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_pet"]) },
 			{ "text_phantom", new Wobbler("text_phantom", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_phantom"]) },

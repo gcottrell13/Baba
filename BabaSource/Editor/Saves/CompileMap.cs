@@ -45,7 +45,6 @@ namespace Editor.Saves
 
                 md.data.Name = data.name;
                 md.originalRegionId = data.regionId;
-                md.data.ResetOnUnload = data.resetWhenInactive;
 
                 mapMap[instance.instanceId] = md.data.MapId;
 

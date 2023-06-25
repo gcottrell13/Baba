@@ -94,6 +94,12 @@ public class MapSimulator
         return dir != Direction.None;
     }
 
+    public void MarkVisited()
+    {
+        map.Visited = true;
+        if (upLayer != null) upLayer.Visited = true;
+    }
+
     /// <summary>
     /// cache the math needed to move objects between maps
     /// </summary>

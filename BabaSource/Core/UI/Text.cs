@@ -85,6 +85,7 @@ namespace Core.UI
                 "7" => "text_seven",
                 "8" => "text_eight",
                 "9" => "text_nine",
+                "%" => "text_percent",
                 _ => name.Length == 1 ? $"text_{name}" : name,
             };
             compoundName = $"{entityName}:{state}";

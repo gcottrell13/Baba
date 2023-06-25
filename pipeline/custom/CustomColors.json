@@ -236,5 +236,12 @@
     "layer": 10,
     "unittype": "text",
     "sprite": "text_need"
+  },
+  "text_percent": {
+    "color": [0, 3],
+    "color_active": [0, 3],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_percent"
   }
 }

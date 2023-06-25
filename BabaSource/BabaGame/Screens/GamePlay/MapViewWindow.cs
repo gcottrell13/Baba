@@ -124,6 +124,7 @@ internal class MapViewWindow : GameObject
         if (_tryGetMapViewer(sim.EastNeighbor, out neighbor) && neighbor.MapData.height == sim.Height) _addMapAndScale(neighbor, sim.Width, 0);
 
         if (_tryGetMapViewer(mapId, out var mp)) _addMapAndScale(mp, 0, 0);
+        sim.MarkVisited();
 
         var removedMaps = previousVisibleMaps.Except(visibleMaps);
         //var addedMaps = visibleMaps.Except(previousVisibleMaps);

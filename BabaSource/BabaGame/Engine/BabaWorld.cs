@@ -133,6 +133,8 @@ public class BabaWorld
             map.removeDuplicatesInSamePosition();
             map.doJoinables();
         }
+
+        Simulators[currentMap].findSpecialPropertiesToDisplay();
     }
 
     public bool TestInventory(Dictionary<ObjectTypeId, int> needs)

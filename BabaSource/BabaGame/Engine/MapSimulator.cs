@@ -1,4 +1,5 @@
 ﻿using BabaGame.Events;
+using BabaGame.Objects;
 using Core.Content;
 using Core.Engine;
 using Core.Utils;
@@ -273,6 +274,36 @@ public class MapSimulator
                 if (d.Contains((obj.x, obj.y - 1))) state |= Direction.Up;
                 if (d.Contains((obj.x, obj.y + 1))) state |= Direction.Down;
                 obj.Facing = state;
+            }
+        }
+    }
+
+    public void findSpecialPropertiesToDisplay()
+    {
+        var p = new Dictionary<ObjectTypeId, ObjectStatesToDisplay>()
+        {
+            //{ ObjectTypeId.@float, ObjectStatesToDisplay.Float },
+            { ObjectTypeId.big, ObjectStatesToDisplay.Big },
+            //{ ObjectTypeId.sleep, ObjectStatesToDisplay.Sleep },
+            //{ ObjectTypeId.powered, ObjectStatesToDisplay.Powered },
+            //{ ObjectTypeId.powered2, ObjectStatesToDisplay.Powered2 },
+            //{ ObjectTypeId.powered3, ObjectStatesToDisplay.Powered3 },
+            //{ ObjectTypeId.party, ObjectStatesToDisplay.Party },
+            //{ ObjectTypeId.pet, ObjectStatesToDisplay.Pet },
+            //{ ObjectTypeId.phantom, ObjectStatesToDisplay.Phantom },
+            //{ ObjectTypeId.best, ObjectStatesToDisplay.Best },
+            //{ ObjectTypeId.broken, ObjectStatesToDisplay.Broken },
+            //{ ObjectTypeId.sad, ObjectStatesToDisplay.Sad },
+            //{ ObjectTypeId.tele, ObjectStatesToDisplay.Tele },
+            //{ ObjectTypeId.win, ObjectStatesToDisplay.Win },
+        };
+
+        foreach (var obj in map.WorldObjects)
+        {
+            obj.state = 0;
+            foreach (var (type, display) in p)
+            {
+                if (isObject(obj, type)) obj.state |= display;
             }
         }
     }

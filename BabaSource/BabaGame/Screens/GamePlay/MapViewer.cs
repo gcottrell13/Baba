@@ -58,11 +58,12 @@ internal class MapViewer : GameObject
     public void Load()
     {
         simulator.doJoinables();
+        simulator.findSpecialPropertiesToDisplay();
         ensureSprites();
         foreach (var data in MapData.WorldObjects)
 		{
             var sprite = sprites[data.index];
-			sprite.OnMove(data, false, false);
+			sprite.OnMove(data, false);
 		}
 	}
 
@@ -72,7 +73,7 @@ internal class MapViewer : GameObject
         foreach (var data in MapData.WorldObjects)
         {
             var sprite = sprites[data.index];
-            sprite.OnMove(data, false, true);
+            sprite.OnMove(data, true);
         }
 
         textOverlay.RemoveAllText();

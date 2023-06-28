@@ -1494,6 +1494,7 @@ public static class SheetMap {
 			{ "text_besideleft", new Wobbler("text_besideleft", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_besideleft"]) },
 			{ "text_besideright", new Wobbler("text_besideright", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_besideright"]) },
 			{ "text_best", new Wobbler("text_best", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_best"]) },
+			{ "text_big", new Wobbler("text_big", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_big"]) },
 			{ "text_bird", new Wobbler("text_bird", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_bird"]) },
 			{ "text_black", new Wobbler("text_black", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_black"]) },
 			{ "text_blob", new Wobbler("text_blob", new[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new Point(24, 24), sheets["text_blob"]) },

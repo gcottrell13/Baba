@@ -20,6 +20,8 @@ namespace BabaGame.Objects;
 /// </summary>
 internal class ObjectSprite : GameObject
 {
+    private const float BIG_FACTOR = 2f;
+
     private ObjectTypeId previousName = 0;
     private int previousX = 0;
     private int previousY = 0;
@@ -82,7 +84,7 @@ internal class ObjectSprite : GameObject
     /// <summary>
     /// for when something happened to the game state
     /// </summary>
-    public void OnMove(BabaObject objectData, bool isSleeping, bool animate)
+    public void OnMove(BabaObject objectData, bool animate)
     {
         Name = $"{objectData.Kind}-{objectData.Name}";
 
@@ -114,7 +116,7 @@ internal class ObjectSprite : GameObject
                     }
                 case FacingOnMove f:
                     {
-                        if (isSleeping)
+                        if (objectData.state.HasFlag(ObjectStatesToDisplay.Sleep))
                             setWobbler(f.Sleep(objectData.Facing, ref moveStep));
                         else
                             setWobbler(f.Move(objectData.Facing, ref moveStep));
@@ -125,6 +127,22 @@ internal class ObjectSprite : GameObject
                         setWobbler(j.Join(objectData.Facing));
                         break;
                     }
+            }
+        }
+
+        if (currentSprite != null)
+        {
+            if (objectData.state.HasFlag(ObjectStatesToDisplay.Big))
+            {
+                currentSprite.SetRelativeScale(BIG_FACTOR);
+                Graphics.x = objectData.x - (BIG_FACTOR / 4);
+                Graphics.y = objectData.y - (BIG_FACTOR / 4);
+            }
+            else
+            {
+                currentSprite.SetRelativeScale(1);
+                Graphics.x = objectData.x;
+                Graphics.y = objectData.y;
             }
         }
 
@@ -170,6 +188,12 @@ internal class ObjectSpriteContainer : Sprite
         this.wobbler = wobbler;
         xscale = 1f / wobbler.Size.X;
         yscale = 1f / wobbler.Size.Y;
+    }
+
+    public void SetRelativeScale(float scale)
+    {
+        xscale = scale / wobbler.Size.X;
+        yscale = scale / wobbler.Size.Y;
     }
 
     public void Step()

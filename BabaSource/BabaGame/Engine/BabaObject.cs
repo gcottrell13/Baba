@@ -1,4 +1,5 @@
-﻿using Core.Content;
+﻿using BabaGame.Objects;
+using Core.Content;
 using Core.Engine;
 using Core.Utils;
 using System;
@@ -20,6 +21,8 @@ public class BabaObject : INameable
     public int y;
     public int index;
     public ObjectKind Kind;
+
+    public ObjectStatesToDisplay state;
 
     public ObjectTypeId Name { get; set; }
 

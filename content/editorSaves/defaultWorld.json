@@ -140,7 +140,7 @@
 			"resetWhenInactive": false,
 			"layer1": {
 				"objects": [
-					{"x":0,"y":10,"name":"cliff","state":0,"color":49,"text":"","original":{"name":"dog","state":4,"color":17}},
+					{"x":0,"y":10,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":0,"y":6,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":0,"y":11,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":0,"y":12,"name":"cliff","state":0,"color":49,"text":"","original":null},
@@ -361,7 +361,7 @@
 		},
 		{
 			"id": 6,
-			"name": "mano-side-1-1",
+			"name": "feed the it #1",
 			"regionId": 6,
 			"resetWhenInactive": false,
 			"layer1": {
@@ -400,8 +400,7 @@
 					{"x":1,"y":3,"name":"cliff","state":0,"color":49,"text":"","original":{"name":"cliff","state":0,"color":49}},
 					{"x":1,"y":4,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":0,"y":4,"name":"cliff","state":0,"color":49,"text":"","original":null},
-					{"x":0,"y":5,"name":"door","state":0,"color":18,"text":"","original":null},
-					{"x":0,"y":0,"name":"text_door","state":0,"color":18,"text":"","original":null},
+					{"x":0,"y":5,"name":"it","state":0,"color":12,"text":"","original":{"name":"door","state":0,"color":18}},
 					{"x":1,"y":0,"name":"text_need","state":0,"color":34,"text":"","original":null},
 					{"x":2,"y":0,"name":"text_worm","state":0,"color":3,"text":"","original":null},
 					{"x":3,"y":1,"name":"cliff","state":0,"color":49,"text":"","original":null},
@@ -443,7 +442,13 @@
 					{"x":10,"y":4,"name":"crystal","state":0,"color":12,"text":"","original":null},
 					{"x":8,"y":4,"name":"crystal","state":0,"color":24,"text":"","original":null},
 					{"x":9,"y":3,"name":"crystal","state":0,"color":34,"text":"","original":null},
-					{"x":10,"y":1,"name":"crab","state":4,"color":18,"text":"","original":null}
+					{"x":10,"y":1,"name":"crab","state":4,"color":18,"text":"","original":null},
+					{"x":0,"y":0,"name":"text_it","state":0,"color":12,"text":"","original":null},
+					{"x":2,"y":9,"name":"text_it","state":0,"color":12,"text":"","original":null},
+					{"x":3,"y":9,"name":"text_is","state":0,"color":3,"text":"","original":null},
+					{"x":4,"y":9,"name":"text_stop","state":0,"color":41,"text":"","original":null},
+					{"x":8,"y":1,"name":"crab","state":4,"color":34,"text":"","original":null},
+					{"x":7,"y":1,"name":"crab","state":4,"color":27,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 10
@@ -681,7 +686,7 @@
 					{"x":0,"y":6,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":3,"y":0,"name":"cliff","state":0,"color":49,"text":"","original":{"name":"cliff","state":0,"color":49}},
 					{"x":2,"y":0,"name":"cliff","state":0,"color":49,"text":"","original":null},
-					{"x":5,"y":1,"name":"text_jiji","state":0,"color":19,"text":"","original":{"name":"text_door","state":0,"color":18}},
+					{"x":5,"y":1,"name":"text_jiji","state":0,"color":19,"text":"","original":null},
 					{"x":6,"y":1,"name":"text_need","state":0,"color":34,"text":"","original":null},
 					{"x":7,"y":1,"name":"text_fish","state":0,"color":11,"text":"","original":null},
 					{"x":8,"y":1,"name":"text_x","state":0,"color":3,"text":"","original":null},
@@ -707,12 +712,12 @@
 					{"x":11,"y":8,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":12,"y":8,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":12,"y":3,"name":"algae","state":0,"color":42,"text":"","original":null},
-					{"x":11,"y":3,"name":"text_big","state":0,"color":12,"text":"","original":{"name":"algae","state":0,"color":42}},
-					{"x":11,"y":2,"name":"text_is","state":0,"color":3,"text":"","original":{"name":"text_jiji","state":0,"color":19}},
-					{"x":11,"y":1,"name":"text_jiji","state":0,"color":19,"text":"","original":{"name":"algae","state":0,"color":42}},
+					{"x":11,"y":3,"name":"text_big","state":0,"color":12,"text":"","original":null},
+					{"x":11,"y":2,"name":"text_is","state":0,"color":3,"text":"","original":null},
+					{"x":11,"y":1,"name":"text_jiji","state":0,"color":19,"text":"","original":null},
 					{"x":12,"y":1,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":13,"y":1,"name":"algae","state":0,"color":42,"text":"","original":null},
-					{"x":13,"y":2,"name":"algae","state":0,"color":42,"text":"","original":{"name":"text_big","state":0,"color":12}},
+					{"x":13,"y":2,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":13,"y":3,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":1,"y":7,"name":"algae","state":0,"color":42,"text":"","original":null},
 					{"x":1,"y":8,"name":"algae","state":0,"color":42,"text":"","original":null},
@@ -739,7 +744,7 @@
 		},
 		{
 			"id": 11,
-			"name": "mano-start-2",
+			"name": "fishing",
 			"regionId": 6,
 			"resetWhenInactive": false,
 			"layer1": {
@@ -842,7 +847,7 @@
 		},
 		{
 			"id": 12,
-			"name": "mano-start-3",
+			"name": "fishing 2",
 			"regionId": 6,
 			"resetWhenInactive": false,
 			"layer1": {
@@ -919,7 +924,7 @@
 		},
 		{
 			"id": 13,
-			"name": "mano-side-1-2",
+			"name": "get a life 1",
 			"regionId": 6,
 			"resetWhenInactive": false,
 			"layer1": {

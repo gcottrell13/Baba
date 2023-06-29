@@ -134,9 +134,10 @@ internal class ObjectSprite : GameObject
         {
             if (objectData.state.HasFlag(ObjectStatesToDisplay.Big))
             {
+                var factor = (BIG_FACTOR - 1) / 2;
                 currentSprite.SetRelativeScale(BIG_FACTOR);
-                Graphics.x = objectData.x - (BIG_FACTOR / 4);
-                Graphics.y = objectData.y - (BIG_FACTOR / 4);
+                Graphics.x = objectData.x - factor;
+                Graphics.y = objectData.y - factor;
             }
             else
             {

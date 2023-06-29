@@ -22,7 +22,7 @@ internal class TextOverlay : GameObject
             backgroundColor = Color.Black,
         });
         var (width, height) = display.TextFinalDimensions();
-        display.Graphics.x = Math.Clamp(x - width * scale / 2 + 0.5f, 0, Math.Max(0, ScreenWidth - width)); 
+        display.Graphics.x = Math.Clamp(x - width * scale + 1f, 0, Math.Max(0, ScreenWidth - width)); 
         display.Graphics.y = Math.Clamp(y - height * scale, 0, Math.Max(0, ScreenHeight - height));
         display.Graphics.xscale = scale;
         display.Graphics.yscale = scale;

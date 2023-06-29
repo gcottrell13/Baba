@@ -1,6 +1,7 @@
 ﻿using BabaGame.Engine;
 using BabaGame.Events;
 using Core;
+using Core.Content;
 using Core.Engine;
 using Core.Events;
 using Core.Screens;
@@ -24,6 +25,7 @@ internal class MapViewWindow : GameObject
     private readonly int viewportHeight;
     private Dictionary<short?, MapViewer> mapViewers = new();
     private short currentMapId = 0;
+    private float currentScale = 1f;
 
     private List<short> visibleMaps = new();
 
@@ -63,7 +65,6 @@ internal class MapViewWindow : GameObject
                 // TODO: fix flickering! (possibly only when going from a smaller scale to a larger one)
                 _loadMap(mapId);
                 // animate
-                var currentScale = Graphics.xscale;
                 // TODO: add something for when we are going left/up to ensure that the right/bottom side is visible the whole time
                 var x = dx * sim.Width * currentScale + currentScale;
                 var y = dy * sim.Height * currentScale + currentScale;
@@ -105,6 +106,7 @@ internal class MapViewWindow : GameObject
             Graphics.x = newScale;
             Graphics.y = newScale;
         }
+        currentScale = newScale;
     }
 
 
@@ -179,5 +181,13 @@ internal class MapViewWindow : GameObject
                 mp.onMove();
             }
         }
+    }
+
+    public void DisplayItemGetToast(ObjectTypeId obj, int addedCount, int newTotal)
+    {
+        var toast = new ItemAddedToast(obj, addedCount, newTotal);
+        toast.Graphics.xscale = 1f/24;
+        toast.Graphics.yscale = 1f/24;
+        AddChild(toast);
     }
 }

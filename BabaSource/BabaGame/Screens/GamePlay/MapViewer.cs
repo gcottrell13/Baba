@@ -119,7 +119,7 @@ internal class MapViewer : GameObject
         if (!string.IsNullOrWhiteSpace(obj.Text)) 
             message = obj.Text;
 
-        if (simulator.isObject(obj, ObjectTypeId.disk))
+        if (simulator.isObject(obj, ObjectTypeId.save))
         {
             message += $"\nStep on this [{obj.Name}]\nsave your game";
         }
@@ -127,7 +127,7 @@ internal class MapViewer : GameObject
         if (simulator.doesObjectNeedAnything(obj) is Dictionary<ObjectTypeId, int> needs && needs.Count > 0)
         {
             var objColor = PaletteInfo.Palettes["default"][obj.Color].ToHexTriple();
-            message += $"\n{objColor}[{obj.Name}:{(int)obj.Facing}][white] Requires:\n";
+            message += $"\n\n{objColor}[{obj.Name}:{(int)obj.Facing}][white] Requires:\n";
             foreach (var (reagent, count) in needs)
             {
                 var color = ThemeInfo.GetColorsByKind(reagent, ObjectKind.Text);

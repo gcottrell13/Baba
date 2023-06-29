@@ -229,7 +229,7 @@ public class MapSimulator
                 if (you.x == grab.x && you.y == grab.y)
                 {
                     EventChannels.SoundPlay.SendMessage(new() { TrackName = "get" }, async: true);
-                    world.AddToInventory(grab.Name, 1);
+                    EventChannels.AddItemsToInventory.SendMessage((grab.Name, 1), async: true);
                     map.RemoveObject(grab);
                 }
             }

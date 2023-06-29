@@ -55,6 +55,20 @@
     "unittype": "text",
     "sprite": "text_rsqbr"
   },
+  "text_lparen": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_lparen"
+  },
+  "text_rparen": {
+    "color": [ 1, 3 ],
+    "color_active": [ 1, 4 ],
+    "layer": 10,
+    "unittype": "text",
+    "sprite": "text_rparen"
+  },
   "text_comma": {
     "color": [ 1, 3 ],
     "color_active": [ 1, 4 ],

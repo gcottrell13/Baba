@@ -72,6 +72,8 @@ namespace Core.UI
                 ":" => "text_colon",
                 "[" => "text_lsqbr",
                 "]" => "text_rsqbr",
+                "(" => "text_lparen",
+                ")" => "text_rparen",
                 "," => "text_comma",
                 "+" => "text_plus",
                 "_" => "text_underscore",

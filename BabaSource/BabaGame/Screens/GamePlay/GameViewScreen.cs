@@ -68,6 +68,7 @@ internal class GameViewScreen : BaseScreen<MainGameState>
         EventChannels.MapChange.Subscribe(mapChange);
         EventChannels.SoundPlay.Subscribe(playSound);
         EventChannels.CharacterControl.Subscribe(charControl);
+        EventChannels.AddItemsToInventory.Subscribe(addItemToInventory);
     }
 
     private async Task playSound(MusicPlay sound)
@@ -78,6 +79,12 @@ internal class GameViewScreen : BaseScreen<MainGameState>
     private void charControl(bool control)
     {
         controllable = control;
+    }
+
+    private void addItemToInventory((ObjectTypeId obj, int count) item)
+    {
+        worldData.AddToInventory(item.obj, item.count);
+        mapViewWindow.DisplayItemGetToast(item.obj, item.count, worldData.Inventory[item.obj]);
     }
 
     private Task mapChange(MapChange e)
@@ -130,5 +137,6 @@ internal class GameViewScreen : BaseScreen<MainGameState>
         EventChannels.MapChange.Unsubscribe(mapChange);
         EventChannels.SoundPlay.Unsubscribe(playSound);
         EventChannels.CharacterControl.Unsubscribe(charControl);
+        EventChannels.AddItemsToInventory.Unsubscribe(addItemToInventory);
     }
 }

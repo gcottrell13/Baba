@@ -51,6 +51,7 @@ public class BabaGame : GameSetup
             SaveFileSelectScreen? saveFileSelectScreen = null;
             MainMenuScreen? mainMenuScreen = null;
             MainGamePlayScreen? mainGamePlayScreen = null;
+            BabaWorld? babaWorld = null;
 
             PlaySound.PlayMusic("menu");
 
@@ -67,8 +68,9 @@ public class BabaGame : GameSetup
                             saveFileSelectScreen = new(saveFile, select, () =>
                             {
                                 var newSave = WorldData.Deserialize(saveFile.InitialContent.Serialize());
-                                newSave.Name = $"Save {(char)(saveFile.SaveFiles.Count + 'a')}";
-                                LoadGameSaveFiles.SaveCompiledMap(newSave, saveFile.Name, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
+                                var ver = ((char)(saveFile.SaveFiles.Count + 'a')).ToString();
+                                newSave.Name = ver;
+                                LoadGameSaveFiles.SaveCompiledMap(newSave, saveFile.Name, ver);
                                 select(newSave);
                             });
                             stack.Add(saveFileSelectScreen);
@@ -95,7 +97,8 @@ public class BabaGame : GameSetup
                     def => def
                         .AddOnEnter(() =>
                         {
-                            mainGamePlayScreen = new(stack, new BabaWorld(selectedWorld!));
+                            babaWorld = new BabaWorld(selectedWorld!);
+                            mainGamePlayScreen = new(stack, babaWorld);
                             stack.Add(mainGamePlayScreen);
                             mainGamePlayScreen.init();
                         })
@@ -118,6 +121,13 @@ public class BabaGame : GameSetup
 
             onKeyPress(ev => stateMachine.SendAction(ev));
             AddChild(stack);
+
+            void saveGame(int i)
+            {
+                var wd = babaWorld?.ToWorldData();
+                LoadGameSaveFiles.SaveCompiledMap(wd, saveFile.Name, wd.Name);
+            }
+            EventChannels.SaveGame.Subscribe(saveGame);
         }
     }
 }

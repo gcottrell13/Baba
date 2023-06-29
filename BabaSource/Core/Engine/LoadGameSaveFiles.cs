@@ -13,7 +13,7 @@ public class LoadGameSaveFiles
 {
     private const string filesDirectory = ContentDirectory.contentDirectory + "/saves/";
 
-    public static void SaveCompiledMap(WorldData worldData, string saveFileName, string version = "0")
+    public static void SaveCompiledMap(WorldData worldData, string saveFileName, string version)
     {
         if (!Directory.Exists(filesDirectory)) 
         { 

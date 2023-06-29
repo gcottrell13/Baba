@@ -155,7 +155,8 @@
 					{"x":0,"y":1,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":1,"y":9,"name":"cliff","state":0,"color":49,"text":"","original":null},
 					{"x":3,"y":1,"name":"cliff","state":0,"color":49,"text":"","original":null},
-					{"x":2,"y":1,"name":"cliff","state":0,"color":49,"text":"","original":null}
+					{"x":2,"y":1,"name":"cliff","state":0,"color":49,"text":"","original":null},
+					{"x":5,"y":2,"name":"disk","state":0,"color":43,"text":"","original":null}
 				],
 				"width": 15,
 				"height": 10
@@ -1028,6 +1029,6 @@
 			}
 		}
 	],
-	"globalObjectInstanceIds": [2],
+	"globalObjectInstanceIds": [2,0],
 	"worldName": "mano [mano]"
 }

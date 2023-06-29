@@ -84,7 +84,7 @@ public class BabaMap
 
     public MapData ToMapData()
     {
-        return new MapData((originalState ?? WorldObjects).Select(x => x.ToObjectData())) 
+        return new MapData(WorldObjects.Select(x => x.ToObjectData())) 
         {
             MapId = MapId,
             northNeighbor = northNeighbor,

@@ -506,7 +506,7 @@ public class MapSimulator
         {
             return moveObjectToMap(south, obj, convertToSouth[x], y - map.height);
         }
-        var retval = new MapMovementStackItem(obj, MapId, obj.x, obj.y, null);
+        var retval = new MapMovementStackItem(obj, MapId, obj.CurrentState, null);
         obj.x = x;
         obj.y = y;
         return retval;
@@ -522,7 +522,7 @@ public class MapSimulator
 
     private MapMovementStackItem moveObjectToMap(MapSimulator m, BabaObject obj, int x, int y)
     {
-        var retVal = new MapMovementStackItem(obj, MapId, obj.x, obj.y, null);
+        var retVal = new MapMovementStackItem(obj, MapId, obj.CurrentState, null);
         map.RemoveObject(obj);
         m.addObjectAt(obj, x, y);
         return retVal;

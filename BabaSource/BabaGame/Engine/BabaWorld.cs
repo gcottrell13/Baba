@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BabaGame.Engine;
 
 
-public record MapMovementStackItem(BabaObject obj, short mapId, int x, int y, MapMovementStackItem? dependentOn);
+public record MapMovementStackItem(BabaObject obj, short mapId, BabaPastState state, MapMovementStackItem? dependentOn);
 
 public class BabaWorld
 {
@@ -108,9 +108,6 @@ public class BabaWorld
 
         parseMapRules(mapIds);
         foreach (var map in sims) movementStack.PushMany(map.moveYou(map.MapId == currentMap ? direction : Direction.None));
-
-        if (movementStack.Count == 0) return;
-
         foreach (var map in sims) movementStack.PushMany(map.doMovement());
         parseMapRules(mapIds);
         foreach (var map in sims) map.transform();
@@ -136,20 +133,16 @@ public class BabaWorld
                 if (obj.CurrentMapId != previous.mapId)
                 {
                     Simulators[obj.CurrentMapId].TryRemoveObject(obj);
-                    Simulators[previous.mapId].addObjectAt(obj, previous.x, previous.y);
+                    Simulators[previous.mapId].addObjectAt(obj, previous.state.x, previous.state.y);
                 }
-                else
-                {
-                    obj.x = previous.x;
-                    obj.y = previous.y;
-                }
+                obj.RestoreState(previous.state);
                 revertedMovements.Add(previous);
             }
 
             while (movementStack.Count > 0)
             {
                 var previous = movementStack.Pop();
-                var (obj, mapId, x, y, instigator) = previous;
+                var (obj, mapId, state, instigator) = previous;
                 if (obj.Deleted || !obj.Present) continue;
 
                 if (instigator != null && revertedMovements.Contains(instigator))

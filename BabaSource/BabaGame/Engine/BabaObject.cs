@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace BabaGame.Engine;
 
+public record struct BabaPastState(int x, int y, Direction facing, short color, ObjectKind kind, ObjectTypeId name);
+
 public class BabaObject : INameable
 {
 
@@ -44,8 +46,7 @@ public class BabaObject : INameable
 
     public bool Active;
 
-    // only objects with samefloat can interact
-    public bool FloatStatus;
+    public BabaPastState CurrentState => new (x, y, Facing, Color, Kind, Name);
 
 
     public static implicit operator BabaObject(ObjectData obj)
@@ -87,6 +88,15 @@ public class BabaObject : INameable
             x = (byte)X,
             y = (byte)Y,
         };
+    }
+
+    public void RestoreState(BabaPastState state)
+    {
+        Name = state.name;
+        Color = state.color;
+        Facing = state.facing;
+        x = state.x;
+        y = state.y;
     }
 
     public override bool Equals([NotNullWhen(true)] object? obj)

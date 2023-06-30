@@ -203,7 +203,6 @@ public class MapSimulator
 
     public void interactionblock()
     {
-        this.Grab();
         this.Hot();
         this.Save();
     }

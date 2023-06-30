@@ -178,6 +178,7 @@ public class BabaWorld
         {
             map.removeDuplicatesInSamePosition();
             map.doJoinables();
+            map.Grab();
         }
 
         Simulators[currentMap].findSpecialPropertiesToDisplay();

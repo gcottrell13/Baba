@@ -129,7 +129,7 @@ public class MapSimulator
         if (moveObjectTo(obj, obj.x + dx, obj.y + dy) is MapMovementStackItem m)
         {
             moves.Add(m);
-            var p = push(obj.x, obj.y, dx, dy, m);
+            var p = push(obj.x - dx, obj.y - dy, dx, dy, m);
             if (p != null) moves.AddRange(p);
         }
         return moves;
@@ -598,7 +598,7 @@ public class MapSimulator
 
     private static Dictionary<ObjectTypeId, ObjectTypeId[]> impliedBy = new()
     {
-        { ObjectTypeId.stop, /* implied by */ new[] { ObjectTypeId.you, ObjectTypeId.you2, mapBorderTypeId } },
+        { ObjectTypeId.stop, /* implied by */ new[] { ObjectTypeId.you, ObjectTypeId.you2, mapBorderTypeId, ObjectTypeId.push, ObjectTypeId.text } },
         { ObjectTypeId.push, new[] { ObjectTypeId.text } },  
     };
 }

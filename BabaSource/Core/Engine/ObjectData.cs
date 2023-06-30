@@ -16,8 +16,8 @@ public class ObjectData : INameable
     public bool Deleted;
     public short Color;
     public Direction Facing;
-    public int x;
-    public int y;
+    public byte x;
+    public byte y;
     public ObjectKind Kind;
     
     public ObjectTypeId Name { get; set; }

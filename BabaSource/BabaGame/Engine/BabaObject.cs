@@ -84,8 +84,8 @@ public class BabaObject : INameable
             CurrentMapId = CurrentMapId,
             Text = Text,
             Kind = Kind,
-            x = X,
-            y = Y,
+            x = (byte)X,
+            y = (byte)Y,
         };
     }
 

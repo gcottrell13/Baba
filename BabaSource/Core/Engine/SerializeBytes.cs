@@ -17,6 +17,7 @@ public class SerializeBytes
 {
     private static readonly Dictionary<Type, Func<object?, byte[]>> serializers = new()
     {
+        { typeof(byte),  makeSerializerMethod<byte>() },
         { typeof(int),  makeSerializerMethod<int>() },
         { typeof(short),  makeSerializerMethod<short>() },
         { typeof(long),  makeSerializerMethod<long>() },
@@ -25,6 +26,7 @@ public class SerializeBytes
     };
     private static readonly Dictionary<Type, Func<Enumerator<byte>, object>> deserializers = new()
     {
+        { typeof(byte), (Enumerator<byte> x) => take(x, 1)[0] },
         { typeof(int),  (Enumerator<byte> x) => BitConverter.ToInt32(take(x, 4)) },
         { typeof(short),  (Enumerator<byte> x) => BitConverter.ToInt16(take(x, 2)) },
         { typeof(long),  (Enumerator<byte> x) => BitConverter.ToInt64(take(x, 8)) },
@@ -37,6 +39,10 @@ public class SerializeBytes
         if (typeof(T) == typeof(string))
         {
             return (object? x) => serializeString(x as string);
+        }
+        if (typeof(T) == typeof(byte))
+        {
+            return obj => new byte[] { (byte)obj };
         }
         var method = typeof(BitConverter).GetMethods().First(x => x.Name == "GetBytes" && x.GetParameters().First().ParameterType == typeof(T));
         return (object? x) => (byte[])method.Invoke(null, new[] { x })!;

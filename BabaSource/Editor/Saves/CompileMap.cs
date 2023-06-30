@@ -140,8 +140,8 @@ namespace Editor.Saves
             md.WorldObjects.AddRange(layer.objects.Where(obj => obj.x < layer.width && obj.y < layer.height).Select(x => new ObjectData()
             {
                 Color = (short)x.color,
-                x = x.x,
-                y = x.y,
+                x = (byte)x.x,
+                y = (byte)x.y,
                 Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
                 Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
                 Text = x.text,

@@ -23,7 +23,7 @@ public class MapSimulatorTests
             Maps = new()
             {
                 new(objects.ToArray()) { MapId=1 },
-                new(strRules.SelectMany((line, y) => line.Split(" ").Select((word, x) => new ObjectData() { Name=Enum.Parse<ObjectTypeId>(word), x=x, y=y, Kind=ObjectKind.Text } )).ToArray()) { MapId=0 },
+                new(strRules.SelectMany((line, y) => line.Split(" ").Select((word, x) => new ObjectData() { Name=Enum.Parse<ObjectTypeId>(word), x=(byte)x, y=(byte)y, Kind=ObjectKind.Text } )).ToArray()) { MapId=0 },
             },
         });
         var sim = babaWorld.Simulators[1];

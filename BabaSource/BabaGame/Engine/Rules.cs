@@ -1,5 +1,6 @@
 ﻿using BabaGame.Events;
 using Core.Content;
+using Core.Engine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,31 @@ public static class Rules
                     EventChannels.AddItemsToInventory.SendMessage((grab.Name, 1), async: true);
                     sim.TryRemoveObject(grab);
                 }
+            }
+        }
+    }
+
+    public static void Need(this MapSimulator sim)
+    {
+        var yous = sim.findObjectsThatAre(ObjectTypeId.you).ToList();
+        bool needsFulfilled(BabaObject obj, out Dictionary<ObjectTypeId, int> needs)
+        {
+            needs = sim.doesObjectNeedAnything(obj);
+            if (needs != null && needs.Count > 0)
+            {
+                return sim.world.TestInventory(needs);
+            }
+            return false;
+        }
+
+        foreach (var you in yous)
+        foreach (var obj in sim.objectsAt(you.x, you.y))
+        {
+            if (needsFulfilled(obj, out var needs))
+            {
+                sim.world.ConsumeFromInventory(needs);
+                sim.TryRemoveObject(obj);
+                EventChannels.SoundPlay.SendMessage(new() { TrackName = "open" }, async: true);
             }
         }
     }

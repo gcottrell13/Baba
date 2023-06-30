@@ -205,6 +205,7 @@ public class MapSimulator
     {
         this.Hot();
         this.Save();
+        this.Need();
     }
 
     public bool collisionCheck(BabaObject n)
@@ -438,29 +439,6 @@ public class MapSimulator
         }
 
         return dict;
-    }
-
-    public void TryRemoveObjectsAt(int x, int y)
-    {
-        bool needsFulfilled(BabaObject obj, out Dictionary<ObjectTypeId, int> needs)
-        {
-            needs = doesObjectNeedAnything(obj);
-            if (needs != null && needs.Count > 0)
-            {
-                return world.TestInventory(needs);
-            }
-            return false;
-        }
-
-        foreach (var obj in objectsAt(x, y))
-        {
-            if (needsFulfilled(obj, out var needs))
-            {
-                world.ConsumeFromInventory(needs);
-                map.RemoveObject(obj);
-                EventChannels.SoundPlay.SendMessage(new() { TrackName = "open" }, async: true);
-            }
-        }
     }
 
     private bool relation(BabaObject obj, NA_WithRelationship<BabaObject> wr)

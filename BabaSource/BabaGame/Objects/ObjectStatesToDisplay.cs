@@ -78,4 +78,9 @@ public enum ObjectStatesToDisplay
     /// animate a floating effect
     /// </summary>
     Float = 0x2000,
+
+    /// <summary>
+    /// sprite opacity = 0
+    /// </summary>
+    Hidden = 0x4000,
 }

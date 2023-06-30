@@ -61,13 +61,19 @@ public class BabaMap
     public void AddObject(BabaObject obj)
     {
         obj.index = counter++;
+        obj.CurrentMapId = MapId;
+        obj.Deleted = false;
+        obj.Present = true;
         WorldObjects.Add(obj);
     }
 
     public void RemoveObject(BabaObject obj)
     {
-        WorldObjects.RemoveAll(x => x.index == obj.index);
-        obj.Deleted = true;
+        if (WorldObjects.RemoveAll(x => x.index == obj.index) > 0)
+        {
+            obj.Deleted = true;
+            obj.CurrentMapId = -1;
+        }
     }
 
     public static implicit operator BabaMap(MapData map) => new BabaMap(map);

@@ -1,4 +1,4 @@
-﻿using BabaGame.Events;
+using BabaGame.Events;
 using BabaGame.Objects;
 using Core.Content;
 using Core.Engine;
@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -27,7 +28,7 @@ public class RuleDict : Dictionary<ObjectTypeId, List<Rule<BabaObject>>>
 
 public class MapSimulator
 {
-    private readonly BabaWorld world;
+    public readonly BabaWorld world;
     public readonly RegionData? region;
 
     private readonly BabaMap map;
@@ -43,7 +44,7 @@ public class MapSimulator
     private Dictionary<int, int> convertToEast = new();
     private Dictionary<int, int> convertToWest = new();
 
-    private RuleDict allRules = new();
+    public RuleDict allRules = new();
     private RuleDict cachedRulesFromAbove = new();
     private RuleDict cachedParsedRules = new();
 
@@ -101,6 +102,12 @@ public class MapSimulator
         if (upLayer != null) upLayer.Visited = true;
     }
 
+    public bool TryRemoveObject(BabaObject obj)
+    {
+        map.RemoveObject(obj);
+        return true;
+    }
+
     /// <summary>
     /// cache the math needed to move objects between maps
     /// </summary>
@@ -116,83 +123,62 @@ public class MapSimulator
         }
     }
 
-    private bool tryMoveObject(BabaObject obj, int dx, int dy, ObjectTypeId kind)
+    private List<MapMovementStackItem> tryMoveObject(BabaObject obj, int dx, int dy)
     {
-        TryRemoveObjectsAt(obj.x + dx, obj.y + dy); // for OPEN/SHUT and NEED
-        if (push(obj.x, obj.y, dx, dy)) // try to move into a space
+        var moves = new List<MapMovementStackItem>();
+        if (moveObjectTo(obj, obj.x + dx, obj.y + dy) is MapMovementStackItem m)
         {
-            pull(obj.x, obj.y, dx, dy); // try to pull objects
-            moveObjectTo(obj, obj.x + dx, obj.y + dy); // move
-            if (obj.Present == false && kind == ObjectTypeId.you)
-            {
-                // switch map
-                EventChannels.MapChange.SendAsyncMessage(new() { MapId = obj.CurrentMapId });
-            }
-            return true;
+            moves.Add(m);
+            var p = push(obj.x, obj.y, dx, dy, m);
+            if (p != null) moves.AddRange(p);
         }
-        return false;
+        return moves;
     }
 
-    public bool doMovement(Direction input, BabaObject[] you)
+    public IEnumerable<MapMovementStackItem> moveYou(Direction input)
     {
-        var movingObjects = new List<(BabaObject obj, int dx, int dy, ObjectTypeId kind)>();
-
-        // a value to return if any movement happened
-        var didAnyMove = false;
+        var movingObjects = new List<MapMovementStackItem>();
 
         if (input != Direction.None)
         {
+            var you = findObjectsThatAre(ObjectTypeId.you).ToList();
             var (dx, dy) = DirectionExtensions.DeltaFromDirection(input);
             foreach (var obj in you)
             {
                 obj.Facing = input;
-                if (tryMoveObject(obj, dx, dy, ObjectTypeId.you))
-                {
-                    didAnyMove = true;
-                }
+                movingObjects.AddRange(tryMoveObject(obj, dx, dy));
             }
-            tryGrab(you);
-            // if we put in a direction, but none of the YOU objects could move, then let's ignore the input and not let anything else move.
-            if (!didAnyMove) 
-                return false;
         }
         else
         {
-            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.idle).Select(i =>
+            foreach (var obj in findObjectsThatAre(ObjectTypeId.idle).ToList())
             {
-                var (dx, dy) = DirectionExtensions.DeltaFromDirection(i.Facing);
-                return (i, 1, 0, ObjectTypeId.idle);
-            }));
+                var (dx, dy) = DirectionExtensions.DeltaFromDirection(obj.Facing);
+                movingObjects.AddRange(tryMoveObject(obj, dx, dy));
+            };
         }
 
+        return movingObjects;
+    }
+
+    public IEnumerable<MapMovementStackItem> doMovement()
+    {
+        var movingObjects = new List<MapMovementStackItem>();
+
+        // chill has a low chance of moving on any turn, and will move in a random direction
+        movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).ToList().SelectMany(i =>
         {
-            // chill has a low chance of moving on any turn, and will move in a random direction
-            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.chill).Select(i =>
-            {
-                // TODO: randomly pick CHILL objects to move in a random direction
-                i.Facing = Direction.Right;
-                return (i, 1, 0, ObjectTypeId.chill);
-            }));
-            // Find all MOVE objects and add them with the delta corresponding to their direction
-            movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.move).Select(i =>
-            {
-                var (dx, dy) = DirectionExtensions.DeltaFromDirection(i.Facing);
-                return (i, dx, dy, ObjectTypeId.move);
-            }));
-        }
-
-        foreach (var (obj, dx, dy, kind) in movingObjects)
+            // TODO: randomly pick CHILL objects to move in a random direction
+            return tryMoveObject(i, 1, 0);
+        }));
+        // Find all MOVE objects and add them with the delta corresponding to their direction
+        movingObjects.AddRange(findObjectsThatAre(ObjectTypeId.move).ToList().SelectMany(i =>
         {
-            var didMove = tryMoveObject(obj, dx, dy, kind);
-            if (!didMove && kind == ObjectTypeId.move)
-            {
-                obj.Facing = DirectionExtensions.Opposite(obj.Facing);
-                if (tryMoveObject(obj, -dx, -dy, kind)) didAnyMove = true;
-            }
-            if (didMove) didAnyMove = true;
-        }
+            var (dx, dy) = DirectionExtensions.DeltaFromDirection(i.Facing);
+            return tryMoveObject(i, dx, dy);
+        }));
 
-        return didAnyMove;
+        return movingObjects;
     }
 
     public void transform()
@@ -200,14 +186,14 @@ public class MapSimulator
 
     }
 
-    public void moveblock()
+    public IEnumerable<MapMovementStackItem> moveblock()
     {
-
+        return new List<MapMovementStackItem>();
     }
 
-    public void fallblock()
+    public IEnumerable<MapMovementStackItem> fallblock()
     {
-
+        return new List<MapMovementStackItem>();
     }
 
     public void statusblock()
@@ -217,37 +203,14 @@ public class MapSimulator
 
     public void interactionblock()
     {
-
+        this.Grab();
+        this.Hot();
+        this.Save();
     }
 
-    private void tryGrab(IEnumerable<BabaObject> yous)
+    public bool collisionCheck(BabaObject n)
     {
-        foreach (var grab in findObjectsThatAre(ObjectTypeId.grab).ToList())
-        {
-            foreach (var you in yous)
-            {
-                if (you.x == grab.x && you.y == grab.y)
-                {
-                    EventChannels.SoundPlay.SendMessage(new() { TrackName = "get" }, async: true);
-                    EventChannels.AddItemsToInventory.SendMessage((grab.Name, 1), async: true);
-                    map.RemoveObject(grab);
-                }
-            }
-        }
-    }
-
-    public void collisionCheck(BabaObject[] yous)
-    {
-        foreach (var save in findObjectsThatAre(ObjectTypeId.save).ToList())
-        {
-            foreach (var you in yous)
-            {
-                if (you.x == save.x && you.y == save.y)
-                {
-                    EventChannels.SaveGame.SendMessage(1, async: true);
-                }
-            }
-        }
+        return objectsAt(n.x, n.y).Any(at => isObject(at, ObjectTypeId.stop) && at != n);
     }
 
     public void removeDuplicatesInSamePosition()
@@ -273,6 +236,8 @@ public class MapSimulator
         foreach (var type in SheetMap.JoinableObjects)
         {
             var objects = findObjectsThatAre(type).ToList();
+            if (objects.Count == 0) continue;
+
             var d = objects.Select(x => (x.x, x.y)).ToHashSet();
 
             foreach (var obj in objects)
@@ -291,30 +256,43 @@ public class MapSimulator
     {
         var p = new Dictionary<ObjectTypeId, ObjectStatesToDisplay>()
         {
-            //{ ObjectTypeId.@float, ObjectStatesToDisplay.Float },
+            { ObjectTypeId.@float, ObjectStatesToDisplay.Float },
             { ObjectTypeId.big, ObjectStatesToDisplay.Big },
-            //{ ObjectTypeId.sleep, ObjectStatesToDisplay.Sleep },
-            //{ ObjectTypeId.powered, ObjectStatesToDisplay.Powered },
-            //{ ObjectTypeId.powered2, ObjectStatesToDisplay.Powered2 },
-            //{ ObjectTypeId.powered3, ObjectStatesToDisplay.Powered3 },
-            //{ ObjectTypeId.party, ObjectStatesToDisplay.Party },
-            //{ ObjectTypeId.pet, ObjectStatesToDisplay.Pet },
-            //{ ObjectTypeId.phantom, ObjectStatesToDisplay.Phantom },
-            //{ ObjectTypeId.best, ObjectStatesToDisplay.Best },
-            //{ ObjectTypeId.broken, ObjectStatesToDisplay.Broken },
-            //{ ObjectTypeId.sad, ObjectStatesToDisplay.Sad },
-            //{ ObjectTypeId.tele, ObjectStatesToDisplay.Tele },
-            //{ ObjectTypeId.win, ObjectStatesToDisplay.Win },
+            { ObjectTypeId.sleep, ObjectStatesToDisplay.Sleep },
+            { ObjectTypeId.powered, ObjectStatesToDisplay.Powered },
+            { ObjectTypeId.powered2, ObjectStatesToDisplay.Powered2 },
+            { ObjectTypeId.powered3, ObjectStatesToDisplay.Powered3 },
+            { ObjectTypeId.party, ObjectStatesToDisplay.Party },
+            { ObjectTypeId.pet, ObjectStatesToDisplay.Pet },
+            { ObjectTypeId.phantom, ObjectStatesToDisplay.Phantom },
+            { ObjectTypeId.best, ObjectStatesToDisplay.Best },
+            { ObjectTypeId.broken, ObjectStatesToDisplay.Broken },
+            { ObjectTypeId.sad, ObjectStatesToDisplay.Sad },
+            { ObjectTypeId.tele, ObjectStatesToDisplay.Tele },
+            { ObjectTypeId.win, ObjectStatesToDisplay.Win },
+            { ObjectTypeId.hide, ObjectStatesToDisplay.Hidden },
         };
+
+        var props = p.Where(i => allRules.ContainsKey(i.Key)).ToList();
 
         foreach (var obj in map.WorldObjects)
         {
             obj.state = 0;
-            foreach (var (type, display) in p)
+            foreach (var (type, display) in props)
             {
                 if (isObject(obj, type)) obj.state |= display;
             }
         }
+    }
+
+    public Dictionary<(int x, int y), List<BabaObject>> ToGrid(IEnumerable<BabaObject> objects)
+    {
+        var d = new Dictionary<(int x, int y), List<BabaObject>>();
+        foreach (var obj in objects)
+        {
+            d.ConstructDefaultValue((obj.x, obj.y)).Add(obj);
+        }
+        return d;
     }
 
     public void setAllRules(RuleDict rules)
@@ -505,13 +483,14 @@ public class MapSimulator
         throw new Exception();
     }
 
-    public bool push(int x, int y, int dx, int dy)
+    public IEnumerable<MapMovementStackItem>? push(int x, int y, int dx, int dy, MapMovementStackItem instigator)
     {
+        var movingObjects = new List<MapMovementStackItem>();
         var allObjects = new List<BabaObject>();
         while (x >= 0 && x < map.width && y >= 0 && y < map.height)
         {
             var inFront = objectsAt(x + dx, y + dy);
-            if (inFront.Any(x => x.Name == mapBorderTypeId || isObject(x, ObjectTypeId.stop))) return false;
+            if (inFront.Any(x => x.Name == mapBorderTypeId)) return null;
             inFront = inFront.Where(x => isObject(x, ObjectTypeId.push)).ToArray();
             x += dx;
             y += dy;
@@ -519,118 +498,57 @@ public class MapSimulator
             allObjects.AddRange(inFront);
         }
 
-        var canMove = true;
-        if (x < 0) canMove = west!.push(west.map.width - 1, convertToWest[y], dx, dy);
-        if (y < 0) canMove = north!.push(convertToNorth[x], north.map.height - 1, dx, dy);
-        if (x >= map.width) canMove = east!.push(0, convertToEast[y], dx, dy);
-        if (y >= map.height) canMove = south!.push(convertToSouth[x], 0, dx, dy);
+        if (x < 0 && west?.push(west.map.width - 1, convertToWest[y], dx, dy, instigator) is IEnumerable<MapMovementStackItem> westMoved) movingObjects.AddRange(westMoved);
+        if (y < 0 && north?.push(convertToNorth[x], north.map.height - 1, dx, dy, instigator) is IEnumerable<MapMovementStackItem> northMoved) movingObjects.AddRange(northMoved);
+        if (x >= map.width && east?.push(0, convertToEast[y], dx, dy, instigator) is IEnumerable<MapMovementStackItem> eastMoved) movingObjects.AddRange(eastMoved);
+        if (y >= map.height && south?.push(convertToSouth[x], 0, dx, dy, instigator) is IEnumerable<MapMovementStackItem> southMoved) movingObjects.AddRange(southMoved);
 
-        if (!canMove) return false;
-
-        var dir = DirectionExtensions.DirectionFromDelta((dx, dy));
         foreach (var obj in allObjects)
         {
-            obj.Facing = dir;
-            moveObjectTo(obj, obj.x + dx, obj.y + dy);
+            if (moveObjectTo(obj, obj.x + dx, obj.y + dy) is MapMovementStackItem m)
+                movingObjects.Add(m with { dependentOn=instigator });
         }
-        return true;
+        return movingObjects;
     }
 
-    public void pull(int x, int y, int dx, int dy)
+    public MapMovementStackItem? moveObjectTo(BabaObject obj, int x, int y)
     {
-        var allObjects = new List<BabaObject>();
-        while (x >= dx && x < map.width + dx && y >= dy && y < map.height + dy)
+        if (x < 0 && west != null)
         {
-            var pullObjects = objectsAt(x - dx, y - dy).Where(x => isObject(x, ObjectTypeId.pull)).ToList();
-            if (pullObjects.Count == 0) break;
-            allObjects.AddRange(pullObjects);
-            x -= dx;
-            y -= dy;
+            return moveObjectToMap(west, obj, west.map.width + x, convertToWest[y]);
         }
-
-        var dir = DirectionExtensions.DirectionFromDelta((dx, dy));
-        foreach (var obj in allObjects)
+        if (y < 0 && north != null)
         {
-            obj.Facing = dir;
-            moveObjectTo(obj, obj.x + dx, obj.y + dy);
+            return moveObjectToMap(north, obj, convertToNorth[x], north.map.height + y);
         }
-
-        x -= dx;
-        y -= dy;
-
-        if (x < 0) west?.pull(west.map.width, convertToWest[y], dx, dy);
-        if (y < 0) north?.pull(convertToNorth[x], north.map.height, dx, dy);
-        if (x >= map.width) east?.pull(0, convertToEast[y], dx, dy);
-        if (y >= map.height) south?.pull(convertToSouth[x], 0, dx, dy);
-    }
-
-    public bool moveObjectTo(BabaObject obj, int x, int y)
-    {
-        if (x < 0)
+        if (x >= map.width && east != null)
         {
-            obj.Present = false;
-            return west != null && moveObjectToMap(west, obj, west.map.width + x, convertToWest[y]);
-        }
-        if (y < 0)
-        {
-            obj.Present = false;
-            return north != null && moveObjectToMap(north, obj, convertToNorth[x], north.map.height + y);
-        }
-        if (x >= map.width)
-        {
-            obj.Present = false;
             return moveObjectToMap(east, obj, x - map.width, convertToEast[y]);
         }
-        if (y >= map.height)
+        if (y >= map.height && south != null)
         {
-            obj.Present = false;
             return moveObjectToMap(south, obj, convertToSouth[x], y - map.height);
         }
+        var retval = new MapMovementStackItem(obj, MapId, obj.x, obj.y, null);
+        obj.x = x;
+        obj.y = y;
+        return retval;
+    }
 
-        var dx = x - obj.x;
-        var dy = y - obj.y;
-        if (Math.Abs(dx) > Math.Abs(dy))
-        {
-            obj.Facing = dx < 0 ? Direction.Left : Direction.Right;
-        }
-        else
-        {
-            obj.Facing = dy < 0 ? Direction.Up : Direction.Down;
-        }
-
+    public bool addObjectAt(BabaObject obj, int x, int y)
+    {
+        map.AddObject(obj);
         obj.x = x;
         obj.y = y;
         return true;
     }
 
-    public bool addObjectAt(BabaObject obj, int x, int y)
+    private MapMovementStackItem moveObjectToMap(MapSimulator m, BabaObject obj, int x, int y)
     {
-        map.AddObject(new()
-        {
-            Name = obj.Name,
-            Present =true,
-            y=y,
-            x=x,
-            Color=obj.Color,
-            Facing=obj.Facing,
-            Kind=obj.Kind,
-            OriginX = obj.OriginX,
-            OriginY = obj.OriginY,
-            MapOfOrigin =obj.MapOfOrigin,
-            index=-1,
-        });
-        return true;
-    }
-
-    private bool moveObjectToMap(MapSimulator? m, BabaObject obj, int x, int y)
-    {
-        if (m is MapSimulator otherMap && otherMap.addObjectAt(obj, x, y))
-        {
-            this.map.RemoveObject(obj);
-            obj.CurrentMapId = otherMap.MapId;
-            return true;
-        }
-        return false;
+        var retVal = new MapMovementStackItem(obj, MapId, obj.x, obj.y, null);
+        map.RemoveObject(obj);
+        m.addObjectAt(obj, x, y);
+        return retVal;
     }
 
     public BabaObject[] objectsAt(int x, int y)
@@ -703,7 +621,7 @@ public class MapSimulator
 
     private static Dictionary<ObjectTypeId, ObjectTypeId[]> impliedBy = new()
     {
-        { ObjectTypeId.stop, /* implied by */ new[] { ObjectTypeId.you, ObjectTypeId.you2 } },
+        { ObjectTypeId.stop, /* implied by */ new[] { ObjectTypeId.you, ObjectTypeId.you2, mapBorderTypeId } },
         { ObjectTypeId.push, new[] { ObjectTypeId.text } },  
     };
 }

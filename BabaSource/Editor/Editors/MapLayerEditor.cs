@@ -82,7 +82,7 @@ namespace Editor.Editors
                 var oldSelectedObject = currentObject;
                 undoActions.Push(() => SetSelectedObject(oldSelectedObject));
             }
-            var d = new SaveObjectData() { name = name, color = ObjectInfo.Info[name].color_active };
+            var d = new SaveObjectData() { name = name, color = ObjectInfo.Info[name].color_active, state=1 };
             SetSelectedObject(d);
             return d;
         }

@@ -1,4 +1,5 @@
-﻿using Core.Content;
+﻿using BabaGame.Events;
+using Core.Content;
 using Core.Engine;
 using Core.Utils;
 using System;
@@ -8,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BabaGame.Engine;
+
+
+public record MapMovementStackItem(BabaObject obj, short mapId, int x, int y, MapMovementStackItem? dependentOn);
 
 public class BabaWorld
 {
@@ -100,34 +104,76 @@ public class BabaWorld
     public void Step(short currentMap, short[] mapIds, Direction direction, ObjectTypeId playerNumber)
     {
         var sims = mapIds.Select(id => Simulators[id]).ToList();
-
-        // this should be recalculated at all points where it's possible to change, like in transform() or interactionblock()
-        var yous = mapIds.ToDictionary(id => id, id => Simulators[id].findObjectsThatAre(playerNumber).ToArray());
+        var movementStack = new Stack<MapMovementStackItem>();
 
         parseMapRules(mapIds);
+        foreach (var map in sims) movementStack.PushMany(map.moveYou(map.MapId == currentMap ? direction : Direction.None));
 
-        var didAnyMove = false;
-        foreach (var map in sims)
-        {
-            if (map.doMovement(map.MapId == currentMap ? direction : Direction.None, yous[map.MapId])) 
-                didAnyMove = true;
-        }
+        if (movementStack.Count == 0) return;
 
-        if (!didAnyMove) return;
-
+        foreach (var map in sims) movementStack.PushMany(map.doMovement());
         parseMapRules(mapIds);
         foreach (var map in sims) map.transform();
         parseMapRules(mapIds);
-        foreach (var map in sims) map.moveblock();
+        foreach (var map in sims) movementStack.PushMany(map.moveblock());
         parseMapRules(mapIds);
-        foreach (var map in sims) map.fallblock();
+        foreach (var map in sims) movementStack.PushMany(map.fallblock());
         parseMapRules(mapIds);
         foreach (var map in sims) map.statusblock();
         parseMapRules(mapIds);
         foreach (var map in sims) map.interactionblock();
         parseMapRules(mapIds);
-        foreach (var map in sims) map.collisionCheck(yous[map.MapId]);
+
+        // collisionCheck:
+        {
+            // pop items off the stack to check if objects should be reverted to their previous position.
+            // items higher on the stack should represent the farthest each item can move.
+
+            var revertedMovements = new HashSet<MapMovementStackItem>();
+
+            void revert(BabaObject obj, MapMovementStackItem previous)
+            {
+                if (obj.CurrentMapId != previous.mapId)
+                {
+                    Simulators[obj.CurrentMapId].TryRemoveObject(obj);
+                    Simulators[previous.mapId].addObjectAt(obj, previous.x, previous.y);
+                }
+                else
+                {
+                    obj.x = previous.x;
+                    obj.y = previous.y;
+                }
+                revertedMovements.Add(previous);
+            }
+
+            while (movementStack.Count > 0)
+            {
+                var previous = movementStack.Pop();
+                var (obj, mapId, x, y, instigator) = previous;
+                if (obj.Deleted || !obj.Present) continue;
+
+                if (instigator != null && revertedMovements.Contains(instigator))
+                {
+                    revert(obj, previous);
+                }
+                // if true, then there is a collision, and this object should be moved back.
+                else if (Simulators[obj.CurrentMapId].collisionCheck(obj))
+                {
+                    revert(obj, previous);
+                    if (Simulators[obj.CurrentMapId].isObject(obj, ObjectTypeId.move))
+                    {
+                        obj.Facing = DirectionExtensions.Opposite(obj.Facing);
+                    }
+                }
+                else if (obj.CurrentMapId != mapId && mapId == currentMap && Simulators[mapId].isObject(obj, ObjectTypeId.you))
+                {
+                    EventChannels.MapChange.SendAsyncMessage(new() { MapId = obj.CurrentMapId });
+                }
+            }
+        }
+
         parseMapRules(mapIds);
+
         foreach (var map in sims)
         {
             map.removeDuplicatesInSamePosition();

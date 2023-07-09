@@ -150,7 +150,7 @@ public class BabaWorld
                     revert(obj, previous);
                 }
                 // if true, then there is a collision, and this object should be moved back.
-                else if (Simulators[obj.CurrentMapId].collisionCheck(obj))
+                else if (Simulators[obj.CurrentMapId].collisionCheck(obj, previous))
                 {
                     revert(obj, previous);
                     if (Simulators[obj.CurrentMapId].isObject(obj, ObjectTypeId.move))

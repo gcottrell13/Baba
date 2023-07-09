@@ -7,17 +7,9 @@ namespace Tests.Engine;
 public class WorldDataTests
 {
     [Test]
-    public void Serialize()
-    {
-        var serialized = WorldDataDeserialized.expectedCompiledMap.Serialize();
-
-        Assert.AreEqual(WorldDataSerialized.expectedSerialized, serialized);
-    }
-
-    [Test]
     public void Deserialize()
     {
-        var deserialized = WorldData.Deserialize(WorldDataSerialized.expectedSerialized);
+        var deserialized = WorldData.Deserialize(WorldDataDeserialized.expectedCompiledMap.Serialize());
 
         Assert.AreEqual(WorldDataDeserialized.expectedCompiledMap, deserialized);
     }

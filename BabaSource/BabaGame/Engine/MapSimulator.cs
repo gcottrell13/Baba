@@ -129,8 +129,8 @@ public class MapSimulator
         if (moveObjectTo(obj, obj.x + dx, obj.y + dy) is MapMovementStackItem m)
         {
             moves.Add(m);
-            var p = push(obj.x - dx, obj.y - dy, dx, dy, m);
-            if (p != null) moves.AddRange(p);
+            //var p = push(obj.x - dx, obj.y - dy, dx, dy, m);
+            //if (p != null) moves.AddRange(p);
         }
         return moves;
     }
@@ -208,9 +208,14 @@ public class MapSimulator
         this.Need();
     }
 
-    public bool collisionCheck(BabaObject n)
+    public bool collisionCheck(BabaObject obj, MapMovementStackItem previousPosition /* used for swap */)
     {
-        return objectsAt(n.x, n.y).Any(at => isObject(at, ObjectTypeId.stop) && at != n);
+        // return true if there's a STOP object under this one.
+        // UNLESS this object can do one of the following:
+        // open (if the STOP object is SHUT), weak, swap
+        // OR the STOP object can do one of the following:
+        // swap
+        return objectsAt(obj.x, obj.y).Any(at => isObject(at, ObjectTypeId.stop) && at != obj);
     }
 
     public void removeDuplicatesInSamePosition()

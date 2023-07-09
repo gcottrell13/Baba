@@ -13,11 +13,11 @@ namespace BabaGame.Screens;
 internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
 {
     private readonly FiltererModal<WorldData> filtererModal;
-    private readonly SaveFile saveFile;
+    private readonly Campaign saveFile;
     private readonly Action<WorldData> onSelect;
     private readonly Action onNew;
 
-    public SaveFileSelectScreen(SaveFile saveFile, Action<WorldData> onSelect, Action onNew)
+    public SaveFileSelectScreen(Campaign saveFile, Action<WorldData> onSelect, Action onNew)
     {
         filtererModal = new(saveFile.SaveFiles.Values.Append(new()).ToList(), 10, display: displayWorldData, canCancel: false)
         {

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Core.Engine;
 
-public class SaveFile
+public class Campaign
 {
     public WorldData InitialContent;
     public Dictionary<string, WorldData> SaveFiles;
     public string Name { get; }
 
-    public SaveFile(string name, WorldData initial, Dictionary<string, WorldData> saves)
+    public Campaign(string name, WorldData initial, Dictionary<string, WorldData> saves)
     {
         Name = name;
         InitialContent = initial;

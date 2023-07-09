@@ -37,7 +37,7 @@ public class BabaGame : GameSetup
         {
             base.Initialize();
 
-            SaveFile? saveFile = null;
+            Campaign? saveFile = null;
             WorldData? selectedWorld = null;
 
             void select(WorldData wd)

@@ -37,11 +37,11 @@ public class LoadGameSaveFiles
         }
     }
 
-    public static Dictionary<string, SaveFile> LoadAllCompiledMaps()
+    public static Dictionary<string, Campaign> LoadAllCompiledMaps()
     {
         var regexp = new Regex(@"([^.]+)\.([^.]+)\.sav");
         var groups = GetCompiledMaps().GroupBy(x => regexp.Match(x) is Match m ? m.Groups[1].Value : "");
-        var d = new Dictionary<string, SaveFile>();
+        var d = new Dictionary<string, Campaign>();
         foreach (var group in groups)
         {
             if (group.Key == "") 
@@ -49,7 +49,7 @@ public class LoadGameSaveFiles
             var saveFileNames = group.ToDictionary(name => regexp.Match(name).Groups[2].Value);
             var savesFiles = saveFileNames.ToDictionary(k => k.Key, k => WorldData.Deserialize(File.ReadAllText(filesDirectory + k.Value)));
             var initial = savesFiles.Remove("0", out var zero) ? zero : new();
-            d[group.Key] = new SaveFile(group.Key, initial, savesFiles);
+            d[group.Key] = new Campaign(group.Key, initial, savesFiles);
         }
 
         return d;

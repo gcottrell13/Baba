@@ -13,11 +13,11 @@ namespace BabaGame.Screens;
 
 internal class WorldSelectScreen : BaseScreen<BabaGameState>
 {
-    private readonly ListDisplay<SaveFile> filtererModal;
+    private readonly ListDisplay<Campaign> filtererModal;
 
     private CallbackCollector<PickerState> callbackCollector = new(PickerState.Open);
 
-    public WorldSelectScreen(List<SaveFile> saveFiles, SaveFile? current, Action<SaveFile> onSelect)
+    public WorldSelectScreen(List<Campaign> saveFiles, Campaign? current, Action<Campaign> onSelect)
     {
         filtererModal = new(saveFiles, 10, display: displaySaveFile, currentValue: current)
         {
@@ -28,13 +28,13 @@ internal class WorldSelectScreen : BaseScreen<BabaGameState>
         SetCommands(BasicMenu);
     }
 
-    private Func<SaveFile, PickerState> select(Action<SaveFile> saveFile) => save =>
+    private Func<Campaign, PickerState> select(Action<Campaign> saveFile) => save =>
     {
         saveFile(save);
         return PickerState.ClosePick;
     };
 
-    private string displaySaveFile(SaveFile saveFile) => saveFile.InitialContent.Name;
+    private string displaySaveFile(Campaign saveFile) => saveFile.InitialContent.Name;
 
     public override BabaGameState Handle(KeyPress ev)
     {

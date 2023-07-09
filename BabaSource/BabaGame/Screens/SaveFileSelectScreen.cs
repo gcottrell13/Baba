@@ -49,7 +49,7 @@ internal class SaveFileSelectScreen : BaseScreen<BabaGameState>
         {
             return "New Save";
         }
-        var percentComplete = wd.Maps.Count(map => map.visited) * 100 / wd.Maps.Count;
+        var percentComplete = wd.Screens.Count(map => map.visited) * 100 / wd.Screens.Count;
         return $"Save {wd.Name} - {percentComplete}%";
     }
 

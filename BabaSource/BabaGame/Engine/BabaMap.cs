@@ -33,14 +33,14 @@ public class BabaMap
     public bool Visited = false;
 
 
-    public BabaMap(MapData map)
+    public BabaMap(ScreenData map)
     {
-        MapId = map.MapId;
-        northNeighbor = map.northNeighbor;
-        eastNeighbor = map.eastNeighbor;
-        southNeighbor = map.southNeighbor;
-        westNeighbor = map.westNeighbor;
-        region = map.region;
+        MapId = map.ScreenId;
+        northNeighbor = map.northNeighborId;
+        eastNeighbor = map.eastNeighborId;
+        southNeighbor = map.southNeighborId;
+        westNeighbor = map.westNeighborId;
+        region = map.RegionId;
         width = map.width;
         height = map.height;
         Name = map.Name;
@@ -76,7 +76,7 @@ public class BabaMap
         }
     }
 
-    public static implicit operator BabaMap(MapData map) => new BabaMap(map);
+    public static implicit operator BabaMap(ScreenData map) => new BabaMap(map);
 
     public void ResetToOriginalState()
     {
@@ -88,16 +88,16 @@ public class BabaMap
         }
     }
 
-    public MapData ToMapData()
+    public ScreenData ToMapData()
     {
-        return new MapData(WorldObjects.Select(x => x.ToObjectData())) 
+        return new ScreenData(WorldObjects.Select(x => x.ToObjectData())) 
         {
-            MapId = MapId,
-            northNeighbor = northNeighbor,
-            eastNeighbor = eastNeighbor,
-            southNeighbor = southNeighbor,
-            westNeighbor = westNeighbor,
-            region = region,
+            ScreenId = MapId,
+            northNeighborId = northNeighbor,
+            eastNeighborId = eastNeighbor,
+            southNeighborId = southNeighbor,
+            westNeighborId = westNeighbor,
+            RegionId = region,
             width = width,
             height = height,
             Name = Name,

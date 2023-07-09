@@ -74,7 +74,7 @@ namespace Editor.Screens
                     continue;
                 }
 
-                var mapData = world.MapDatas.FirstOrDefault(x => x.id == instance.mapDataId);
+                var mapData = world.ScreenDatas.FirstOrDefault(x => x.id == instance.screenDataId);
 
                 if (mapData == null)
                 {

@@ -276,7 +276,7 @@ namespace Editor.Screens
             SetCommands(d);
         }
 
-        public void onAddInstanceToGlobal(SaveMapInstance saveMapInstance)
+        public void onAddInstanceToGlobal(SaveScreenInstance saveMapInstance)
         {
             if (editor.save.globalObjectInstanceIds.Contains(saveMapInstance.instanceId))
             {
@@ -351,14 +351,14 @@ namespace Editor.Screens
 
         private EditorStates editAtCursor()
         {
-            var id = editor?.MapAtCursor()?.mapDataId;
+            var id = editor?.MapAtCursor()?.screenDataId;
             var map = Editor.EDITOR.mapDatas.FirstOrDefault(x => x.id == id);
             if (map == null) return EditorStates.None;
             EditMap(map);
             return EditorStates.MapEditor;
         }
 
-        public EditorStates SetPickedMap(SaveMapData? pickedMap)
+        public EditorStates SetPickedMap(SaveScreenData? pickedMap)
         {
             if (pickedMap == null) throw new ArgumentNullException(nameof(pickedMap));
             editor?.setPickedMap(pickedMap);
@@ -383,7 +383,7 @@ namespace Editor.Screens
             Editor.EDITOR.LoadMap(Editor.EDITOR.NewMap());
         }
 
-        private void EditMap(SaveMapData selected)
+        private void EditMap(SaveScreenData selected)
         {
             Editor.EDITOR.LoadMap(selected);
         }

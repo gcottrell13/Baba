@@ -99,11 +99,5 @@ namespace Core.Utils
             }
             return true;
         }
-
-        public static string Indent(this string s, int indent)
-        {
-            var t = "\t".Repeat(indent);
-            return string.Join("\n", s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(x => t + x));
-        }
     }
 }

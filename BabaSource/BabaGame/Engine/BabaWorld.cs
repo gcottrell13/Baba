@@ -26,10 +26,10 @@ public class BabaWorld
 	public BabaWorld(WorldData data)
 	{
         name = data.Name;
-		MapDatas = data.Maps.ToDictionary(map => map.MapId, map => (BabaMap)map);
+		MapDatas = data.Screens.ToDictionary(map => map.ScreenId, map => (BabaMap)map);
 		Regions = data.Regions.ToDictionary(r => r.RegionId);
         GlobalWordMapIds = data.GlobalWordMapIds;
-		Simulators = data.Maps.ToDictionary(map => map.MapId, map => new MapSimulator(this, map.MapId));
+		Simulators = data.Screens.ToDictionary(map => map.ScreenId, map => new MapSimulator(this, map.ScreenId));
         Inventory = data.Inventory;
 
 		foreach (var sim in Simulators.Values)
@@ -42,7 +42,7 @@ public class BabaWorld
     {
         var data = new WorldData
         {
-            Maps = MapDatas.Values.Select(x => x.ToMapData()).ToList(),
+            Screens = MapDatas.Values.Select(x => x.ToMapData()).ToList(),
             Regions = Regions.Values.ToList(),
             GlobalWordMapIds = GlobalWordMapIds,
             Name = name,

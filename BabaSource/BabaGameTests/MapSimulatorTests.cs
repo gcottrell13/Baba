@@ -20,10 +20,10 @@ public class MapSimulatorTests
     {
         var babaWorld = new BabaWorld(new() {
             GlobalWordMapIds = new short[] { 0 },
-            Maps = new()
+            Screens = new()
             {
-                new(objects.ToArray()) { MapId=1 },
-                new(strRules.SelectMany((line, y) => line.Split(" ").Select((word, x) => new ObjectData() { Name=Enum.Parse<ObjectTypeId>(word), x=(byte)x, y=(byte)y, Kind=ObjectKind.Text } )).ToArray()) { MapId=0 },
+                new(objects.ToArray()) { ScreenId=1 },
+                new(strRules.SelectMany((line, y) => line.Split(" ").Select((word, x) => new ObjectData() { Name=Enum.Parse<ObjectTypeId>(word), x=(byte)x, y=(byte)y, Kind=ObjectKind.Text } )).ToArray()) { ScreenId=0 },
             },
         });
         var sim = babaWorld.Simulators[1];
@@ -120,19 +120,19 @@ public class MapSimulatorTests
         var babaWorld = new BabaWorld(new()
         {
             GlobalWordMapIds = new short[] { 0 },
-            Maps = new()
+            Screens = new()
             {
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.baba, x = 1, y = 1 },
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2 },
-                }) { MapId = 1, width = 15, height = 15 },
+                }) { ScreenId = 1, width = 15, height = 15 },
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.baba, x = 1, y = 1 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 1, y = 2 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.you, x = 1, y = 3 },
-                }) { MapId = 0, width = 15, height = 15 },
+                }) { ScreenId = 0, width = 15, height = 15 },
             }
         });
         var actual = babaWorld.Simulators[1].objectsAt(1, 1);
@@ -148,18 +148,18 @@ public class MapSimulatorTests
         var babaWorld = new BabaWorld(new()
         {
             GlobalWordMapIds = new short[] { 0 },
-            Maps = new()
+            Screens = new()
             {
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 2 },
-                }) { MapId = 1, width = 15, height = 15 },
+                }) { ScreenId = 1, width = 15, height = 15 },
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3 },
-                }) { MapId = 0, width = 15, height = 15 },
+                }) { ScreenId = 0, width = 15, height = 15 },
             }
         });
 
@@ -179,22 +179,22 @@ public class MapSimulatorTests
         var babaWorld = new BabaWorld(new()
         {
             GlobalWordMapIds = new short[] { 0 },
-            Maps = new()
+            Screens = new()
             {
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 0 },
-                }) { MapId = 1, width = 10, height = 10, northNeighbor=2 },
+                }) { ScreenId = 1, width = 10, height = 10, northNeighborId=2 },
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Object, Name=ObjectTypeId.boat, x = 1, y = 14 },
-                }) { MapId = 2, width = 15, height = 15, southNeighbor=1 },
+                }) { ScreenId = 2, width = 15, height = 15, southNeighborId=1 },
                 new(new ObjectData[]
                 {
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.boat, x = 2, y = 1 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.@is, x = 2, y = 2 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.pull, x = 2, y = 3 },
-                }) { MapId = 0, width = 15, height = 15 },
+                }) { ScreenId = 0, width = 15, height = 15 },
             }
         });
 
@@ -220,7 +220,7 @@ public class MapSimulatorTests
         var babaWorld = new BabaWorld(new()
         {
             GlobalWordMapIds = new short[] { 0 },
-            Maps = new()
+            Screens = new()
             {
                 new(new ObjectData[]
                 {
@@ -231,7 +231,7 @@ public class MapSimulatorTests
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.x, x = 2, y = 4 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.two, x = 2, y = 5 },
                     new() { Kind=ObjectKind.Text, Name=ObjectTypeId.one, x = 2, y = 6 },
-                }) { MapId = 0, width = 15, height = 15 },
+                }) { ScreenId = 0, width = 15, height = 15 },
             }
         });
 

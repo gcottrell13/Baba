@@ -14,9 +14,9 @@ namespace Editor.Saves
         private static string serialize<T>(T obj, int indent) where T : notnull => obj switch
         {
             SaveFormatWorld s => Serialize(s, indent + 1),
-            SaveMapInstance s => Serialize(s, indent + 1),
+            SaveScreenInstance s => Serialize(s, indent + 1),
             SaveWarp s => Serialize(s, indent + 1),
-            SaveMapData s => Serialize(s, indent + 1),
+            SaveScreenData s => Serialize(s, indent + 1),
             SaveMapLayer s => Serialize(s, indent + 1),
             SaveRegion s => Serialize(s, indent + 1),
             SaveObjectData s => Serialize(s, indent + 1),
@@ -33,14 +33,14 @@ namespace Editor.Saves
                 yield return $"\"{nameof(save.WorldLayout)}\": {slist(save.WorldLayout, 0)}";
                 yield return $"\"{nameof(save.Warps)}\": {slist(save.Warps, 0)}";
                 yield return $"\"{nameof(save.Regions)}\": {slist(save.Regions, 0)}";
-                yield return $"\"{nameof(save.MapDatas)}\": {slist(save.MapDatas, 0)}";
+                yield return $"\"{nameof(save.ScreenDatas)}\": {slist(save.ScreenDatas, 0)}";
                 yield return $"\"{nameof(save.globalObjectInstanceIds)}\": {serialize(save.globalObjectInstanceIds, 0)}";
                 yield return $"\"{nameof(save.worldName)}\": \"{save.worldName}\"";
             }
             return formatLines(lines(), 0, "{", "}");
         }
 
-        public static string Serialize(SaveMapInstance mapInstance, int indent)
+        public static string Serialize(SaveScreenInstance mapInstance, int indent)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(mapInstance);
         }
@@ -74,7 +74,7 @@ namespace Editor.Saves
             return formatLines(lines(), indent, "{", "}");
         }
 
-        public static string Serialize(SaveMapData map, int indent)
+        public static string Serialize(SaveScreenData map, int indent)
         {
             IEnumerable<string> lines()
             {

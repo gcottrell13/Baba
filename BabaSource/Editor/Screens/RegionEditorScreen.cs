@@ -135,7 +135,7 @@ internal class RegionEditorScreen : BaseScreen<EditorStates>
         stateMachine.Initialize(EditorStates.RegionEditor);
     }
 
-    public void onAddInstanceToRegion(SaveMapInstance saveMapInstance)
+    public void onAddInstanceToRegion(SaveScreenInstance saveMapInstance)
     {
         if (region.regionObjectInstanceIds.Contains(saveMapInstance.instanceId))
         {
@@ -160,7 +160,7 @@ internal class RegionEditorScreen : BaseScreen<EditorStates>
         bg.SetColor(ThemeInfo.GetThemeBackgroundColor(region.theme));
 
         RemoveChild(pickedMapsDisplay);
-        pickedMapsDisplay.SetText(string.Join("\n", region.regionObjectInstanceIds.Select(world.SaveMapDataByInstanceId).Select(map => map?.name)));
+        pickedMapsDisplay.SetText(string.Join("\n", region.regionObjectInstanceIds.Select(world.SaveScreenDataByInstanceId).Select(map => map?.name)));
         pickedMapsDisplay.Graphics.y = 75;
         AddChild(pickedMapsDisplay);
 

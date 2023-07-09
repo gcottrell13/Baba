@@ -11,7 +11,9 @@ namespace Core.Engine;
 public class WorldData
 {
     public List<RegionData> Regions = new();
-    public List<MapData> Maps = new();
+    public List<ScreenData> Screens = new();
+    public List<PositionData> Positions = new();
+
     public short[] GlobalWordMapIds;
     public string Name = string.Empty;
     public Dictionary<ObjectTypeId, int> Inventory = new();
@@ -28,14 +30,14 @@ public class WorldData
 
             {string.Join("\n\n", Regions.Select(outputRegion))}
 
-            {string.Join("\n\n", Maps.Select(outputMap))}
+            {string.Join("\n\n", Screens.Select(outputScreen))}
             """;
     }
 
     public override bool Equals(object? obj)
     {
         if (obj is WorldData world)
-            return Regions.Compare(world.Regions) && Maps.Compare(world.Maps) && world.GlobalWordMapIds.Compare(GlobalWordMapIds) && world.Name == Name && Inventory.Compare(world.Inventory);
+            return Regions.Compare(world.Regions) && Screens.Compare(world.Screens) && world.GlobalWordMapIds.Compare(GlobalWordMapIds) && world.Name == Name && Inventory.Compare(world.Inventory);
         return base.Equals(obj);
     }
 
@@ -45,12 +47,13 @@ public class WorldData
     }
 
     public override string ToString() => $$"""
-        new WorldData() {
-            GlobalWordMapIds = new short[] { {{ string.Join(", ", GlobalWordMapIds) }} },
-            Name = "{{Name}}",
-            Maps = new() { {{string.Join(",", Maps.Select(x => "\n" + x.ToString().Indent(2)))}} },
-            Regions = new() { {{string.Join(",", Regions.Select(x => "\n" + x.ToString().Indent(2)))}} },
-            Inventory = new() {{{
+        new {{nameof(WorldData)}}() {
+            {{nameof(GlobalWordMapIds)}} = new short[] { {{ string.Join(", ", GlobalWordMapIds) }} },
+            {{nameof(Name)}} = "{{Name}}",
+            {{nameof(Screens)}} = new() { {{string.Join(",", Screens.Select(x => "\n" + x.ToString().Indent(2)))}} },
+            {{nameof(Regions)}} = new() { {{string.Join(",", Regions.Select(x => "\n" + x.ToString().Indent(2)))}} },
+            {{nameof(Positions)}} = new() { {{string.Join(",", Positions.Select(x => x.ToString())) }},
+            {{nameof(Inventory)}} = new() {{{
         (Inventory.Count > 0 ? (
             " \n" + string.Join(",\n", 
                 Inventory.Select(x => "{ ObjectTypeId." + x.Key.ToString() + ", " + x.Value.ToString() + " }")
@@ -80,13 +83,13 @@ public class WorldData
             regionStartIndex = str.IndexOf(beginRegion, endIndex);
         }
 
-        var mapStartIndex = str.IndexOf(beginMap);
+        var mapStartIndex = str.IndexOf(beginScreen);
         while (mapStartIndex != -1)
         {
-            var endIndex = str.IndexOf(endMap, mapStartIndex);
-            mapStartIndex += beginMap.Length;
-            world.Maps.Add(MapData.Deserialize(str.Substring(mapStartIndex, endIndex - mapStartIndex)));
-            mapStartIndex = str.IndexOf(beginMap, endIndex);
+            var endIndex = str.IndexOf(endScreen, mapStartIndex);
+            mapStartIndex += beginScreen.Length;
+            world.Screens.Add(ScreenData.Deserialize(str.Substring(mapStartIndex, endIndex - mapStartIndex)));
+            mapStartIndex = str.IndexOf(beginScreen, endIndex);
         }
 
         return world;
@@ -96,8 +99,8 @@ public class WorldData
     private const string endWorld = "---- END WORLD ----";
     private const string beginRegion = "---- BEGIN REGION ----";
     private const string endRegion = "---- END REGION ----";
-    private const string beginMap = "---- BEGIN MAP ----";
-    private const string endMap = "---- END MAP ----";
+    private const string beginScreen = "---- BEGIN SCREEN ----";
+    private const string endScreen = "---- END SCREEN ----";
 
     private static string outputWorldData(WorldData data)
     {
@@ -119,13 +122,13 @@ public class WorldData
                 """;
     }
 
-    private static string outputMap(MapData mapInfo)
+    private static string outputScreen(ScreenData screenData)
     {
         return $"""
-                # {mapInfo.MapId} {mapInfo.Name}
-                {beginMap}
-                {mapInfo.Serialize()}
-                {endMap}
+                # {screenData.ScreenId} {screenData.Name}
+                {beginScreen}
+                {screenData.Serialize()}
+                {endScreen}
                 """;
     }
 }

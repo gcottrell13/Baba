@@ -15,7 +15,7 @@ namespace Editor.Editors
     internal class WorldEditor
     {
         public SaveFormatWorld save { get; private set; }
-        private SaveMapData? pickedMap;
+        private SaveScreenData? pickedMap;
         public SaveObjectData cursor { get; private set; } = new() { name = "cursor", color = ThemeInfo.ColorNameMap["rosy"] };
 
         public Vector2 warpPoint1;
@@ -86,7 +86,7 @@ namespace Editor.Editors
             return save.WorldLayout.Remove(m);
         }
 
-        public SaveMapInstance? MapAtCursor() => save.WorldLayout.FirstOrDefault(x => x.x == cursor.x && x.y == cursor.y);
+        public SaveScreenInstance? MapAtCursor() => save.WorldLayout.FirstOrDefault(x => x.x == cursor.x && x.y == cursor.y);
 
         public bool TryPlaceMapAtCursor()
         {
@@ -94,10 +94,10 @@ namespace Editor.Editors
             var m = MapAtCursor();
             if (m == null)
             {
-                m = new SaveMapInstance { x = cursor.x, y = cursor.y };
+                m = new SaveScreenInstance { x = cursor.x, y = cursor.y };
                 save.WorldLayout.Add(m);
             }
-            m.mapDataId = pickedMap.id;
+            m.screenDataId = pickedMap.id;
             return true;
         }
 
@@ -109,7 +109,7 @@ namespace Editor.Editors
             LoadGameSaveFiles.SaveCompiledMap(compiled, save.fileName ?? "compiled", "0");
         }
 
-        public void setPickedMap(SaveMapData? map)
+        public void setPickedMap(SaveScreenData? map)
         {
             pickedMap = map;
         }

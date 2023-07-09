@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Editor.Screens;
 
-internal class MapInstancePickerScreen : FiltererModal<SaveMapInstance>
+internal class MapInstancePickerScreen : FiltererModal<SaveScreenInstance>
 {
 
     public MapInstancePickerScreen(
-        IEnumerable<SaveMapInstance> items, 
+        IEnumerable<SaveScreenInstance> items, 
         int maxDisplay,
         SaveFormatWorld world,
-        Func<SaveMapInstance, bool> isSelected, // we can select multiple
-        SaveMapInstance? currentValue = null,
+        Func<SaveScreenInstance, bool> isSelected, // we can select multiple
+        SaveScreenInstance? currentValue = null,
         bool canCancel = true) 
         : base(items, maxDisplay, 
             display: map(world, isSelected), 
@@ -27,7 +27,7 @@ internal class MapInstancePickerScreen : FiltererModal<SaveMapInstance>
     {
     }
 
-    private static Func<SaveMapInstance, string> map(SaveFormatWorld world, Func<SaveMapInstance, bool> isSelected) 
-        => (SaveMapInstance instance) 
-        => (isSelected(instance) ? "[check] " : "" ) + (world.SaveMapDataByInstanceId(instance.instanceId)?.name ?? "none");
+    private static Func<SaveScreenInstance, string> map(SaveFormatWorld world, Func<SaveScreenInstance, bool> isSelected) 
+        => (SaveScreenInstance instance) 
+        => (isSelected(instance) ? "[check] " : "" ) + (world.SaveScreenDataByInstanceId(instance.instanceId)?.name ?? "none");
 }

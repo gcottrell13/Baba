@@ -1,10 +1,12 @@
 ﻿using Core.Content;
 using Core.Engine;
 using Core.Utils;
+using MonoGame.Extended.Screens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,99 +14,103 @@ namespace Editor.Saves
 {
     public static class CompileMap
     {
-        [DebuggerDisplay("{originalMapId} -> {data.MapId}: {x} {y}")]
-        private class MapTemp
-        {
-            internal int x;
-            internal int y;
-            internal MapData data;
-            internal int originalMapId;
-            internal int originalRegionId;
-
-            public MapTemp(MapData data)
-            {
-                this.data = data;
-            }
-        }
-
         public static WorldData CompileWorld(SaveFormatWorld world)
         {
-            var mapTemps = new List<MapTemp>();
-            var mapMap = new Dictionary<int, short>();
-            var regionMap = new Dictionary<int, short>();
+            var screenDatas = new Dictionary<short, ScreenData>();
             var regionDatas = new List<RegionData>();
+            var positionsByScreen = new Dictionary<short, Dictionary<int, PositionData>>();
+            var objects = new List<ObjectData>();
 
-            short mapTempId = 1;
+            int globalPositionId = 0;
 
             foreach (var instance in world.WorldLayout)
             {
-                var data = world.MapDatas.FirstOrDefault(x => x.id == instance.mapDataId);
+                var data = world.ScreenDatas.FirstOrDefault(x => x.id == instance.screenDataId);
                 if (data == null) continue;
 
-                var md = fromMapLayer(data.layer1, instance.x, instance.y, instance.mapDataId, ref mapTempId);
+                var screenData = new ScreenData() { 
+                    height=(short)data.layer1.height, 
+                    width=(short)data.layer1.width,
+                    ScreenId=(short)instance.instanceId,
+                    RegionId=(short)data.regionId,
+                    Name=data.name,
+                };
+                screenDatas[screenData.ScreenId] = screenData;
 
-                md.data.Name = data.name;
-                md.originalRegionId = data.regionId;
+                var p = positionsFromLayer(data.layer1, screenData.ScreenId, ref globalPositionId);
+                //positions.AddRange(p.Values);
+                positionsByScreen[screenData.ScreenId] = p.Values.ToDictionary(pos => pos.PositionId, pos => pos);
 
-                mapMap[instance.instanceId] = md.data.MapId;
-
-                if (data.layer2.objects.Count > 0)
+                objects.AddRange(data.layer1.objects.Where(obj => obj.x < data.layer1.width && obj.y < data.layer1.height).Select(x => new ObjectData()
                 {
-                    var wordLayer = fromMapLayer(data.layer2, -1, -1, -1, ref mapTempId);
-                    wordLayer.data.Name = $"{md.data.MapId} uplayer - {data.name}";
-                    mapTemps.Add(wordLayer);
-                    md.data.upLayer = wordLayer.data.MapId;
-                }
-                mapTemps.Add(md);
+                    Color = (short)x.color,
+                    Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
+                    Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
+                    Text = x.text,
+                    Present = true,
+                    Facing = (Direction)x.state,
+                    PositionId = p[(x.x, x.y)].PositionId,
+                }));
             }
-
-            var globalMapIds = world.globalObjectInstanceIds.Where(mapMap.ContainsKey).Select(x => mapMap[x]);
 
             short regionIds = 0;
             foreach (var region in world.Regions)
             {
-                var mapIds = region.regionObjectInstanceIds.Where(mapMap.ContainsKey).Select(x => mapMap[x]);
-                regionMap[region.id] = regionIds;
+                var regionScreenIds = region.regionObjectInstanceIds.Where(id => screenDatas.ContainsKey((short)id)).Select(x => (short)x).ToList();
                 regionDatas.Add(new()
                 {
                     Music = region.musicName,
                     RegionId = regionIds++,
                     Theme = region.theme,
-                    WordLayerIds = mapIds.ToArray(),
+                    WordLayerIds = regionScreenIds.ToArray(),
                     Name = region.name,
                 });
             }
-
-            foreach (var mapTemp in mapTemps)
+            void stitch(ScreenData thisScreen, short neighborId)
             {
-                var x = mapTemp.x;
-                var y = mapTemp.y;
-                mapTemp.data.northNeighbor = findNeighbor(mapTemps, world, x, y, 0, -1)?.data.MapId ?? 0;
-                mapTemp.data.southNeighbor = findNeighbor(mapTemps, world, x, y, 0, 1)?.data.MapId ?? 0;
-                mapTemp.data.eastNeighbor = findNeighbor(mapTemps, world, x, y, 1, 0)?.data.MapId ?? 0;
-                mapTemp.data.westNeighbor = findNeighbor(mapTemps, world, x, y, -1, 0)?.data.MapId ?? 0;
-
-                mapTemp.data.region = regionMap.TryGetValue(mapTemp.originalRegionId, out var regionId) ? regionId : (short)0;
+                if (neighborId == 0) return;
+                var newValues = stitchPositionsBetweenScreens(thisScreen, screenDatas[neighborId], positionsByScreen[thisScreen.ScreenId].Values, positionsByScreen[neighborId].Values);
+                foreach (var val in newValues)
+                {
+                    positionsByScreen[thisScreen.ScreenId][val.PositionId] = val;
+                }
             }
 
+            foreach (var (screenId, screen) in screenDatas)
+            {
+                var x = screen.x;
+                var y = screen.y;
+                screen.northNeighborId = findNeighbor(world, x, y, 0, -1);
+                screen.southNeighborId = findNeighbor(world, x, y, 0, 1);
+                screen.eastNeighborId = findNeighbor(world, x, y, 1, 0);
+                screen.westNeighborId = findNeighbor(world, x, y, -1, 0);
+
+                stitch(screen, screen.northNeighborId);
+                stitch(screen, screen.southNeighborId);
+                stitch(screen, screen.westNeighborId);
+                stitch(screen, screen.eastNeighborId);
+            }
+
+            var globalScreenIds = world.globalObjectInstanceIds.Select(id => (short)id).Where(id => screenDatas.ContainsKey(id)).ToArray();
             return new WorldData()
             {
-                Maps = mapTemps.Select(x => x.data).ToList(),
+                Positions = positionsByScreen.Values.SelectMany(screenPositions => screenPositions.Values).ToList(),
+                Screens = screenDatas.Values.ToList(),
                 Regions = regionDatas,
-                GlobalWordMapIds = globalMapIds.ToArray(),
+                GlobalWordMapIds = globalScreenIds,
                 Name = world.worldName,
             };
         }
 
-        private static MapTemp? findNeighbor(List<MapTemp> maps, SaveFormatWorld world, int x0, int y0, int dx, int dy)
+        private static short findNeighbor(SaveFormatWorld world, int x0, int y0, int dx, int dy)
         {
-            if (x0 == 0 && dx < 0) return null;
-            if (y0 == 0 && dy < 0) return null;
+            if (x0 == 0 && dx < 0) return 0;
+            if (y0 == 0 && dy < 0) return 0;
 
             var x = x0 + dx;
             var y = y0 + dy;
 
-            if (mapExistsAt(maps, x, y) is MapTemp nearMap) return nearMap;
+            if (getScreenIdAt(world, x, y) is SaveScreenInstance sv) return (short)sv.instanceId;
 
             var warps = world.Warps.Where(w => (w.x1 == x && w.y1 == y) || (w.x2 == x && w.y2 == y));
             foreach (var warp in warps)
@@ -115,46 +121,96 @@ namespace Editor.Saves
                 else
                     (xf, yf) = (warp.x1, warp.y1);
 
-                if (mapExistsAt(maps, xf, yf) is MapTemp farMap) return farMap;
+                if (getScreenIdAt(world, xf, yf) is SaveScreenInstance farMap) return (short)farMap.instanceId;
 
-                if (findNeighbor(maps, world, xf, yf, dx, dy) is MapTemp f) return f;
+                var n = findNeighbor(world, xf, yf, dx, dy);
+                if (n != 0) return n;
             }
 
-            return null;
+            return 0;
         }
 
-        private static MapTemp? mapExistsAt(List<MapTemp> maps, int x, int y)
+        private static SaveScreenInstance? getScreenIdAt(SaveFormatWorld world, int x, int y)
         {
-            return maps.FirstOrDefault(w => w.x == x && w.y == y);
+            return world.WorldLayout.FirstOrDefault(w => w.x == x && w.y == y);
         }
 
-
-        private static MapTemp fromMapLayer(SaveMapLayer layer, int x, int y, int id, ref short mapTempId)
+        private static Dictionary<(int x, int y), PositionData> positionsFromLayer(SaveMapLayer layer, short screenId, ref int globalPositionId)
         {
-            var md = new MapData()
+            var ids = new Dictionary<(int x, int y), int>();
+            var dict = new Dictionary<(int x, int y), PositionData>();
+            for (var x = 0; x < layer.width; x ++)
             {
-                MapId = mapTempId++,
-                width = (short)layer.width,
-                height = (short)layer.height,
-            };
-            md.WorldObjects.AddRange(layer.objects.Where(obj => obj.x < layer.width && obj.y < layer.height).Select(x => new ObjectData()
+                for (var y = 0; y < layer.height; y++)
+                {
+                    ids[(x, y)] = globalPositionId++;
+                }
+            }
+
+            for (short x = 0; x < layer.width; x++)
             {
-                Color = (short)x.color,
-                x = (byte)x.x,
-                y = (byte)x.y,
-                Kind = x.name.StartsWith("text_") ? ObjectKind.Text : ObjectKind.Object,
-                Name = Enum.Parse<ObjectTypeId>(x.name.Replace("text_", "")),
-                Text = x.text,
-                Present = true,
-                Facing = (Direction)x.state,
-            }).ToArray());
-            return new MapTemp(md)
-            {
-                x = x,
-                y = y,
-                originalMapId = id,
-            };
+                for (short y = 0; y < layer.height; y++)
+                {
+                    ids.TryGetValue((x - 1, y), out var west);
+                    ids.TryGetValue((x + 1, y), out var east);
+                    ids.TryGetValue((x, y - 1), out var north);
+                    ids.TryGetValue((x, y + 1), out var south);
+
+                    dict[(x, y)] = new (ids[(x, y)], screenId, x, y, north, south, east, west);
+                }
+            }
+            return dict;
         }
 
+        private static List<PositionData> stitchPositionsBetweenScreens(ScreenData from, ScreenData to, IEnumerable<PositionData> f, IEnumerable<PositionData> t)
+        {
+            List<PositionData> fromPositions;
+            List<PositionData> toPositions;
+            Direction direction;
+
+            if (to.ScreenId == from.northNeighborId)
+            {
+                fromPositions = f.Where(x => x.ScreenDisplayY == 0).ToList();
+                toPositions = t.Where(x => x.ScreenDisplayY == (to.height - 1)).ToList();
+                direction = Direction.Up;
+            }
+            else if (to.ScreenId == from.southNeighborId)
+            {
+                fromPositions = f.Where(x => x.ScreenDisplayY == (from.height - 1)).ToList();
+                toPositions = t.Where(x => x.ScreenDisplayY == 0).ToList();
+                direction = Direction.Down;
+            }
+            else if (to.ScreenId == from.westNeighborId)
+            {
+                fromPositions = f.Where(x => x.ScreenDisplayX == 0).ToList();
+                toPositions = t.Where(x => x.ScreenDisplayX == (to.width - 1)).ToList();
+                direction = Direction.Left;
+            }
+            else if (to.ScreenId == from.eastNeighborId)
+            {
+                fromPositions = f.Where(x => x.ScreenDisplayX == (from.width - 1)).ToList();
+                toPositions = t.Where(x => x.ScreenDisplayX == 0).ToList();
+                direction = Direction.Right;
+            }
+            else return new();
+
+            var ratio = (float)toPositions.Count / (float)fromPositions.Count;
+            foreach (var (fromPos, index) in fromPositions.Select((x, i) => (x, i)).ToList())
+            {
+                var n = (int)(index * ratio);
+                var m = toPositions[n];
+
+                var newItem = direction switch
+                {
+                    Direction.Left => fromPos with { west = m.PositionId },
+                    Direction.Right => fromPos with { east = m.PositionId },
+                    Direction.Up => fromPos with { north = m.PositionId },
+                    Direction.Down => fromPos with { south = m.PositionId },
+                    _ => fromPos,
+                };
+                fromPositions[index] = newItem;
+            }
+            return fromPositions;
+        }
     }
 }

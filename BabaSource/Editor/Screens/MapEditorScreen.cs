@@ -16,9 +16,9 @@ namespace Editor.Screens
         private MapLayerEditorScreen layerEditorScreen;
 
         private TextInputBox titleText = new(format: "[90,ff,90]Map Editor: [white]{}") { Name = "editortitle" };
-        private readonly SaveMapData mapData;
+        private readonly SaveScreenData mapData;
 
-        public MapEditorScreen(ScreenStack stack, SaveMapData mapData)
+        public MapEditorScreen(ScreenStack stack, SaveScreenData mapData)
         {
             editor = new(mapData);
             var theme = Editor.EDITOR.regions.FirstOrDefault(x => x.id == mapData.regionId)?.theme;

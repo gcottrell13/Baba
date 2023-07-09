@@ -13,7 +13,7 @@ namespace Editor
 
         private readonly ReadonlySavesList savesList;
         public SaveFormatWorld? currentWorld { get; private set; }
-        public SaveMapData? currentMap { get; private set; }
+        public SaveScreenData? currentMap { get; private set; }
         public SaveMapLayer? currentMapLayer { get; private set; }
         public SaveRegion? currentRegion { get; private set; }
         
@@ -39,11 +39,11 @@ namespace Editor
             return newWorld;
         }
 
-        public SaveMapData NewMap()
+        public SaveScreenData NewMap()
         {
             var maxId = mapDatas.Count > 0 ? mapDatas.Max(x => x.id) : 0;
-            var newMap = new SaveMapData() { name = $"new map {mapDatas.Count + 1}", id = maxId + 1 };
-            currentWorld!.MapDatas.Add(newMap);
+            var newMap = new SaveScreenData() { name = $"new map {mapDatas.Count + 1}", id = maxId + 1 };
+            currentWorld!.ScreenDatas.Add(newMap);
             LoadEditorSaveFiles.SaveAll(currentWorld);
             return newMap;
         }
@@ -64,7 +64,7 @@ namespace Editor
             currentWorld = world;
         }
 
-        public void LoadMap(SaveMapData? map)
+        public void LoadMap(SaveScreenData? map)
         {
             if (map == null) throw new ArgumentNullException(nameof(map));
             if (mapDatas.Contains(map) != true) throw new Exception("map does not exist in the current list");
@@ -78,7 +78,7 @@ namespace Editor
             currentRegion = region;
         }
 
-        public List<SaveMapData> mapDatas => currentWorld?.MapDatas ?? new List<SaveMapData>();
+        public List<SaveScreenData> mapDatas => currentWorld?.ScreenDatas ?? new List<SaveScreenData>();
 
         public List<SaveRegion> regions => currentWorld?.Regions ?? new List<SaveRegion>();
 

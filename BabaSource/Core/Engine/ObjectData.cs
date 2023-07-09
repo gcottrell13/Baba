@@ -11,30 +11,21 @@ public enum ObjectKind
     Text,
 }
 
-public class ObjectData : INameable
+public class ObjectData
 {
-    public bool Deleted;
     public short Color;
     public Direction Facing;
-    public byte x;
-    public byte y;
     public ObjectKind Kind;
+    public long PositionId;
     
     public ObjectTypeId Name { get; set; }
 
-    public int X => x;
-
-    public int Y => y;
-
     // if the object's map of origin
     public short MapOfOrigin;
-    public short OriginX;
-    public short OriginY;
 
-    // if the object is not present, act like it doesn't exist
+    // if the object is deleted or not present, act like it doesn't exist
     public bool Present = true;
-
-    public short CurrentMapId;
+    public bool Deleted = false;
 
     public string? Text;
 
@@ -42,7 +33,7 @@ public class ObjectData : INameable
     {
         if (obj is ObjectData w)
         {
-            return w.Deleted == Deleted && w.Color == Color && w.Facing == Facing && w.x == x && w.y == y && w.Name == Name && w.Kind == Kind;
+            return w.Deleted == Deleted && w.Color == Color && w.Facing == Facing && w.PositionId == PositionId && w.Name == Name && w.Kind == Kind;
         }
         return base.Equals(obj);
     }
@@ -52,7 +43,7 @@ public class ObjectData : INameable
     public override string ToString() => $$"""
         new ObjectData() {
             {{nameof(Deleted)}} = {{Deleted.ToString().ToLower()}}, {{nameof(Color)}} = {{Color}}, {{nameof(Facing)}} = {{nameof(Direction)}}.{{Facing}}, 
-            {{nameof(x)}} = {{x}}, {{nameof(y)}} = {{y}}, {{nameof(Name)}} = {{nameof(ObjectTypeId)}}.@{{Enum.GetName(Name)}}, {{nameof(Kind)}} = {{nameof(ObjectKind)}}.{{Kind}},
+            {{nameof(PositionId)}} = {{PositionId}}, {{nameof(Name)}} = {{nameof(ObjectTypeId)}}.@{{Enum.GetName(Name)}}, {{nameof(Kind)}} = {{nameof(ObjectKind)}}.{{Kind}},
             {{nameof(Text)}} = {{textToString}},
         }
         """;
